@@ -1,0 +1,42 @@
+#*********************************************************************
+# Copyright (c) Intel Corporation 2020
+# SPDX-License-Identifier: Apache-2.0
+#*********************************************************************/
+
+# This workflow will do a clean install of go dependencies, build the source code and run tests across different versions of go
+
+name: Go CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        go-version: [1.20.x]
+
+    steps:
+    - name: Install Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go-version }}
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Install Test Converter and run tests
+      run: |
+        export GOPATH="$HOME/go/"
+        export PATH=$PATH:$GOPATH/bin
+        go install github.com/jstemmer/go-junit-report/v2@latest
+        go test -v 2>&1 ./... | go-junit-report -set-exit-code > go-wsman.xml
+    - name: GitHub Upload Release Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: go-wsman-unit
+        path: go-wsman.xml
+
