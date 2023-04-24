@@ -1,0 +1,112 @@
+package ethernetport
+
+import (
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
+)
+
+type EthernetPortSettings struct {
+	models.SettingData
+	VLANTag                      int
+	SharedMAC                    bool
+	MACAddress                   string
+	LinkIsUp                     bool
+	LinkPolicy                   LinkPolicy
+	LinkPreference               LinkPreference
+	LinkControl                  LinkControl
+	SharedStaticIp               bool
+	SharedDynamicIP              bool
+	IpSyncEnabled                bool
+	DHCPEnabled                  bool
+	IPAddress                    string
+	SubnetMask                   string
+	DefaultGateway               string
+	PrimaryDNS                   string
+	SecondaryDNS                 string
+	ConsoleTcpMaxRetransmissions ConsoleTcpMaxRetransmissions
+	WLANLinkProtectionLevel      WLANLinkProtectionLevel
+	PhysicalConnectionType       PhysicalConnectionType
+	PhysicalNicMedium            PhysicalNicMedium
+}
+
+type LinkPolicyValues int
+
+const AMT_EthernetPortSettings = "AMT_EthernetPortSettings"
+
+const (
+	LinkPolicyValuesS0AC LinkPolicyValues = 1
+	LinkPolicyValuesSxAC LinkPolicyValues = 14
+	LinkPolicyValuesS0DC LinkPolicyValues = 16
+	LinkPolicyValuesSxDC LinkPolicyValues = 224
+)
+
+type LinkPolicy []LinkPolicyValues
+
+type LinkPreference int
+
+const (
+	LinkPreferenceME   LinkPreference = 1
+	LinkPreferenceHOST LinkPreference = 2
+)
+
+type LinkControl int
+
+const (
+	LinkControlME   LinkControl = 1
+	LinkControlHOST LinkControl = 2
+)
+
+type ConsoleTcpMaxRetransmissions int
+
+const (
+	ConsoleTcpMaxRetransmissions5 ConsoleTcpMaxRetransmissions = 5
+	ConsoleTcpMaxRetransmissions6 ConsoleTcpMaxRetransmissions = 6
+	ConsoleTcpMaxRetransmissions7 ConsoleTcpMaxRetransmissions = 7
+)
+
+type WLANLinkProtectionLevel int
+
+const (
+	WLANLinkProtectionLevelOVERRIDE WLANLinkProtectionLevel = 0
+	WLANLinkProtectionLevelNONE     WLANLinkProtectionLevel = 1
+	WLANLinkProtectionLevelPASSIVE  WLANLinkProtectionLevel = 2
+	WLANLinkProtectionLevelHIGH     WLANLinkProtectionLevel = 3
+)
+
+type PhysicalConnectionType int
+
+const (
+	PhysicalConnectionTypeIntegratedLANNIC PhysicalConnectionType = iota
+	PhysicalConnectionTypeDiscreteLANNIC
+	PhysicalConnectionTypeLANviaThunderboldDock
+	PhysicalConnectionTypeWirelessLAN
+)
+
+type PhysicalNicMedium int
+
+const (
+	PhysicalNicMediumSMBUS PhysicalNicMedium = iota
+	PhysicalNicMediumPCIe
+)
+
+type Settings struct {
+	base wsman.Base
+}
+
+func NewEthernetPortSettings(wsmanMessageCreator *wsman.WSManMessageCreator) Settings {
+	return Settings{
+		base: wsman.NewBase(wsmanMessageCreator, AMT_EthernetPortSettings),
+	}
+}
+func (EthernetPortSettings Settings) Get() string {
+	return EthernetPortSettings.base.Get(nil)
+}
+func (EthernetPortSettings Settings) Enumerate() string {
+	return EthernetPortSettings.base.Enumerate()
+}
+func (EthernetPortSettings Settings) Pull(enumerationContext string) string {
+	return EthernetPortSettings.base.Pull(enumerationContext)
+}
+func (EthernetPortSettings Settings) Put(ethernetPortSettings EthernetPortSettings) string {
+	return EthernetPortSettings.base.Put(ethernetPortSettings, false, nil)
+}
