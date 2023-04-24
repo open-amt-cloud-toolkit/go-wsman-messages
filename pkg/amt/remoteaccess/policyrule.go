@@ -15,10 +15,10 @@ type RemoteAccessPolicyRule struct {
 type Trigger uint8
 
 const (
-	TriggerUserInitiated    Trigger = 0
-	TriggerAlert            Trigger = 1
-	TriggerPeriodic         Trigger = 2
-	TriggerHomeProvisioning Trigger = 3
+	UserInitiated Trigger = iota
+	Alert
+	Periodic
+	HomeProvisioning
 )
 
 type PolicyRule struct {

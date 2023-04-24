@@ -65,35 +65,35 @@ const (
 type HealthState int
 
 const (
-	HealthStateUnknown             HealthState = 0
-	HealthStateOK                  HealthState = 5
-	HealthStateDegradedWarning     HealthState = 10
-	HealthStateMinorFailure        HealthState = 15
-	HealthStateMajorFailure        HealthState = 20
-	HealthStateCriticalFailure     HealthState = 25
-	HealthStateNonRecoverableError HealthState = 30
+	Unknown             HealthState = 0
+	OK                  HealthState = 5
+	DegradedWarning     HealthState = 10
+	MinorFailure        HealthState = 15
+	MajorFailure        HealthState = 20
+	CriticalFailure     HealthState = 25
+	NonRecoverableError HealthState = 30
 )
 
 type LocalProfileSynchronizationEnabled int
 
 const (
-	LocalProfileSynchronizationEnabledLocalSyncDisabled LocalProfileSynchronizationEnabled = 0
-	LocalProfileSynchronizationEnabledUnrestrictedSync  LocalProfileSynchronizationEnabled = 3
+	LocalSyncDisabled LocalProfileSynchronizationEnabled = 0
+	UnrestrictedSync  LocalProfileSynchronizationEnabled = 3
 )
 
 type NoHostCsmeSoftwarePolicy int
 
 const (
-	NoHostCsmeSoftwarePolicyRelaxedPolicy NoHostCsmeSoftwarePolicy = iota
-	NoHostCsmeSoftwarePolicyAggressivePolicy
-	NoHostCsmeSoftwarePolicyReserved
+	RelaxedPolicy NoHostCsmeSoftwarePolicy = iota
+	AggressivePolicy
+	Reserved
 )
 
 type UEFIWiFiProfileShareEnabled int
 
 const (
-	UEFIWiFiProfileShareEnabledEnabled UEFIWiFiProfileShareEnabled = iota
-	UEFIWiFiProfileShareEnabledDisabled
+	Enabled UEFIWiFiProfileShareEnabled = iota
+	Disabled
 )
 
 type Service struct {

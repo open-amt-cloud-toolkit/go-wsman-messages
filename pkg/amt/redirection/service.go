@@ -25,31 +25,31 @@ type EnabledState int
 const AMT_RedirectionService = "AMT_RedirectionService"
 
 const (
-	EnabledStateUnknown EnabledState = iota
-	EnabledStateOther
-	EnabledStateEnabled
-	EnabledStateDisabled
-	EnabledStateShuttingDown
-	EnabledStateNotApplicable
-	EnabledStateEnabledButOffline
-	EnabledStateInTest
-	EnabledStateDeferred
-	EnabledStateQuiesce
-	EnabledStateStarting
-	EnabledStateDMTFReserved
-	EnabledStateIDERAndSOLAreDisabled         = 32768
-	EnabledStateIDERIsEnabledAndSOLIsDisabled = 32769
-	EnabledStateSOLIsEnabledAndIDERIsDisabled = 32770
-	EnabledStateIDERAndSOLAreEnabled          = 32771
+	Unknown EnabledState = iota
+	Other
+	Enabled
+	Disabled
+	ShuttingDown
+	NotApplicable
+	EnabledButOffline
+	InTest
+	Deferred
+	Quiesce
+	Starting
+	DMTFReserved
+	IDERAndSOLAreDisabled         = 32768
+	IDERIsEnabledAndSOLIsDisabled = 32769
+	SOLIsEnabledAndIDERIsDisabled = 32770
+	IDERAndSOLAreEnabled          = 32771
 )
 
 type RequestedState int
 
 const (
-	RequestedStateDisableIDERAndSOL       RequestedState = 32768
-	RequestedStateEnableIDERAndDisableSOL RequestedState = 32769
-	RequestedStateEnableSOLAndDisableIDER RequestedState = 32770
-	RequestedStateEnableIDERAndSOL        RequestedState = 32771
+	DisableIDERAndSOL       RequestedState = 32768
+	EnableIDERAndDisableSOL RequestedState = 32769
+	EnableSOLAndDisableIDER RequestedState = 32770
+	EnableIDERAndSOL        RequestedState = 32771
 )
 
 type Service struct {

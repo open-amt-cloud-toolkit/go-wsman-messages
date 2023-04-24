@@ -29,7 +29,7 @@ type GenerateKeyPair_INPUT struct {
 type KeyAlgorithm int
 
 const (
-	KeyAlgorithmRSA KeyAlgorithm = 0
+	RSA KeyAlgorithm = 0
 )
 
 type KeyLength int
@@ -48,8 +48,8 @@ type PKCS10Request struct {
 type SigningAlgorithm int
 
 const (
-	SigningAlgorithmSHA1RSA SigningAlgorithm = iota
-	SigningAlgorithmSHA256RSA
+	SHA1RSA SigningAlgorithm = iota
+	SHA256RSA
 )
 
 type ManagementService struct {

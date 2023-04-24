@@ -16,9 +16,9 @@ type RemoteAccessPolicyAppliesToMPS struct {
 type MpsType int
 
 const (
-	MpsTypeExternalMPS MpsType = iota
-	MpsTypeInternalMPS
-	MpsTypeBothMPS
+	ExternalMPS MpsType = iota
+	InternalMPS
+	BothMPS
 )
 
 type PolicyAppliesToMPS struct {

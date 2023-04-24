@@ -16,7 +16,7 @@ type AuditLog struct {
 type ReadRecords_INPUT struct {
 	XMLName    xml.Name `xml:"h:ReadRecords_INPUT"`
 	H          string   `xml:"xmlns:h,attr"`
-	StartIndex int      `xml:"h:StartIndex,omitempty" json:"StartIndex,omitempty"`
+	StartIndex int      `xml:"h:StartIndex" json:"StartIndex"`
 }
 
 func NewAuditLog(wsmanMessageCreator *wsman.WSManMessageCreator) AuditLog {

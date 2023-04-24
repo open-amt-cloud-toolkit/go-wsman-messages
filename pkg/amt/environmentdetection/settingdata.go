@@ -17,8 +17,8 @@ type EnvironmentDetectionSettingData struct {
 type DetectionAlgorithm uint8
 
 const (
-	DetectionAlgorithmLocalDomains DetectionAlgorithm = iota
-	DetectionAlgorithmRemoteURLs
+	LocalDomains DetectionAlgorithm = iota
+	RemoteURLs
 )
 
 type SettingData struct {

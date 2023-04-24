@@ -28,20 +28,20 @@ type AuthenticationProtocol int
 const AMT_IEEE8021xProfile = "AMT_8021XProfile"
 
 const (
-	AuthenticationProtocolTLS AuthenticationProtocol = iota
-	AuthenticationProtocolTTLS_MSCHAPv2
-	AuthenticationProtocolPEAP_MSCHAPv2
-	AuthenticationProtocolEAP_GTC
-	AuthenticationProtocolEAPFAST_MSCHAPv2
-	AuthenticationProtocolEAPFAST_GTC
-	AuthenticationProtocolEAPFAST_TLS
+	TLS AuthenticationProtocol = iota
+	TTLS_MSCHAPv2
+	PEAP_MSCHAPv2
+	EAP_GTC
+	EAPFAST_MSCHAPv2
+	EAPFAST_GTC
+	EAPFAST_TLS
 )
 
 type ServerCertificateNameComparison int
 
 const (
-	ServerCertificateNameComparisonFullName ServerCertificateNameComparison = iota
-	ServerCertificateNameComparisonDomainSuffix
+	FullName ServerCertificateNameComparison = iota
+	DomainSuffix
 )
 
 type Profile struct {
