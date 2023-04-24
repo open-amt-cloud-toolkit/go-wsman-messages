@@ -46,17 +46,17 @@ type BootSettingData struct {
 type FirmwareVerbosity uint8
 
 const (
-	FirmwareVerbositySystemDefault FirmwareVerbosity = iota
-	FirmwareVerbosityQuietMinimal
-	FirmwareVerbosityVerboseAll
-	FirmwareVerbosityScreenBlank
+	SystemDefault FirmwareVerbosity = iota
+	QuietMinimal
+	VerboseAll
+	ScreenBlank
 )
 
 type IDERBootDevice uint8
 
 const (
-	IDERBootDeviceFloppyBoot IDERBootDevice = iota
-	IDERBootDeviceCDBoot
+	FloppyBoot IDERBootDevice = iota
+	CDBoot
 )
 
 type BootSettingDataResponse struct {

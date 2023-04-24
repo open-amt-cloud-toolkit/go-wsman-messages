@@ -36,37 +36,32 @@ type PreferredAddressFamily int
 const AMT_GeneralSettings = "AMT_GeneralSettings"
 
 const (
-	PreferredAddressFamilyIPv4 PreferredAddressFamily = 0
-	PreferredAddressFamilyIPv6 PreferredAddressFamily = 1
-)
-
-type AMTNetworkEnabled int
-
-const (
-	AMTNetworkEnabledDisabled AMTNetworkEnabled = 0
-	AMTNetworkEnabledEnabled  AMTNetworkEnabled = 1
+	IPv4 PreferredAddressFamily = iota
+	IPv6
 )
 
 type PrivacyLevel int
 
 const (
-	PrivacyLevelDefault  PrivacyLevel = 0
-	PrivacyLevelEnhanced PrivacyLevel = 1
-	PrivacyLevelExtreme  PrivacyLevel = 2
+	PrivacyLevelDefault PrivacyLevel = iota
+	PrivacyLevelEnhanced
+	PrivacyLevelExtreme
 )
 
 type PowerSource int
 
 const (
-	PowerSourceAC PowerSource = 0
-	PowerSourceDC PowerSource = 1
+	AC PowerSource = iota
+	DC
 )
 
-type ThunderboltDockEnabled int
+type AMTNetworkEnabled FeatureEnabled
+type ThunderboltDockEnabled FeatureEnabled
+type FeatureEnabled int
 
 const (
-	ThunderboltDockEnabledDisabled ThunderboltDockEnabled = 0
-	ThunderboltDockEnabledEnabled  ThunderboltDockEnabled = 1
+	Disabled FeatureEnabled = iota
+	Enabled
 )
 
 type Response struct {

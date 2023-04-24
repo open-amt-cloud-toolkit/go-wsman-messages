@@ -31,9 +31,9 @@ type UpdateUserAclEntry struct {
 type AccessPermission int
 
 const (
-	AccessPermissionLocalAccessOnly       AccessPermission = 0
-	AccessPermissionNetworkAccessOnly     AccessPermission = 1
-	AccessPermissionLocalAndNetworkAccess AccessPermission = 2
+	LocalAccessOnly AccessPermission = iota
+	NetworkAccessOnly
+	LocalAndNetworkAccess
 )
 
 type RealmValues int

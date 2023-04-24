@@ -11,10 +11,10 @@ type RequestedState int
 const AMT_UserInitiatedConnectionService = "AMT_UserInitiatedConnectionService"
 
 const (
-	RequestedStateAllInterfacesDisabled      RequestedState = 32768
-	RequestedStateBIOSInterfaceEnabled       RequestedState = 32769
-	RequestedStateOSInterfaceEnabled         RequestedState = 32770
-	RequestedStateBIOSandOSInterfacesEnabled RequestedState = 32771
+	AllInterfacesDisabled      RequestedState = 32768
+	BIOSInterfaceEnabled       RequestedState = 32769
+	OSInterfaceEnabled         RequestedState = 32770
+	BIOSandOSInterfacesEnabled RequestedState = 32771
 )
 
 type Service struct {

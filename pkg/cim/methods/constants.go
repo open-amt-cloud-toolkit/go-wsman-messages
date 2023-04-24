@@ -3,13 +3,13 @@ package methods
 type Methods string
 
 const (
-	MethodGet                     Methods = "Get"
-	MethodPull                    Methods = "Pull"
-	MethodEnumerate               Methods = "Enumerate"
-	MethodPut                     Methods = "Put"
-	MethodDelete                  Methods = "Delete"
-	MethodSetBootConfigRole       Methods = "SetBootConfigRole"
-	MethodChangeBootOrder         Methods = "ChangeBootOrder"
-	MethodRequestPowerStateChange Methods = "RequestPowerStateChange"
-	MethodRequestStateChange      Methods = "RequestStateChange"
+	Get                     Methods = "Get"
+	Pull                    Methods = "Pull"
+	Enumerate               Methods = "Enumerate"
+	Put                     Methods = "Put"
+	Delete                  Methods = "Delete"
+	SetBootConfigRole       Methods = "SetBootConfigRole"
+	ChangeBootOrder         Methods = "ChangeBootOrder"
+	RequestPowerStateChange Methods = "RequestPowerStateChange"
+	RequestStateChange      Methods = "RequestStateChange"
 )

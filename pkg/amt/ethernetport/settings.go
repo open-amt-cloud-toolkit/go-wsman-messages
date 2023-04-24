@@ -34,10 +34,10 @@ type LinkPolicyValues int
 const AMT_EthernetPortSettings = "AMT_EthernetPortSettings"
 
 const (
-	LinkPolicyValuesS0AC LinkPolicyValues = 1
-	LinkPolicyValuesSxAC LinkPolicyValues = 14
-	LinkPolicyValuesS0DC LinkPolicyValues = 16
-	LinkPolicyValuesSxDC LinkPolicyValues = 224
+	S0AC LinkPolicyValues = 1
+	SxAC LinkPolicyValues = 14
+	S0DC LinkPolicyValues = 16
+	SxDC LinkPolicyValues = 224
 )
 
 type LinkPolicy []LinkPolicyValues
@@ -45,48 +45,48 @@ type LinkPolicy []LinkPolicyValues
 type LinkPreference int
 
 const (
-	LinkPreferenceME   LinkPreference = 1
-	LinkPreferenceHOST LinkPreference = 2
+	LinkPreferenceME LinkPreference = iota + 1
+	LinkPreferenceHOST
 )
 
 type LinkControl int
 
 const (
-	LinkControlME   LinkControl = 1
-	LinkControlHOST LinkControl = 2
+	LinkControlME LinkControl = iota + 1
+	LinkControlHOST
 )
 
 type ConsoleTcpMaxRetransmissions int
 
 const (
-	ConsoleTcpMaxRetransmissions5 ConsoleTcpMaxRetransmissions = 5
-	ConsoleTcpMaxRetransmissions6 ConsoleTcpMaxRetransmissions = 6
-	ConsoleTcpMaxRetransmissions7 ConsoleTcpMaxRetransmissions = 7
+	ConsoleTcpMaxRetransmissions5 ConsoleTcpMaxRetransmissions = iota + 5
+	ConsoleTcpMaxRetransmissions6
+	ConsoleTcpMaxRetransmissions7
 )
 
 type WLANLinkProtectionLevel int
 
 const (
-	WLANLinkProtectionLevelOVERRIDE WLANLinkProtectionLevel = 0
-	WLANLinkProtectionLevelNONE     WLANLinkProtectionLevel = 1
-	WLANLinkProtectionLevelPASSIVE  WLANLinkProtectionLevel = 2
-	WLANLinkProtectionLevelHIGH     WLANLinkProtectionLevel = 3
+	OVERRIDE WLANLinkProtectionLevel = iota
+	NONE
+	PASSIVE
+	HIGH
 )
 
 type PhysicalConnectionType int
 
 const (
-	PhysicalConnectionTypeIntegratedLANNIC PhysicalConnectionType = iota
-	PhysicalConnectionTypeDiscreteLANNIC
-	PhysicalConnectionTypeLANviaThunderboldDock
-	PhysicalConnectionTypeWirelessLAN
+	IntegratedLANNIC PhysicalConnectionType = iota
+	DiscreteLANNIC
+	LANviaThunderboldDock
+	WirelessLAN
 )
 
 type PhysicalNicMedium int
 
 const (
-	PhysicalNicMediumSMBUS PhysicalNicMedium = iota
-	PhysicalNicMediumPCIe
+	SMBUS PhysicalNicMedium = iota
+	PCIe
 )
 
 type Settings struct {
