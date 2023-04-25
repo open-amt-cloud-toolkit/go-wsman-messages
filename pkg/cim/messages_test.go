@@ -84,6 +84,4 @@ func TestNewMessages(t *testing.T) {
 	if reflect.DeepEqual(m.WiFiPort, wifi.Port{}) {
 		t.Error("WiFiPort is not initialized")
 	}
-
-	// Add checks for other fields here
 }

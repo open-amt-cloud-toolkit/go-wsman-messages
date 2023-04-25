@@ -1,4 +1,4 @@
-package physical
+package alarmclock
 
 import (
 	"testing"
@@ -9,13 +9,13 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 )
 
-func TestCard(t *testing.T) {
+func TestAMT_AlarmClockService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
+	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := wsman.NewWSManMessageCreator(resourceUriBase)
-	elementUnderTest := NewCard(wsmanMessageCreator)
+	elementUnderTest := NewService(wsmanMessageCreator)
 
-	t.Run("cim_* Tests", func(t *testing.T) {
+	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name         string
 			method       string
@@ -24,11 +24,11 @@ func TestCard(t *testing.T) {
 			responseFunc func() string
 		}{
 			//GETS
-			{"should create a valid cim_Card Get wsman message", "CIM_Card", wsmantesting.GET, "", elementUnderTest.Get},
+			{"should create a valid AMT_AlarmClockService Get wsman message", "AMT_AlarmClockService", wsmantesting.GET, "", elementUnderTest.Get},
 			//ENUMERATES
-			{"should create a valid cim_Card Enumerate wsman message", "CIM_Card", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
+			{"should create a valid AMT_AlarmClockService Enumerate wsman message", "AMT_AlarmClockService", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
 			//PULLS
-			{"should create a valid cim_Card Pull wsman message", "CIM_Card", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{"should create a valid AMT_AlarmClockService Pull wsman message", "AMT_AlarmClockService", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 		}
 
 		for _, test := range tests {

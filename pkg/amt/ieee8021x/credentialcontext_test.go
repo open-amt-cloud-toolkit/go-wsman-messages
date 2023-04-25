@@ -9,13 +9,13 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 )
 
-func TestCIM(t *testing.T) {
+func TestAMT_IEEE8021xCredentialContext(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
+	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := wsman.NewWSManMessageCreator(resourceUriBase)
-	elementUnderTest := NewIEEE8021xSettings(wsmanMessageCreator)
+	elementUnderTest := NewIEEE8021xCredentialContext(wsmanMessageCreator)
 
-	t.Run("cim_* Tests", func(t *testing.T) {
+	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name         string
 			method       string
@@ -24,11 +24,11 @@ func TestCIM(t *testing.T) {
 			responseFunc func() string
 		}{
 			//GETS
-			{"should create a valid cim_IEEE8021xSettings Get wsman message", "CIM_IEEE8021xSettings", wsmantesting.GET, "", elementUnderTest.Get},
+			{"should create a valid AMT_IEEE8021xCredentialContext Get wsman message", "AMT_IEEE8021xCredentialContext", wsmantesting.GET, "", elementUnderTest.Get},
 			//ENUMERATES
-			{"should create a valid cim_IEEE8021xSettings Enumerate wsman message", "CIM_IEEE8021xSettings", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
+			{"should create a valid AMT_IEEE8021xCredentialContext Enumerate wsman message", "AMT_IEEE8021xCredentialContext", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
 			//PULLS
-			{"should create a valid cim_IEEE8021xSettings Pull wsman message", "CIM_IEEE8021xSettings", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{"should create a valid AMT_IEEE8021xCredentialContext Pull wsman message", "AMT_IEEE8021xCredentialContext", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 		}
 
 		for _, test := range tests {
