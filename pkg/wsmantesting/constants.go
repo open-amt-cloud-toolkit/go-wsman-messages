@@ -32,6 +32,6 @@ const (
 
 var PULL_BODY = fmt.Sprintf(`<Pull xmlns="http://schemas.xmlsoap.org/ws/2004/09/enumeration"><EnumerationContext>%s</EnumerationContext><MaxElements>999</MaxElements><MaxCharacters>99999</MaxCharacters></Pull>`, EnumerationContext)
 
-var ExpectedResponse = func(messageID int, resourceUriBase, method, action, body string) string {
-	return fmt.Sprintf(`%s%s%s</a:Action><a:To>/wsman</a:To><w:ResourceURI>%s%s</w:ResourceURI><a:MessageID>%d</a:MessageID><a:ReplyTo><a:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address></a:ReplyTo><w:OperationTimeout>%s</w:OperationTimeout></Header><Body>%s</Body></Envelope>`, XMLHeader, Envelope, action, resourceUriBase, method, messageID, OperationTimeout, body)
+var ExpectedResponse = func(messageID int, resourceUriBase, method, action, extraHeader, body string) string {
+	return fmt.Sprintf(`%s%s%s</a:Action><a:To>/wsman</a:To><w:ResourceURI>%s%s</w:ResourceURI><a:MessageID>%d</a:MessageID><a:ReplyTo><a:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address></a:ReplyTo><w:OperationTimeout>%s</w:OperationTimeout>%s</Header><Body>%s</Body></Envelope>`, XMLHeader, Envelope, action, resourceUriBase, method, messageID, OperationTimeout, extraHeader, body)
 }

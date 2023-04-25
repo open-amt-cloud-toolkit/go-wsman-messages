@@ -33,7 +33,7 @@ func TestAMT_PublicPrivateKeyPair(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				correctResponse := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.body)
+				correctResponse := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
 				messageID++
 				response := test.responseFunc()
 				if response != correctResponse {

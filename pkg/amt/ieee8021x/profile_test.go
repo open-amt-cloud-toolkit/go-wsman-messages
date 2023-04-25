@@ -9,7 +9,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 )
 
-func TestAMT_IEEE8021xProfile(t *testing.T) {
+func TestAMT_8021XProfile(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := wsman.NewWSManMessageCreator(resourceUriBase)
@@ -24,16 +24,16 @@ func TestAMT_IEEE8021xProfile(t *testing.T) {
 			responseFunc func() string
 		}{
 			//GETS
-			{"should create a valid AMT_IEEE8021xProfile Get wsman message", "AMT_IEEE8021xProfile", wsmantesting.GET, "", elementUnderTest.Get},
+			{"should create a valid AMT_8021XProfile Get wsman message", "AMT_8021XProfile", wsmantesting.GET, "", elementUnderTest.Get},
 			//ENUMERATES
-			{"should create a valid AMT_IEEE8021xProfile Enumerate wsman message", "AMT_IEEE8021xProfile", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
+			{"should create a valid AMT_8021XProfile Enumerate wsman message", "AMT_8021XProfile", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
 			//PULLS
-			{"should create a valid AMT_IEEE8021xProfile Pull wsman message", "AMT_IEEE8021xProfile", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{"should create a valid AMT_8021XProfile Pull wsman message", "AMT_8021XProfile", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 		}
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				correctResponse := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.body)
+				correctResponse := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
 				messageID++
 				response := test.responseFunc()
 				if response != correctResponse {
