@@ -22,32 +22,30 @@ jobs:
         go-version: [1.20.x]
 
     steps:
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: ${{ matrix.go-version }}
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Install Test Converter and run tests
-        run: |
-          export GOPATH="$HOME/go/"
-          export PATH=$PATH:$GOPATH/bin
-          go install github.com/jstemmer/go-junit-report/v2@latest
-          go test -covermode=atomic -coverprofile=coverage.out -race -v 2>&1 ./... | go-junit-report -set-exit-code > go-wsman.xml
-      - name: Format
-        run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
-        if: matrix.os == 'ubuntu-latest'
-      - name: Run go vet
-        run: go vet ./...
-      - name: Run go lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
-          version: latest
-      - uses: codecov/codecov-action@v3.1.2
-        name: Upload Coverage Results
-      - name: GitHub Upload Release Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: go-wsman-unit
-          path: go-wsman.xml
+    - name: Install Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go-version }}
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Install Test Converter and run tests
+      run: |
+        export GOPATH="$HOME/go/"
+        export PATH=$PATH:$GOPATH/bin
+        go install github.com/jstemmer/go-junit-report/v2@latest
+        go test -covermode=atomic -coverprofile=coverage.out -race -v 2>&1 ./... | go-junit-report -set-exit-code > go-wsman.xml
+    - name: Format
+      run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
+    - name: Run go vet
+      run: go vet ./...
+    - name: Run go lint
+      uses: golangci/golangci-lint-action@v3
+      with:
+        version: latest
+    - uses: codecov/codecov-action@v3.1.2
+      name: Upload Coverage Results
+    - name: GitHub Upload Coverage Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: go-wsman-unit
+        path: go-wsman.xml
