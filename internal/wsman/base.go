@@ -38,7 +38,7 @@ func (b *Base) Put(data interface{}, useHeaderSelector bool, customSelector *Sel
 	if customSelector == nil {
 		customSelector = &Selector{Name: "InstanceID", Value: fmt.Sprintf("%v", data)}
 	}
-	var header string = ""
+	var header string
 	if useHeaderSelector {
 		header = b.WSManMessageCreator.CreateHeader(BaseActionsPut, b.className, customSelector, "", "")
 	} else {

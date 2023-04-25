@@ -9,9 +9,9 @@ name: Go CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -33,14 +33,19 @@ jobs:
         export GOPATH="$HOME/go/"
         export PATH=$PATH:$GOPATH/bin
         go install github.com/jstemmer/go-junit-report/v2@latest
-        go test -v -coverprofile=coverage.out -covermode=atomic 2>&1 ./... | go-junit-report -set-exit-code > go-wsman.xml
+        go test -covermode=atomic -coverprofile=coverage.out -race -v 2>&1 ./... | go-junit-report -set-exit-code > go-wsman.xml
     - name: Format
       run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
-    - uses: codecov/codecov-action@894ff025c7b54547a9a2a1e9f228beae737ad3c2 # v3.1.3
+    - name: Run go vet
+      run: go vet ./...
+    - name: Run go lint
+      uses: golangci/golangci-lint-action@v3
+      with:
+        version: latest
+    - uses: codecov/codecov-action@v3.1.2
       name: Upload Coverage Results
     - name: GitHub Upload Coverage Artifacts
       uses: actions/upload-artifact@v2
       with:
         name: go-wsman-unit
         path: go-wsman.xml
-

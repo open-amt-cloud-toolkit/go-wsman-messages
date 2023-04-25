@@ -1063,11 +1063,11 @@ type EnabledLogicalElementEnabledDefault int
 
 const (
 	EnabledLogicalElementEnabledDefaultEnabled           EnabledLogicalElementEnabledDefault = 2
-	EnabledLogicalElementEnabledDefaultDisabled                                              = 3
-	EnabledLogicalElementEnabledDefaultNotApplicable                                         = 5
-	EnabledLogicalElementEnabledDefaultEnabledButOffline                                     = 6
-	EnabledLogicalElementEnabledDefaultNoDefault                                             = 7
-	EnabledLogicalElementEnabledDefaultQuiesce                                               = 9
+	EnabledLogicalElementEnabledDefaultDisabled          EnabledLogicalElementEnabledDefault = 3
+	EnabledLogicalElementEnabledDefaultNotApplicable     EnabledLogicalElementEnabledDefault = 5
+	EnabledLogicalElementEnabledDefaultEnabledButOffline EnabledLogicalElementEnabledDefault = 6
+	EnabledLogicalElementEnabledDefaultNoDefault         EnabledLogicalElementEnabledDefault = 7
+	EnabledLogicalElementEnabledDefaultQuiesce           EnabledLogicalElementEnabledDefault = 9
 )
 
 type BSSType int
