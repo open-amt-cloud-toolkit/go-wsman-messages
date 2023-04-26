@@ -23,7 +23,7 @@ jobs:
 
     steps:
     - name: Install Go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v4
       with:
         go-version: ${{ matrix.go-version }}
     - name: Checkout code
@@ -45,7 +45,7 @@ jobs:
     - uses: codecov/codecov-action@v3.1.2
       name: Upload Coverage Results
     - name: GitHub Upload Coverage Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: go-wsman-unit
         path: go-wsman.xml
