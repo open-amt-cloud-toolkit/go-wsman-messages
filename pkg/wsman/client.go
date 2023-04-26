@@ -42,16 +42,6 @@ func NewClient(target, username, password string, useDigest bool) *Client {
 	}
 	if res.useDigest {
 		res.challenge = &authChallenge{Username: res.username, Password: res.password}
-		resp, err := res.PostForm(res.endpoint, nil)
-		if err != nil {
-			log.Fatalf("unable to perform digest auth with %s: %v", res.endpoint, err)
-		}
-		if resp.StatusCode != 401 {
-			log.Fatalf("no digest auth at %s", res.endpoint)
-		}
-		if err := res.challenge.parseChallenge(resp.Header.Get("WWW-Authenticate")); err != nil {
-			log.Fatalf("failed to parse auth header %v", err)
-		}
 	}
 	return res
 }
