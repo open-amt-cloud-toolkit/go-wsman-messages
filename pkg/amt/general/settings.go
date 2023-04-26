@@ -1,12 +1,26 @@
 package general
 
 import (
+	"encoding/xml"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 
+type AMTMessage struct {
+	XMLName xml.Name     `xml:"Envelope"`
+	Header  wsman.Header `xml:"Header"`
+	Body    Body         `xml:"Body"`
+}
+
+type Body struct {
+	XMLName            xml.Name        `xml:"Body"`
+	AMTGeneralSettings GeneralSettings `xml:"AMT_GeneralSettings"`
+}
+
 type GeneralSettings struct {
 	models.SettingData
+	XMLName                       xml.Name `xml:"AMT_GeneralSettings"`
 	NetworkInterfaceEnabled       bool
 	DigestRealm                   string
 	IdleWakeTimeout               int
