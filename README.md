@@ -1,5 +1,7 @@
 # go-wsman-messages
 
+> Disclaimer: Production viable releases are tagged and listed under 'Releases'.  All other check-ins should be considered 'in-development' and should not be used in production
+
 This repository contains a Go library that creates properly formatted wsman messages to send to Intel® Active Management Technology (AMT) capable platforms. These messages are based on the AMT SDK documentation, which can be found [here](https://software.intel.com/content/www/us/en/develop/articles/intel-active-management-technology-software-development-kit-sdk.html).
 
 This library provides an easy to use API that returns an XML string that is ready to be sent to an Intel® AMT device. It supports calls into AMT, IPS, and CIM classes supported by Intel® AMT devices.
