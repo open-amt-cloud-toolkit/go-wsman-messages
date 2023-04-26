@@ -92,7 +92,7 @@ func (w WSManMessageCreator) CreateBody(method string, wsmanClass string, data i
 		w.namespaceMe(data, wsmanClass)
 		xmlString, err := xml.Marshal(data)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		str.WriteString(string(xmlString))
 	} else {
