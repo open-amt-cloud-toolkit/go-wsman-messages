@@ -1,3 +1,8 @@
+/*********************************************************************
+ * Copyright (c) Intel Corporation 2023
+ * SPDX-License-Identifier: Apache-2.0
+ **********************************************************************/
+
 package ieee8021x
 
 import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
