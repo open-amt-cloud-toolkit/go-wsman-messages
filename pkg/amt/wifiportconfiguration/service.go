@@ -6,8 +6,7 @@
 package wifiportconfiguration
 
 import (
-	"fmt"
-	"html"
+	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
@@ -104,6 +103,30 @@ const (
 type Service struct {
 	base wsman.Base
 }
+type AddWiFiSettings_INPUT struct {
+	XMLName              xml.Name `xml:"h:AddWiFiSettings_INPUT"`
+	H                    string   `xml:"xmlns:h,attr"`
+	WifiEndpoint         WiFiEndpoint
+	WiFiEndpointSettings models.WiFiEndpointSettings
+	IEEE8021xSettings    *models.IEEE8021xSettings `xml:"h:IEEE8021xSettingsInput,omitempty"`
+	ClientCredential     *ClientCredential         `xml:"h:ClientCredential,omitempty"`
+	CACredential         *CACredential             `xml:"h:CACredential,omitempty"`
+}
+type WiFiEndpoint struct {
+	XMLName             xml.Name                   `xml:"h:WiFiEndpoint,omitempty"`
+	Address             string                     `xml:"a:Address,omitempty"`
+	ReferenceParameters models.ReferenceParameters `xml:"a:ReferenceParameters,omitempty"`
+}
+type CACredential struct {
+	XMLName             xml.Name                   `xml:"h:CACredential,omitempty"`
+	Address             string                     `xml:"a:Address,omitempty"`
+	ReferenceParameters models.ReferenceParameters `xml:"a:ReferenceParameters,omitempty"`
+}
+type ClientCredential struct {
+	XMLName             xml.Name                   `xml:"h:ClientCredential,omitempty"`
+	Address             string                     `xml:"a:Address,omitempty"`
+	ReferenceParameters models.ReferenceParameters `xml:"a:ReferenceParameters,omitempty"`
+}
 
 func NewWiFiPortConfigurationService(wsmanMessageCreator *wsman.WSManMessageCreator) Service {
 	return Service{
@@ -126,50 +149,49 @@ func (s Service) Put(wiFiPortConfigurationService WiFiPortConfigurationService) 
 // AddWiFiSettings atomically creates instances and associates them based on the input parameters.
 func (s Service) AddWiFiSettings(wifiEndpointSettings models.WiFiEndpointSettings, selector wsman.Selector, ieee8021xSettingsInput *models.IEEE8021xSettings, clientCredential, caCredential string) string {
 	header := s.base.WSManMessageCreator.CreateHeader(string(actions.AddWiFiSettings), AMT_WiFiPortConfigurationService, nil, "", "")
-	//wifiEndpointSettings.PSKPassPhrase = strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(wifiEndpointSettings.PSKPassPhrase, "&", "&amp;"), "<", "&lt;"), ">", "&gt;"), "\"", "&quot;"), "'", "&apos;")
-	//needs testing
-	wifiEndpointSettings.PSKPassPhrase = html.EscapeString(wifiEndpointSettings.PSKPassPhrase)
 
-	dataArray := []interface{}{}
-	wifiEndpointObject := map[string]interface{}{
-		"WiFiEndpoint": map[string]interface{}{
-			"Address": "/wsman",
-			"ReferenceParameters": map[string]interface{}{
-				"ResourceURI": fmt.Sprintf("http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/%s", wifi.CIM_WiFiEndpoint),
-				"SelectorSet": s.base.WSManMessageCreator.CreateSelectorObjectForBody(selector),
+	input := AddWiFiSettings_INPUT{
+		WifiEndpoint: WiFiEndpoint{
+			Address: "/wsman",
+			ReferenceParameters: models.ReferenceParameters{
+				ResourceURI: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/" + wifi.CIM_WiFiEndpoint,
+				SelectorSet: models.SelectorSet{Selector: []wsman.Selector{selector}},
 			},
 		},
+		WiFiEndpointSettings: wifiEndpointSettings,
 	}
-	dataArray = append(dataArray, wifiEndpointObject)
-
-	wifiEndpointSettingInputObject := map[string]interface{}{
-		"WiFiEndpointSettingsInput": wifiEndpointSettings,
-		"namespace":                 "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings",
-	}
-	dataArray = append(dataArray, wifiEndpointSettingInputObject)
-
 	if ieee8021xSettingsInput != nil {
-		ieee8021xSettingsInputObject := map[string]interface{}{
-			"ieee8021xSettingsInput": *ieee8021xSettingsInput,
-			"namespace":              "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_IEEE8021xSettings",
+		input.IEEE8021xSettings = ieee8021xSettingsInput
+		input.CACredential = &CACredential{
+			Address: "default",
+			ReferenceParameters: models.ReferenceParameters{
+				ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
+				SelectorSet: models.SelectorSet{
+					Selector: []wsman.Selector{
+						{
+							Name:  "InstanceID",
+							Value: caCredential,
+						},
+					},
+				},
+			},
 		}
-		dataArray = append(dataArray, ieee8021xSettingsInputObject)
+		input.ClientCredential = &ClientCredential{
+			Address: "default",
+			ReferenceParameters: models.ReferenceParameters{
+				ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
+				SelectorSet: models.SelectorSet{
+					Selector: []wsman.Selector{
+						{
+							Name:  "InstanceID",
+							Value: clientCredential,
+						},
+					},
+				},
+			},
+		}
 	}
 
-	if clientCredential != "" {
-		clientCredentialObject := map[string]interface{}{
-			"ClientCredential": clientCredential,
-		}
-		dataArray = append(dataArray, clientCredentialObject)
-	}
-
-	if caCredential != "" {
-		caCredentialObject := map[string]interface{}{
-			"CACredential": caCredential,
-		}
-		dataArray = append(dataArray, caCredentialObject)
-	}
-
-	body := s.base.WSManMessageCreator.CreateBody(string(methods.AddWiFiSettings)+"_INPUT", AMT_WiFiPortConfigurationService, dataArray)
+	body := s.base.WSManMessageCreator.CreateBody(string(methods.AddWiFiSettings)+"_INPUT", AMT_WiFiPortConfigurationService, &input)
 	return s.base.WSManMessageCreator.CreateXML(header, body)
 }

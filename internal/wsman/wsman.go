@@ -14,8 +14,9 @@ import (
 )
 
 type Selector struct {
-	Name  string
-	Value string
+	XMLName xml.Name `xml:"w:Selector,omitempty"`
+	Name    string   `xml:"Name,attr"`
+	Value   string   `xml:",chardata"`
 }
 
 type ReturnValue struct {
