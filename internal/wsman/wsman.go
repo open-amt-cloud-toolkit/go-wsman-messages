@@ -14,8 +14,9 @@ import (
 )
 
 type Selector struct {
-	Name  string
-	Value string
+	XMLName xml.Name `xml:"w:Selector,omitempty"`
+	Name    string   `xml:"Name,attr"`
+	Value   string   `xml:",chardata"`
 }
 
 type ReturnValue struct {
@@ -164,8 +165,7 @@ func createCommonBodyPull(enumerationContext string, maxElements, maxCharacters 
 }
 
 func (w WSManMessageCreator) createCommonBodyCreateOrPut(wsmanClass string, data interface{}) string {
-	// Assuming `createBody` function is implemented in Go code
-	return w.CreateBody(wsmanClass, wsmanClass, []interface{}{data})
+	return w.CreateBody(wsmanClass, wsmanClass, data)
 }
 
 func createCommonBodyRequestStateChange(input string, requestedState int) string {

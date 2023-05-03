@@ -6,6 +6,7 @@
 package models
 
 import (
+	"encoding/xml"
 	"time"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
@@ -13,13 +14,14 @@ import (
 
 type SettingData struct {
 	ManagedElement
-	InstanceID string // MaxLen=256
+	InstanceID string `xml:"InstanceID,omitempty"` // MaxLen=256
 }
 
 type ManagedElement struct {
-	Caption     string // MaxLen=64
-	Description string // MaxLen=256
-	ElementName string // MaxLen=256
+	XMLName     xml.Name `xml:"h:ManagedElement"`
+	Caption     string   `xml:"h:Caption,omitempty"`     // MaxLen=64
+	Description string   `xml:"h:Description,omitempty"` // MaxLen=256
+	ElementName string   `xml:"h:ElementName,omitempty"` // MaxLen=256
 }
 type Collection struct {
 	ManagedElement
@@ -211,33 +213,6 @@ type PhysicalPackage struct {
 type Card struct {
 	PhysicalPackage
 }
-type Policy struct {
-	ManagedElement
-	CommonName     string
-	PolicyKeywords []string
-}
-
-type PolicySet struct {
-	Policy
-	PolicyDecisionStrategy PolicyDecisionStrategy // ValueMap={1, 2} Values={First Matching, All}
-	PolicyRoles            []string               // MaxLen=256
-	Enabled                Enabled                // ValueMap={1, 2, 3} Values={Enabled, Disabled, Enabled For Debug}
-}
-
-type PolicySetAppliesToElement struct {
-	PolicySet
-	ManagedElement ManagedElement
-}
-
-/**
- * First Matching:1 | All:2
- */
-type PolicyDecisionStrategy uint8
-
-const (
-	PolicyDecisionStrategyFirstMatching PolicyDecisionStrategy = 1
-	PolicyDecisionStrategyAll           PolicyDecisionStrategy = 2
-)
 
 /**
  * Enabled:1 | Disabled:2 | Enabled For Debug:3
@@ -320,19 +295,20 @@ type SharedCredential struct {
 
 // IEEE8021xSettings represents the IEEE 802.1x settings for a network interface.
 type IEEE8021xSettings struct {
-	SettingData
-	ElementName                     string
-	InstanceID                      string
-	AuthenticationProtocol          AuthenticationProtocol
-	RoamingIdentity                 string
-	ServerCertificateName           string
-	ServerCertificateNameComparison ServerCertificateNameComparison
-	Username                        string
-	Password                        string
-	Domain                          string
-	ProtectedAccessCredential       string
-	PACPassword                     string
-	PSK                             string
+	XMLName                         xml.Name                        `xml:"h:IEEE8021xSettingsInput,omitempty"`
+	H                               string                          `xml:"xmlns:q,attr"`
+	ElementName                     string                          `xml:"q:ElementName,omitempty"`
+	InstanceID                      string                          `xml:"q:InstanceID,omitempty"`
+	AuthenticationProtocol          AuthenticationProtocol          `xml:"q:AuthenticationProtocol"`
+	RoamingIdentity                 string                          `xml:"q:RoamingIdentity,omitempty"`
+	ServerCertificateName           string                          `xml:"q:ServerCertificateName,omitempty"`
+	ServerCertificateNameComparison ServerCertificateNameComparison `xml:"q:ServerCertificateNameComparison,omitempty"`
+	Username                        string                          `xml:"q:Username,omitempty"`
+	Password                        string                          `xml:"q:Password,omitempty"`
+	Domain                          string                          `xml:"q:Domain,omitempty"`
+	ProtectedAccessCredential       string                          `xml:"q:ProtectedAccessCredential,omitempty"`
+	PACPassword                     string                          `xml:"q:PACPassword,omitempty"`
+	PSK                             string                          `xml:"q:PSK,omitempty"`
 }
 
 type AuthenticationProtocol int
@@ -352,18 +328,20 @@ const (
 )
 
 type WiFiEndpointSettings struct {
-	SettingData
-	ElementName          string
-	InstanceID           string
-	Priority             int
-	SSID                 string // Max Length 32
-	BSSType              BSSType
-	EncryptionMethod     EncryptionMethod
-	AuthenticationMethod AuthenticationMethod
-	Keys                 []string // OctetString ArrayType=Indexed Max Length 256
-	KeyIndex             int
-	PSKValue             uint64 // OctetString
-	PSKPassPhrase        string // Min Length 8 Max Length 63
+	XMLName xml.Name `xml:"h:WiFiEndpointSettingsInput"`
+	H       string   `xml:"xmlns:q,attr"`
+	// SettingData
+	ElementName          string               `xml:"q:ElementName"`
+	InstanceID           string               `xml:"q:InstanceID"`
+	AuthenticationMethod AuthenticationMethod `xml:"q:AuthenticationMethod"`
+	EncryptionMethod     EncryptionMethod     `xml:"q:EncryptionMethod"`
+	SSID                 string               `xml:"q:SSID"` // Max Length 32
+	Priority             int                  `xml:"q:Priority"`
+	PSKPassPhrase        string               `xml:"q:PSKPassPhrase"` // Min Length 8 Max Length 63
+	BSSType              BSSType              `xml:"q:BSSType,omitempty"`
+	Keys                 []string             `xml:"q:Keys,omitempty"` // OctetString ArrayType=Indexed Max Length 256
+	KeyIndex             int                  `xml:"q:KeyIndex,omitempty"`
+	PSKValue             uint64               `xml:"q:PSKValue,omitempty"` // OctetString
 }
 
 // BootSourceSetting represents the boot source settings for a device.
@@ -871,12 +849,13 @@ type UserOfService struct {
 }
 
 type ReferenceParameters struct {
-	ResourceURI string
-	SelectorSet SelectorSet
+	ResourceURI string      `xml:"w:ResourceURI,omitempty"`
+	SelectorSet SelectorSet `xml:"w:SelectorSet,omitempty"`
 }
 
 type SelectorSet struct {
-	Selector []string
+	XMLName  xml.Name `xml:"w:SelectorSet,omitempty"`
+	Selector []wsman.Selector
 }
 
 type AssociatedPowerManagementService struct {

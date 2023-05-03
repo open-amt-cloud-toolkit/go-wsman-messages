@@ -6,6 +6,8 @@
 package timesynchronization
 
 import (
+	"encoding/xml"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 )
@@ -16,9 +18,11 @@ type Service struct {
 	base wsman.Base
 }
 type SetHighAccuracyTimeSynch_INPUT struct {
-	Ta0 int64
-	Tm1 int64
-	Tm2 int64
+	XMLName xml.Name `xml:"h:SetHighAccuracyTimeSynch_INPUT"`
+	H       string   `xml:"xmlns:h,attr"`
+	Ta0     int64    `xml:"h:Ta0"`
+	Tm1     int64    `xml:"h:Tm1"`
+	Tm2     int64    `xml:"h:Tm2"`
 }
 
 func NewTimeSynchronizationService(wsmanMessageCreator *wsman.WSManMessageCreator) Service {
@@ -37,7 +41,7 @@ func (TimeSynchronizationService Service) Pull(enumerationContext string) string
 }
 func (TLSCredentialContext Service) SetHighAccuracyTimeSynch(ta0, tm1, tm2 int64) string {
 	header := TLSCredentialContext.base.WSManMessageCreator.CreateHeader(string(actions.SetHighAccuracyTimeSynch), AMT_TimeSynchronizationService, nil, "", "")
-	body := TLSCredentialContext.base.WSManMessageCreator.CreateBody("SetHighAccuracyTimeSynch_INPUT", AMT_TimeSynchronizationService, SetHighAccuracyTimeSynch_INPUT{
+	body := TLSCredentialContext.base.WSManMessageCreator.CreateBody("SetHighAccuracyTimeSynch_INPUT", AMT_TimeSynchronizationService, &SetHighAccuracyTimeSynch_INPUT{
 		Ta0: ta0,
 		Tm1: tm1,
 		Tm2: tm2,
