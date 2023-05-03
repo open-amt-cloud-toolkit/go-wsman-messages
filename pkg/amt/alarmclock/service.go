@@ -12,13 +12,13 @@ import (
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 
 const AMT_AlarmClockService = "AMT_AlarmClockService"
 
 type AlarmClockOccurrence struct {
-	models.ManagedElement
+	//models.ManagedElement
+	ElementName        string    `json:"ElementName"`
 	InstanceID         string    `json:"InstanceID"`
 	StartTime          time.Time `json:"StartTime"`
 	Interval           int       `json:"Interval,omitempty"`
@@ -46,7 +46,7 @@ func (acs Service) Pull(enumerationContext string) string {
 func (acs Service) AddAlarm(alarmClockOccurrence AlarmClockOccurrence) string {
 	header := acs.base.WSManMessageCreator.CreateHeader(string(actions.AddAlarm), string(AMT_AlarmClockService), nil, "", "")
 	startTime := alarmClockOccurrence.StartTime.UTC().Format(time.RFC3339Nano)
-	startTime = strings.Split(startTime, ".")[0] + "Z"
+	startTime = strings.Split(startTime, ".")[0]
 
 	var body strings.Builder
 	body.WriteString(`<Body><p:AddAlarm_INPUT xmlns:p="`)

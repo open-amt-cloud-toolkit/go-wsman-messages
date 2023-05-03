@@ -6,6 +6,8 @@
 package remoteaccess
 
 import (
+	"encoding/xml"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
@@ -13,15 +15,45 @@ import (
 const AMT_RemoteAccessPolicyAppliesToMPS = "AMT_RemoteAccessPolicyAppliesToMPS"
 
 type RemoteAccessPolicyAppliesToMPS struct {
-	models.PolicySetAppliesToElement
-	OrderOfAccess int
-	MpsType       MpsType
+	XMLName xml.Name `xml:"h:AMT_RemoteAccessPolicyAppliesToMPS"`
+	H       string   `xml:"xmlns:h,attr"`
+	PolicySetAppliesToElement
+	OrderOfAccess int     `xml:"h:OrderOfAccess"`
+	MPSType       MPSType `xml:"h:MpsType"`
+}
+type Policy struct {
+	models.ManagedElement
+	CommonName     string   `xml:"h:CommonName"`
+	PolicyKeywords []string `xml:"h:PolicyKeywords"`
 }
 
-type MpsType int
+type PolicySet struct {
+	XMLName xml.Name `xml:"h:PolicySet"`
+	Policy
+	PolicyDecisionStrategy PolicyDecisionStrategy `xml:"h:PolicyDecisionStrategy"` // ValueMap={1, 2} Values={First Matching, All}
+	PolicyRoles            []string               `xml:"h:PolicyRoles"`            // MaxLen=256
+	Enabled                models.Enabled         `xml:"h:Enabled"`                // ValueMap={1, 2, 3} Values={Enabled, Disabled, Enabled For Debug}
+}
+
+type PolicySetAppliesToElement struct {
+	PolicySet      PolicySet
+	ManagedElement models.ManagedElement
+}
+
+/**
+ * First Matching:1 | All:2
+ */
+type PolicyDecisionStrategy uint8
 
 const (
-	ExternalMPS MpsType = iota
+	PolicyDecisionStrategyFirstMatching PolicyDecisionStrategy = 1
+	PolicyDecisionStrategyAll           PolicyDecisionStrategy = 2
+)
+
+type MPSType int
+
+const (
+	ExternalMPS MPSType = iota
 	InternalMPS
 	BothMPS
 )
@@ -44,7 +76,7 @@ func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Enumerate() string {
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Pull(enumerationContext string) string {
 	return RemoteAccessPolicyAppliesToMPS.base.Pull(enumerationContext)
 }
-func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Put(remoteAccessPolicyAppliesToMPS RemoteAccessPolicyAppliesToMPS) string {
+func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Put(remoteAccessPolicyAppliesToMPS *RemoteAccessPolicyAppliesToMPS) string {
 	return RemoteAccessPolicyAppliesToMPS.base.Put(remoteAccessPolicyAppliesToMPS, false, nil)
 }
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Delete(selector *wsman.Selector) string {

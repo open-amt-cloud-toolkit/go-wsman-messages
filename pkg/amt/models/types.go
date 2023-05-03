@@ -29,31 +29,6 @@ const (
 	AMTAuthenticateObjectSignatureMechanismTLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 AMTAuthenticateObjectSignatureMechanism = 0
 )
 
-type MPServer struct {
-	AccessInfo string
-	InfoFormat MPServerInfoFormat
-	Port       int
-	AuthMethod MPServerAuthMethod
-	Username   string
-	Password   string
-	CommonName string
-}
-
-type MPServerInfoFormat uint8
-
-const (
-	MPServerInfoFormatIPv4Address MPServerInfoFormat = 3
-	MPServerInfoFormatIPv6Address MPServerInfoFormat = 4
-	MPServerInfoFormatFQDN        MPServerInfoFormat = 201
-)
-
-type MPServerAuthMethod uint8
-
-const (
-	MPServerAuthMethodMutualAuthentication           MPServerAuthMethod = 1
-	MPServerAuthMethodUsernamePasswordAuthentication MPServerAuthMethod = 2
-)
-
 type SystemDefensePolicy struct {
 	models.ManagedElement
 	PolicyName            string

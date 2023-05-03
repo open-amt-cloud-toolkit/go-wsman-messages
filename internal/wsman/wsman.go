@@ -165,8 +165,7 @@ func createCommonBodyPull(enumerationContext string, maxElements, maxCharacters 
 }
 
 func (w WSManMessageCreator) createCommonBodyCreateOrPut(wsmanClass string, data interface{}) string {
-	// Assuming `createBody` function is implemented in Go code
-	return w.CreateBody(wsmanClass, wsmanClass, []interface{}{data})
+	return w.CreateBody(wsmanClass, wsmanClass, data)
 }
 
 func createCommonBodyRequestStateChange(input string, requestedState int) string {

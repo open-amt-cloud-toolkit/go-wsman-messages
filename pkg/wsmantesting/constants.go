@@ -16,6 +16,8 @@ const (
 	ENUMERATE               = "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Enumerate"
 	PULL                    = "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Pull"
 	DELETE                  = "http://schemas.xmlsoap.org/ws/2004/09/transfer/Delete"
+	PUT                     = "http://schemas.xmlsoap.org/ws/2004/09/transfer/Put"
+	CREATE                  = "http://schemas.xmlsoap.org/ws/2004/09/transfer/Create"
 	ENUMERATE_BODY          = "<Enumerate xmlns=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration\" />"
 	ServerCertificateIssuer = `serverCertificateIssuer`
 	ClientCertificate       = `clientCertificate`

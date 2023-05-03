@@ -18,9 +18,10 @@ type SettingData struct {
 }
 
 type ManagedElement struct {
-	Caption     string `xml:"Caption,omitempty"`     // MaxLen=64
-	Description string `xml:"Description,omitempty"` // MaxLen=256
-	ElementName string `xml:"ElementName,omitempty"` // MaxLen=256
+	XMLName     xml.Name `xml:"h:ManagedElement"`
+	Caption     string   `xml:"h:Caption,omitempty"`     // MaxLen=64
+	Description string   `xml:"h:Description,omitempty"` // MaxLen=256
+	ElementName string   `xml:"h:ElementName,omitempty"` // MaxLen=256
 }
 type Collection struct {
 	ManagedElement
@@ -212,33 +213,6 @@ type PhysicalPackage struct {
 type Card struct {
 	PhysicalPackage
 }
-type Policy struct {
-	ManagedElement
-	CommonName     string
-	PolicyKeywords []string
-}
-
-type PolicySet struct {
-	Policy
-	PolicyDecisionStrategy PolicyDecisionStrategy // ValueMap={1, 2} Values={First Matching, All}
-	PolicyRoles            []string               // MaxLen=256
-	Enabled                Enabled                // ValueMap={1, 2, 3} Values={Enabled, Disabled, Enabled For Debug}
-}
-
-type PolicySetAppliesToElement struct {
-	PolicySet
-	ManagedElement ManagedElement
-}
-
-/**
- * First Matching:1 | All:2
- */
-type PolicyDecisionStrategy uint8
-
-const (
-	PolicyDecisionStrategyFirstMatching PolicyDecisionStrategy = 1
-	PolicyDecisionStrategyAll           PolicyDecisionStrategy = 2
-)
 
 /**
  * Enabled:1 | Disabled:2 | Enabled For Debug:3

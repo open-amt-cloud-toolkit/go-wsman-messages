@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 )
 
@@ -34,6 +35,10 @@ func TestAMT_SetupAndConfigurationService(t *testing.T) {
 			{"should create a valid AMT_SetupAndConfigurationService Enumerate wsman message", "AMT_SetupAndConfigurationService", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
 			//PULLS
 			{"should create a valid AMT_SetupAndConfigurationService Pull wsman message", "AMT_SetupAndConfigurationService", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{"should create a valid AMT_SetupAndConfigurationService CommitChanges wsman message", "AMT_SetupAndConfigurationService", string(actions.CommitChanges), `<h:CommitChanges_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"></h:CommitChanges_INPUT>`, elementUnderTest.CommitChanges},
+			{"should create a valid AMT_SetupAndConfigurationService GetUuid wsman message", "AMT_SetupAndConfigurationService", string(actions.GetUuid), `<h:GetUuid_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"></h:GetUuid_INPUT>`, elementUnderTest.GetUuid},
+			{"should create a valid AMT_SetupAndConfigurationService SetMEBxPassword wsman message", "AMT_SetupAndConfigurationService", string(actions.SetMEBxPassword), `<h:SetMEBxPassword_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"><h:Password>P@ssw0rd</h:Password></h:SetMEBxPassword_INPUT>`, func() string { return elementUnderTest.SetMEBXPassword("P@ssw0rd") }},
+			{"should create a valid AMT_SetupAndConfigurationService Unprovision wsman message", "AMT_SetupAndConfigurationService", "Unprovision", `<h:Unprovision_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"><h:ProvisioningMode>1</h:ProvisioningMode></h:Unprovision_INPUT>`, func() string { return elementUnderTest.Unprovision(1) }},
 		}
 
 		for _, test := range tests {
