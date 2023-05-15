@@ -33,9 +33,13 @@ func NewKerberosSettingData(wsmanMessageCreator *wsman.WSManMessageCreator) Kerb
 func (KerberosSettingData KerberosSettingData) Get() string {
 	return KerberosSettingData.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (KerberosSettingData KerberosSettingData) Enumerate() string {
 	return KerberosSettingData.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (KerberosSettingData KerberosSettingData) Pull(enumerationContext string) string {
 	return KerberosSettingData.base.Pull(enumerationContext)
 }

@@ -108,12 +108,18 @@ func NewEthernetPortSettings(wsmanMessageCreator *wsman.WSManMessageCreator) Set
 func (EthernetPortSettings Settings) Get() string {
 	return EthernetPortSettings.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (EthernetPortSettings Settings) Enumerate() string {
 	return EthernetPortSettings.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (EthernetPortSettings Settings) Pull(enumerationContext string) string {
 	return EthernetPortSettings.base.Pull(enumerationContext)
 }
+
+// Put will change properties of the selected instance
 func (EthernetPortSettings Settings) Put(ethernetPortSettings EthernetPortSettings) string {
 	return EthernetPortSettings.base.Put(ethernetPortSettings, false, nil)
 }

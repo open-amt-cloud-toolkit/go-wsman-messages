@@ -33,9 +33,13 @@ func NewAuditLog(wsmanMessageCreator *wsman.WSManMessageCreator) AuditLog {
 func (AuditLog AuditLog) Get() string {
 	return AuditLog.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (AuditLog AuditLog) Enumerate() string {
 	return AuditLog.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (AuditLog AuditLog) Pull(enumerationContext string) string {
 	return AuditLog.base.Pull(enumerationContext)
 }

@@ -53,14 +53,17 @@ func (b Settings) Get() string {
 	return b.base.Get(nil)
 }
 
+// Enumerates the instances of this class
 func (b Settings) Enumerate() string {
 	return b.base.Enumerate()
 }
 
+// Pulls instances of this class, following an Enumerate operation
 func (b Settings) Pull(enumerationContext string) string {
 	return b.base.Pull(enumerationContext)
 }
 
+// Put will change properties of the selected instance
 func (b Settings) Put(ieee8021xSettings IEEE8021xSettings) string {
 
 	return b.base.Put(ieee8021xSettings, false, nil)

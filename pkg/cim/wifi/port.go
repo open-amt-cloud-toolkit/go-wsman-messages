@@ -22,6 +22,8 @@ func NewWiFiPort(wsmanMessageCreator *wsman.WSManMessageCreator) Port {
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_WiFiPort)),
 	}
 }
+
+// RequestStateChange requests that the state of the element be changed to the value specified in the RequestedState parameter . . .
 func (w Port) RequestStateChange(requestedState int) string {
 	return w.base.RequestStateChange(actions.RequestStateChange(string(CIM_WiFiPort)), requestedState)
 }
@@ -31,9 +33,12 @@ func (b Port) Get() string {
 	return b.base.Get(nil)
 }
 
+// Enumerates the instances of this class
 func (b Port) Enumerate() string {
 	return b.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (b Port) Pull(enumerationContext string) string {
 	return b.base.Pull(enumerationContext)
 }

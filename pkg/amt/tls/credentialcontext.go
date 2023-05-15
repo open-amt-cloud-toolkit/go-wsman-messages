@@ -27,15 +27,23 @@ func NewTLSCredentialContext(wsmanMessageCreator *wsman.WSManMessageCreator) Cre
 func (TLSCredentialContext CredentialContext) Get() string {
 	return TLSCredentialContext.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (TLSCredentialContext CredentialContext) Enumerate() string {
 	return TLSCredentialContext.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (TLSCredentialContext CredentialContext) Pull(enumerationContext string) string {
 	return TLSCredentialContext.base.Pull(enumerationContext)
 }
+
+// Delete removes a the specified instance
 func (TLSCredentialContext CredentialContext) Delete(selector *wsman.Selector) string {
 	return TLSCredentialContext.base.Delete(selector)
 }
+
+// Creates a new instance of this class
 func (TLSCredentialContext CredentialContext) Create(certHandle string) string {
 	header := TLSCredentialContext.base.WSManMessageCreator.CreateHeader(string(wsman.BaseActionsCreate), AMT_TLSCredentialContext, nil, "", "")
 	body := fmt.Sprintf(`<Body><h:AMT_TLSCredentialContext xmlns:h="%sAMT_TLSCredentialContext"><h:ElementInContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementInContext><h:ElementProvidingContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_TLSProtocolEndpointCollection</w:ResourceURI><w:SelectorSet><w:Selector Name="ElementName">TLSProtocolEndpointInstances Collection</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementProvidingContext></h:AMT_TLSCredentialContext></Body>`, TLSCredentialContext.base.WSManMessageCreator.ResourceURIBase, TLSCredentialContext.base.WSManMessageCreator.ResourceURIBase, certHandle, TLSCredentialContext.base.WSManMessageCreator.ResourceURIBase)

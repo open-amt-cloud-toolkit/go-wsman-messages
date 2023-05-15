@@ -72,18 +72,28 @@ func NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator *wsman.WSManMessageCr
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Get() string {
 	return RemoteAccessPolicyAppliesToMPS.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Enumerate() string {
 	return RemoteAccessPolicyAppliesToMPS.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Pull(enumerationContext string) string {
 	return RemoteAccessPolicyAppliesToMPS.base.Pull(enumerationContext)
 }
+
+// Put will change properties of the selected instance
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Put(remoteAccessPolicyAppliesToMPS *RemoteAccessPolicyAppliesToMPS) string {
 	return RemoteAccessPolicyAppliesToMPS.base.Put(remoteAccessPolicyAppliesToMPS, false, nil)
 }
+
+// Delete removes a the specified instance
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Delete(selector *wsman.Selector) string {
 	return RemoteAccessPolicyAppliesToMPS.base.Delete(selector)
 }
+
+// Creates a new instance of this class
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Create(remoteAccessPolicyAppliesToMPS RemoteAccessPolicyAppliesToMPS) string {
 	return RemoteAccessPolicyAppliesToMPS.base.Create(remoteAccessPolicyAppliesToMPS, nil)
 }

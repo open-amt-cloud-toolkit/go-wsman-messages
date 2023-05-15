@@ -105,6 +105,11 @@ type SetAdminACLEntryEx_INPUT struct {
 	DigestPassword string   `xml:"h:DigestPassword"`
 }
 
+// Describes the Authorization Service, which is responsible for Access Control management in the Intel(R) AMT subsystem.
+// Additional Notes:
+// 1) Realms 'AuditLogRealm' (20) and 'ACLRealm' (21) are supported only in Intel AMT Release 4.0 and later releases.
+// 2) Realm 'DTRealm' (23) is supported only in 'ME 5.1' and Intel AMT Release 5.1 and later releases.
+// 3) All the methods of 'AMT_AuthorizationService' except for 'Get' are not supported in Remote Connectivity Service provisioning mode
 func NewAuthorizationService(wsmanMessageCreator *wsman.WSManMessageCreator) AuthorizationService {
 	return AuthorizationService{
 		base: wsman.NewBase(wsmanMessageCreator, AMT_AuthorizationService),
@@ -115,32 +120,18 @@ func NewAuthorizationService(wsmanMessageCreator *wsman.WSManMessageCreator) Aut
 func (AuthorizationService AuthorizationService) Get() string {
 	return AuthorizationService.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (AuthorizationService AuthorizationService) Enumerate() string {
 	return AuthorizationService.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (AuthorizationService AuthorizationService) Pull(enumerationContext string) string {
 	return AuthorizationService.base.Pull(enumerationContext)
 }
 
-// func (as AuthorizationService) AddUserAclEntryEx(accessPermission AccessPermission, realms []RealmValues, digestUsername, digestPassword, kerberosUserSid string) string {
-// 	if (digestUsername == "" || digestPassword == "") && kerberosUserSid == "" {
-// 		panic("Missing user ACL entry information")
-// 	}
-// 	if digestUsername != "" && len(digestUsername) > 16 {
-// 		panic("Username too long")
-// 	}
-// 	header := as.base.WSManMessageCreator.CreateHeader(string(actions.AddUserAclEntryEx), AMT_AuthorizationService, nil, "", "")
-// 	aclObject := AddUserAclEntry{
-// 		DigestUsername:   digestUsername,
-// 		DigestPassword:   digestPassword,
-// 		KerberosUserSid:  kerberosUserSid,
-// 		AccessPermission: accessPermission,
-// 		Realms:           realms,
-// 	}
-// 	body := as.base.WSManMessageCreator.CreateBody("AddUserAclEntryEx_INPUT", AMT_AuthorizationService, &aclObject)
-// 	return as.base.WSManMessageCreator.CreateXML(header, body)
-// }
-
+// EnumerateUserAclEntries enumerates entries in the User Access Control List (ACL).
 func (as AuthorizationService) EnumerateUserAclEntries(startIndex int) string {
 	if startIndex == 0 {
 		startIndex = 1
@@ -173,6 +164,8 @@ func (as AuthorizationService) GetAdminNetAclEntryStatus() string {
 	body := as.base.WSManMessageCreator.CreateBody("GetAdminNetAclEntryStatus_INPUT", AMT_AuthorizationService, nil)
 	return as.base.WSManMessageCreator.CreateXML(header, body)
 }
+
+// GetUserAclEntryEx reads a user entry from the Intel(R) AMT device.
 func (as AuthorizationService) GetUserAclEntryEx(handle int) string {
 	header := as.base.WSManMessageCreator.CreateHeader(string(actions.GetUserAclEntryEx), AMT_AuthorizationService, nil, "", "")
 	body := as.base.WSManMessageCreator.CreateBody("GetUserAclEntryEx_INPUT", AMT_AuthorizationService, &GetUserAclEntryEx_INPUT{Handle: handle})
@@ -196,23 +189,3 @@ func (as AuthorizationService) SetAdminACLEntryEx(username, digestPassword strin
 	body := as.base.WSManMessageCreator.CreateBody("SetAdminAclEntryEx_INPUT", AMT_AuthorizationService, &SetAdminACLEntryEx_INPUT{Username: username, DigestPassword: digestPassword})
 	return as.base.WSManMessageCreator.CreateXML(header, body)
 }
-
-// func (as AuthorizationService) UpdateUserAclEntryEx(handle int, accessPermission AccessPermission, realms []RealmValues, digestUsername, digestPassword, kerberosUserSid string) string {
-// 	if (digestUsername == "" || digestPassword == "") && kerberosUserSid == "" {
-// 		panic("Missing user ACL entry information")
-// 	}
-// 	if digestUsername != "" && len(digestUsername) > 16 {
-// 		panic("Username too long")
-// 	}
-// 	header := as.base.WSManMessageCreator.CreateHeader(string(actions.UpdateUserAclEntryEx), AMT_AuthorizationService, nil, "", "")
-// 	aclObject := &UpdateUserAclEntry{
-// 		Handle:           handle,
-// 		DigestUsername:   digestUsername,
-// 		DigestPassword:   digestPassword,
-// 		KerberosUserSid:  kerberosUserSid,
-// 		AccessPermission: accessPermission,
-// 		Realms:           realms,
-// 	}
-// 	body := as.base.WSManMessageCreator.CreateBody("UpdateUserAclEntryEx_INPUT", AMT_AuthorizationService, aclObject)
-// 	return as.base.WSManMessageCreator.CreateXML(header, body)
-// }

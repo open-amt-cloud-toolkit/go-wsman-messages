@@ -30,19 +30,18 @@ func (b Service) Get() string {
 	return b.base.Get(nil)
 }
 
-// Enumerates the instances of OptInService.
+// Enumerates the instances of this class
 func (b Service) Enumerate() string {
 	return b.base.Enumerate()
 }
 
-// Pulls instances of OptInService, following an Enumerate operation.
+// Pulls instances of this class, following an Enumerate operation
 func (b Service) Pull(enumerationContext string) string {
 	return b.base.Pull(enumerationContext)
 }
 
-// Changes properties of OptInService.
-//
-//	func (b OptInService) Put(optInServiceResponse models.OptInServiceResponse) string {
+//	// Put will change properties of the selected instance
+func (b OptInService) Put(optInServiceResponse models.OptInServiceResponse) string {
 //		key := reflect.ValueOf(optInServiceResponse).MapKeys()[0].Interface().(string)
 //		return b.base.Put(optInServiceResponse[key], string(IPS_OptInService), false)
 //	}

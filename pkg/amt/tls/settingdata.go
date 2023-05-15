@@ -34,12 +34,18 @@ func NewTLSSettingData(wsmanMessageCreator *wsman.WSManMessageCreator) SettingDa
 func (TLSSettingData SettingData) Get() string {
 	return TLSSettingData.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (TLSSettingData SettingData) Enumerate() string {
 	return TLSSettingData.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (TLSSettingData SettingData) Pull(enumerationContext string) string {
 	return TLSSettingData.base.Pull(enumerationContext)
 }
+
+// Put will change properties of the selected instance
 func (TLSSettingData SettingData) Put(tlsSettingData TLSSettingData) string {
 	return TLSSettingData.base.Put(tlsSettingData, false, nil)
 }

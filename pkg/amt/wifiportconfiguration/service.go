@@ -138,12 +138,18 @@ func NewWiFiPortConfigurationService(wsmanMessageCreator *wsman.WSManMessageCrea
 func (s Service) Get() string {
 	return s.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (s Service) Enumerate() string {
 	return s.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (s Service) Pull(enumerationContext string) string {
 	return s.base.Pull(enumerationContext)
 }
+
+// Put will change properties of the selected instance
 func (s Service) Put(wiFiPortConfigurationService WiFiPortConfigurationService) string {
 	return s.base.Put(wiFiPortConfigurationService, false, nil)
 }

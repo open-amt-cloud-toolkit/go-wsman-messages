@@ -42,9 +42,13 @@ func NewService(wsmanMessageCreator *wsman.WSManMessageCreator) Service {
 func (acs Service) Get() string {
 	return acs.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (acs Service) Enumerate() string {
 	return acs.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (acs Service) Pull(enumerationContext string) string {
 	return acs.base.Pull(enumerationContext)
 }

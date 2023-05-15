@@ -36,12 +36,18 @@ func NewUserInitiatedConnectionService(wsmanMessageCreator *wsman.WSManMessageCr
 func (UserInitiatedConnectionService Service) Get() string {
 	return UserInitiatedConnectionService.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (UserInitiatedConnectionService Service) Enumerate() string {
 	return UserInitiatedConnectionService.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (UserInitiatedConnectionService Service) Pull(enumerationContext string) string {
 	return UserInitiatedConnectionService.base.Pull(enumerationContext)
 }
+
+// RequestStateChange requests that the state of the element be changed to the value specified in the RequestedState parameter . . .
 func (UserInitiatedConnectionService Service) RequestStateChange(requestedState RequestedState) string {
 	return UserInitiatedConnectionService.base.RequestStateChange(actions.RequestStateChange(redirection.AMT_RedirectionService), int(requestedState))
 

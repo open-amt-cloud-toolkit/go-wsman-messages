@@ -40,12 +40,18 @@ func NewEnvironmentDetectionSettingData(wsmanMessageCreator *wsman.WSManMessageC
 func (EnvironmentDetectionSettingData SettingData) Get() string {
 	return EnvironmentDetectionSettingData.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (EnvironmentDetectionSettingData SettingData) Enumerate() string {
 	return EnvironmentDetectionSettingData.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (EnvironmentDetectionSettingData SettingData) Pull(enumerationContext string) string {
 	return EnvironmentDetectionSettingData.base.Pull(enumerationContext)
 }
+
+// Put will change properties of the selected instance
 func (EnvironmentDetectionSettingData SettingData) Put(environmentDetectionSettingData EnvironmentDetectionSettingData) string {
 	return EnvironmentDetectionSettingData.base.Put(environmentDetectionSettingData, false, nil)
 }
