@@ -61,6 +61,10 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 				}
 				return elementUnderTest.GeneratePKCS10RequestEx(pkcs10Request)
 			}},
+			{"should return a valid amt_PublicKeyManagementService AddKey wsman message", "AMT_PublicKeyManagementService", "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/AddKey", `<h:AddKey_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService"><h:KeyBlob>privatekey</h:KeyBlob></h:AddKey_INPUT>`, func() string {
+				cert := []byte("privatekey")
+				return elementUnderTest.AddKey(cert)
+			}},
 		}
 
 		for _, test := range tests {

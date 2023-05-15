@@ -18,6 +18,11 @@ type Selector struct {
 	Name    string   `xml:"Name,attr"`
 	Value   string   `xml:",chardata"`
 }
+type Selector_OUTPUT struct {
+	XMLName xml.Name `xml:"Selector,omitempty"`
+	Name    string   `xml:"Name,attr"`
+	Value   string   `xml:",chardata"`
+}
 
 type ReturnValue struct {
 	ReturnValue    int
