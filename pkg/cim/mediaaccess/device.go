@@ -19,6 +19,8 @@ func NewMediaAccessDevice(wsmanMessageCreator *wsman.WSManMessageCreator) Device
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_MediaAccessDevice)),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (b Device) Get() string {
 	return b.base.Get(nil)
 }

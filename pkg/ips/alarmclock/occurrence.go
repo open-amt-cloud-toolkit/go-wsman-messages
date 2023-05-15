@@ -20,6 +20,7 @@ func NewAlarmClockOccurrence(wsmanMessageCreator *wsman.WSManMessageCreator) Occ
 	}
 }
 
+// Get retrieves the representation of the instance
 func (a Occurrence) Get() string {
 	return a.base.Get(nil)
 }

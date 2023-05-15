@@ -28,6 +28,8 @@ func NewKerberosSettingData(wsmanMessageCreator *wsman.WSManMessageCreator) Kerb
 		base: wsman.NewBase(wsmanMessageCreator, AMT_KerberosSettingData),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (KerberosSettingData KerberosSettingData) Get() string {
 	return KerberosSettingData.base.Get(nil)
 }

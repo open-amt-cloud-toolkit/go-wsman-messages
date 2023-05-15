@@ -20,6 +20,8 @@ func NewManagementPresenceRemoteSAP(wsmanMessageCreator *wsman.WSManMessageCreat
 		base: wsman.NewBase(wsmanMessageCreator, AMT_ManagementPresenceRemoteSAP),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (ManagementPresenceRemoteSAP RemoteSAP) Get() string {
 	return ManagementPresenceRemoteSAP.base.Get(nil)
 }

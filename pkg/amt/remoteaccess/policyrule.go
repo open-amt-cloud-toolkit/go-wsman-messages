@@ -35,6 +35,8 @@ func NewRemoteAccessPolicyRule(wsmanMessageCreator *wsman.WSManMessageCreator) P
 		base: wsman.NewBase(wsmanMessageCreator, AMT_RemoteAccessPolicyRule),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (RemoteAccessPolicyRule PolicyRule) Get() string {
 	return RemoteAccessPolicyRule.base.Get(nil)
 }

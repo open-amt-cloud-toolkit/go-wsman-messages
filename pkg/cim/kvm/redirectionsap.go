@@ -25,6 +25,8 @@ func NewKVMRedirectionSAP(wsmanMessageCreator *wsman.WSManMessageCreator) Redire
 func (k RedirectionSAP) RequestStateChange(requestedState int) string {
 	return k.base.RequestStateChange(actions.RequestStateChange(string(CIM_KVMRedirectionSAP)), requestedState)
 }
+
+// Get retrieves the representation of the instance
 func (b RedirectionSAP) Get() string {
 	return b.base.Get(nil)
 }

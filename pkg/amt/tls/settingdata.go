@@ -29,6 +29,8 @@ func NewTLSSettingData(wsmanMessageCreator *wsman.WSManMessageCreator) SettingDa
 		base: wsman.NewBase(wsmanMessageCreator, AMT_TLSSettingData),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (TLSSettingData SettingData) Get() string {
 	return TLSSettingData.base.Get(nil)
 }

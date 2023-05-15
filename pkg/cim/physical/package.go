@@ -19,6 +19,8 @@ func NewPhysicalPackage(wsmanMessageCreator *wsman.WSManMessageCreator) Package 
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_PhysicalPackage)),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (b Package) Get() string {
 	return b.base.Get(nil)
 }

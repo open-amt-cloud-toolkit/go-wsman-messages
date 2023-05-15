@@ -24,6 +24,7 @@ func (b *Base) Enumerate() string {
 	return b.WSManMessageCreator.CreateXML(header, EnumerateBody)
 }
 
+// Get retrieves the representation of the instance
 func (b *Base) Get(selector *Selector) string {
 	header := b.WSManMessageCreator.CreateHeader(BaseActionsGet, b.className, selector, "", "")
 	return b.WSManMessageCreator.CreateXML(header, GetBody)

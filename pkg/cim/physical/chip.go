@@ -19,6 +19,8 @@ func NewChip(wsmanMessageCreator *wsman.WSManMessageCreator) Chip {
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_Chip)),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (b Chip) Get() string {
 	return b.base.Get(nil)
 }

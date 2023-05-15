@@ -29,6 +29,8 @@ func NewPublicKeyCertificate(wsmanMessageCreator *wsman.WSManMessageCreator) Cer
 		base: wsman.NewBase(wsmanMessageCreator, AMT_PublicKeyCertificate),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (PublicKeyCertificate Certificate) Get() string {
 	return PublicKeyCertificate.base.Get(nil)
 }

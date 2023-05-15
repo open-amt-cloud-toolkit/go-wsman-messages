@@ -19,6 +19,8 @@ func NewSoftwareIdentity(wsmanMessageCreator *wsman.WSManMessageCreator) Identit
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_SoftwareIdentity)),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (b Identity) Get() string {
 	return b.base.Get(nil)
 }

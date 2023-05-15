@@ -20,6 +20,8 @@ func NewPublicPrivateKeyPair(wsmanMessageCreator *wsman.WSManMessageCreator) Key
 		base: wsman.NewBase(wsmanMessageCreator, AMT_PublicPrivateKeyPair),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (PublicPrivateKeyPair KeyPair) Get() string {
 	return PublicPrivateKeyPair.base.Get(nil)
 }

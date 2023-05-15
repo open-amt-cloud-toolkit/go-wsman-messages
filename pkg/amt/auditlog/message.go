@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Represents an Audit Log in the Intel AMT subsystem.
 package auditlog
 
 import (
@@ -18,7 +19,7 @@ type AuditLog struct {
 	base wsman.Base
 }
 
-type ReadRecords_INPUT struct {
+type readRecords_INPUT struct {
 	XMLName    xml.Name `xml:"h:ReadRecords_INPUT"`
 	H          string   `xml:"xmlns:h,attr"`
 	StartIndex int      `xml:"h:StartIndex" json:"StartIndex"`
@@ -28,6 +29,7 @@ func NewAuditLog(wsmanMessageCreator *wsman.WSManMessageCreator) AuditLog {
 	return AuditLog{base: wsman.NewBase(wsmanMessageCreator, AMT_AuditLog)}
 }
 
+// Get retrieves the representation of the instance
 func (AuditLog AuditLog) Get() string {
 	return AuditLog.base.Get(nil)
 }
@@ -37,12 +39,16 @@ func (AuditLog AuditLog) Enumerate() string {
 func (AuditLog AuditLog) Pull(enumerationContext string) string {
 	return AuditLog.base.Pull(enumerationContext)
 }
+
+// ReadRecords returns a list of consecutive audit log records in chronological order:
+// The first record in the returned array is the oldest record stored in the log.
+// startIndex Identifies the position of the first record to retrieve. An index of 1 indicates the first record in the log.
 func (a AuditLog) ReadRecords(startIndex int) string {
 	if startIndex < 1 {
 		startIndex = 0
 	}
 	header := a.base.WSManMessageCreator.CreateHeader(string(actions.ReadRecords), AMT_AuditLog, nil, "", "")
-	body := a.base.WSManMessageCreator.CreateBody("ReadRecords_INPUT", AMT_AuditLog, &ReadRecords_INPUT{StartIndex: startIndex})
+	body := a.base.WSManMessageCreator.CreateBody("ReadRecords_INPUT", AMT_AuditLog, &readRecords_INPUT{StartIndex: startIndex})
 
 	return a.base.WSManMessageCreator.CreateXML(header, body)
 }

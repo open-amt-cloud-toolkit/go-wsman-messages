@@ -48,6 +48,7 @@ func NewIEEE8021xSettings(wsmanMessageCreator *wsman.WSManMessageCreator) Settin
 	}
 }
 
+// Get retrieves the representation of the instance
 func (b Settings) Get() string {
 	return b.base.Get(nil)
 }

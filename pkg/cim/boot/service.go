@@ -37,6 +37,8 @@ func NewBootService(wsmanMessageCreator *wsman.WSManMessageCreator) Service {
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_BootService)),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (b Service) Get() string {
 	return b.base.Get(nil)
 }

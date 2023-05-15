@@ -19,6 +19,8 @@ func NewServiceAvailableToElement(wsmanMessageCreator *wsman.WSManMessageCreator
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_ServiceAvailableToElement)),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (b AvailableToElement) Get() string {
 	return b.base.Get(nil)
 }

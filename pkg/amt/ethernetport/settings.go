@@ -103,6 +103,8 @@ func NewEthernetPortSettings(wsmanMessageCreator *wsman.WSManMessageCreator) Set
 		base: wsman.NewBase(wsmanMessageCreator, AMT_EthernetPortSettings),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (EthernetPortSettings Settings) Get() string {
 	return EthernetPortSettings.base.Get(nil)
 }

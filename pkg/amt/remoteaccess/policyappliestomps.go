@@ -67,6 +67,8 @@ func NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator *wsman.WSManMessageCr
 		base: wsman.NewBase(wsmanMessageCreator, AMT_RemoteAccessPolicyAppliesToMPS),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Get() string {
 	return RemoteAccessPolicyAppliesToMPS.base.Get(nil)
 }

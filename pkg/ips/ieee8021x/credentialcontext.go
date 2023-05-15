@@ -20,6 +20,7 @@ func NewIEEE8021xCredentialContext(wsmanMessageCreator *wsman.WSManMessageCreato
 	}
 }
 
+// Get retrieves the representation of the instance
 func (b CredentialContext) Get() string {
 	return b.base.Get(nil)
 }

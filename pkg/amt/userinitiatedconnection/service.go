@@ -31,6 +31,8 @@ func NewUserInitiatedConnectionService(wsmanMessageCreator *wsman.WSManMessageCr
 		base: wsman.NewBase(wsmanMessageCreator, AMT_UserInitiatedConnectionService),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (UserInitiatedConnectionService Service) Get() string {
 	return UserInitiatedConnectionService.base.Get(nil)
 }

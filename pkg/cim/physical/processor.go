@@ -19,6 +19,8 @@ func NewProcessor(wsmanMessageCreator *wsman.WSManMessageCreator) Processor {
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_Processor)),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (b Processor) Get() string {
 	return b.base.Get(nil)
 }

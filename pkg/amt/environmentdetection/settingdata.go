@@ -35,6 +35,8 @@ func NewEnvironmentDetectionSettingData(wsmanMessageCreator *wsman.WSManMessageC
 		base: wsman.NewBase(wsmanMessageCreator, AMT_EnvironmentDetectionSettingData),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (EnvironmentDetectionSettingData SettingData) Get() string {
 	return EnvironmentDetectionSettingData.base.Get(nil)
 }
