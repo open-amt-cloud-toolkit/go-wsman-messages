@@ -133,6 +133,8 @@ func NewWiFiPortConfigurationService(wsmanMessageCreator *wsman.WSManMessageCrea
 		base: wsman.NewBase(wsmanMessageCreator, AMT_WiFiPortConfigurationService),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (s Service) Get() string {
 	return s.base.Get(nil)
 }
@@ -147,7 +149,7 @@ func (s Service) Put(wiFiPortConfigurationService WiFiPortConfigurationService) 
 }
 
 // AddWiFiSettings atomically creates instances and associates them based on the input parameters.
-func (s Service) AddWiFiSettings(wifiEndpointSettings models.WiFiEndpointSettings, selector wsman.Selector, ieee8021xSettingsInput *models.IEEE8021xSettings, clientCredential, caCredential string) string {
+func (s Service) AddWiFiSettings(wifiEndpointSettings models.WiFiEndpointSettings, ieee8021xSettingsInput *models.IEEE8021xSettings, wifiEndpoint, clientCredential, caCredential string) string {
 	header := s.base.WSManMessageCreator.CreateHeader(string(actions.AddWiFiSettings), AMT_WiFiPortConfigurationService, nil, "", "")
 
 	input := AddWiFiSettings_INPUT{
@@ -155,13 +157,22 @@ func (s Service) AddWiFiSettings(wifiEndpointSettings models.WiFiEndpointSetting
 			Address: "/wsman",
 			ReferenceParameters: models.ReferenceParameters{
 				ResourceURI: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/" + wifi.CIM_WiFiEndpoint,
-				SelectorSet: models.SelectorSet{Selector: []wsman.Selector{selector}},
+				SelectorSet: models.SelectorSet{
+					Selector: []wsman.Selector{
+						{
+							Name:  "Name",
+							Value: wifiEndpoint,
+						},
+					},
+				},
 			},
 		},
 		WiFiEndpointSettings: wifiEndpointSettings,
 	}
+	input.WiFiEndpointSettings.H = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings"
 	if ieee8021xSettingsInput != nil {
 		input.IEEE8021xSettings = ieee8021xSettingsInput
+		input.IEEE8021xSettings.H = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_IEEE8021xSettings"
 		input.CACredential = &CACredential{
 			Address: "default",
 			ReferenceParameters: models.ReferenceParameters{

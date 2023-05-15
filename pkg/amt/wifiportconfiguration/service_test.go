@@ -37,11 +37,6 @@ func TestAMT_WiFiPortConfigurationService(t *testing.T) {
 			{"should create a valid AMT_WiFiPortConfigurationService Pull wsman message", "AMT_WiFiPortConfigurationService", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 			// WIFI PORT CONFIGURATION SERVICE
 			{"should return a valid amt_WiFiPortConfigurationService ADD_WIFI_SETTINGS wsman message", "AMT_WiFiPortConfigurationService", `http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService/AddWiFiSettings`, `<h:AddWiFiSettings_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService"><h:WiFiEndpoint><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpoint</w:ResourceURI><w:SelectorSet><w:Selector Name="Name">WiFi Endpoint 0</w:Selector></w:SelectorSet></a:ReferenceParameters></h:WiFiEndpoint><h:WiFiEndpointSettingsInput xmlns:q="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings"><q:ElementName>home</q:ElementName><q:InstanceID>Intel(r) AMT:WiFi Endpoint Settings home</q:InstanceID><q:AuthenticationMethod>6</q:AuthenticationMethod><q:EncryptionMethod>4</q:EncryptionMethod><q:SSID>admin</q:SSID><q:Priority>1</q:Priority><q:PSKPassPhrase>p&#39;ass&lt;&gt;&amp;&#34;code</q:PSKPassPhrase></h:WiFiEndpointSettingsInput></h:AddWiFiSettings_INPUT>`, func() string {
-
-				selector := wsman.Selector{
-					Name:  "Name",
-					Value: "WiFi Endpoint 0",
-				}
 				wifiEndpointSettings := models.WiFiEndpointSettings{
 					H:                    "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings", //todo: make more dynamic
 					ElementName:          "home",
@@ -52,14 +47,10 @@ func TestAMT_WiFiPortConfigurationService(t *testing.T) {
 					Priority:             1,
 					PSKPassPhrase:        "p'ass<>&\"code",
 				}
-				return elementUnderTest.AddWiFiSettings(wifiEndpointSettings, selector, nil, "", "")
+				return elementUnderTest.AddWiFiSettings(wifiEndpointSettings, nil, "WiFi Endpoint 0", "", "")
 			}},
 
 			{"should create a valid AMT_WiFiPortConfigurationService ADD_WIFI_SETTINGS 8021x wsman message", "AMT_WiFiPortConfigurationService", `http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService/AddWiFiSettings`, `<h:AddWiFiSettings_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService"><h:WiFiEndpoint><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpoint</w:ResourceURI><w:SelectorSet><w:Selector Name="Name">WiFi Endpoint 0</w:Selector></w:SelectorSet></a:ReferenceParameters></h:WiFiEndpoint><h:WiFiEndpointSettingsInput xmlns:q="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings"><q:ElementName>home</q:ElementName><q:InstanceID>Intel(r) AMT:WiFi Endpoint Settings home</q:InstanceID><q:AuthenticationMethod>6</q:AuthenticationMethod><q:EncryptionMethod>4</q:EncryptionMethod><q:SSID>admin</q:SSID><q:Priority>1</q:Priority><q:PSKPassPhrase>p&#39;ass&lt;&gt;&amp;&#34;code</q:PSKPassPhrase></h:WiFiEndpointSettingsInput><h:IEEE8021xSettingsInput xmlns:q="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_IEEE8021xSettings"><q:ElementName>wifi_8021x_profile</q:ElementName><q:AuthenticationProtocol>0</q:AuthenticationProtocol></h:IEEE8021xSettingsInput><h:ClientCredential><a:Address>default</a:Address><a:ReferenceParameters><w:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">handle 0</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ClientCredential><h:CACredential><a:Address>default</a:Address><a:ReferenceParameters><w:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">handle 1</w:Selector></w:SelectorSet></a:ReferenceParameters></h:CACredential></h:AddWiFiSettings_INPUT>`, func() string {
-				selector := wsman.Selector{
-					Name:  "Name",
-					Value: "WiFi Endpoint 0",
-				}
 				wifiEndpointSettings := models.WiFiEndpointSettings{
 					H:                    "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings",
 					ElementName:          "home",
@@ -77,7 +68,7 @@ func TestAMT_WiFiPortConfigurationService(t *testing.T) {
 				}
 				clientCredential := "handle 0"
 				caCredential := "handle 1"
-				return elementUnderTest.AddWiFiSettings(wifiEndpointSettings, selector, ieee8021xSettingsInput, clientCredential, caCredential)
+				return elementUnderTest.AddWiFiSettings(wifiEndpointSettings, ieee8021xSettingsInput, "WiFi Endpoint 0", clientCredential, caCredential)
 			}},
 		}
 
