@@ -19,6 +19,8 @@ func NewBootSourceSetting(wsmanMessageCreator *wsman.WSManMessageCreator) Source
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_BootSourceSetting)),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (b SourceSetting) Get() string {
 	return b.base.Get(nil)
 }

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// AMT Alarm Clock Service derived from Service and provides the ability to set an alarm time to turn the host computer system on. Setting an alarm time is done by calling "AddAlarm" method."NextAMTAlarmTime" and "AMTAlarmClockInterval" properties are deprecated and "AddAlarm" should be used instead.
 package alarmclock
 
 import (
@@ -17,12 +18,16 @@ import (
 const AMT_AlarmClockService = "AMT_AlarmClockService"
 
 type AlarmClockOccurrence struct {
-	//models.ManagedElement
-	ElementName        string    `json:"ElementName"`
-	InstanceID         string    `json:"InstanceID"`
-	StartTime          time.Time `json:"StartTime"`
-	Interval           int       `json:"Interval,omitempty"`
-	DeleteOnCompletion bool      `json:"DeleteOnCompletion"`
+	// Elementname is a user-friendly name for the object
+	ElementName string `json:"ElementName"`
+	// InstanceID is the instance key, set by the caller of AMT_AlarmClockService.AddAlarm.
+	InstanceID string `json:"InstanceID"`
+	// StartTime is the next time when the alarm is scheduled to be set.
+	StartTime time.Time `json:"StartTime"`
+	// Interval between occurrences of the alarm (0 if the alarm is scheduled to run once).
+	Interval int `json:"Interval,omitempty"`
+	// DeleteOnComplete if set to TRUE, the instance will be deleted by the FW when the alarm is completed
+	DeleteOnCompletion bool `json:"DeleteOnCompletion"`
 }
 
 type Service struct {
@@ -33,6 +38,7 @@ func NewService(wsmanMessageCreator *wsman.WSManMessageCreator) Service {
 	return Service{base: wsman.NewBase(wsmanMessageCreator, string(AMT_AlarmClockService))}
 }
 
+// Get retrieves the representation of the instance
 func (acs Service) Get() string {
 	return acs.base.Get(nil)
 }
@@ -43,6 +49,7 @@ func (acs Service) Pull(enumerationContext string) string {
 	return acs.base.Pull(enumerationContext)
 }
 
+// AddAlarm creates an alarm that would wake the system at a given time.The method receives as input an embedded instance of type IPS_AlarmClockOccurrence, with the following fields set: StartTime, Interval, InstanceID, DeleteOnCompletion. Upon success, the method creates an instance of IPS_AlarmClockOccurrence which is associated with AlarmClockService.The method would fail if 5 instances or more of IPS_AlarmClockOccurrence already exist in the system.
 func (acs Service) AddAlarm(alarmClockOccurrence AlarmClockOccurrence) string {
 	header := acs.base.WSManMessageCreator.CreateHeader(string(actions.AddAlarm), string(AMT_AlarmClockService), nil, "", "")
 	startTime := alarmClockOccurrence.StartTime.UTC().Format(time.RFC3339Nano)

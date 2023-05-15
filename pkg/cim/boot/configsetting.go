@@ -25,6 +25,7 @@ func NewBootConfigSetting(wsmanMessageCreator *wsman.WSManMessageCreator) Config
 	}
 }
 
+// Get retrieves the representation of the instance
 func (b ConfigSetting) Get() string {
 	return b.base.Get(nil)
 }

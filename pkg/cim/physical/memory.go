@@ -19,6 +19,8 @@ func NewPhysicalMemory(wsmanMessageCreator *wsman.WSManMessageCreator) Memory {
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_PhysicalMemory)),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (b Memory) Get() string {
 	return b.base.Get(nil)
 }

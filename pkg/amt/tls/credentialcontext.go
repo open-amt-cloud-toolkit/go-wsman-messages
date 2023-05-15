@@ -22,6 +22,8 @@ func NewTLSCredentialContext(wsmanMessageCreator *wsman.WSManMessageCreator) Cre
 		base: wsman.NewBase(wsmanMessageCreator, AMT_TLSCredentialContext),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (TLSCredentialContext CredentialContext) Get() string {
 	return TLSCredentialContext.base.Get(nil)
 }

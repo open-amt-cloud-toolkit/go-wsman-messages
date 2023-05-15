@@ -30,6 +30,8 @@ func NewTimeSynchronizationService(wsmanMessageCreator *wsman.WSManMessageCreato
 		base: wsman.NewBase(wsmanMessageCreator, AMT_TimeSynchronizationService),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (TimeSynchronizationService Service) Get() string {
 	return TimeSynchronizationService.base.Get(nil)
 }

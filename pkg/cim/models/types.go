@@ -853,6 +853,15 @@ type ReferenceParameters struct {
 	SelectorSet SelectorSet `xml:"w:SelectorSet,omitempty"`
 }
 
+type ReferenceParameters_OUTPUT struct {
+	ResourceURI string             `xml:"ResourceURI,omitempty"`
+	SelectorSet SelectorSet_OUTPUT `xml:"SelectorSet,omitempty"`
+}
+type SelectorSet_OUTPUT struct {
+	XMLName  xml.Name `xml:"SelectorSet,omitempty"`
+	Selector []wsman.Selector_OUTPUT
+}
+
 type SelectorSet struct {
 	XMLName  xml.Name `xml:"w:SelectorSet,omitempty"`
 	Selector []wsman.Selector

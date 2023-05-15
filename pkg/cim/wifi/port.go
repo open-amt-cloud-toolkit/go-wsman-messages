@@ -25,6 +25,8 @@ func NewWiFiPort(wsmanMessageCreator *wsman.WSManMessageCreator) Port {
 func (w Port) RequestStateChange(requestedState int) string {
 	return w.base.RequestStateChange(actions.RequestStateChange(string(CIM_WiFiPort)), requestedState)
 }
+
+// Get retrieves the representation of the instance
 func (b Port) Get() string {
 	return b.base.Get(nil)
 }

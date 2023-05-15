@@ -30,6 +30,8 @@ func NewMessageLog(wsmanMessageCreator *wsman.WSManMessageCreator) MessageLog {
 		base: wsman.NewBase(wsmanMessageCreator, AMT_MessageLog),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (MessageLog MessageLog) Get() string {
 	return MessageLog.base.Get(nil)
 }

@@ -12,7 +12,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 
-type AMTMessage struct {
+type Response struct {
 	XMLName xml.Name     `xml:"Envelope"`
 	Header  wsman.Header `xml:"Header"`
 	Body    Body         `xml:"Body"`
@@ -83,10 +83,6 @@ const (
 	Enabled
 )
 
-type Response struct {
-	AMT_GeneralSettings Settings
-}
-
 type Settings struct {
 	base wsman.Base
 }
@@ -96,6 +92,8 @@ func NewGeneralSettings(wsmanMessageCreator *wsman.WSManMessageCreator) Settings
 		base: wsman.NewBase(wsmanMessageCreator, AMT_GeneralSettings),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (GeneralSettings Settings) Get() string {
 	return GeneralSettings.base.Get(nil)
 }

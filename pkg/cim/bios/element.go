@@ -19,6 +19,8 @@ func NewBIOSElement(wsmanMessageCreator *wsman.WSManMessageCreator) Element {
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_BiosElement)),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (b Element) Get() string {
 	return b.base.Get(nil)
 }

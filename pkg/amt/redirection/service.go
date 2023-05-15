@@ -66,6 +66,8 @@ func NewRedirectionService(wsmanMessageCreator *wsman.WSManMessageCreator) Servi
 		base: wsman.NewBase(wsmanMessageCreator, AMT_RedirectionService),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (RedirectionService Service) Get() string {
 	return RedirectionService.base.Get(nil)
 }

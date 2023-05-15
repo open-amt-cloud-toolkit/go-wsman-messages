@@ -20,6 +20,8 @@ func NewWiFiEndpointSettings(wsmanMessageCreator *wsman.WSManMessageCreator) End
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_WiFiEndpointSettings)),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (b EndpointSettings) Get() string {
 	return b.base.Get(nil)
 }

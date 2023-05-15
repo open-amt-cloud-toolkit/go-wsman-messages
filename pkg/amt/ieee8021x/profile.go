@@ -58,6 +58,8 @@ func NewIEEE8021xProfile(wsmanMessageCreator *wsman.WSManMessageCreator) Profile
 		base: wsman.NewBase(wsmanMessageCreator, AMT_IEEE8021xProfile),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (IEEE8021xProfile Profile) Get() string {
 	return IEEE8021xProfile.base.Get(nil)
 }

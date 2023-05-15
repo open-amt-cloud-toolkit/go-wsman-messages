@@ -41,6 +41,7 @@ func NewHostBasedSetupService(wsmanMessageCreator *wsman.WSManMessageCreator) Se
 	}
 }
 
+// Get retrieves the representation of the instance
 func (b Service) Get() string {
 	return b.base.Get(nil)
 }

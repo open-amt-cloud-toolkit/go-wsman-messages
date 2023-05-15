@@ -2,7 +2,6 @@
  * Copyright (c) Intel Corporation 2023
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
-
 package actions
 
 import "fmt"
@@ -14,6 +13,7 @@ const (
 	AddTrustedRootCertificate Actions = "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/AddTrustedRootCertificate"
 	AddCertificate            Actions = "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/AddCertificate"
 	GenerateKeyPair           Actions = "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/GenerateKeyPair"
+	AddKey                    Actions = "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/AddKey"
 	AddMps                    Actions = "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService/AddMpServer"
 	AddRemoteAccessPolicyRule Actions = "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService/AddRemoteAccessPolicyRule"
 	SetBootConfigRole         Actions = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService/SetBootConfigRole"

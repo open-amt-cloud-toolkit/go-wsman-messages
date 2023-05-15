@@ -19,6 +19,8 @@ func NewCard(wsmanMessageCreator *wsman.WSManMessageCreator) Card {
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_Card)),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (b Card) Get() string {
 	return b.base.Get(nil)
 }

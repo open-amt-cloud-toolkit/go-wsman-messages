@@ -47,6 +47,8 @@ func NewRemoteAccessService(wsmanMessageCreator *wsman.WSManMessageCreator) Serv
 		base: wsman.NewBase(wsmanMessageCreator, AMT_RemoteAccessService),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (RemoteAccessService Service) Get() string {
 	return RemoteAccessService.base.Get(nil)
 }

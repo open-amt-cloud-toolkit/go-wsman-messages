@@ -24,6 +24,8 @@ func NewMPSUsernamePassword(wsmanMessageCreator *wsman.WSManMessageCreator) User
 		base: wsman.NewBase(wsmanMessageCreator, AMT_MPSUsernamePassword),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (MPSUsernamePassword UsernamePassword) Get() string {
 	return MPSUsernamePassword.base.Get(nil)
 }

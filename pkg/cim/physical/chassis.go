@@ -19,6 +19,8 @@ func NewChassis(wsmanMessageCreator *wsman.WSManMessageCreator) Chassis {
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_Chassis)),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (b Chassis) Get() string {
 	return b.base.Get(nil)
 }

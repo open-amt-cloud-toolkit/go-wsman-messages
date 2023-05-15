@@ -77,6 +77,8 @@ func NewBootSettingData(wsmanMessageCreator *wsman.WSManMessageCreator) SettingD
 		base: wsman.NewBase(wsmanMessageCreator, AMT_BootSettingData),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (BootSettingData SettingData) Get() string {
 	return BootSettingData.base.Get(nil)
 }

@@ -21,6 +21,8 @@ func NewBootCapabilities(wsmanMessageCreator *wsman.WSManMessageCreator) BootCap
 		base: wsman.NewBase(wsmanMessageCreator, AMT_BootCapabilities),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (BootCapabilities BootCapabilities) Get() string {
 	return BootCapabilities.base.Get(nil)
 }

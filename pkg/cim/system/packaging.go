@@ -19,6 +19,8 @@ func NewSystemPackaging(wsmanMessageCreator *wsman.WSManMessageCreator) Packagin
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_SystemPackaging)),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (b Packaging) Get() string {
 	return b.base.Get(nil)
 }

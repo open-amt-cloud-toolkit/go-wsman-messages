@@ -110,6 +110,8 @@ func NewAuthorizationService(wsmanMessageCreator *wsman.WSManMessageCreator) Aut
 		base: wsman.NewBase(wsmanMessageCreator, AMT_AuthorizationService),
 	}
 }
+
+// Get retrieves the representation of the instance
 func (AuthorizationService AuthorizationService) Get() string {
 	return AuthorizationService.base.Get(nil)
 }
