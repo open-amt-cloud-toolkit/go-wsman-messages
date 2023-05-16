@@ -9,7 +9,6 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"time"
 )
@@ -55,7 +54,7 @@ func (c *Client) Post(msg string) (response []byte, err error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("req:%#v\nbody:\n%s\n", req, msg)
+
 	if c.username != "" && c.password != "" {
 		if c.useDigest {
 			auth, err := c.challenge.authorize("POST", c.endpoint)
@@ -74,7 +73,7 @@ func (c *Client) Post(msg string) (response []byte, err error) {
 		return nil, err
 	}
 	if c.useDigest && res.StatusCode == 401 {
-		log.Print("Digest reauthorizing")
+
 		if err := c.challenge.parseChallenge(res.Header.Get("WWW-Authenticate")); err != nil {
 			return nil, err
 		}
@@ -99,7 +98,7 @@ func (c *Client) Post(msg string) (response []byte, err error) {
 
 	if res.StatusCode >= 400 {
 		b, _ := io.ReadAll(res.Body)
-		return nil, fmt.Errorf("wsman.Client: post recieved %v\n'%v'", res.Status, string(b))
+		return nil, fmt.Errorf("wsman.Client: post received %v\n'%v'", res.Status, string(b))
 	}
 	response, err = io.ReadAll(res.Body)
 	if err != nil {
