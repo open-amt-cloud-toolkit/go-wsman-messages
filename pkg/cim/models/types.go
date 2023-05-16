@@ -337,7 +337,7 @@ type WiFiEndpointSettings struct {
 	EncryptionMethod     EncryptionMethod     `xml:"q:EncryptionMethod"`
 	SSID                 string               `xml:"q:SSID"` // Max Length 32
 	Priority             int                  `xml:"q:Priority"`
-	PSKPassPhrase        string               `xml:"q:PSKPassPhrase"` // Min Length 8 Max Length 63
+	PSKPassPhrase        string               `xml:"q:PSKPassPhrase,omitempty"` // Min Length 8 Max Length 63
 	BSSType              BSSType              `xml:"q:BSSType,omitempty"`
 	Keys                 []string             `xml:"q:Keys,omitempty"` // OctetString ArrayType=Indexed Max Length 256
 	KeyIndex             int                  `xml:"q:KeyIndex,omitempty"`
