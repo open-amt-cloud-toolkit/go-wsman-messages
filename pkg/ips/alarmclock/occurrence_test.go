@@ -37,11 +37,7 @@ func TestIPS_AlarmClockOccurrence(t *testing.T) {
 			{"should create a valid IPS_AlarmClockOccurrence Pull wsman message", "IPS_AlarmClockOccurrence", wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 			// DELETE
 			{"should create a valid ips_AlarmClockOccurrence Delete wsman message", "IPS_AlarmClockOccurrence", wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"Name\">Instance</w:Selector></w:SelectorSet>", func() string {
-				selector := &wsman.Selector{
-					Name:  "Name",
-					Value: "Instance",
-				}
-				return elementUnderTest.Delete(selector)
+				return elementUnderTest.Delete("Instance")
 			}},
 		}
 

@@ -49,6 +49,7 @@ func (RemoteAccessPolicyRule PolicyRule) Pull(enumerationContext string) string 
 func (RemoteAccessPolicyRule PolicyRule) Put(remoteAccessPolicyRule RemoteAccessPolicyRule) string {
 	return RemoteAccessPolicyRule.base.Put(remoteAccessPolicyRule, false, nil)
 }
-func (RemoteAccessPolicyRule PolicyRule) Delete(selector *wsman.Selector) string {
+func (RemoteAccessPolicyRule PolicyRule) Delete(handle string) string {
+	selector := wsman.Selector{Name: "PolicyRuleName", Value: handle}
 	return RemoteAccessPolicyRule.base.Delete(selector)
 }

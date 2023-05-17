@@ -33,7 +33,8 @@ func (TLSCredentialContext CredentialContext) Enumerate() string {
 func (TLSCredentialContext CredentialContext) Pull(enumerationContext string) string {
 	return TLSCredentialContext.base.Pull(enumerationContext)
 }
-func (TLSCredentialContext CredentialContext) Delete(selector *wsman.Selector) string {
+func (TLSCredentialContext CredentialContext) Delete(handle string) string {
+	selector := wsman.Selector{Name: "Name", Value: handle}
 	return TLSCredentialContext.base.Delete(selector)
 }
 func (TLSCredentialContext CredentialContext) Create(certHandle string) string {

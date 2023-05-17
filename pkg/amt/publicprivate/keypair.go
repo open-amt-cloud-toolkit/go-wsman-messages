@@ -31,3 +31,7 @@ func (PublicPrivateKeyPair KeyPair) Enumerate() string {
 func (PublicPrivateKeyPair KeyPair) Pull(enumerationContext string) string {
 	return PublicPrivateKeyPair.base.Pull(enumerationContext)
 }
+func (PublicPrivateKeyPair KeyPair) Delete(instanceID string) string {
+	selector := wsman.Selector{Name: "InstanceID", Value: instanceID}
+	return PublicPrivateKeyPair.base.Delete(selector)
+}

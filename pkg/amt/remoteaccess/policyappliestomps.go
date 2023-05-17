@@ -81,7 +81,8 @@ func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Pull(enumerationContext
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Put(remoteAccessPolicyAppliesToMPS *RemoteAccessPolicyAppliesToMPS) string {
 	return RemoteAccessPolicyAppliesToMPS.base.Put(remoteAccessPolicyAppliesToMPS, false, nil)
 }
-func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Delete(selector *wsman.Selector) string {
+func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Delete(handle string) string {
+	selector := wsman.Selector{Name: "Name", Value: handle}
 	return RemoteAccessPolicyAppliesToMPS.base.Delete(selector)
 }
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Create(remoteAccessPolicyAppliesToMPS RemoteAccessPolicyAppliesToMPS) string {

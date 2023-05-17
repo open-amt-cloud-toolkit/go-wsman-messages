@@ -67,11 +67,7 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 			}},
 			//{"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Create wsman message", "AMT_RemoteAccessPolicyAppliesToMPS", wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 			{"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Delete wsman message", "AMT_RemoteAccessPolicyAppliesToMPS", wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"Name\">Instance</w:Selector></w:SelectorSet>", func() string {
-				selector := &wsman.Selector{
-					Name:  "Name",
-					Value: "Instance",
-				}
-				return elementUnderTest.Delete(selector)
+				return elementUnderTest.Delete("Instance")
 			}},
 		}
 

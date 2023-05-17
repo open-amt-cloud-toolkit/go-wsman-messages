@@ -43,6 +43,7 @@ func (PublicKeyCertificate Certificate) Pull(enumerationContext string) string {
 func (PublicKeyCertificate Certificate) Put(publicKeyCertificate PublicKeyCertificate) string {
 	return PublicKeyCertificate.base.Put(publicKeyCertificate, false, nil)
 }
-func (PublicKeyCertificate Certificate) Delete(selector *wsman.Selector) string {
+func (PublicKeyCertificate Certificate) Delete(instanceID string) string {
+	selector := wsman.Selector{Name: "InstanceID", Value: instanceID}
 	return PublicKeyCertificate.base.Delete(selector)
 }

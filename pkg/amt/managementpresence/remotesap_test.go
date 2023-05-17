@@ -26,19 +26,22 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 			method       string
 			action       string
 			body         string
+			extraHeader  string
 			responseFunc func() string
 		}{
 			//GETS
-			{"should create a valid AMT_ManagementPresenceRemoteSAP Get wsman message", "AMT_ManagementPresenceRemoteSAP", wsmantesting.GET, "", elementUnderTest.Get},
+			{"should create a valid AMT_ManagementPresenceRemoteSAP Get wsman message", "AMT_ManagementPresenceRemoteSAP", wsmantesting.GET, "", "", elementUnderTest.Get},
 			//ENUMERATES
-			{"should create a valid AMT_ManagementPresenceRemoteSAP Enumerate wsman message", "AMT_ManagementPresenceRemoteSAP", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
+			{"should create a valid AMT_ManagementPresenceRemoteSAP Enumerate wsman message", "AMT_ManagementPresenceRemoteSAP", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, "", elementUnderTest.Enumerate},
 			//PULLS
-			{"should create a valid AMT_ManagementPresenceRemoteSAP Pull wsman message", "AMT_ManagementPresenceRemoteSAP", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{"should create a valid AMT_ManagementPresenceRemoteSAP Pull wsman message", "AMT_ManagementPresenceRemoteSAP", wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			//DELETE
+			{"should create a valid AMT_ManagementPresenceRemoteSAP Delete wsman message", "AMT_ManagementPresenceRemoteSAP", wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"Name\">instanceID123</w:Selector></w:SelectorSet>", func() string { return elementUnderTest.Delete("instanceID123") }},
 		}
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				correctResponse := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				correctResponse := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response := test.responseFunc()
 				if response != correctResponse {
