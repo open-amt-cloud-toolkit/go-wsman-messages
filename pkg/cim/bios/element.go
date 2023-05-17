@@ -25,9 +25,12 @@ func (b Element) Get() string {
 	return b.base.Get(nil)
 }
 
+// Enumerates the instances of this class
 func (b Element) Enumerate() string {
 	return b.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (b Element) Pull(enumerationContext string) string {
 	return b.base.Pull(enumerationContext)
 }

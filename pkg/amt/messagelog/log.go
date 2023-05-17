@@ -35,9 +35,13 @@ func NewMessageLog(wsmanMessageCreator *wsman.WSManMessageCreator) MessageLog {
 func (MessageLog MessageLog) Get() string {
 	return MessageLog.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (MessageLog MessageLog) Enumerate() string {
 	return MessageLog.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (MessageLog MessageLog) Pull(enumerationContext string) string {
 	return MessageLog.base.Pull(enumerationContext)
 }

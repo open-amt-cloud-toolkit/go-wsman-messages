@@ -82,12 +82,18 @@ func NewBootSettingData(wsmanMessageCreator *wsman.WSManMessageCreator) SettingD
 func (BootSettingData SettingData) Get() string {
 	return BootSettingData.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (BootSettingData SettingData) Enumerate() string {
 	return BootSettingData.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (BootSettingData SettingData) Pull(enumerationContext string) string {
 	return BootSettingData.base.Pull(enumerationContext)
 }
+
+// Put will change properties of the selected instance
 func (BootSettingData SettingData) Put(bootSettingData BootSettingData) string {
 	return BootSettingData.base.Put(bootSettingData, false, nil)
 }

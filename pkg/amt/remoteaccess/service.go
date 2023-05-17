@@ -52,9 +52,13 @@ func NewRemoteAccessService(wsmanMessageCreator *wsman.WSManMessageCreator) Serv
 func (RemoteAccessService Service) Get() string {
 	return RemoteAccessService.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (RemoteAccessService Service) Enumerate() string {
 	return RemoteAccessService.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (RemoteAccessService Service) Pull(enumerationContext string) string {
 	return RemoteAccessService.base.Pull(enumerationContext)
 }

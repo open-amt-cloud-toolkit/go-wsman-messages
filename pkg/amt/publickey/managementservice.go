@@ -101,13 +101,18 @@ func NewPublicKeyManagementService(wsmanMessageCreator *wsman.WSManMessageCreato
 func (PublicKeyManagementService ManagementService) Get() string {
 	return PublicKeyManagementService.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (PublicKeyManagementService ManagementService) Enumerate() string {
 	return PublicKeyManagementService.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (PublicKeyManagementService ManagementService) Pull(enumerationContext string) string {
 	return PublicKeyManagementService.base.Pull(enumerationContext)
 }
 
+// Delete removes a the specified instance
 func (PublicKeyManagementService ManagementService) Delete(instanceID string) string {
 	selector := wsman.Selector{Name: "InstanceID", Value: instanceID}
 	return PublicKeyManagementService.base.Delete(selector)

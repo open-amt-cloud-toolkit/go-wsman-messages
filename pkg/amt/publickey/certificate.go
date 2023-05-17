@@ -34,15 +34,23 @@ func NewPublicKeyCertificate(wsmanMessageCreator *wsman.WSManMessageCreator) Cer
 func (PublicKeyCertificate Certificate) Get() string {
 	return PublicKeyCertificate.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (PublicKeyCertificate Certificate) Enumerate() string {
 	return PublicKeyCertificate.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (PublicKeyCertificate Certificate) Pull(enumerationContext string) string {
 	return PublicKeyCertificate.base.Pull(enumerationContext)
 }
+
+// Put will change properties of the selected instance
 func (PublicKeyCertificate Certificate) Put(publicKeyCertificate PublicKeyCertificate) string {
 	return PublicKeyCertificate.base.Put(publicKeyCertificate, false, nil)
 }
+
+// Delete removes a the specified instance
 func (PublicKeyCertificate Certificate) Delete(instanceID string) string {
 	selector := wsman.Selector{Name: "InstanceID", Value: instanceID}
 	return PublicKeyCertificate.base.Delete(selector)

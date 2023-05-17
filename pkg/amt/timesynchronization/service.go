@@ -35,9 +35,13 @@ func NewTimeSynchronizationService(wsmanMessageCreator *wsman.WSManMessageCreato
 func (TimeSynchronizationService Service) Get() string {
 	return TimeSynchronizationService.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (TimeSynchronizationService Service) Enumerate() string {
 	return TimeSynchronizationService.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (TimeSynchronizationService Service) Pull(enumerationContext string) string {
 	return TimeSynchronizationService.base.Pull(enumerationContext)
 }

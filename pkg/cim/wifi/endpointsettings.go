@@ -26,12 +26,17 @@ func (b EndpointSettings) Get() string {
 	return b.base.Get(nil)
 }
 
+// Enumerates the instances of this class
 func (b EndpointSettings) Enumerate() string {
 	return b.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (b EndpointSettings) Pull(enumerationContext string) string {
 	return b.base.Pull(enumerationContext)
 }
+
+// Delete removes a the specified instance
 func (b EndpointSettings) Delete(handle string) string {
 	selector := wsman.Selector{Name: "Name", Value: handle}
 	return b.base.Delete(selector)

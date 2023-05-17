@@ -25,9 +25,12 @@ func (b Packaging) Get() string {
 	return b.base.Get(nil)
 }
 
+// Enumerates the instances of this class
 func (b Packaging) Enumerate() string {
 	return b.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (b Packaging) Pull(enumerationContext string) string {
 	return b.base.Pull(enumerationContext)
 }

@@ -29,12 +29,18 @@ func NewMPSUsernamePassword(wsmanMessageCreator *wsman.WSManMessageCreator) User
 func (MPSUsernamePassword UsernamePassword) Get() string {
 	return MPSUsernamePassword.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (MPSUsernamePassword UsernamePassword) Enumerate() string {
 	return MPSUsernamePassword.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (MPSUsernamePassword UsernamePassword) Pull(enumerationContext string) string {
 	return MPSUsernamePassword.base.Pull(enumerationContext)
 }
+
+// Put will change properties of the selected instance
 func (MPSUsernamePassword UsernamePassword) Put(mpsUsernamePassword MPSUsernamePassword) string {
 	return MPSUsernamePassword.base.Put(mpsUsernamePassword, false, nil)
 }

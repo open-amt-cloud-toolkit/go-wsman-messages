@@ -40,15 +40,23 @@ func NewRemoteAccessPolicyRule(wsmanMessageCreator *wsman.WSManMessageCreator) P
 func (RemoteAccessPolicyRule PolicyRule) Get() string {
 	return RemoteAccessPolicyRule.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (RemoteAccessPolicyRule PolicyRule) Enumerate() string {
 	return RemoteAccessPolicyRule.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (RemoteAccessPolicyRule PolicyRule) Pull(enumerationContext string) string {
 	return RemoteAccessPolicyRule.base.Pull(enumerationContext)
 }
+
+// Put will change properties of the selected instance
 func (RemoteAccessPolicyRule PolicyRule) Put(remoteAccessPolicyRule RemoteAccessPolicyRule) string {
 	return RemoteAccessPolicyRule.base.Put(remoteAccessPolicyRule, false, nil)
 }
+
+// Delete removes a the specified instance
 func (RemoteAccessPolicyRule PolicyRule) Delete(handle string) string {
 	selector := wsman.Selector{Name: "PolicyRuleName", Value: handle}
 	return RemoteAccessPolicyRule.base.Delete(selector)

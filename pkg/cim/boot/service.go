@@ -43,9 +43,12 @@ func (b Service) Get() string {
 	return b.base.Get(nil)
 }
 
+// Enumerates the instances of this class
 func (b Service) Enumerate() string {
 	return b.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (b Service) Pull(enumerationContext string) string {
 	return b.base.Pull(enumerationContext)
 }

@@ -63,12 +63,18 @@ func NewIEEE8021xProfile(wsmanMessageCreator *wsman.WSManMessageCreator) Profile
 func (IEEE8021xProfile Profile) Get() string {
 	return IEEE8021xProfile.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (IEEE8021xProfile Profile) Enumerate() string {
 	return IEEE8021xProfile.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (IEEE8021xProfile Profile) Pull(enumerationContext string) string {
 	return IEEE8021xProfile.base.Pull(enumerationContext)
 }
+
+// Put will change properties of the selected instance
 func (IEEE8021xProfile Profile) Put(ieee8021xProfile IEEE8021xProfile) string {
 	return IEEE8021xProfile.base.Put(ieee8021xProfile, false, nil)
 }

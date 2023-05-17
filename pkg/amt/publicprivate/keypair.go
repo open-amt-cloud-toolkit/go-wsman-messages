@@ -25,9 +25,13 @@ func NewPublicPrivateKeyPair(wsmanMessageCreator *wsman.WSManMessageCreator) Key
 func (PublicPrivateKeyPair KeyPair) Get() string {
 	return PublicPrivateKeyPair.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (PublicPrivateKeyPair KeyPair) Enumerate() string {
 	return PublicPrivateKeyPair.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (PublicPrivateKeyPair KeyPair) Pull(enumerationContext string) string {
 	return PublicPrivateKeyPair.base.Pull(enumerationContext)
 }

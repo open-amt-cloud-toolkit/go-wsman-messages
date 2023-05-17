@@ -22,6 +22,8 @@ func NewKVMRedirectionSAP(wsmanMessageCreator *wsman.WSManMessageCreator) Redire
 		base: wsman.NewBase(wsmanMessageCreator, string(CIM_KVMRedirectionSAP)),
 	}
 }
+
+// RequestStateChange requests that the state of the element be changed to the value specified in the RequestedState parameter . . .
 func (k RedirectionSAP) RequestStateChange(requestedState int) string {
 	return k.base.RequestStateChange(actions.RequestStateChange(string(CIM_KVMRedirectionSAP)), requestedState)
 }
@@ -31,9 +33,12 @@ func (b RedirectionSAP) Get() string {
 	return b.base.Get(nil)
 }
 
+// Enumerates the instances of this class
 func (b RedirectionSAP) Enumerate() string {
 	return b.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (b RedirectionSAP) Pull(enumerationContext string) string {
 	return b.base.Pull(enumerationContext)
 }

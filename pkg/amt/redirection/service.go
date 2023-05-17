@@ -71,15 +71,23 @@ func NewRedirectionService(wsmanMessageCreator *wsman.WSManMessageCreator) Servi
 func (RedirectionService Service) Get() string {
 	return RedirectionService.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (RedirectionService Service) Enumerate() string {
 	return RedirectionService.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (RedirectionService Service) Pull(enumerationContext string) string {
 	return RedirectionService.base.Pull(enumerationContext)
 }
+
+// Put will change properties of the selected instance
 func (RedirectionService Service) Put(redirectionService RedirectionService) string {
 	return RedirectionService.base.Put(redirectionService, false, nil)
 }
+
+// RequestStateChange requests that the state of the element be changed to the value specified in the RequestedState parameter . . .
 func (RedirectionService Service) RequestStateChange(requestedState RequestedState) string {
 	return RedirectionService.base.RequestStateChange(actions.RequestStateChange(AMT_RedirectionService), int(requestedState))
 }

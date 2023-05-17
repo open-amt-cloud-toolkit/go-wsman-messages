@@ -97,12 +97,18 @@ func NewGeneralSettings(wsmanMessageCreator *wsman.WSManMessageCreator) Settings
 func (GeneralSettings Settings) Get() string {
 	return GeneralSettings.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (GeneralSettings Settings) Enumerate() string {
 	return GeneralSettings.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (GeneralSettings Settings) Pull(enumerationContext string) string {
 	return GeneralSettings.base.Pull(enumerationContext)
 }
+
+// Put will change properties of the selected instance
 func (GeneralSettings Settings) Put(generalSettings GeneralSettings) string {
 	return GeneralSettings.base.Put(generalSettings, false, nil)
 }

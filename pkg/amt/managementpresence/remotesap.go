@@ -25,12 +25,18 @@ func NewManagementPresenceRemoteSAP(wsmanMessageCreator *wsman.WSManMessageCreat
 func (ManagementPresenceRemoteSAP RemoteSAP) Get() string {
 	return ManagementPresenceRemoteSAP.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (ManagementPresenceRemoteSAP RemoteSAP) Enumerate() string {
 	return ManagementPresenceRemoteSAP.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (ManagementPresenceRemoteSAP RemoteSAP) Pull(enumerationContext string) string {
 	return ManagementPresenceRemoteSAP.base.Pull(enumerationContext)
 }
+
+// Delete removes a the specified instance
 func (ManagementPresenceRemoteSAP RemoteSAP) Delete(handle string) string {
 	selector := wsman.Selector{Name: "Name", Value: handle}
 	return ManagementPresenceRemoteSAP.base.Delete(selector)

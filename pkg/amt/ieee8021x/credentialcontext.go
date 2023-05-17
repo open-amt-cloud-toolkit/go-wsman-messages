@@ -25,9 +25,13 @@ func NewIEEE8021xCredentialContext(wsmanMessageCreator *wsman.WSManMessageCreato
 func (IEEE8021xCredentialContext CredentialContext) Get() string {
 	return IEEE8021xCredentialContext.base.Get(nil)
 }
+
+// Enumerates the instances of this class
 func (IEEE8021xCredentialContext CredentialContext) Enumerate() string {
 	return IEEE8021xCredentialContext.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (IEEE8021xCredentialContext CredentialContext) Pull(enumerationContext string) string {
 	return IEEE8021xCredentialContext.base.Pull(enumerationContext)
 }

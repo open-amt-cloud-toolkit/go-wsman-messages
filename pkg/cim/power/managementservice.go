@@ -86,9 +86,12 @@ func (b ManagementService) Get() string {
 	return b.base.Get(nil)
 }
 
+// Enumerates the instances of this class
 func (b ManagementService) Enumerate() string {
 	return b.base.Enumerate()
 }
+
+// Pulls instances of this class, following an Enumerate operation
 func (b ManagementService) Pull(enumerationContext string) string {
 	return b.base.Pull(enumerationContext)
 }

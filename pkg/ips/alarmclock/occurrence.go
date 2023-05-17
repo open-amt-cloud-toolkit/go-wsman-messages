@@ -25,15 +25,18 @@ func (a Occurrence) Get() string {
 	return a.base.Get(nil)
 }
 
+// Delete removes a the specified instance
 func (a Occurrence) Delete(handle string) string {
 	selector := wsman.Selector{Name: "Name", Value: handle}
 	return a.base.Delete(selector)
 }
 
+// Enumerates the instances of this class
 func (a Occurrence) Enumerate() string {
 	return a.base.Enumerate()
 }
 
+// Pulls instances of this class, following an Enumerate operation
 func (a Occurrence) Pull(enumerationContext string) string {
 	return a.base.Pull(enumerationContext)
 }
