@@ -86,12 +86,12 @@ func TestAMT_AuthorizationService(t *testing.T) {
 				return elementUnderTest.GetAdminAclEntryStatus()
 			}},
 
-			// // GET ADMIN NET ACL ENTRY STATUS
+			// GET ADMIN NET ACL ENTRY STATUS
 			{"should return a valid amt_AuthorizationService GetAdminNetAclEntryStatus wsman message", "AMT_AuthorizationService", `http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService/GetAdminNetAclEntryStatus`, `<h:GetAdminNetAclEntryStatus_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService"></h:GetAdminNetAclEntryStatus_INPUT>`, func() string {
 				return elementUnderTest.GetAdminNetAclEntryStatus()
 			}},
 
-			// // GET ACL ENABLED STATE
+			// GET ACL ENABLED STATE
 			{"should return a valid amt_AuthorizationService GetAclEnabledState wsman message", "AMT_AuthorizationService", `http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService/GetAclEnabledState`, `<h:GetAclEnabledState_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService"><h:Handle>1</h:Handle></h:GetAclEnabledState_INPUT>`, func() string {
 				return elementUnderTest.GetAclEnabledState(1)
 			}},

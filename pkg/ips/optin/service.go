@@ -40,11 +40,6 @@ func (b Service) Pull(enumerationContext string) string {
 	return b.base.Pull(enumerationContext)
 }
 
-//	// Put will change properties of the selected instance
-func (b OptInService) Put(optInServiceResponse models.OptInServiceResponse) string {
-//		key := reflect.ValueOf(optInServiceResponse).MapKeys()[0].Interface().(string)
-//		return b.base.Put(optInServiceResponse[key], string(IPS_OptInService), false)
-//	}
 type OptInCode struct {
 	XMLName   xml.Name `xml:"h:SendOptInCode_INPUT"`
 	H         string   `xml:"xmlns:h,attr"`
