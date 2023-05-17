@@ -26,19 +26,22 @@ func TestAMT_PublicKeyCertificate(t *testing.T) {
 			method       string
 			action       string
 			body         string
+			extraHeader  string
 			responseFunc func() string
 		}{
 			//GETS
-			{"should create a valid AMT_PublicKeyCertificate Get wsman message", "AMT_PublicKeyCertificate", wsmantesting.GET, "", elementUnderTest.Get},
+			{"should create a valid AMT_PublicKeyCertificate Get wsman message", "AMT_PublicKeyCertificate", wsmantesting.GET, "", "", elementUnderTest.Get},
 			//ENUMERATES
-			{"should create a valid AMT_PublicKeyCertificate Enumerate wsman message", "AMT_PublicKeyCertificate", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
+			{"should create a valid AMT_PublicKeyCertificate Enumerate wsman message", "AMT_PublicKeyCertificate", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, "", elementUnderTest.Enumerate},
 			//PULLS
-			{"should create a valid AMT_PublicKeyCertificate Pull wsman message", "AMT_PublicKeyCertificate", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{"should create a valid AMT_PublicKeyCertificate Pull wsman message", "AMT_PublicKeyCertificate", wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			//DELETE
+			{"should create a valid AMT_PublicKeyCertificate Delete wsman message", "AMT_PublicKeyCertificate", wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"InstanceID\">instanceID123</w:Selector></w:SelectorSet>", func() string { return elementUnderTest.Delete("instanceID123") }},
 		}
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				correctResponse := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				correctResponse := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response := test.responseFunc()
 				if response != correctResponse {

@@ -26,7 +26,8 @@ func (a Occurrence) Get() string {
 }
 
 // Delete removes a the specified instance
-func (a Occurrence) Delete(selector *wsman.Selector) string {
+func (a Occurrence) Delete(handle string) string {
+	selector := wsman.Selector{Name: "Name", Value: handle}
 	return a.base.Delete(selector)
 }
 

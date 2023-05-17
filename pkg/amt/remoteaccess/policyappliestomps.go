@@ -89,7 +89,8 @@ func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Put(remoteAccessPolicyA
 }
 
 // Delete removes a the specified instance
-func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Delete(selector *wsman.Selector) string {
+func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Delete(handle string) string {
+	selector := wsman.Selector{Name: "Name", Value: handle}
 	return RemoteAccessPolicyAppliesToMPS.base.Delete(selector)
 }
 

@@ -39,8 +39,8 @@ func (b *Base) Pull(enumerationContext string) string {
 }
 
 // Delete removes a the specified instance
-func (b *Base) Delete(selector *Selector) string {
-	header := b.WSManMessageCreator.CreateHeader(BaseActionsDelete, b.className, selector, "", "")
+func (b *Base) Delete(selector Selector) string {
+	header := b.WSManMessageCreator.CreateHeader(BaseActionsDelete, b.className, &selector, "", "")
 	return b.WSManMessageCreator.CreateXML(header, DeleteBody)
 }
 

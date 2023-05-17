@@ -37,6 +37,7 @@ func (ManagementPresenceRemoteSAP RemoteSAP) Pull(enumerationContext string) str
 }
 
 // Delete removes a the specified instance
-func (ManagementPresenceRemoteSAP RemoteSAP) Delete(selector *wsman.Selector) string {
+func (ManagementPresenceRemoteSAP RemoteSAP) Delete(handle string) string {
+	selector := wsman.Selector{Name: "Name", Value: handle}
 	return ManagementPresenceRemoteSAP.base.Delete(selector)
 }

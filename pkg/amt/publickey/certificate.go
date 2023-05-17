@@ -51,6 +51,7 @@ func (PublicKeyCertificate Certificate) Put(publicKeyCertificate PublicKeyCertif
 }
 
 // Delete removes a the specified instance
-func (PublicKeyCertificate Certificate) Delete(selector *wsman.Selector) string {
+func (PublicKeyCertificate Certificate) Delete(instanceID string) string {
+	selector := wsman.Selector{Name: "InstanceID", Value: instanceID}
 	return PublicKeyCertificate.base.Delete(selector)
 }

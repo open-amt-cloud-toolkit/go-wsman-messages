@@ -57,6 +57,7 @@ func (RemoteAccessPolicyRule PolicyRule) Put(remoteAccessPolicyRule RemoteAccess
 }
 
 // Delete removes a the specified instance
-func (RemoteAccessPolicyRule PolicyRule) Delete(selector *wsman.Selector) string {
+func (RemoteAccessPolicyRule PolicyRule) Delete(handle string) string {
+	selector := wsman.Selector{Name: "PolicyRuleName", Value: handle}
 	return RemoteAccessPolicyRule.base.Delete(selector)
 }

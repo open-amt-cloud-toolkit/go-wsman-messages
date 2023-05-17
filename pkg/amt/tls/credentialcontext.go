@@ -39,7 +39,8 @@ func (TLSCredentialContext CredentialContext) Pull(enumerationContext string) st
 }
 
 // Delete removes a the specified instance
-func (TLSCredentialContext CredentialContext) Delete(selector *wsman.Selector) string {
+func (TLSCredentialContext CredentialContext) Delete(handle string) string {
+	selector := wsman.Selector{Name: "Name", Value: handle}
 	return TLSCredentialContext.base.Delete(selector)
 }
 
