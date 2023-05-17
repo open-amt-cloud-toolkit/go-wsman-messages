@@ -108,7 +108,8 @@ func (PublicKeyManagementService ManagementService) Pull(enumerationContext stri
 	return PublicKeyManagementService.base.Pull(enumerationContext)
 }
 
-func (PublicKeyManagementService ManagementService) Delete(selector *wsman.Selector) string {
+func (PublicKeyManagementService ManagementService) Delete(instanceID string) string {
+	selector := wsman.Selector{Name: "InstanceID", Value: instanceID}
 	return PublicKeyManagementService.base.Delete(selector)
 }
 func (p ManagementService) AddCertificate(certificateBlob string) string {
@@ -141,6 +142,11 @@ func (p ManagementService) GeneratePKCS10RequestEx(pkcs10Request PKCS10Request) 
 	return p.base.WSManMessageCreator.CreateXML(header, body)
 }
 
+// AddKey adds a new certificate key to the Intel(R) AMT CertStore.
+// A key cannot be removed if its corresponding certificate is referenced (for example, used by TLS, 802.1X, or EAC).
+// After the method succeeds, a new instance of AMT_PublicPrivateKeyPair will be created.
+// Possible return values are: PT_STATUS_SUCCESS(0), PT_STATUS_INTERNAL_ERROR(1), PT_STATUS_MAX_LIMIT_REACHED(23),
+// PT_STATUS_FLASH_WRITE_LIMIT_EXCEEDED(38), PT_STATUS_DUPLICATE(2068), PT_STATUS_INVALID_KEY(2062).
 func (p ManagementService) AddKey(keyBlob []byte) string {
 	header := p.base.WSManMessageCreator.CreateHeader(string(actions.AddKey), AMT_PublicKeyManagementService, nil, "", "")
 	params := &AddKey_INPUT{

@@ -35,8 +35,8 @@ func (b *Base) Pull(enumerationContext string) string {
 	body := createCommonBodyPull(enumerationContext, 0, 0)
 	return b.WSManMessageCreator.CreateXML(header, body)
 }
-func (b *Base) Delete(selector *Selector) string {
-	header := b.WSManMessageCreator.CreateHeader(BaseActionsDelete, b.className, selector, "", "")
+func (b *Base) Delete(selector Selector) string {
+	header := b.WSManMessageCreator.CreateHeader(BaseActionsDelete, b.className, &selector, "", "")
 	return b.WSManMessageCreator.CreateXML(header, DeleteBody)
 }
 

@@ -32,6 +32,7 @@ func (b EndpointSettings) Enumerate() string {
 func (b EndpointSettings) Pull(enumerationContext string) string {
 	return b.base.Pull(enumerationContext)
 }
-func (b EndpointSettings) Delete(selector *wsman.Selector) string {
+func (b EndpointSettings) Delete(handle string) string {
+	selector := wsman.Selector{Name: "Name", Value: handle}
 	return b.base.Delete(selector)
 }

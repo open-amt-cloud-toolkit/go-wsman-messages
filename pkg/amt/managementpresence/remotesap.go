@@ -31,6 +31,7 @@ func (ManagementPresenceRemoteSAP RemoteSAP) Enumerate() string {
 func (ManagementPresenceRemoteSAP RemoteSAP) Pull(enumerationContext string) string {
 	return ManagementPresenceRemoteSAP.base.Pull(enumerationContext)
 }
-func (ManagementPresenceRemoteSAP RemoteSAP) Delete(selector *wsman.Selector) string {
+func (ManagementPresenceRemoteSAP RemoteSAP) Delete(handle string) string {
+	selector := wsman.Selector{Name: "Name", Value: handle}
 	return ManagementPresenceRemoteSAP.base.Delete(selector)
 }
