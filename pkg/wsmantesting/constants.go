@@ -21,6 +21,7 @@ const (
 	ENUMERATE_BODY          = "<Enumerate xmlns=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration\" />"
 	ServerCertificateIssuer = `serverCertificateIssuer`
 	ClientCertificate       = `clientCertificate`
+	DigestRealm             = "Digest:Realm"
 	AdminPassEncryptionType = 2
 	AdminPassword           = `bebb3497d69b544c732651365cc3462d`
 	MCNonce                 = `ZxxE0cFy590zDBIR39q6QU6iuII=`
