@@ -47,8 +47,8 @@ func TestIPS_HostBasedSetupService(t *testing.T) {
 			}},
 
 			//ADD NEXT CERT IN CHAIN
-			{"should create a valid IPS_HostBasedSetupService Setup wsman message", "IPS_HostBasedSetupService", wsmantesting.SETUP, fmt.Sprintf(`<h:Setup_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService"><h:NetAdminPassEncryptionType>%d</h:NetAdminPassEncryptionType><h:NetworkAdminPassword>%s</h:NetworkAdminPassword></h:Setup_INPUT>`, wsmantesting.AdminPassEncryptionType, wsmantesting.AdminPassword), func() string {
-				return elementUnderTest.Setup(wsmantesting.AdminPassEncryptionType, wsmantesting.AdminPassword)
+			{"should create a valid IPS_HostBasedSetupService Setup wsman message", "IPS_HostBasedSetupService", wsmantesting.SETUP, fmt.Sprintf(`<h:Setup_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService"><h:NetAdminPassEncryptionType>%d</h:NetAdminPassEncryptionType><h:NetworkAdminPassword>%s</h:NetworkAdminPassword></h:Setup_INPUT>`, wsmantesting.AdminPassEncryptionType, "f73b2c17b1ecbd7a235ec37d66cbed71"), func() string {
+				return elementUnderTest.Setup(wsmantesting.AdminPassEncryptionType, wsmantesting.DigestRealm, wsmantesting.AdminPassword)
 			}},
 		}
 

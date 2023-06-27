@@ -6,11 +6,25 @@
 package hostbasedsetup
 
 import (
+	"crypto/md5"
 	"encoding/xml"
+	"fmt"
+	"io"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/ips/actions"
 )
+
+type Response struct {
+	XMLName xml.Name     `xml:"Envelope"`
+	Header  wsman.Header `xml:"Header"`
+	Body    Body         `xml:"Body"`
+}
+
+type Body struct {
+	XMLName      xml.Name     `xml:"Body"`
+	Setup_OUTPUT Setup_OUTPUT `xml:"Setup_OUTPUT"`
+}
 
 type AdminPassEncryptionType int
 
@@ -106,13 +120,21 @@ type Setup struct {
 	NetAdminPassEncryptionType int      `xml:"h:NetAdminPassEncryptionType"`
 	NetworkAdminPassword       string   `xml:"h:NetworkAdminPassword"`
 }
+type Setup_OUTPUT struct {
+	ReturnValue int
+}
 
-func (b Service) Setup(adminPassEncryptionType AdminPassEncryptionType, adminPassword string) string {
+func (b Service) Setup(adminPassEncryptionType AdminPassEncryptionType, digestRealm, adminPassword string) string {
+	setupPassword := "admin:" + digestRealm + ":" + adminPassword
+	// Create an md5 hash.
+	hash := md5.New()
+	_, _ = io.WriteString(hash, setupPassword)
+	hashInHex := fmt.Sprintf("%x", hash.Sum(nil))
 	header := b.base.WSManMessageCreator.CreateHeader(string(actions.Setup), string(IPS_HostBasedSetupService), nil, "", "")
 	body := b.base.WSManMessageCreator.CreateBody("Setup_INPUT", string(IPS_HostBasedSetupService), Setup{
 		H:                          "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService",
 		NetAdminPassEncryptionType: int(adminPassEncryptionType),
-		NetworkAdminPassword:       adminPassword,
+		NetworkAdminPassword:       string(hashInHex),
 	})
 	return b.base.WSManMessageCreator.CreateXML(header, body)
 }
