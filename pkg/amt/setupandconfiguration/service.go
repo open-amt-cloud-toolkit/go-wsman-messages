@@ -81,7 +81,7 @@ func (s Service) Unprovision(provisioningMode int) string {
 	if provisioningMode == 0 {
 		provisioningMode = 1
 	}
-	header := s.base.WSManMessageCreator.CreateHeader("Unprovision", AMT_SetupAndConfigurationService, nil, "", "")
+	header := s.base.WSManMessageCreator.CreateHeader(string(actions.Unprovision), AMT_SetupAndConfigurationService, nil, "", "")
 	body := fmt.Sprintf(`<Body><h:Unprovision_INPUT xmlns:h="%s%s"><h:ProvisioningMode>%d</h:ProvisioningMode></h:Unprovision_INPUT></Body>`, s.base.WSManMessageCreator.ResourceURIBase, AMT_SetupAndConfigurationService, provisioningMode)
 	return s.base.WSManMessageCreator.CreateXML(header, body)
 }
