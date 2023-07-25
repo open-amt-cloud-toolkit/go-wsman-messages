@@ -22,4 +22,5 @@ const (
 	AddNextCertInChain      Methods = "AddNextCertInChain"
 	SetCertificates         Methods = "SetCertificates"
 	SetCertificates_INPUT   Methods = "SetCertificates_INPUT"
+	UpgradeClientToAdmin    Methods = "UpgradeClientToAdmin"
 )

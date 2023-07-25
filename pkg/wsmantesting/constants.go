@@ -30,6 +30,7 @@ const (
 	SET_CERTIFICATES        = "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_IEEE8021xSettings/SetCertificates"
 	ADD_NEXT_CERT_IN_CHAIN  = "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService/AddNextCertInChain"
 	ADMIN_SETUP             = "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService/AdminSetup"
+	UPGRADE_CLIENT_TO_ADMIN = "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService/UpgradeClientToAdmin"
 	SETUP                   = "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService/Setup"
 	SEND_OPT_IN_CODE        = "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_OptInService/SendOptInCode"
 	START_OPT_IN            = "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_OptInService/StartOptIn"

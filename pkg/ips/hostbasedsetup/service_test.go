@@ -46,6 +46,11 @@ func TestIPS_HostBasedSetupService(t *testing.T) {
 				return elementUnderTest.AdminSetup(wsmantesting.AdminPassEncryptionType, wsmantesting.AdminPassword, wsmantesting.MCNonce, wsmantesting.SigningAlgorithm, wsmantesting.DigitalSignature)
 			}},
 
+			// UpgradeToAdminSetup
+			{"should create a valid IPS_HostBasedSetupService UpgradeToAdminSetup wsman message", "IPS_HostBasedSetupService", wsmantesting.UPGRADE_CLIENT_TO_ADMIN, fmt.Sprintf(`<h:UpgradeClientToAdmin_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService"><h:McNonce>%s</h:McNonce><h:SigningAlgorithm>%d</h:SigningAlgorithm><h:DigitalSignature>%s</h:DigitalSignature></h:UpgradeClientToAdmin_INPUT>`, wsmantesting.MCNonce, wsmantesting.SigningAlgorithm, wsmantesting.DigitalSignature), func() string {
+				return elementUnderTest.UpgradeClientToAdmin(wsmantesting.MCNonce, wsmantesting.SigningAlgorithm, wsmantesting.DigitalSignature)
+			}},
+
 			//ADD NEXT CERT IN CHAIN
 			{"should create a valid IPS_HostBasedSetupService Setup wsman message", "IPS_HostBasedSetupService", wsmantesting.SETUP, fmt.Sprintf(`<h:Setup_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService"><h:NetAdminPassEncryptionType>%d</h:NetAdminPassEncryptionType><h:NetworkAdminPassword>%s</h:NetworkAdminPassword></h:Setup_INPUT>`, wsmantesting.AdminPassEncryptionType, "f73b2c17b1ecbd7a235ec37d66cbed71"), func() string {
 				return elementUnderTest.Setup(wsmantesting.AdminPassEncryptionType, wsmantesting.DigestRealm, wsmantesting.AdminPassword)

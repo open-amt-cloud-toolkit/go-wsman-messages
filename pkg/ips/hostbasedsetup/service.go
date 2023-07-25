@@ -138,3 +138,23 @@ func (b Service) Setup(adminPassEncryptionType AdminPassEncryptionType, digestRe
 	})
 	return b.base.WSManMessageCreator.CreateXML(header, body)
 }
+
+type UpgradeClientToAdmin struct {
+	XMLName          xml.Name `xml:"h:UpgradeClientToAdmin_INPUT"`
+	H                string   `xml:"xmlns:h,attr"`
+	McNonce          string   `xml:"h:McNonce"`
+	SigningAlgorithm int      `xml:"h:SigningAlgorithm"`
+	DigitalSignature string   `xml:"h:DigitalSignature"`
+}
+
+// Upgrade Intel(R) AMT from Client to Admin Control Mode.
+func (b Service) UpgradeClientToAdmin(mcNonce string, signingAlgorithm SigningAlgorithm, digitalSignature string) string {
+	header := b.base.WSManMessageCreator.CreateHeader(string(actions.UpgradeClientToAdmin), string(IPS_HostBasedSetupService), nil, "", "")
+	body := b.base.WSManMessageCreator.CreateBody("UpgradeClientToAdmin_INPUT", string(IPS_HostBasedSetupService), UpgradeClientToAdmin{
+		H:                "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService",
+		McNonce:          mcNonce,
+		SigningAlgorithm: int(signingAlgorithm),
+		DigitalSignature: digitalSignature,
+	})
+	return b.base.WSManMessageCreator.CreateXML(header, body)
+}
