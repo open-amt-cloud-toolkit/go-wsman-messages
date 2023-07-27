@@ -6,6 +6,7 @@
 package setupandconfiguration
 
 import (
+	"encoding/xml"
 	"fmt"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
@@ -15,6 +16,20 @@ import (
 
 const AMT_SetupAndConfigurationService = "AMT_SetupAndConfigurationService"
 
+type UnprovisionResponse struct {
+	XMLName xml.Name        `xml:"Envelope"`
+	Header  wsman.Header    `xml:"Header"`
+	Body    UnprovisionBody `xml:"Body"`
+}
+
+type UnprovisionBody struct {
+	XMLName            xml.Name           `xml:"Body"`
+	Unprovision_OUTPUT Unprovision_OUTPUT `xml:"Unprovision_OUTPUT"`
+}
+
+type Unprovision_OUTPUT struct {
+	ReturnValue int
+}
 type SetupAndConfigurationService struct {
 	models.CredentialManagementService
 	AMT_SetupAndConfigurationService struct {
