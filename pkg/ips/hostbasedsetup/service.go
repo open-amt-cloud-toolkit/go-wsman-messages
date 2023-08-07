@@ -22,8 +22,24 @@ type Response struct {
 }
 
 type Body struct {
-	XMLName      xml.Name     `xml:"Body"`
-	Setup_OUTPUT Setup_OUTPUT `xml:"Setup_OUTPUT"`
+	XMLName                   xml.Name                  `xml:"Body"`
+	Setup_OUTPUT              Setup_OUTPUT              `xml:"Setup_OUTPUT"`
+	AdminSetup_OUTPUT         AdminSetup_OUTPUT         `xml:"AdminSetup_OUTPUT"`
+	AddNextCertInChain_OUTPUT AddNextCertInChain_OUTPUT `xml:"AddNextCertInChain_OUTPUT"`
+	IPS_HostBasedSetupService HostBasedSetupService     `xml:"IPS_HostBasedSetupService"`
+}
+
+type HostBasedSetupService struct {
+	XMLName                 xml.Name `xml:"IPS_HostBasedSetupService"`
+	ElementName             string
+	SystemCreationClassName string
+	SystemName              string
+	CreationClassName       string
+	Name                    string
+	CurrentControlMode      int
+	AllowedControlModes     int
+	ConfigurationNonce      string
+	CertChainStatus         int
 }
 
 type AdminPassEncryptionType int
@@ -78,6 +94,10 @@ type AddNextCertInChain struct {
 	IsRootCertificate bool     `xml:"h:IsRootCertificate"`
 }
 
+type AddNextCertInChain_OUTPUT struct {
+	ReturnValue int
+}
+
 // Add a certificate to the provisioning certificate chain, to be used by AdminSetup or UpgradeClientToAdmin methods.
 func (b Service) AddNextCertInChain(cert string, isLeaf bool, isRoot bool) string {
 	header := b.base.WSManMessageCreator.CreateHeader(string(actions.AddNextCertInChain), string(IPS_HostBasedSetupService), nil, "", "")
@@ -100,13 +120,18 @@ type AdminSetup struct {
 	DigitalSignature           string   `xml:"h:DigitalSignature"`
 }
 
+type AdminSetup_OUTPUT struct {
+	ReturnValue int
+}
+
 // Setup Intel(R) AMT from the local host, resulting in Admin Setup Mode. Requires OS administrator rights, and moves Intel(R) AMT from "Pre Provisioned" state to "Post Provisioned" state. The control mode after this method is run will be "Admin".
-func (b Service) AdminSetup(adminPassEncryptionType AdminPassEncryptionType, adminPassword string, mcNonce string, signingAlgorithm SigningAlgorithm, digitalSignature string) string {
+func (b Service) AdminSetup(adminPassEncryptionType AdminPassEncryptionType, digestRealm string, adminPassword string, mcNonce string, signingAlgorithm SigningAlgorithm, digitalSignature string) string {
+	hashInHex := createMD5Hash(adminPassword, digestRealm)
 	header := b.base.WSManMessageCreator.CreateHeader(string(actions.AdminSetup), string(IPS_HostBasedSetupService), nil, "", "")
 	body := b.base.WSManMessageCreator.CreateBody("AdminSetup_INPUT", string(IPS_HostBasedSetupService), AdminSetup{
 		H:                          "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService",
 		NetAdminPassEncryptionType: int(adminPassEncryptionType),
-		NetworkAdminPassword:       adminPassword,
+		NetworkAdminPassword:       string(hashInHex),
 		McNonce:                    mcNonce,
 		SigningAlgorithm:           int(signingAlgorithm),
 		DigitalSignature:           digitalSignature,
@@ -125,11 +150,7 @@ type Setup_OUTPUT struct {
 }
 
 func (b Service) Setup(adminPassEncryptionType AdminPassEncryptionType, digestRealm, adminPassword string) string {
-	setupPassword := "admin:" + digestRealm + ":" + adminPassword
-	// Create an md5 hash.
-	hash := md5.New()
-	_, _ = io.WriteString(hash, setupPassword)
-	hashInHex := fmt.Sprintf("%x", hash.Sum(nil))
+	hashInHex := createMD5Hash(adminPassword, digestRealm)
 	header := b.base.WSManMessageCreator.CreateHeader(string(actions.Setup), string(IPS_HostBasedSetupService), nil, "", "")
 	body := b.base.WSManMessageCreator.CreateBody("Setup_INPUT", string(IPS_HostBasedSetupService), Setup{
 		H:                          "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService",
@@ -137,6 +158,15 @@ func (b Service) Setup(adminPassEncryptionType AdminPassEncryptionType, digestRe
 		NetworkAdminPassword:       string(hashInHex),
 	})
 	return b.base.WSManMessageCreator.CreateXML(header, body)
+}
+
+func createMD5Hash(adminPassword string, digestRealm string) string {
+	// Create an md5 hash.
+	setupPassword := "admin:" + digestRealm + ":" + adminPassword
+	hash := md5.New()
+	_, _ = io.WriteString(hash, setupPassword)
+	hashInHex := fmt.Sprintf("%x", hash.Sum(nil))
+	return hashInHex
 }
 
 type UpgradeClientToAdmin struct {
