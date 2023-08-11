@@ -244,22 +244,22 @@ func (s Service) AddWiFiSettings(wifiEndpointSettings models.WiFiEndpointSetting
 }
 
 type AddWiFiSettingsResponse struct {
-	XMLName xml.Name            `xml:"Envelope"`
-	Header  wsman.Header        `xml:"Header"`
-	Body    AddWiFiSettingsBody `xml:"Body"`
+	XMLName xml.Name `xml:"Envelope"`
+	Header  wsman.Header
+	Body    AddWiFiSettingsBody
 }
 
 type AddWiFiSettingsBody struct {
-	XMLName                xml.Name               `xml:"Body"`
-	AddWiFiSettings_OUTPUT AddWiFiSettings_OUTPUT `xml:"AddWiFiSettings_OUTPUT"`
+	XMLName                xml.Name `xml:"Body"`
+	AddWiFiSettings_OUTPUT AddWiFiSettings_OUTPUT
 }
 
 type AddWiFiSettings_OUTPUT struct {
-	XMLName              xml.Name `xml:"g:AddWiFiSettings_OUTPUT"`
-	G                    string   `xml:"xmlns:g,attr"`
+	XMLName              xml.Name `xml:"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService AddWiFiSettings_OUTPUT"`
 	WiFiEndpointSettings models.WiFiEndpointSettings
-	IEEE8021xSettings    *models.IEEE8021xSettings `xml:"g:IEEE8021xSettingsInput,omitempty"`
-	ClientCredential     *ClientCredential         `xml:"g:ClientCredential,omitempty"`
-	CACredential         *CACredential             `xml:"g:CACredential,omitempty"`
-	ReturnValue          int                       `xml:"g:ReturnValue"`
+	// not concerned with these entries on OUTPUT
+	//IEEE8021xSettings    *models.IEEE8021xSettings `xml:"g:IEEE8021xSettingsInput,omitempty"`
+	//ClientCredential     *ClientCredential         `xml:"g:ClientCredential,omitempty"`
+	//CACredential         *CACredential             `xml:"g:CACredential,omitempty"`
+	ReturnValue int
 }
