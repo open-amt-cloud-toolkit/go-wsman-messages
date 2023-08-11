@@ -30,7 +30,7 @@ type PortConfigurationBody struct {
 const AMT_WiFiPortConfigurationService = "AMT_WiFiPortConfigurationService"
 
 type WiFiPortConfigurationService struct {
-	XMLName                            xml.Name `xml:"AMT_WiFiPortConfigurationService"`
+	XMLName                            xml.Name `xml:"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService AMT_WiFiPortConfigurationService"`
 	RequestedState                     RequestedState
 	EnabledState                       EnabledState
 	HealthState                        HealthState
