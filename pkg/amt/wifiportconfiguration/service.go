@@ -7,6 +7,7 @@ package wifiportconfiguration
 
 import (
 	"encoding/xml"
+	"strconv"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
@@ -16,20 +17,19 @@ import (
 )
 
 type PortConfigurationResponse struct {
-	XMLName xml.Name              `xml:"Envelope"`
-	Header  wsman.Header          `xml:"Header"`
-	Body    PortConfigurationBody `xml:"Body"`
+	XMLName xml.Name     `xml:"Envelope"`
+	Header  wsman.Header `xml:"Header"`
+	Body    PortConfigurationBody
 }
 
 type PortConfigurationBody struct {
-	XMLName                      xml.Name                     `xml:"Body"`
-	WiFiPortConfigurationService WiFiPortConfigurationService `xml:"AMT_WiFiPortConfigurationService"`
+	XMLName                      xml.Name `xml:"Body"`
+	WiFiPortConfigurationService WiFiPortConfigurationService
 }
 
 const AMT_WiFiPortConfigurationService = "AMT_WiFiPortConfigurationService"
 
 type WiFiPortConfigurationService struct {
-	models.NetworkPortConfigurationService
 	XMLName                            xml.Name `xml:"AMT_WiFiPortConfigurationService"`
 	RequestedState                     RequestedState
 	EnabledState                       EnabledState
@@ -39,7 +39,7 @@ type WiFiPortConfigurationService struct {
 	SystemName                         string
 	CreationClassName                  string
 	Name                               string
-	LocalProfileSynchronizationEnabled LocalProfileSynchronizationEnabled
+	LocalProfileSynchronizationEnabled LocalProfileSynchronizationEnabled `xml:"localProfileSynchronizationEnabled"`
 	LastConnectedSsidUnderMeControl    string
 	NoHostCsmeSoftwarePolicy           NoHostCsmeSoftwarePolicy
 	UEFIWiFiProfileShareEnabled        UEFIWiFiProfileShareEnabled
@@ -107,9 +107,26 @@ const (
 
 type UEFIWiFiProfileShareEnabled int
 
+func (t *UEFIWiFiProfileShareEnabled) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	var strVal string
+	err := d.DecodeElement(&strVal, &start)
+	if err != nil {
+		return err
+	}
+	enabled, _ := strconv.ParseBool(strVal)
+	if enabled {
+		//*t = true
+		*t = (UEFIWiFiProfileShareEnabled)(1)
+	} else {
+		//*t = false
+		*t = (UEFIWiFiProfileShareEnabled)(0)
+	}
+	return nil
+}
+
 const (
-	Enabled UEFIWiFiProfileShareEnabled = iota
-	Disabled
+	Disabled UEFIWiFiProfileShareEnabled = iota
+	Enabled
 )
 
 type Service struct {
@@ -163,6 +180,7 @@ func (s Service) Pull(enumerationContext string) string {
 
 // Put will change properties of the selected instance
 func (s Service) Put(wiFiPortConfigurationService WiFiPortConfigurationService) string {
+	//wiFiPortConfigurationService.XMLSchema = "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService"
 	return s.base.Put(wiFiPortConfigurationService, false, nil)
 }
 
@@ -243,5 +261,5 @@ type AddWiFiSettings_OUTPUT struct {
 	IEEE8021xSettings    *models.IEEE8021xSettings `xml:"g:IEEE8021xSettingsInput,omitempty"`
 	ClientCredential     *ClientCredential         `xml:"g:ClientCredential,omitempty"`
 	CACredential         *CACredential             `xml:"g:CACredential,omitempty"`
-	ReturnValue          int
+	ReturnValue          int                       `xml:"g:ReturnValue"`
 }
