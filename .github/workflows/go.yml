@@ -29,12 +29,12 @@ jobs:
 
     steps:
     - name: Harden Runner
-      uses: step-security/harden-runner@cba0d00b1fc9a034e1e642ea0f1103c282990604 # v2.5.0
+      uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
       with:
         egress-policy: audit
 
     - name: Install Go
-      uses: actions/setup-go@fac708d6674e30b6ba41289acaab6d4b75aa0753 # v4.0.1
+      uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe # v4.1.0
       with:
         go-version: ${{ matrix.go-version }}
     - name: Checkout code
@@ -50,10 +50,10 @@ jobs:
     - name: Run go vet
       run: go vet ./...
     - name: Run go lint
-      uses: golangci/golangci-lint-action@639cd343e1d3b897ff35927a75193d57cfcba299 # v3.6.0
+      uses: golangci/golangci-lint-action@3a919529898de77ec3da873e3063ca4b10e7f5cc # v3.7.0
       with:
         version: latest
-    - uses: codecov/codecov-action@40a12dcee2df644d47232dde008099a3e9e4f865 # v3.1.2
+    - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # v3.1.4
       name: Upload Coverage Results
     - name: GitHub Upload Coverage Artifacts
       uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
