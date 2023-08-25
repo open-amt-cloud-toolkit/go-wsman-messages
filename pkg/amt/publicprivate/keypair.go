@@ -6,15 +6,32 @@
 package publicprivate
 
 import (
+	"encoding/xml"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
 )
 
 const AMT_PublicPrivateKeyPair = "AMT_PublicPrivateKeyPair"
 
+type PullResponseEnvelope struct {
+	XMLName xml.Name `xml:"Envelope"`
+	Header  wsman.Header
+	Body    PullResponseBody
+}
+
+type PullResponseBody struct {
+	PullResponse PullResponse
+}
+
+type PullResponse struct {
+	Items         []PublicPrivateKeyPair `xml:"Items>AMT_PublicPrivateKeyPair"`
+	EndOfSequence string
+}
+
 type PublicPrivateKeyPair struct {
-	ElementName string      // A user-friendly name for the object . . .
-	InstanceID  string      // Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class.
-	DERKey      [1210]uint8 // RSA Key encoded as DES PKCS#1.
+	ElementName string // A user-friendly name for the object . . .
+	InstanceID  string // Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class.
+	//DERKey      [1210]uint8 // RSA Key encoded as DES PKCS#1.
+	DERKey string
 }
 
 type KeyPair struct {
