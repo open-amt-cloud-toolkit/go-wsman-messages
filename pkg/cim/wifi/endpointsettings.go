@@ -15,28 +15,29 @@ type EndpointSettings struct {
 	base wsman.Base
 }
 
-type PullEnvelope struct {
-	XMLName xml.Name     `xml:"Envelope"`
-	Header  wsman.Header `xml:"Header"`
-	Body    PullBody     `xml:"Body"`
+type PullResponseEnvelope struct {
+	XMLName xml.Name `xml:"Envelope"`
+	Header  wsman.Header
+	Body    PullResponseBody
 }
 
-type PullBody struct {
-	XMLName      xml.Name     `xml:"Body"`
-	PullResponse PullResponse `xml:"PullResponse"`
+type PullResponseBody struct {
+	PullResponse PullResponse
 }
 
 type PullResponse struct {
-	Items         PullItems `xml:"Items"`
-	EndOfSequence string    `xml:"EndOfSequence"`
-}
-
-type PullItems struct {
-	WifiSettings []CIMWiFiEndpointSettings `xml:"CIM_WiFiEndpointSettings"`
+	Items         []CIMWiFiEndpointSettings `xml:"Items>CIM_WiFiEndpointSettings"`
+	EndOfSequence string                    `xml:"EndOfSequence"`
 }
 
 type CIMWiFiEndpointSettings struct {
-	InstanceID string `xml:"InstanceID"`
+	AuthenticationMethod int
+	BSSType              int
+	ElementName          string
+	EncryptionMethod     int
+	InstanceID           string
+	Priority             int
+	SSID                 string
 }
 
 const CIM_WiFiEndpoint = "CIM_WiFiEndpoint"
