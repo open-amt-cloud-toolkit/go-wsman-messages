@@ -840,15 +840,15 @@ type ServiceAvailableToElement struct {
 
 type AssociationReference struct {
 	Address             string
-	ReferenceParameters SimpleReference
+	ReferenceParameters ReferenceParmetersNoNamespace
 }
 
-type SimpleReference struct {
-	ResourceURI string           `xml:"ResourceURI,omitempty"`
-	SelectorSet []SimpleSelector `xml:"SelectorSet>Selector,omitempty"`
+type ReferenceParmetersNoNamespace struct {
+	ResourceURI string
+	SelectorSet []SelectorNoNamespace `xml:"SelectorSet>Selector,omitempty"`
 }
 
-func (rp *SimpleReference) HasSelector(name string, value string) bool {
+func (rp *ReferenceParmetersNoNamespace) HasSelector(name string, value string) bool {
 	for _, selector := range rp.SelectorSet {
 		if selector.Name == name && selector.Value == value {
 			return true
@@ -856,7 +856,7 @@ func (rp *SimpleReference) HasSelector(name string, value string) bool {
 	}
 	return false
 }
-func (rp *SimpleReference) GetSelectorValue(name string) string {
+func (rp *ReferenceParmetersNoNamespace) GetSelectorValue(name string) string {
 	for _, selector := range rp.SelectorSet {
 		if selector.Name == name {
 			return selector.Value
@@ -865,10 +865,10 @@ func (rp *SimpleReference) GetSelectorValue(name string) string {
 	return ""
 }
 
-type SimpleSelector struct {
-	XMLName xml.Name `xml:"Selector,omitempty"`
-	Name    string   `xml:"Name,attr"`
-	Value   string   `xml:",chardata"`
+type SelectorNoNamespace struct {
+	//XMLName xml.Name `xml:"Selector,omitempty"`
+	Name  string `xml:"Name,attr"`
+	Value string `xml:",chardata"`
 }
 
 type ServiceProvider struct {
