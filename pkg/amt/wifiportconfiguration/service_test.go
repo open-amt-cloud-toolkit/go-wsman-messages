@@ -6,6 +6,8 @@
 package wifiportconfiguration
 
 import (
+	"encoding/xml"
+	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -83,4 +85,59 @@ func TestAMT_WiFiPortConfigurationService(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("unmarshall UEFIWiFiProfileShareEnabled for Disabled - 0", func(t *testing.T) {
+		original := PortConfigurationResponse{}
+		originalXML, err := xml.Marshal(original)
+		assert.Nil(t, err)
+		var received PortConfigurationResponse
+		err = xml.Unmarshal(originalXML, &received)
+		assert.Nil(t, err)
+		assert.Equal(t,
+			Disabled,
+			received.Body.WiFiPortConfigurationService.UEFIWiFiProfileShareEnabled)
+	})
+
+	t.Run("unmarshall UEFIWiFiProfileShareEnabled for Enabled - 1", func(t *testing.T) {
+		original := PortConfigurationResponse{}
+		original.Body.WiFiPortConfigurationService.UEFIWiFiProfileShareEnabled = Enabled
+		originalXML, err := xml.Marshal(original)
+		assert.Nil(t, err)
+		var received PortConfigurationResponse
+		err = xml.Unmarshal(originalXML, &received)
+		assert.Nil(t, err)
+		assert.Equal(t,
+			Enabled,
+			received.Body.WiFiPortConfigurationService.UEFIWiFiProfileShareEnabled)
+	})
+
+	t.Run("unmarshall UEFIWiFiProfileShareEnabled for Disabled - false", func(t *testing.T) {
+		original := PortConfigurationResponse{}
+		originalXML, err := xml.Marshal(original)
+		assert.Nil(t, err)
+		re := regexp.MustCompile(`<UEFIWiFiProfileShareEnabled>0</UEFIWiFiProfileShareEnabled>`)
+		originalXML = []byte(re.ReplaceAllString(string(originalXML), `<UEFIWiFiProfileShareEnabled>false</UEFIWiFiProfileShareEnabled>`))
+		var received PortConfigurationResponse
+		err = xml.Unmarshal(originalXML, &received)
+		assert.Nil(t, err)
+		assert.Equal(t,
+			Disabled,
+			received.Body.WiFiPortConfigurationService.UEFIWiFiProfileShareEnabled)
+	})
+
+	t.Run("unmarshall UEFIWiFiProfileShareEnabled for Enabled - true", func(t *testing.T) {
+		original := PortConfigurationResponse{}
+		original.Body.WiFiPortConfigurationService.UEFIWiFiProfileShareEnabled = Enabled
+		originalXML, err := xml.Marshal(original)
+		assert.Nil(t, err)
+		re := regexp.MustCompile(`<UEFIWiFiProfileShareEnabled>1</UEFIWiFiProfileShareEnabled>`)
+		originalXML = []byte(re.ReplaceAllString(string(originalXML), `<UEFIWiFiProfileShareEnabled>true</UEFIWiFiProfileShareEnabled>`))
+		var received PortConfigurationResponse
+		err = xml.Unmarshal(originalXML, &received)
+		assert.Nil(t, err)
+		assert.Equal(t,
+			Enabled,
+			received.Body.WiFiPortConfigurationService.UEFIWiFiProfileShareEnabled)
+	})
+
 }
