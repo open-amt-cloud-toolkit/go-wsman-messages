@@ -838,6 +838,39 @@ type ServiceAvailableToElement struct {
 	UserOfService   UserOfService
 }
 
+type AssociationReference struct {
+	Address             string
+	ReferenceParameters SimpleReference
+}
+
+type SimpleReference struct {
+	ResourceURI string           `xml:"ResourceURI,omitempty"`
+	SelectorSet []SimpleSelector `xml:"SelectorSet>Selector,omitempty"`
+}
+
+func (rp *SimpleReference) HasSelector(name string, value string) bool {
+	for _, selector := range rp.SelectorSet {
+		if selector.Name == name && selector.Value == value {
+			return true
+		}
+	}
+	return false
+}
+func (rp *SimpleReference) GetSelectorValue(name string) string {
+	for _, selector := range rp.SelectorSet {
+		if selector.Name == name {
+			return selector.Value
+		}
+	}
+	return ""
+}
+
+type SimpleSelector struct {
+	XMLName xml.Name `xml:"Selector,omitempty"`
+	Name    string   `xml:"Name,attr"`
+	Value   string   `xml:",chardata"`
+}
+
 type ServiceProvider struct {
 	Address             string
 	ReferenceParameters ReferenceParameters
