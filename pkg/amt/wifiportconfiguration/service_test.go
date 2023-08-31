@@ -22,6 +22,9 @@ func TestAMT_WiFiPortConfigurationService(t *testing.T) {
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := wsman.NewWSManMessageCreator(resourceUriBase)
 	elementUnderTest := NewWiFiPortConfigurationService(wsmanMessageCreator)
+	wiFiPortConfigurationService := WiFiPortConfigurationService{}
+	expectedPutBodyXml, err := xml.Marshal(wiFiPortConfigurationService)
+	assert.Nil(t, err)
 
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
@@ -32,13 +35,15 @@ func TestAMT_WiFiPortConfigurationService(t *testing.T) {
 			responseFunc func() string
 		}{
 			//GETS
-			{"should create a valid AMT_WiFiPortConfigurationService Get wsman message", "AMT_WiFiPortConfigurationService", wsmantesting.GET, "", elementUnderTest.Get},
+			{"should create a valid AMT_WiFiPortConfigurationService Get wsman message", AMT_WiFiPortConfigurationService, wsmantesting.GET, "", elementUnderTest.Get},
 			//ENUMERATES
-			{"should create a valid AMT_WiFiPortConfigurationService Enumerate wsman message", "AMT_WiFiPortConfigurationService", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
+			{"should create a valid AMT_WiFiPortConfigurationService Enumerate wsman message", AMT_WiFiPortConfigurationService, wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
 			//PULLS
-			{"should create a valid AMT_WiFiPortConfigurationService Pull wsman message", "AMT_WiFiPortConfigurationService", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{"should create a valid AMT_WiFiPortConfigurationService Pull wsman message", AMT_WiFiPortConfigurationService, wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			// PUTS
+			{"should create a valid AMT_WiFiPortConfigurationService Put wsman message", AMT_WiFiPortConfigurationService, wsmantesting.PUT, string(expectedPutBodyXml), func() string { return elementUnderTest.Put(wiFiPortConfigurationService) }},
 			// WIFI PORT CONFIGURATION SERVICE
-			{"should return a valid amt_WiFiPortConfigurationService ADD_WIFI_SETTINGS wsman message", "AMT_WiFiPortConfigurationService", `http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService/AddWiFiSettings`, `<h:AddWiFiSettings_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService"><h:WiFiEndpoint><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpoint</w:ResourceURI><w:SelectorSet><w:Selector Name="Name">WiFi Endpoint 0</w:Selector></w:SelectorSet></a:ReferenceParameters></h:WiFiEndpoint><h:WiFiEndpointSettingsInput xmlns:q="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings"><q:ElementName>home</q:ElementName><q:InstanceID>Intel(r) AMT:WiFi Endpoint Settings home</q:InstanceID><q:AuthenticationMethod>6</q:AuthenticationMethod><q:EncryptionMethod>4</q:EncryptionMethod><q:SSID>admin</q:SSID><q:Priority>1</q:Priority><q:PSKPassPhrase>p&#39;ass&lt;&gt;&amp;&#34;code</q:PSKPassPhrase></h:WiFiEndpointSettingsInput></h:AddWiFiSettings_INPUT>`, func() string {
+			{"should return a valid amt_WiFiPortConfigurationService ADD_WIFI_SETTINGS wsman message", AMT_WiFiPortConfigurationService, `http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService/AddWiFiSettings`, `<h:AddWiFiSettings_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService"><h:WiFiEndpoint><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpoint</w:ResourceURI><w:SelectorSet><w:Selector Name="Name">WiFi Endpoint 0</w:Selector></w:SelectorSet></a:ReferenceParameters></h:WiFiEndpoint><h:WiFiEndpointSettingsInput xmlns:q="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings"><q:ElementName>home</q:ElementName><q:InstanceID>Intel(r) AMT:WiFi Endpoint Settings home</q:InstanceID><q:AuthenticationMethod>6</q:AuthenticationMethod><q:EncryptionMethod>4</q:EncryptionMethod><q:SSID>admin</q:SSID><q:Priority>1</q:Priority><q:PSKPassPhrase>p&#39;ass&lt;&gt;&amp;&#34;code</q:PSKPassPhrase></h:WiFiEndpointSettingsInput></h:AddWiFiSettings_INPUT>`, func() string {
 				wifiEndpointSettings := models.WiFiEndpointSettings{
 					H:                    "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings", //todo: make more dynamic
 					ElementName:          "home",
