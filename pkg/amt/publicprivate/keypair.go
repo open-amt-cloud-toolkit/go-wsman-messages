@@ -11,6 +11,12 @@ import (
 
 const AMT_PublicPrivateKeyPair = "AMT_PublicPrivateKeyPair"
 
+type PublicPrivateKeyPair struct {
+	ElementName string      // A user-friendly name for the object . . .
+	InstanceID  string      // Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class.
+	DERKey      [1210]uint8 // RSA Key encoded as DES PKCS#1.
+}
+
 type KeyPair struct {
 	base wsman.Base
 }
