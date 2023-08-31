@@ -29,6 +29,21 @@ type PullResponse struct {
 	EndOfSequence string
 }
 
+type PullResponseEnvelope struct {
+	XMLName xml.Name `xml:"Envelope"`
+	Header  wsman.Header
+	Body    PullResponseBody
+}
+
+type PullResponseBody struct {
+	PullResponse PullResponse
+}
+
+type PullResponse struct {
+	Items         []PublicKeyCertificate `xml:"Items>AMT_PublicKeyCertificate"`
+	EndOfSequence string
+}
+
 type PublicKeyCertificate struct {
 	ElementName           string // A user-friendly name for the object . . .
 	InstanceID            string // Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class.
@@ -39,7 +54,9 @@ type PublicKeyCertificate struct {
 	ReadOnlyCertificate   bool   // Indicates whether the certificate is an Intel AMT self-signed certificate. If True, the certificate cannot be deleted.
 }
 
-type X509CertificateBlob string //[4100]uint8
+type X509CertificateBlob string
+
+//type X509CertificateBlob [4100]uint8
 
 func (t *X509CertificateBlob) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	var strVal string
