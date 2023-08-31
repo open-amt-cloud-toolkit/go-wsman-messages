@@ -19,6 +19,16 @@ func TestAMT_PublicKeyCertificate(t *testing.T) {
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := wsman.NewWSManMessageCreator(resourceUriBase)
 	elementUnderTest := NewPublicKeyCertificate(wsmanMessageCreator)
+	putCert := PublicKeyCertificate{
+		ElementName:           "",
+		InstanceID:            "",
+		X509Certificate:       "",
+		TrustedRootCertficate: false,
+		Issuer:                "",
+		Subject:               "",
+		ReadOnlyCertificate:   false,
+	}
+	expectedPutCertBody := `<PublicKeyCertificate><ElementName></ElementName><InstanceID></InstanceID><X509Certificate></X509Certificate><TrustedRootCertficate>false</TrustedRootCertficate><Issuer></Issuer><Subject></Subject><ReadOnlyCertificate>false</ReadOnlyCertificate></PublicKeyCertificate>`
 
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
@@ -30,13 +40,15 @@ func TestAMT_PublicKeyCertificate(t *testing.T) {
 			responseFunc func() string
 		}{
 			//GETS
-			{"should create a valid AMT_PublicKeyCertificate Get wsman message", "AMT_PublicKeyCertificate", wsmantesting.GET, "", "", elementUnderTest.Get},
+			{"should create a valid AMT_PublicKeyCertificate Get wsman message", AMT_PublicKeyCertificate, wsmantesting.GET, "", "", elementUnderTest.Get},
 			//ENUMERATES
-			{"should create a valid AMT_PublicKeyCertificate Enumerate wsman message", "AMT_PublicKeyCertificate", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, "", elementUnderTest.Enumerate},
+			{"should create a valid AMT_PublicKeyCertificate Enumerate wsman message", AMT_PublicKeyCertificate, wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, "", elementUnderTest.Enumerate},
 			//PULLS
-			{"should create a valid AMT_PublicKeyCertificate Pull wsman message", "AMT_PublicKeyCertificate", wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{"should create a valid AMT_PublicKeyCertificate Pull wsman message", AMT_PublicKeyCertificate, wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			//PUTS
+			{"should create a valid AMT_PublicKeyCertificate Put wsman message", AMT_PublicKeyCertificate, wsmantesting.PUT, expectedPutCertBody, "", func() string { return elementUnderTest.Put(putCert) }},
 			//DELETE
-			{"should create a valid AMT_PublicKeyCertificate Delete wsman message", "AMT_PublicKeyCertificate", wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"InstanceID\">instanceID123</w:Selector></w:SelectorSet>", func() string { return elementUnderTest.Delete("instanceID123") }},
+			{"should create a valid AMT_PublicKeyCertificate Delete wsman message", AMT_PublicKeyCertificate, wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"InstanceID\">instanceID123</w:Selector></w:SelectorSet>", func() string { return elementUnderTest.Delete("instanceID123") }},
 		}
 
 		for _, test := range tests {
