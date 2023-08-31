@@ -15,10 +15,22 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/wifi"
 )
 
+type Response struct {
+	XMLName xml.Name     `xml:"Envelope"`
+	Header  wsman.Header `xml:"Header"`
+	Body    Body         `xml:"Body"`
+}
+
+type Body struct {
+	XMLName                      xml.Name                     `xml:"Body"`
+	WiFiPortConfigurationService WiFiPortConfigurationService `xml:"AMT_WiFiPortConfigurationService"`
+}
+
 const AMT_WiFiPortConfigurationService = "AMT_WiFiPortConfigurationService"
 
 type WiFiPortConfigurationService struct {
 	models.NetworkPortConfigurationService
+	XMLName                            xml.Name `xml:"AMT_WiFiPortConfigurationService"`
 	RequestedState                     RequestedState
 	EnabledState                       EnabledState
 	HealthState                        HealthState

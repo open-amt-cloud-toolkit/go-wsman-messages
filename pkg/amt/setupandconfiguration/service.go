@@ -28,6 +28,7 @@ type UnprovisionBody struct {
 }
 
 type Unprovision_OUTPUT struct {
+	XMLName     xml.Name `xml:"Unprovision_OUTPUT"`
 	ReturnValue int
 }
 type SetupAndConfigurationService struct {

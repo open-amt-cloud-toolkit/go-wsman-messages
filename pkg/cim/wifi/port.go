@@ -6,12 +6,26 @@
 package wifi
 
 import (
+	"encoding/xml"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/actions"
 )
 
 type Port struct {
 	base wsman.Base
+}
+type RequestStateChangeResponse struct {
+	XMLName xml.Name               `xml:"Envelope"`
+	Header  wsman.Header           `xml:"Header"`
+	Body    RequestStateChangeBody `xml:"Body"`
+}
+type RequestStateChangeBody struct {
+	XMLName                   xml.Name                  `xml:"Body"`
+	RequestStateChange_OUTPUT RequestStateChange_OUTPUT `xml:"RequestStateChange_OUTPUT"`
+}
+type RequestStateChange_OUTPUT struct {
+	XMLName     xml.Name `xml:"RequestStateChange_OUTPUT"`
+	ReturnValue int
 }
 
 const CIM_WiFiPort = "CIM_WiFiPort"
