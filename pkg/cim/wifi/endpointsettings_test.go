@@ -36,7 +36,7 @@ func TestWifiEndpointSettings(t *testing.T) {
 			//PULLS
 			{"should create a valid cim_WiFiEndpointSettings Pull wsman message", "CIM_WiFiEndpointSettings", wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 			//DELETE
-			{"should create a valid cim_WiFiEndpointSettings Delete wsman message", "CIM_WiFiEndpointSettings", wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"Name\">instanceID123</w:Selector></w:SelectorSet>", func() string { return elementUnderTest.Delete("instanceID123") }},
+			{"should create a valid cim_WiFiEndpointSettings Delete wsman message", "CIM_WiFiEndpointSettings", wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"InstanceID\">instanceID123</w:Selector></w:SelectorSet>", func() string { return elementUnderTest.Delete("instanceID123") }},
 		}
 
 		for _, test := range tests {
@@ -44,9 +44,7 @@ func TestWifiEndpointSettings(t *testing.T) {
 				correctResponse := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response := test.responseFunc()
-				if response != correctResponse {
-					assert.Equal(t, correctResponse, response)
-				}
+				assert.Equal(t, correctResponse, response)
 			})
 		}
 	})
