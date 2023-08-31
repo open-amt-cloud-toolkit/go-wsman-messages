@@ -15,13 +15,12 @@ import (
 
 const AMT_PublicKeyManagementService = "AMT_PublicKeyManagementService"
 
-type Response struct {
-	XMLName xml.Name     `xml:"Envelope"`
-	Header  wsman.Header `xml:"Header"`
-	Body    Body         `xml:"Body"`
+type AddKeyResponseEnvelope struct {
+	XMLName xml.Name           `xml:"Envelope"`
+	Header  wsman.Header       `xml:"Header"`
+	Body    AddKeyResponseBody `xml:"Body"`
 }
-type Body struct {
-	XMLName                          xml.Name                     `xml:"Body"`
+type AddKeyResponseBody struct {
 	AddTrustedRootCertificate_OUTPUT AddTrustedCertificate_OUTPUT `xml:"AddTrustedRootCertificate_OUTPUT,omitempty"`
 	AddTrustedCertificate_OUTPUT     AddTrustedCertificate_OUTPUT `xml:"AddCertificate_OUTPUT,omitempty"`
 	AddKey_OUTPUT                    AddKey_OUTPUT                `xml:"AddKey_OUTPUT,omitempty"`
