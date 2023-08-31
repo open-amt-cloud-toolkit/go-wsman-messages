@@ -15,22 +15,6 @@ type EndpointSettings struct {
 	base wsman.Base
 }
 
-type EnumerationEnvelope struct {
-	XMLName xml.Name        `xml:"Envelope"`
-	Header  wsman.Header    `xml:"Header"`
-	Body    EnumerationBody `xml:"Body"`
-}
-
-type EnumerationBody struct {
-	XMLName           xml.Name          `xml:"Body"`
-	EnumerateResponse EnumerateResponse `xml:"EnumerateResponse"`
-}
-
-type EnumerateResponse struct {
-	XMLName            xml.Name `xml:"EnumerateResponse"`
-	EnumerationContext string   `xml:"EnumerationContext"`
-}
-
 type PullEnvelope struct {
 	XMLName xml.Name     `xml:"Envelope"`
 	Header  wsman.Header `xml:"Header"`
