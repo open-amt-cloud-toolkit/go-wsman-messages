@@ -5,10 +5,54 @@
 
 package wifi
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+import (
+	"encoding/xml"
+
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+)
 
 type EndpointSettings struct {
 	base wsman.Base
+}
+
+type EnumerationEnvelope struct {
+	XMLName xml.Name        `xml:"Envelope"`
+	Header  wsman.Header    `xml:"Header"`
+	Body    EnumerationBody `xml:"Body"`
+}
+
+type EnumerationBody struct {
+	XMLName           xml.Name          `xml:"Body"`
+	EnumerateResponse EnumerateResponse `xml:"EnumerateResponse"`
+}
+
+type EnumerateResponse struct {
+	XMLName            xml.Name `xml:"EnumerateResponse"`
+	EnumerationContext string   `xml:"EnumerationContext"`
+}
+
+type PullEnvelope struct {
+	XMLName xml.Name     `xml:"Envelope"`
+	Header  wsman.Header `xml:"Header"`
+	Body    PullBody     `xml:"Body"`
+}
+
+type PullBody struct {
+	XMLName      xml.Name     `xml:"Body"`
+	PullResponse PullResponse `xml:"PullResponse"`
+}
+
+type PullResponse struct {
+	Items         PullItems `xml:"Items"`
+	EndOfSequence string    `xml:"EndOfSequence"`
+}
+
+type PullItems struct {
+	WifiSettings []CIMWiFiEndpointSettings `xml:"CIM_WiFiEndpointSettings"`
+}
+
+type CIMWiFiEndpointSettings struct {
+	InstanceID string `xml:"InstanceID"`
 }
 
 const CIM_WiFiEndpoint = "CIM_WiFiEndpoint"
@@ -38,6 +82,6 @@ func (b EndpointSettings) Pull(enumerationContext string) string {
 
 // Delete removes a the specified instance
 func (b EndpointSettings) Delete(handle string) string {
-	selector := wsman.Selector{Name: "Name", Value: handle}
+	selector := wsman.Selector{Name: "InstanceID", Value: handle}
 	return b.base.Delete(selector)
 }
