@@ -15,13 +15,13 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/wifi"
 )
 
-type Response struct {
-	XMLName xml.Name     `xml:"Envelope"`
-	Header  wsman.Header `xml:"Header"`
-	Body    Body         `xml:"Body"`
+type PortConfigurationResponse struct {
+	XMLName xml.Name              `xml:"Envelope"`
+	Header  wsman.Header          `xml:"Header"`
+	Body    PortConfigurationBody `xml:"Body"`
 }
 
-type Body struct {
+type PortConfigurationBody struct {
 	XMLName                      xml.Name                     `xml:"Body"`
 	WiFiPortConfigurationService WiFiPortConfigurationService `xml:"AMT_WiFiPortConfigurationService"`
 }
@@ -223,4 +223,25 @@ func (s Service) AddWiFiSettings(wifiEndpointSettings models.WiFiEndpointSetting
 
 	body := s.base.WSManMessageCreator.CreateBody(string(methods.AddWiFiSettings)+"_INPUT", AMT_WiFiPortConfigurationService, &input)
 	return s.base.WSManMessageCreator.CreateXML(header, body)
+}
+
+type AddWiFiSettingsResponse struct {
+	XMLName xml.Name            `xml:"Envelope"`
+	Header  wsman.Header        `xml:"Header"`
+	Body    AddWiFiSettingsBody `xml:"Body"`
+}
+
+type AddWiFiSettingsBody struct {
+	XMLName                xml.Name               `xml:"Body"`
+	AddWiFiSettings_OUTPUT AddWiFiSettings_OUTPUT `xml:"AddWiFiSettings_OUTPUT"`
+}
+
+type AddWiFiSettings_OUTPUT struct {
+	XMLName              xml.Name `xml:"g:AddWiFiSettings_OUTPUT"`
+	G                    string   `xml:"xmlns:g,attr"`
+	WiFiEndpointSettings models.WiFiEndpointSettings
+	IEEE8021xSettings    *models.IEEE8021xSettings `xml:"g:IEEE8021xSettingsInput,omitempty"`
+	ClientCredential     *ClientCredential         `xml:"g:ClientCredential,omitempty"`
+	CACredential         *CACredential             `xml:"g:CACredential,omitempty"`
+	ReturnValue          int
 }
