@@ -10,6 +10,8 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/bios"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/boot"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/computer"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/concrete"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/credential"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/ieee8021x"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/kvm"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/mediaaccess"
@@ -31,6 +33,8 @@ type Messages struct {
 	Chassis                   physical.Chassis
 	Chip                      physical.Chip
 	ComputerSystemPackage     computer.SystemPackage
+	ConcreteDependency        concrete.Dependency
+	CredentialContext         credential.Context
 	IEEE8021xSettings         ieee8021x.Settings
 	KVMRedirectionSAP         kvm.RedirectionSAP
 	MediaAccessDevice         mediaaccess.Device
@@ -59,6 +63,8 @@ func NewMessages() Messages {
 	m.Chassis = physical.NewChassis(wsmanMessageCreator)
 	m.Chip = physical.NewChip(wsmanMessageCreator)
 	m.ComputerSystemPackage = computer.NewComputerSystemPackage(wsmanMessageCreator)
+	m.ConcreteDependency = concrete.NewDependency(wsmanMessageCreator)
+	m.CredentialContext = credential.NewContext(wsmanMessageCreator)
 	m.IEEE8021xSettings = ieee8021x.NewIEEE8021xSettings(wsmanMessageCreator)
 	m.KVMRedirectionSAP = kvm.NewKVMRedirectionSAP(wsmanMessageCreator)
 	m.MediaAccessDevice = mediaaccess.NewMediaAccessDevice(wsmanMessageCreator)

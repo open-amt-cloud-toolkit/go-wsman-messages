@@ -838,6 +838,39 @@ type ServiceAvailableToElement struct {
 	UserOfService   UserOfService
 }
 
+type AssociationReference struct {
+	Address             string
+	ReferenceParameters ReferenceParmetersNoNamespace
+}
+
+type ReferenceParmetersNoNamespace struct {
+	ResourceURI string
+	SelectorSet []SelectorNoNamespace `xml:"SelectorSet>Selector,omitempty"`
+}
+
+func (rp *ReferenceParmetersNoNamespace) HasSelector(name string, value string) bool {
+	for _, selector := range rp.SelectorSet {
+		if selector.Name == name && selector.Value == value {
+			return true
+		}
+	}
+	return false
+}
+func (rp *ReferenceParmetersNoNamespace) GetSelectorValue(name string) string {
+	for _, selector := range rp.SelectorSet {
+		if selector.Name == name {
+			return selector.Value
+		}
+	}
+	return ""
+}
+
+type SelectorNoNamespace struct {
+	//XMLName xml.Name `xml:"Selector,omitempty"`
+	Name  string `xml:"Name,attr"`
+	Value string `xml:",chardata"`
+}
+
 type ServiceProvider struct {
 	Address             string
 	ReferenceParameters ReferenceParameters
