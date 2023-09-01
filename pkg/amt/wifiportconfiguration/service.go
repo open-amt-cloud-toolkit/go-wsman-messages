@@ -16,13 +16,13 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/wifi"
 )
 
-type PortConfigurationResponse struct {
+type Response struct {
 	XMLName xml.Name     `xml:"Envelope"`
 	Header  wsman.Header `xml:"Header"`
-	Body    PortConfigurationBody
+	Body    Body
 }
 
-type PortConfigurationBody struct {
+type Body struct {
 	XMLName                      xml.Name `xml:"Body"`
 	WiFiPortConfigurationService WiFiPortConfigurationService
 }
