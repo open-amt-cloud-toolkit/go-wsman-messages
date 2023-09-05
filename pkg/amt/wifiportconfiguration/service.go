@@ -223,19 +223,21 @@ func (s Service) AddWiFiSettings(wifiEndpointSettings models.WiFiEndpointSetting
 				},
 			},
 		}
-		input.ClientCredential = &ClientCredential{
-			Address: "default",
-			ReferenceParameters: models.ReferenceParameters{
-				ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
-				SelectorSet: models.SelectorSet{
-					Selector: []wsman.Selector{
-						{
-							Name:  "InstanceID",
-							Value: clientCredential,
+		if clientCredential != "" {
+			input.ClientCredential = &ClientCredential{
+				Address: "default",
+				ReferenceParameters: models.ReferenceParameters{
+					ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
+					SelectorSet: models.SelectorSet{
+						Selector: []wsman.Selector{
+							{
+								Name:  "InstanceID",
+								Value: clientCredential,
+							},
 						},
 					},
 				},
-			},
+			}
 		}
 	}
 
