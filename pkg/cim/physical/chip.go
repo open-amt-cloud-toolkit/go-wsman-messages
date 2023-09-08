@@ -5,18 +5,20 @@
 
 package physical
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+import (
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+)
 
 type Chip struct {
-	base wsman.Base
+	base message.Base
 }
 
 const CIM_Chip = "CIM_Chip"
 
 // NewChip returns a new instance of the Chip struct.
-func NewChip(wsmanMessageCreator *wsman.WSManMessageCreator) Chip {
+func NewChip(wsmanMessageCreator *message.WSManMessageCreator) Chip {
 	return Chip{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_Chip)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_Chip)),
 	}
 }
 

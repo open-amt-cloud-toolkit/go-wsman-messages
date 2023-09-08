@@ -3,9 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
-package wsman
+package message
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Base struct {
 	WSManMessageCreator *WSManMessageCreator

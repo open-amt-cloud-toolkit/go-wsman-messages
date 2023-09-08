@@ -8,14 +8,14 @@ package general
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 
 type Response struct {
-	XMLName xml.Name     `xml:"Envelope"`
-	Header  wsman.Header `xml:"Header"`
-	Body    Body         `xml:"Body"`
+	XMLName xml.Name       `xml:"Envelope"`
+	Header  message.Header `xml:"Header"`
+	Body    Body           `xml:"Body"`
 }
 
 type Body struct {
@@ -84,12 +84,12 @@ const (
 )
 
 type Settings struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewGeneralSettings(wsmanMessageCreator *wsman.WSManMessageCreator) Settings {
+func NewGeneralSettings(wsmanMessageCreator *message.WSManMessageCreator) Settings {
 	return Settings{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_GeneralSettings),
+		base: message.NewBase(wsmanMessageCreator, AMT_GeneralSettings),
 	}
 }
 

@@ -5,18 +5,20 @@
 
 package physical
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+import (
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+)
 
 type Package struct {
-	base wsman.Base
+	base message.Base
 }
 
 const CIM_PhysicalPackage = "CIM_PhysicalPackage"
 
 // NewPhysicalPackage returns a new instance of the PhysicalPackage struct.
-func NewPhysicalPackage(wsmanMessageCreator *wsman.WSManMessageCreator) Package {
+func NewPhysicalPackage(wsmanMessageCreator *message.WSManMessageCreator) Package {
 	return Package{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_PhysicalPackage)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_PhysicalPackage)),
 	}
 }
 

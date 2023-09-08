@@ -5,18 +5,20 @@
 
 package physical
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+import (
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+)
 
 type Card struct {
-	base wsman.Base
+	base message.Base
 }
 
 const CIM_Card = "CIM_Card"
 
 // NewCard returns a new instance of the Card struct.
-func NewCard(wsmanMessageCreator *wsman.WSManMessageCreator) Card {
+func NewCard(wsmanMessageCreator *message.WSManMessageCreator) Card {
 	return Card{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_Card)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_Card)),
 	}
 }
 

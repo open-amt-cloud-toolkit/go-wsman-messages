@@ -8,7 +8,7 @@ package remoteaccess
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 
@@ -59,12 +59,12 @@ const (
 )
 
 type PolicyAppliesToMPS struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator *wsman.WSManMessageCreator) PolicyAppliesToMPS {
+func NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator *message.WSManMessageCreator) PolicyAppliesToMPS {
 	return PolicyAppliesToMPS{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_RemoteAccessPolicyAppliesToMPS),
+		base: message.NewBase(wsmanMessageCreator, AMT_RemoteAccessPolicyAppliesToMPS),
 	}
 }
 
@@ -90,7 +90,7 @@ func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Put(remoteAccessPolicyA
 
 // Delete removes a the specified instance
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Delete(handle string) string {
-	selector := wsman.Selector{Name: "Name", Value: handle}
+	selector := message.Selector{Name: "Name", Value: handle}
 	return RemoteAccessPolicyAppliesToMPS.base.Delete(selector)
 }
 

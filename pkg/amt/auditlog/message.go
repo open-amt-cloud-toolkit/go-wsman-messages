@@ -9,14 +9,14 @@ package auditlog
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 )
 
 const AMT_AuditLog = "AMT_AuditLog"
 
 type AuditLog struct {
-	base wsman.Base
+	base message.Base
 }
 
 type readRecords_INPUT struct {
@@ -25,8 +25,8 @@ type readRecords_INPUT struct {
 	StartIndex int      `xml:"h:StartIndex" json:"StartIndex"`
 }
 
-func NewAuditLog(wsmanMessageCreator *wsman.WSManMessageCreator) AuditLog {
-	return AuditLog{base: wsman.NewBase(wsmanMessageCreator, AMT_AuditLog)}
+func NewAuditLog(wsmanMessageCreator *message.WSManMessageCreator) AuditLog {
+	return AuditLog{base: message.NewBase(wsmanMessageCreator, AMT_AuditLog)}
 }
 
 // Get retrieves the representation of the instance

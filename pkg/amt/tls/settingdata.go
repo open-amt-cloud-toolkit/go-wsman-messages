@@ -6,7 +6,7 @@
 package tls
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 
@@ -21,12 +21,12 @@ type TLSSettingData struct {
 	NonSecureConnectionsSupported bool
 }
 type SettingData struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewTLSSettingData(wsmanMessageCreator *wsman.WSManMessageCreator) SettingData {
+func NewTLSSettingData(wsmanMessageCreator *message.WSManMessageCreator) SettingData {
 	return SettingData{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_TLSSettingData),
+		base: message.NewBase(wsmanMessageCreator, AMT_TLSSettingData),
 	}
 }
 

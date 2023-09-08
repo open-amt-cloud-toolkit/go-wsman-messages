@@ -7,13 +7,14 @@ package concrete
 
 import (
 	"encoding/xml"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 
 type DependencyPullResponseEnvelope struct {
 	XMLName xml.Name `xml:"Envelope"`
-	Header  wsman.Header
+	Header  message.Header
 	Body    DependencyPullResponseBody
 }
 
@@ -32,16 +33,16 @@ type Relationship struct {
 }
 
 type Dependency struct {
-	base wsman.Base
+	base message.Base
 }
 
 const ClassName = "CIM_ConcreteDependency"
 
 // NewDependency returns a new instance of the NewDependency struct.
 // should be NewDependency() because concrete is scoped already as package name.
-func NewDependency(wsmanMessageCreator *wsman.WSManMessageCreator) Dependency {
+func NewDependency(wsmanMessageCreator *message.WSManMessageCreator) Dependency {
 	return Dependency{
-		base: wsman.NewBase(wsmanMessageCreator, ClassName),
+		base: message.NewBase(wsmanMessageCreator, ClassName),
 	}
 }
 

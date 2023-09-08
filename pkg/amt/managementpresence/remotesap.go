@@ -5,19 +5,17 @@
 
 package managementpresence
 
-import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
-)
+import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 
 const AMT_ManagementPresenceRemoteSAP = "AMT_ManagementPresenceRemoteSAP"
 
 type RemoteSAP struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewManagementPresenceRemoteSAP(wsmanMessageCreator *wsman.WSManMessageCreator) RemoteSAP {
+func NewManagementPresenceRemoteSAP(wsmanMessageCreator *message.WSManMessageCreator) RemoteSAP {
 	return RemoteSAP{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_ManagementPresenceRemoteSAP),
+		base: message.NewBase(wsmanMessageCreator, AMT_ManagementPresenceRemoteSAP),
 	}
 }
 
@@ -38,6 +36,6 @@ func (ManagementPresenceRemoteSAP RemoteSAP) Pull(enumerationContext string) str
 
 // Delete removes a the specified instance
 func (ManagementPresenceRemoteSAP RemoteSAP) Delete(handle string) string {
-	selector := wsman.Selector{Name: "Name", Value: handle}
+	selector := message.Selector{Name: "Name", Value: handle}
 	return ManagementPresenceRemoteSAP.base.Delete(selector)
 }

@@ -6,16 +6,17 @@
 package credential
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"testing"
+
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestCIM(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := wsman.NewWSManMessageCreator(resourceUriBase)
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	elementUnderTest := NewContext(wsmanMessageCreator)
 
 	t.Run("cim_* Tests", func(t *testing.T) {

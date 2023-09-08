@@ -7,16 +7,17 @@ package wifi
 
 import (
 	"encoding/xml"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/actions"
 )
 
 type Port struct {
-	base wsman.Base
+	base message.Base
 }
 type RequestStateChangeResponse struct {
 	XMLName xml.Name               `xml:"Envelope"`
-	Header  wsman.Header           `xml:"Header"`
+	Header  message.Header         `xml:"Header"`
 	Body    RequestStateChangeBody `xml:"Body"`
 }
 type RequestStateChangeBody struct {
@@ -31,9 +32,9 @@ type RequestStateChange_OUTPUT struct {
 const CIM_WiFiPort = "CIM_WiFiPort"
 
 // NewWiFiPort returns a new instance of the WiFiPort struct.
-func NewWiFiPort(wsmanMessageCreator *wsman.WSManMessageCreator) Port {
+func NewWiFiPort(wsmanMessageCreator *message.WSManMessageCreator) Port {
 	return Port{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_WiFiPort)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_WiFiPort)),
 	}
 }
 

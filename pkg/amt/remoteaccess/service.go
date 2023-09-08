@@ -8,14 +8,14 @@ package remoteaccess
 import (
 	"fmt"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 )
 
 const AMT_RemoteAccessService = "AMT_RemoteAccessService"
 
 type Service struct {
-	base wsman.Base
+	base message.Base
 }
 type MPServer struct {
 	AccessInfo string
@@ -42,9 +42,9 @@ const (
 	UsernamePasswordAuthentication MPServerAuthMethod = 2
 )
 
-func NewRemoteAccessService(wsmanMessageCreator *wsman.WSManMessageCreator) Service {
+func NewRemoteAccessService(wsmanMessageCreator *message.WSManMessageCreator) Service {
 	return Service{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_RemoteAccessService),
+		base: message.NewBase(wsmanMessageCreator, AMT_RemoteAccessService),
 	}
 }
 
@@ -68,7 +68,7 @@ func (r Service) AddMPS(mpServer MPServer) string {
 	return r.base.WSManMessageCreator.CreateXML(header, body)
 }
 
-func (r Service) AddRemoteAccessPolicyRule(remoteAccessPolicyRule RemoteAccessPolicyRule, selector wsman.Selector) string {
+func (r Service) AddRemoteAccessPolicyRule(remoteAccessPolicyRule RemoteAccessPolicyRule, selector message.Selector) string {
 	header := r.base.WSManMessageCreator.CreateHeader(string(actions.AddRemoteAccessPolicyRule), AMT_RemoteAccessService, nil, "", "")
 	body := fmt.Sprintf(`<Body><h:AddRemoteAccessPolicyRule_INPUT xmlns:h="%s%s"><h:Trigger>%d</h:Trigger><h:TunnelLifeTime>%d</h:TunnelLifeTime><h:ExtendedData>%s</h:ExtendedData><h:MpServer><Address xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</Address><ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing"><ResourceURI xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd">%s%s</ResourceURI><SelectorSet xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><Selector Name="%s">%s</Selector></SelectorSet></ReferenceParameters></h:MpServer></h:AddRemoteAccessPolicyRule_INPUT></Body>`, r.base.WSManMessageCreator.ResourceURIBase,
 		AMT_RemoteAccessService,

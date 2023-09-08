@@ -9,7 +9,7 @@ import (
 	"encoding/xml"
 	"time"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 )
 
 type SettingData struct {
@@ -226,7 +226,7 @@ const (
 )
 
 type PowerActionResponse struct {
-	RequestPowerStateChange_OUTPUT wsman.ReturnValue
+	RequestPowerStateChange_OUTPUT message.ReturnValue
 }
 type PhysicalFrame struct {
 	PhysicalPackage
@@ -892,12 +892,12 @@ type ReferenceParameters_OUTPUT struct {
 }
 type SelectorSet_OUTPUT struct {
 	XMLName  xml.Name `xml:"SelectorSet,omitempty"`
-	Selector []wsman.Selector_OUTPUT
+	Selector []message.Selector_OUTPUT
 }
 
 type SelectorSet struct {
 	XMLName  xml.Name `xml:"w:SelectorSet,omitempty"`
-	Selector []wsman.Selector
+	Selector []message.Selector
 }
 
 type AssociatedPowerManagementService struct {

@@ -6,7 +6,7 @@
 package userinitiatedconnection
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/redirection"
 )
@@ -23,12 +23,12 @@ const (
 )
 
 type Service struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewUserInitiatedConnectionService(wsmanMessageCreator *wsman.WSManMessageCreator) Service {
+func NewUserInitiatedConnectionService(wsmanMessageCreator *message.WSManMessageCreator) Service {
 	return Service{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_UserInitiatedConnectionService),
+		base: message.NewBase(wsmanMessageCreator, AMT_UserInitiatedConnectionService),
 	}
 }
 

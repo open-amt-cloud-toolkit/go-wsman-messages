@@ -8,7 +8,7 @@ package publickey
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
@@ -16,9 +16,9 @@ import (
 const AMT_PublicKeyManagementService = "AMT_PublicKeyManagementService"
 
 type Response struct {
-	XMLName xml.Name     `xml:"Envelope"`
-	Header  wsman.Header `xml:"Header"`
-	Body    Body         `xml:"Body"`
+	XMLName xml.Name       `xml:"Envelope"`
+	Header  message.Header `xml:"Header"`
+	Body    Body           `xml:"Body"`
 }
 type Body struct {
 	AddTrustedRootCertificate_OUTPUT AddTrustedCertificate_OUTPUT `xml:"AddTrustedRootCertificate_OUTPUT,omitempty"`
@@ -87,12 +87,12 @@ const (
 )
 
 type ManagementService struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewPublicKeyManagementService(wsmanMessageCreator *wsman.WSManMessageCreator) ManagementService {
+func NewPublicKeyManagementService(wsmanMessageCreator *message.WSManMessageCreator) ManagementService {
 	return ManagementService{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_PublicKeyManagementService),
+		base: message.NewBase(wsmanMessageCreator, AMT_PublicKeyManagementService),
 	}
 }
 
@@ -113,7 +113,7 @@ func (PublicKeyManagementService ManagementService) Pull(enumerationContext stri
 
 // Delete removes a the specified instance
 func (PublicKeyManagementService ManagementService) Delete(instanceID string) string {
-	selector := wsman.Selector{Name: "InstanceID", Value: instanceID}
+	selector := message.Selector{Name: "InstanceID", Value: instanceID}
 	return PublicKeyManagementService.base.Delete(selector)
 }
 func (p ManagementService) AddCertificate(certificateBlob string) string {

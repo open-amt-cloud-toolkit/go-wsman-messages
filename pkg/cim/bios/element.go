@@ -5,18 +5,18 @@
 
 package bios
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 
 type Element struct {
-	base wsman.Base
+	base message.Base
 }
 
 const CIM_BiosElement = "CIM_BIOSElement"
 
 // NewBIOSElement returns a new instance of the BIOSElement struct.
-func NewBIOSElement(wsmanMessageCreator *wsman.WSManMessageCreator) Element {
+func NewBIOSElement(wsmanMessageCreator *message.WSManMessageCreator) Element {
 	return Element{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_BiosElement)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_BiosElement)),
 	}
 }
 

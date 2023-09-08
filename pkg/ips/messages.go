@@ -8,7 +8,7 @@ package ips
 import (
 	// "reflect"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/ips/alarmclock"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/ips/hostbasedsetup"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/ips/ieee8021x"
@@ -16,7 +16,7 @@ import (
 )
 
 type Messages struct {
-	wsmanMessageCreator        *wsman.WSManMessageCreator
+	wsmanMessageCreator        *message.WSManMessageCreator
 	OptInService               optin.Service
 	HostBasedSetupService      hostbasedsetup.Service
 	AlarmClockOccurrence       alarmclock.Occurrence
@@ -26,7 +26,7 @@ type Messages struct {
 
 func NewMessages() Messages {
 	resourceUriBase := "http://intel.com/wbem/wscim/1/ips-schema/1/"
-	wsmanMessageCreator := wsman.NewWSManMessageCreator(resourceUriBase)
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	m := Messages{
 		wsmanMessageCreator: wsmanMessageCreator,
 	}

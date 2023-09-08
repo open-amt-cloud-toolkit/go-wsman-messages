@@ -11,14 +11,14 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/ips/actions"
 )
 
 type Response struct {
-	XMLName xml.Name     `xml:"Envelope"`
-	Header  wsman.Header `xml:"Header"`
-	Body    Body         `xml:"Body"`
+	XMLName xml.Name       `xml:"Envelope"`
+	Header  message.Header `xml:"Header"`
+	Body    Body           `xml:"Body"`
 }
 
 type Body struct {
@@ -59,15 +59,15 @@ const (
 )
 
 type Service struct {
-	base wsman.Base
+	base message.Base
 }
 
 const IPS_HostBasedSetupService = "IPS_HostBasedSetupService"
 
 // NewHostBasedSetupService returns a new instance of the HostBasedSetupService struct.
-func NewHostBasedSetupService(wsmanMessageCreator *wsman.WSManMessageCreator) Service {
+func NewHostBasedSetupService(wsmanMessageCreator *message.WSManMessageCreator) Service {
 	return Service{
-		base: wsman.NewBase(wsmanMessageCreator, string(IPS_HostBasedSetupService)),
+		base: message.NewBase(wsmanMessageCreator, string(IPS_HostBasedSetupService)),
 	}
 }
 

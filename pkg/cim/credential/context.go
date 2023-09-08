@@ -7,13 +7,14 @@ package credential
 
 import (
 	"encoding/xml"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 
 type ContextPullResponseEnvelope struct {
 	XMLName xml.Name `xml:"Envelope"`
-	Header  wsman.Header
+	Header  message.Header
 	Body    ContextPullResponseBody
 }
 
@@ -32,15 +33,15 @@ type Relationship struct {
 }
 
 type Context struct {
-	base wsman.Base
+	base message.Base
 }
 
 const ClassName = "CIM_CredentialContext"
 
 // NewContext returns a new instance of the NewContext struct.
-func NewContext(wsmanMessageCreator *wsman.WSManMessageCreator) Context {
+func NewContext(wsmanMessageCreator *message.WSManMessageCreator) Context {
 	return Context{
-		base: wsman.NewBase(wsmanMessageCreator, ClassName),
+		base: message.NewBase(wsmanMessageCreator, ClassName),
 	}
 }
 

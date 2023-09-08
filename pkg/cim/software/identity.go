@@ -5,18 +5,18 @@
 
 package software
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 
 type Identity struct {
-	base wsman.Base
+	base message.Base
 }
 
 const CIM_SoftwareIdentity = "CIM_SoftwareIdentity"
 
 // NewSoftwareIdentity returns a new instance of the SoftwareIdentity struct.
-func NewSoftwareIdentity(wsmanMessageCreator *wsman.WSManMessageCreator) Identity {
+func NewSoftwareIdentity(wsmanMessageCreator *message.WSManMessageCreator) Identity {
 	return Identity{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_SoftwareIdentity)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_SoftwareIdentity)),
 	}
 }
 

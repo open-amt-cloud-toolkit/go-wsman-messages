@@ -5,18 +5,20 @@
 
 package physical
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+import (
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+)
 
 type Chassis struct {
-	base wsman.Base
+	base message.Base
 }
 
 const CIM_Chassis = "CIM_Chassis"
 
 // NewChassis returns a new instance of the Chassis struct.
-func NewChassis(wsmanMessageCreator *wsman.WSManMessageCreator) Chassis {
+func NewChassis(wsmanMessageCreator *message.WSManMessageCreator) Chassis {
 	return Chassis{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_Chassis)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_Chassis)),
 	}
 }
 

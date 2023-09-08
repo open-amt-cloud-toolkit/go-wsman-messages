@@ -2,12 +2,13 @@ package common
 
 import (
 	"encoding/xml"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 )
 
 type EnumerationResponse struct {
 	XMLName xml.Name `xml:"Envelope"`
-	Header  wsman.Header
+	Header  message.Header
 	Body    EnumerationBody
 }
 

@@ -9,7 +9,7 @@ import (
 	"encoding/xml"
 	"strconv"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/methods"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
@@ -17,8 +17,8 @@ import (
 )
 
 type Response struct {
-	XMLName xml.Name     `xml:"Envelope"`
-	Header  wsman.Header `xml:"Header"`
+	XMLName xml.Name       `xml:"Envelope"`
+	Header  message.Header `xml:"Header"`
 	Body    Body
 }
 
@@ -130,7 +130,7 @@ const (
 )
 
 type Service struct {
-	base wsman.Base
+	base message.Base
 }
 type AddWiFiSettings_INPUT struct {
 	XMLName              xml.Name `xml:"h:AddWiFiSettings_INPUT"`
@@ -157,9 +157,9 @@ type ClientCredential struct {
 	ReferenceParameters models.ReferenceParameters `xml:"a:ReferenceParameters,omitempty"`
 }
 
-func NewWiFiPortConfigurationService(wsmanMessageCreator *wsman.WSManMessageCreator) Service {
+func NewWiFiPortConfigurationService(wsmanMessageCreator *message.WSManMessageCreator) Service {
 	return Service{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_WiFiPortConfigurationService),
+		base: message.NewBase(wsmanMessageCreator, AMT_WiFiPortConfigurationService),
 	}
 }
 
@@ -194,7 +194,7 @@ func (s Service) AddWiFiSettings(wifiEndpointSettings models.WiFiEndpointSetting
 			ReferenceParameters: models.ReferenceParameters{
 				ResourceURI: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/" + wifi.CIM_WiFiEndpoint,
 				SelectorSet: models.SelectorSet{
-					Selector: []wsman.Selector{
+					Selector: []message.Selector{
 						{
 							Name:  "Name",
 							Value: wifiEndpoint,
@@ -214,7 +214,7 @@ func (s Service) AddWiFiSettings(wifiEndpointSettings models.WiFiEndpointSetting
 			ReferenceParameters: models.ReferenceParameters{
 				ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
 				SelectorSet: models.SelectorSet{
-					Selector: []wsman.Selector{
+					Selector: []message.Selector{
 						{
 							Name:  "InstanceID",
 							Value: caCredential,
@@ -229,7 +229,7 @@ func (s Service) AddWiFiSettings(wifiEndpointSettings models.WiFiEndpointSetting
 				ReferenceParameters: models.ReferenceParameters{
 					ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
 					SelectorSet: models.SelectorSet{
-						Selector: []wsman.Selector{
+						Selector: []message.Selector{
 							{
 								Name:  "InstanceID",
 								Value: clientCredential,
@@ -247,7 +247,7 @@ func (s Service) AddWiFiSettings(wifiEndpointSettings models.WiFiEndpointSetting
 
 type AddWiFiSettingsResponse struct {
 	XMLName xml.Name `xml:"Envelope"`
-	Header  wsman.Header
+	Header  message.Header
 	Body    AddWiFiSettingsBody
 }
 

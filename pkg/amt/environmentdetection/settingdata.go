@@ -6,7 +6,7 @@
 package environmentdetection
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 
@@ -27,12 +27,12 @@ const (
 )
 
 type SettingData struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewEnvironmentDetectionSettingData(wsmanMessageCreator *wsman.WSManMessageCreator) SettingData {
+func NewEnvironmentDetectionSettingData(wsmanMessageCreator *message.WSManMessageCreator) SettingData {
 	return SettingData{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_EnvironmentDetectionSettingData),
+		base: message.NewBase(wsmanMessageCreator, AMT_EnvironmentDetectionSettingData),
 	}
 }
 

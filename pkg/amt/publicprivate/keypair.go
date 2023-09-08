@@ -8,14 +8,14 @@ package publicprivate
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 )
 
 const AMT_PublicPrivateKeyPair = "AMT_PublicPrivateKeyPair"
 
 type PullResponseEnvelope struct {
 	XMLName xml.Name `xml:"Envelope"`
-	Header  wsman.Header
+	Header  message.Header
 	Body    PullResponseBody
 }
 
@@ -36,12 +36,12 @@ type PublicPrivateKeyPair struct {
 }
 
 type KeyPair struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewPublicPrivateKeyPair(wsmanMessageCreator *wsman.WSManMessageCreator) KeyPair {
+func NewPublicPrivateKeyPair(wsmanMessageCreator *message.WSManMessageCreator) KeyPair {
 	return KeyPair{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_PublicPrivateKeyPair),
+		base: message.NewBase(wsmanMessageCreator, AMT_PublicPrivateKeyPair),
 	}
 }
 
@@ -60,6 +60,6 @@ func (PublicPrivateKeyPair KeyPair) Pull(enumerationContext string) string {
 	return PublicPrivateKeyPair.base.Pull(enumerationContext)
 }
 func (PublicPrivateKeyPair KeyPair) Delete(instanceID string) string {
-	selector := wsman.Selector{Name: "InstanceID", Value: instanceID}
+	selector := message.Selector{Name: "InstanceID", Value: instanceID}
 	return PublicPrivateKeyPair.base.Delete(selector)
 }

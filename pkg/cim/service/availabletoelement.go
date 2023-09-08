@@ -5,18 +5,18 @@
 
 package service
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 
 type AvailableToElement struct {
-	base wsman.Base
+	base message.Base
 }
 
 const CIM_ServiceAvailableToElement = "CIM_ServiceAvailableToElement"
 
 // NewServiceAvailableToElement returns a new instance of the ServiceAvailableToElement struct.
-func NewServiceAvailableToElement(wsmanMessageCreator *wsman.WSManMessageCreator) AvailableToElement {
+func NewServiceAvailableToElement(wsmanMessageCreator *message.WSManMessageCreator) AvailableToElement {
 	return AvailableToElement{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_ServiceAvailableToElement)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_ServiceAvailableToElement)),
 	}
 }
 

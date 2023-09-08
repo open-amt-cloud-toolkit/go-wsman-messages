@@ -5,18 +5,20 @@
 
 package boot
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+import (
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+)
 
 const CIM_BootSourceSetting = "CIM_BootSourceSetting"
 
 type SourceSetting struct {
-	base wsman.Base
+	base message.Base
 }
 
 // NewBootSourceSetting returns a new instance of the BootSourceSetting struct.
-func NewBootSourceSetting(wsmanMessageCreator *wsman.WSManMessageCreator) SourceSetting {
+func NewBootSourceSetting(wsmanMessageCreator *message.WSManMessageCreator) SourceSetting {
 	return SourceSetting{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_BootSourceSetting)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_BootSourceSetting)),
 	}
 }
 

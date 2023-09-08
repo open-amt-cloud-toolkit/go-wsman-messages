@@ -8,7 +8,7 @@ package authorization
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 )
 
@@ -67,7 +67,7 @@ const (
 )
 
 type AuthorizationService struct {
-	base wsman.Base
+	base message.Base
 }
 type EnumerateUserAclEntries_INPUT struct {
 	XMLName    xml.Name `xml:"h:EnumerateUserAclEntries_INPUT"`
@@ -110,9 +110,9 @@ type SetAdminACLEntryEx_INPUT struct {
 // 1) Realms 'AuditLogRealm' (20) and 'ACLRealm' (21) are supported only in Intel AMT Release 4.0 and later releases.
 // 2) Realm 'DTRealm' (23) is supported only in 'ME 5.1' and Intel AMT Release 5.1 and later releases.
 // 3) All the methods of 'AMT_AuthorizationService' except for 'Get' are not supported in Remote Connectivity Service provisioning mode
-func NewAuthorizationService(wsmanMessageCreator *wsman.WSManMessageCreator) AuthorizationService {
+func NewAuthorizationService(wsmanMessageCreator *message.WSManMessageCreator) AuthorizationService {
 	return AuthorizationService{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_AuthorizationService),
+		base: message.NewBase(wsmanMessageCreator, AMT_AuthorizationService),
 	}
 }
 

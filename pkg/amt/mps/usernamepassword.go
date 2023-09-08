@@ -6,7 +6,7 @@
 package mps
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 
@@ -16,12 +16,12 @@ type MPSUsernamePassword struct {
 	models.SharedCredential
 }
 type UsernamePassword struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewMPSUsernamePassword(wsmanMessageCreator *wsman.WSManMessageCreator) UsernamePassword {
+func NewMPSUsernamePassword(wsmanMessageCreator *message.WSManMessageCreator) UsernamePassword {
 	return UsernamePassword{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_MPSUsernamePassword),
+		base: message.NewBase(wsmanMessageCreator, AMT_MPSUsernamePassword),
 	}
 }
 

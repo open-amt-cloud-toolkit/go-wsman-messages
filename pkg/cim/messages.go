@@ -6,7 +6,7 @@
 package cim
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/bios"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/boot"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/computer"
@@ -24,7 +24,7 @@ import (
 )
 
 type Messages struct {
-	wsmanMessageCreator       *wsman.WSManMessageCreator
+	wsmanMessageCreator       *message.WSManMessageCreator
 	BIOSElement               bios.Element
 	BootConfigSetting         boot.ConfigSetting
 	BootService               boot.Service
@@ -51,7 +51,7 @@ type Messages struct {
 
 func NewMessages() Messages {
 	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := wsman.NewWSManMessageCreator(resourceUriBase)
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	m := Messages{
 		wsmanMessageCreator: wsmanMessageCreator,
 	}

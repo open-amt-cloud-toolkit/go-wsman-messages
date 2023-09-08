@@ -8,7 +8,7 @@ package ieee8021x
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/ips/actions"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/ips/methods"
@@ -30,7 +30,7 @@ const (
 )
 
 type Settings struct {
-	base wsman.Base
+	base message.Base
 }
 type Certificate struct {
 	XMLName                 xml.Name `xml:"h:SetCertificates_INPUT"`
@@ -42,9 +42,9 @@ type Certificate struct {
 const IPS_IEEE8021xSettings = "IPS_IEEE8021xSettings"
 
 // NewIEEE8021xSettings returns a new instance of the IEEE8021xSettings struct.
-func NewIEEE8021xSettings(wsmanMessageCreator *wsman.WSManMessageCreator) Settings {
+func NewIEEE8021xSettings(wsmanMessageCreator *message.WSManMessageCreator) Settings {
 	return Settings{
-		base: wsman.NewBase(wsmanMessageCreator, IPS_IEEE8021xSettings),
+		base: message.NewBase(wsmanMessageCreator, IPS_IEEE8021xSettings),
 	}
 }
 
