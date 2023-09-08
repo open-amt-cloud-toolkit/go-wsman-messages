@@ -8,14 +8,14 @@ package kerberos
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 )
 
 const AMT_KerberosSettingData = "AMT_KerberosSettingData"
 
 type KerberosSettingData struct {
-	base wsman.Base
+	base message.Base
 }
 type SetCredentialCacheState_INPUT struct {
 	XMLName xml.Name `xml:"h:SetCredentialCacheState_INPUT"`
@@ -23,9 +23,9 @@ type SetCredentialCacheState_INPUT struct {
 	Enabled bool     `xml:"h:Enabled"`
 }
 
-func NewKerberosSettingData(wsmanMessageCreator *wsman.WSManMessageCreator) KerberosSettingData {
+func NewKerberosSettingData(wsmanMessageCreator *message.WSManMessageCreator) KerberosSettingData {
 	return KerberosSettingData{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_KerberosSettingData),
+		base: message.NewBase(wsmanMessageCreator, AMT_KerberosSettingData),
 	}
 }
 

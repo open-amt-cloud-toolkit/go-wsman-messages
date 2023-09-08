@@ -5,18 +5,18 @@
 
 package mediaaccess
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 
 const CIM_MediaAccessDevice = "CIM_MediaAccessDevice"
 
 type Device struct {
-	base wsman.Base
+	base message.Base
 }
 
 // NewMediaAccessDevice returns a new instance of the MediaAccessDevice struct.
-func NewMediaAccessDevice(wsmanMessageCreator *wsman.WSManMessageCreator) Device {
+func NewMediaAccessDevice(wsmanMessageCreator *message.WSManMessageCreator) Device {
 	return Device{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_MediaAccessDevice)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_MediaAccessDevice)),
 	}
 }
 

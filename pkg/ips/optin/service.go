@@ -8,20 +8,20 @@ package optin
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/ips/actions"
 )
 
 type Service struct {
-	base wsman.Base
+	base message.Base
 }
 
 const IPS_OptInService = "IPS_OptInService"
 
 // NewOptInService returns a new instance of the OptInService struct.
-func NewOptInService(wsmanMessageCreator *wsman.WSManMessageCreator) Service {
+func NewOptInService(wsmanMessageCreator *message.WSManMessageCreator) Service {
 	return Service{
-		base: wsman.NewBase(wsmanMessageCreator, string(IPS_OptInService)),
+		base: message.NewBase(wsmanMessageCreator, string(IPS_OptInService)),
 	}
 }
 

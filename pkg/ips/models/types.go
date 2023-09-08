@@ -6,7 +6,7 @@
 package models
 
 import (
-	base "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	base "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	cim "github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 

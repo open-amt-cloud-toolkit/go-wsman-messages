@@ -5,18 +5,18 @@
 
 package alarmclock
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 
 type Occurrence struct {
-	base wsman.Base
+	base message.Base
 }
 
 const IPS_AlarmClockOccurrence = "IPS_AlarmClockOccurrence"
 
 // NewAlarmClockOccurrence returns a new instance of the AlarmClockOccurrence struct.
-func NewAlarmClockOccurrence(wsmanMessageCreator *wsman.WSManMessageCreator) Occurrence {
+func NewAlarmClockOccurrence(wsmanMessageCreator *message.WSManMessageCreator) Occurrence {
 	return Occurrence{
-		base: wsman.NewBase(wsmanMessageCreator, IPS_AlarmClockOccurrence),
+		base: message.NewBase(wsmanMessageCreator, IPS_AlarmClockOccurrence),
 	}
 }
 
@@ -27,7 +27,7 @@ func (a Occurrence) Get() string {
 
 // Delete removes a the specified instance
 func (a Occurrence) Delete(handle string) string {
-	selector := wsman.Selector{Name: "Name", Value: handle}
+	selector := message.Selector{Name: "Name", Value: handle}
 	return a.base.Delete(selector)
 }
 

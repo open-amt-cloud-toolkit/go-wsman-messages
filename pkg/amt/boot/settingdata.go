@@ -6,7 +6,7 @@
 package boot
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 
@@ -69,12 +69,12 @@ type BootSettingDataResponse struct {
 }
 
 type SettingData struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewBootSettingData(wsmanMessageCreator *wsman.WSManMessageCreator) SettingData {
+func NewBootSettingData(wsmanMessageCreator *message.WSManMessageCreator) SettingData {
 	return SettingData{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_BootSettingData),
+		base: message.NewBase(wsmanMessageCreator, AMT_BootSettingData),
 	}
 }
 

@@ -6,7 +6,7 @@
 package redirection
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 )
 
@@ -58,12 +58,12 @@ const (
 )
 
 type Service struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewRedirectionService(wsmanMessageCreator *wsman.WSManMessageCreator) Service {
+func NewRedirectionService(wsmanMessageCreator *message.WSManMessageCreator) Service {
 	return Service{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_RedirectionService),
+		base: message.NewBase(wsmanMessageCreator, AMT_RedirectionService),
 	}
 }
 

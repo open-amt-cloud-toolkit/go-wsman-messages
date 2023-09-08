@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 )
@@ -20,7 +20,7 @@ import (
 func TestAMT_WiFiPortConfigurationService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := wsman.NewWSManMessageCreator(resourceUriBase)
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	elementUnderTest := NewWiFiPortConfigurationService(wsmanMessageCreator)
 	wiFiPortConfigurationService := WiFiPortConfigurationService{}
 	expectedPutBodyXml, err := xml.Marshal(wiFiPortConfigurationService)

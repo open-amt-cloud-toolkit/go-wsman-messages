@@ -8,16 +8,16 @@ package wifi
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 )
 
 type EndpointSettings struct {
-	base wsman.Base
+	base message.Base
 }
 
 type PullResponseEnvelope struct {
 	XMLName xml.Name `xml:"Envelope"`
-	Header  wsman.Header
+	Header  message.Header
 	Body    PullResponseBody
 }
 
@@ -44,9 +44,9 @@ const CIM_WiFiEndpoint = "CIM_WiFiEndpoint"
 const CIM_WiFiEndpointSettings = "CIM_WiFiEndpointSettings"
 
 // NewWiFiEndpointSettings returns a new instance of the WiFiEndpointSettings struct.
-func NewWiFiEndpointSettings(wsmanMessageCreator *wsman.WSManMessageCreator) EndpointSettings {
+func NewWiFiEndpointSettings(wsmanMessageCreator *message.WSManMessageCreator) EndpointSettings {
 	return EndpointSettings{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_WiFiEndpointSettings)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_WiFiEndpointSettings)),
 	}
 }
 
@@ -67,6 +67,6 @@ func (b EndpointSettings) Pull(enumerationContext string) string {
 
 // Delete removes a the specified instance
 func (b EndpointSettings) Delete(handle string) string {
-	selector := wsman.Selector{Name: "InstanceID", Value: handle}
+	selector := message.Selector{Name: "InstanceID", Value: handle}
 	return b.base.Delete(selector)
 }

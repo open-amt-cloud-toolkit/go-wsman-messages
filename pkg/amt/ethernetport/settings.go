@@ -6,7 +6,7 @@
 package ethernetport
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 
@@ -95,12 +95,12 @@ const (
 )
 
 type Settings struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewEthernetPortSettings(wsmanMessageCreator *wsman.WSManMessageCreator) Settings {
+func NewEthernetPortSettings(wsmanMessageCreator *message.WSManMessageCreator) Settings {
 	return Settings{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_EthernetPortSettings),
+		base: message.NewBase(wsmanMessageCreator, AMT_EthernetPortSettings),
 	}
 }
 

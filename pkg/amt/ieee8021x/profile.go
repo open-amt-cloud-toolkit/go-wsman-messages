@@ -6,7 +6,7 @@
 package ieee8021x
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 )
 
 type IEEE8021xProfile struct {
@@ -50,12 +50,12 @@ const (
 )
 
 type Profile struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewIEEE8021xProfile(wsmanMessageCreator *wsman.WSManMessageCreator) Profile {
+func NewIEEE8021xProfile(wsmanMessageCreator *message.WSManMessageCreator) Profile {
 	return Profile{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_IEEE8021xProfile),
+		base: message.NewBase(wsmanMessageCreator, AMT_IEEE8021xProfile),
 	}
 }
 

@@ -5,18 +5,18 @@
 
 package system
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 
 type Packaging struct {
-	base wsman.Base
+	base message.Base
 }
 
 const CIM_SystemPackaging = "CIM_SystemPackaging"
 
 // NewSystemPackaging returns a new instance of the SystemPackaging struct.
-func NewSystemPackaging(wsmanMessageCreator *wsman.WSManMessageCreator) Packaging {
+func NewSystemPackaging(wsmanMessageCreator *message.WSManMessageCreator) Packaging {
 	return Packaging{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_SystemPackaging)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_SystemPackaging)),
 	}
 }
 

@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 )
 
@@ -31,11 +31,11 @@ type AlarmClockOccurrence struct {
 }
 
 type Service struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewService(wsmanMessageCreator *wsman.WSManMessageCreator) Service {
-	return Service{base: wsman.NewBase(wsmanMessageCreator, string(AMT_AlarmClockService))}
+func NewService(wsmanMessageCreator *message.WSManMessageCreator) Service {
+	return Service{base: message.NewBase(wsmanMessageCreator, string(AMT_AlarmClockService))}
 }
 
 // Get retrieves the representation of the instance

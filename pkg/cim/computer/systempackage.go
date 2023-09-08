@@ -5,18 +5,18 @@
 
 package computer
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 
 const CIM_ComputerSystemPackage = "CIM_ComputerSystemPackage"
 
 type SystemPackage struct {
-	base wsman.Base
+	base message.Base
 }
 
 // NewComputerSystemPackage returns a new instance of the ComputerSystemPackage struct.
-func NewComputerSystemPackage(wsmanMessageCreator *wsman.WSManMessageCreator) SystemPackage {
+func NewComputerSystemPackage(wsmanMessageCreator *message.WSManMessageCreator) SystemPackage {
 	return SystemPackage{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_ComputerSystemPackage)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_ComputerSystemPackage)),
 	}
 }
 

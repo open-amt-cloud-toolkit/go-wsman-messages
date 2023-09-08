@@ -9,14 +9,14 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 )
 
 const AMT_MessageLog = "AMT_MessageLog"
 
 type MessageLog struct {
-	base wsman.Base
+	base message.Base
 }
 type GetRecords_INPUT struct {
 	XMLName             xml.Name `xml:"h:GetRecords_INPUT"`
@@ -25,9 +25,9 @@ type GetRecords_INPUT struct {
 	MaxReadRecords      int      `xml:"h:MaxReadRecords"`
 }
 
-func NewMessageLog(wsmanMessageCreator *wsman.WSManMessageCreator) MessageLog {
+func NewMessageLog(wsmanMessageCreator *message.WSManMessageCreator) MessageLog {
 	return MessageLog{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_MessageLog),
+		base: message.NewBase(wsmanMessageCreator, AMT_MessageLog),
 	}
 }
 

@@ -6,20 +6,20 @@
 package kvm
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/actions"
 )
 
 const CIM_KVMRedirectionSAP = "CIM_KVMRedirectionSAP"
 
 type RedirectionSAP struct {
-	base wsman.Base
+	base message.Base
 }
 
 // NewKVMRedirectionSAP returns a new instance of the KVMRedirectionSAP struct.
-func NewKVMRedirectionSAP(wsmanMessageCreator *wsman.WSManMessageCreator) RedirectionSAP {
+func NewKVMRedirectionSAP(wsmanMessageCreator *message.WSManMessageCreator) RedirectionSAP {
 	return RedirectionSAP{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_KVMRedirectionSAP)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_KVMRedirectionSAP)),
 	}
 }
 

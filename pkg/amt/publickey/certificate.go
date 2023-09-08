@@ -8,14 +8,14 @@ package publickey
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 )
 
 const AMT_PublicKeyCertificate = "AMT_PublicKeyCertificate"
 
 type PullResponseEnvelope struct {
 	XMLName xml.Name `xml:"Envelope"`
-	Header  wsman.Header
+	Header  message.Header
 	Body    PullResponseBody
 }
 
@@ -39,12 +39,12 @@ type PublicKeyCertificate struct {
 }
 
 type Certificate struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewPublicKeyCertificate(wsmanMessageCreator *wsman.WSManMessageCreator) Certificate {
+func NewPublicKeyCertificate(wsmanMessageCreator *message.WSManMessageCreator) Certificate {
 	return Certificate{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_PublicKeyCertificate),
+		base: message.NewBase(wsmanMessageCreator, AMT_PublicKeyCertificate),
 	}
 }
 
@@ -70,6 +70,6 @@ func (PublicKeyCertificate Certificate) Put(publicKeyCertificate PublicKeyCertif
 
 // Delete removes a the specified instance
 func (PublicKeyCertificate Certificate) Delete(instanceID string) string {
-	selector := wsman.Selector{Name: "InstanceID", Value: instanceID}
+	selector := message.Selector{Name: "InstanceID", Value: instanceID}
 	return PublicKeyCertificate.base.Delete(selector)
 }

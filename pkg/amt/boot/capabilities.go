@@ -6,19 +6,19 @@
 package boot
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 )
 
 const AMT_BootCapabilities = "AMT_BootCapabilities"
 
 type BootCapabilities struct {
 	ClassName string
-	base      wsman.Base
+	base      message.Base
 }
 
-func NewBootCapabilities(wsmanMessageCreator *wsman.WSManMessageCreator) BootCapabilities {
+func NewBootCapabilities(wsmanMessageCreator *message.WSManMessageCreator) BootCapabilities {
 	return BootCapabilities{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_BootCapabilities),
+		base: message.NewBase(wsmanMessageCreator, AMT_BootCapabilities),
 	}
 }
 

@@ -8,7 +8,7 @@ package boot
 import (
 	"fmt"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/actions"
 )
 
@@ -28,13 +28,13 @@ const (
 )
 
 type Service struct {
-	base wsman.Base
+	base message.Base
 }
 
 // NewBootService returns a new instance of the BootService struct.
-func NewBootService(wsmanMessageCreator *wsman.WSManMessageCreator) Service {
+func NewBootService(wsmanMessageCreator *message.WSManMessageCreator) Service {
 	return Service{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_BootService)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_BootService)),
 	}
 }
 

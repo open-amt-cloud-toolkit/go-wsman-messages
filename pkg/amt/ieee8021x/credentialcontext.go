@@ -6,18 +6,18 @@
 package ieee8021x
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 )
 
 const AMT_IEEE8021xCredentialContext = "AMT_8021xCredentialContext"
 
 type CredentialContext struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewIEEE8021xCredentialContext(wsmanMessageCreator *wsman.WSManMessageCreator) CredentialContext {
+func NewIEEE8021xCredentialContext(wsmanMessageCreator *message.WSManMessageCreator) CredentialContext {
 	return CredentialContext{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_IEEE8021xCredentialContext),
+		base: message.NewBase(wsmanMessageCreator, AMT_IEEE8021xCredentialContext),
 	}
 }
 

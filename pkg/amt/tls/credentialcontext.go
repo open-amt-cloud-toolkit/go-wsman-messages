@@ -8,18 +8,18 @@ package tls
 import (
 	"fmt"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 )
 
 const AMT_TLSCredentialContext = "AMT_TLSCredentialContext"
 
 type CredentialContext struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewTLSCredentialContext(wsmanMessageCreator *wsman.WSManMessageCreator) CredentialContext {
+func NewTLSCredentialContext(wsmanMessageCreator *message.WSManMessageCreator) CredentialContext {
 	return CredentialContext{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_TLSCredentialContext),
+		base: message.NewBase(wsmanMessageCreator, AMT_TLSCredentialContext),
 	}
 }
 
@@ -40,13 +40,13 @@ func (TLSCredentialContext CredentialContext) Pull(enumerationContext string) st
 
 // Delete removes a the specified instance
 func (TLSCredentialContext CredentialContext) Delete(handle string) string {
-	selector := wsman.Selector{Name: "Name", Value: handle}
+	selector := message.Selector{Name: "Name", Value: handle}
 	return TLSCredentialContext.base.Delete(selector)
 }
 
 // Creates a new instance of this class
 func (TLSCredentialContext CredentialContext) Create(certHandle string) string {
-	header := TLSCredentialContext.base.WSManMessageCreator.CreateHeader(string(wsman.BaseActionsCreate), AMT_TLSCredentialContext, nil, "", "")
+	header := TLSCredentialContext.base.WSManMessageCreator.CreateHeader(string(message.BaseActionsCreate), AMT_TLSCredentialContext, nil, "", "")
 	body := fmt.Sprintf(`<Body><h:AMT_TLSCredentialContext xmlns:h="%sAMT_TLSCredentialContext"><h:ElementInContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementInContext><h:ElementProvidingContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_TLSProtocolEndpointCollection</w:ResourceURI><w:SelectorSet><w:Selector Name="ElementName">TLSProtocolEndpointInstances Collection</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementProvidingContext></h:AMT_TLSCredentialContext></Body>`, TLSCredentialContext.base.WSManMessageCreator.ResourceURIBase, TLSCredentialContext.base.WSManMessageCreator.ResourceURIBase, certHandle, TLSCredentialContext.base.WSManMessageCreator.ResourceURIBase)
 	return TLSCredentialContext.base.WSManMessageCreator.CreateXML(header, body)
 }

@@ -5,18 +5,20 @@
 
 package physical
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+import (
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+)
 
 type Processor struct {
-	base wsman.Base
+	base message.Base
 }
 
 const CIM_Processor = "CIM_Processor"
 
 // NewProcessor returns a new instance of the Processor struct.
-func NewProcessor(wsmanMessageCreator *wsman.WSManMessageCreator) Processor {
+func NewProcessor(wsmanMessageCreator *message.WSManMessageCreator) Processor {
 	return Processor{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_Processor)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_Processor)),
 	}
 }
 

@@ -10,14 +10,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 )
 
 func TestSystemPackaging(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := wsman.NewWSManMessageCreator(resourceUriBase)
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	elementUnderTest := NewSystemPackaging(wsmanMessageCreator)
 
 	t.Run("cim_* Tests", func(t *testing.T) {

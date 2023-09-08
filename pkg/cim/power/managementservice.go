@@ -8,7 +8,7 @@ package power
 import (
 	"fmt"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/actions"
 )
 
@@ -62,15 +62,15 @@ const (
 )
 
 type ManagementService struct {
-	base wsman.Base
+	base message.Base
 }
 
 const CIM_PowerManagementService = "CIM_PowerManagementService"
 
 // NewPowerManagementService returns a new instance of the PowerManagementService struct.
-func NewPowerManagementService(wsmanMessageCreator *wsman.WSManMessageCreator) ManagementService {
+func NewPowerManagementService(wsmanMessageCreator *message.WSManMessageCreator) ManagementService {
 	return ManagementService{
-		base: wsman.NewBase(wsmanMessageCreator, string(CIM_PowerManagementService)),
+		base: message.NewBase(wsmanMessageCreator, string(CIM_PowerManagementService)),
 	}
 }
 

@@ -9,7 +9,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
@@ -18,7 +18,7 @@ const AMT_SetupAndConfigurationService = "AMT_SetupAndConfigurationService"
 
 type UnprovisionResponse struct {
 	XMLName xml.Name        `xml:"Envelope"`
-	Header  wsman.Header    `xml:"Header"`
+	Header  message.Header  `xml:"Header"`
 	Body    UnprovisionBody `xml:"Body"`
 }
 
@@ -49,12 +49,12 @@ type SetupAndConfigurationService struct {
 	}
 }
 type Service struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewSetupAndConfigurationService(wsmanMessageCreator *wsman.WSManMessageCreator) Service {
+func NewSetupAndConfigurationService(wsmanMessageCreator *message.WSManMessageCreator) Service {
 	return Service{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_SetupAndConfigurationService),
+		base: message.NewBase(wsmanMessageCreator, AMT_SetupAndConfigurationService),
 	}
 }
 func (s Service) Get() string {

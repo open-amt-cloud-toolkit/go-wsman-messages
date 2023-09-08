@@ -6,7 +6,7 @@
 package remoteaccess
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 )
 
 const AMT_RemoteAccessPolicyRule = "AMT_RemoteAccessPolicyRule"
@@ -27,12 +27,12 @@ const (
 )
 
 type PolicyRule struct {
-	base wsman.Base
+	base message.Base
 }
 
-func NewRemoteAccessPolicyRule(wsmanMessageCreator *wsman.WSManMessageCreator) PolicyRule {
+func NewRemoteAccessPolicyRule(wsmanMessageCreator *message.WSManMessageCreator) PolicyRule {
 	return PolicyRule{
-		base: wsman.NewBase(wsmanMessageCreator, AMT_RemoteAccessPolicyRule),
+		base: message.NewBase(wsmanMessageCreator, AMT_RemoteAccessPolicyRule),
 	}
 }
 
@@ -58,6 +58,6 @@ func (RemoteAccessPolicyRule PolicyRule) Put(remoteAccessPolicyRule RemoteAccess
 
 // Delete removes a the specified instance
 func (RemoteAccessPolicyRule PolicyRule) Delete(handle string) string {
-	selector := wsman.Selector{Name: "PolicyRuleName", Value: handle}
+	selector := message.Selector{Name: "PolicyRuleName", Value: handle}
 	return RemoteAccessPolicyRule.base.Delete(selector)
 }
