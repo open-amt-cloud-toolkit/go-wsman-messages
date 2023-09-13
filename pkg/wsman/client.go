@@ -17,6 +17,16 @@ const ContentType = "application/soap+xml; charset=utf-8"
 const NS_WSMAN = "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"
 const NS_WSMID = "http://schemas.dmtf.org/wbem/wsman/identity/1/wsmanidentity.xsd"
 
+type Message struct {
+	XMLInput  string
+	XMLOutput string
+}
+
+// WSManClient is an interface for the wsman.Client.
+type WSManClient interface {
+	Post(msg string) (response []byte, err error)
+}
+
 // Client is a thin wrapper around http.Client.
 type Client struct {
 	http.Client
