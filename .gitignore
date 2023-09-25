@@ -1,4 +1,4 @@
 *.exe
 **/*.xml
 coverage
-
+!**/wsmantesting/responses/**/*.xml
