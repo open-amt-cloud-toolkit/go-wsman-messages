@@ -7,16 +7,22 @@
 package alarmclock
 
 import (
+	"encoding/json"
+	"encoding/xml"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
 
-const AMT_AlarmClockService = "AMT_AlarmClockService"
+// INPUTS
 
+// AlarmClockOccurrence represents a single alarm clock setting
 type AlarmClockOccurrence struct {
 	// Elementname is a user-friendly name for the object
 	ElementName string `json:"ElementName"`
@@ -30,31 +36,154 @@ type AlarmClockOccurrence struct {
 	DeleteOnCompletion bool `json:"DeleteOnCompletion"`
 }
 
+// OUTPUTS
+type (
+	Response struct {
+		*wsman.Message
+		XMLName xml.Name       `xml:"Envelope"`
+		Header  message.Header `xml:"Header"`
+		Body    Body           `xml:"Body"`
+	}
+	Body struct {
+		XMLName           xml.Name          `xml:"Body"`
+		AlarmClockService AlarmClockService `xml:"AMT_AlarmClockService"`
+		EnumerateResponse common.EnumerateResponse
+		AddAlarmOutput    AddAlarmOutput `xml:"AddAlarm_OUTPUT"`
+		PullResponse      PullResponse
+	}
+	PullResponse struct {
+		Items []Item
+	}
+	Item struct {
+		AlarmClockService AlarmClockService `xml:"AMT_AlarmClockService"`
+	}
+	AlarmClockService struct {
+		// The Name property uniquely identifies the Service and provides an indication of the functionality that is managed . . .
+		Name string
+		// CreationClassName indicates the name of the class or the subclass that is used in the creation of an instance . . .
+		CreationClassName string
+		// The Name of the scoping System.
+		SystemName string
+		// The CreationClassName of the scoping System.
+		SystemCreationClassName string
+		// A user-friendly name for the object . . .
+		ElementName string
+		// Specifies the next AMT alarm time . . .
+		NextAMTAlarmTime time.Time
+		// Specifies the alarm time interval . . .
+		AMTAlarmClockInterval time.Time
+	}
+	AddAlarmOutput struct {
+		// A reference to the created instance of IPS_AlarmClockOccurrence.
+		AlarmClock  AlarmClock
+		// Return code. 0 indicates success
+		ReturnValue int
+	}
+	AlarmClock struct {
+		// Reference address to the created instance of IPS_AlarmClockOccurrence
+		Address             string
+		ReferenceParameters models.ReferenceParameters_OUTPUT
+	}
+)
+
+func (w *Response) JSON() string {
+	jsonOutput, err := json.Marshal(w.Body)
+	if err != nil {
+		return ""
+	}
+	return string(jsonOutput)
+}
+
+const AMT_AlarmClockService = "AMT_AlarmClockService"
+
 type Service struct {
-	base message.Base
+	base   message.Base
+	client wsman.WSManClient
 }
 
 func NewService(wsmanMessageCreator *message.WSManMessageCreator) Service {
-	return Service{base: message.NewBase(wsmanMessageCreator, string(AMT_AlarmClockService))}
+	return Service{
+		base:   message.NewBase(wsmanMessageCreator, AMT_AlarmClockService),
+		client: nil,
+	}
+}
+func NewServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) Service {
+	return Service{
+		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_AlarmClockService, client),
+		client: client,
+	}
 }
 
 // Get retrieves the representation of the instance
-func (acs Service) Get() string {
-	return acs.base.Get(nil)
+func (acs Service) Get() (response Response, err error) {
+
+	response = Response{
+		Message: &wsman.Message{
+			XMLInput: acs.base.Get(nil),
+		},
+	}
+
+	// send the message to AMT
+	err = acs.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 // Enumerates the instances of this class
-func (acs Service) Enumerate() string {
-	return acs.base.Enumerate()
+func (acs Service) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &wsman.Message{
+			XMLInput: acs.base.Enumerate(),
+		},
+	}
+	// send the message to AMT
+	err = acs.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (acs Service) Pull(enumerationContext string) string {
-	return acs.base.Pull(enumerationContext)
+func (acs Service) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &wsman.Message{
+			XMLInput: acs.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = acs.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 // AddAlarm creates an alarm that would wake the system at a given time.The method receives as input an embedded instance of type IPS_AlarmClockOccurrence, with the following fields set: StartTime, Interval, InstanceID, DeleteOnCompletion. Upon success, the method creates an instance of IPS_AlarmClockOccurrence which is associated with AlarmClockService.The method would fail if 5 instances or more of IPS_AlarmClockOccurrence already exist in the system.
-func (acs Service) AddAlarm(alarmClockOccurrence AlarmClockOccurrence) string {
+func (acs Service) AddAlarm(alarmClockOccurrence AlarmClockOccurrence) (response Response, err error) {
 	header := acs.base.WSManMessageCreator.CreateHeader(string(actions.AddAlarm), string(AMT_AlarmClockService), nil, "", "")
 	startTime := alarmClockOccurrence.StartTime.UTC().Format(time.RFC3339Nano)
 	startTime = strings.Split(startTime, ".")[0]
@@ -94,5 +223,22 @@ func (acs Service) AddAlarm(alarmClockOccurrence AlarmClockOccurrence) string {
 	body.WriteString(strconv.FormatBool(alarmClockOccurrence.DeleteOnCompletion))
 	body.WriteString(`</s:DeleteOnCompletion></p:AlarmTemplate></p:AddAlarm_INPUT></Body>`)
 
-	return acs.base.WSManMessageCreator.CreateXML(header, body.String())
+	response = Response{
+		Message: &wsman.Message{
+			XMLInput: acs.base.WSManMessageCreator.CreateXML(header, body.String()),
+		},
+	}
+	// send the message to AMT
+	err = acs.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
 }
