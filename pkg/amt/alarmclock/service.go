@@ -75,7 +75,7 @@ type (
 	}
 	AddAlarmOutput struct {
 		// A reference to the created instance of IPS_AlarmClockOccurrence.
-		AlarmClock  AlarmClock
+		AlarmClock AlarmClock
 		// Return code. 0 indicates success
 		ReturnValue int
 	}
