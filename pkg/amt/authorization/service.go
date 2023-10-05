@@ -6,12 +6,48 @@
 package authorization
 
 import (
+	"encoding/json"
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
+	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
 
+type (
+	Response struct {
+		*wsman.Message
+		XMLName xml.Name       `xml:"Envelope"`
+		Header  message.Header `xml:"Header"`
+		Body    Body           `xml:"Body"`
+	}
+	Body struct {
+		XMLName                 xml.Name                `xml:"Body"`
+		AuthorizationOccurrence AuthorizationOccurrence `xml:"AMT_AuthorizationService"`
+
+		EnumerateResponse common.EnumerateResponse
+		//PullResponse      		  PullResponse
+	}
+	/*PullResponse struct {
+		Items []Item
+	}
+	Item struct {
+		AuthorizationService AuthorizationService `xml:"AMT_AuthorizationService"`
+	}*/
+
+	AuthorizationOccurrence struct {
+		AllowHttpQopAuthOnly    int
+		CreationClassName       string
+		ElementName             string
+		EnabledState            int
+		Name                    string
+		RequestedState          int
+		SystemCreationClassName string
+		SystemName              string
+	}
+)
 type AddUserAclEntry struct {
 	XMLName          xml.Name         `xml:"h:AddUserAclEntryEx_INPUT"`
 	H                string           `xml:"xmlns:h,attr"`
@@ -43,6 +79,14 @@ const (
 
 type RealmValues int
 
+func (w *Response) JSON() string {
+	jsonOutput, err := json.Marshal(w.Body)
+	if err != nil {
+		return ""
+	}
+	return string(jsonOutput)
+}
+
 const AMT_AuthorizationService = "AMT_AuthorizationService"
 
 const (
@@ -67,7 +111,8 @@ const (
 )
 
 type AuthorizationService struct {
-	base message.Base
+	base   message.Base
+	client wsman.WSManClient
 }
 type EnumerateUserAclEntries_INPUT struct {
 	XMLName    xml.Name `xml:"h:EnumerateUserAclEntries_INPUT"`
@@ -112,23 +157,83 @@ type SetAdminACLEntryEx_INPUT struct {
 // 3) All the methods of 'AMT_AuthorizationService' except for 'Get' are not supported in Remote Connectivity Service provisioning mode
 func NewAuthorizationService(wsmanMessageCreator *message.WSManMessageCreator) AuthorizationService {
 	return AuthorizationService{
-		base: message.NewBase(wsmanMessageCreator, AMT_AuthorizationService),
+		base:   message.NewBase(wsmanMessageCreator, AMT_AuthorizationService),
+		client: nil,
+	}
+}
+func NewServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) AuthorizationService {
+	return AuthorizationService{
+		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_AuthorizationService, client),
+		client: client,
 	}
 }
 
 // Get retrieves the representation of the instance
-func (AuthorizationService AuthorizationService) Get() string {
-	return AuthorizationService.base.Get(nil)
+func (as AuthorizationService) Get() (response Response, err error) {
+
+	response = Response{
+		Message: &wsman.Message{
+			XMLInput: as.base.Get(nil),
+		},
+	}
+
+	// send the message to AMT
+	err = as.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 // Enumerates the instances of this class
-func (AuthorizationService AuthorizationService) Enumerate() string {
-	return AuthorizationService.base.Enumerate()
+func (as AuthorizationService) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &wsman.Message{
+			XMLInput: as.base.Enumerate(),
+		},
+	}
+	// send the message to AMT
+	err = as.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (AuthorizationService AuthorizationService) Pull(enumerationContext string) string {
-	return AuthorizationService.base.Pull(enumerationContext)
+func (as AuthorizationService) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &wsman.Message{
+			XMLInput: as.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = as.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 // EnumerateUserAclEntries enumerates entries in the User Access Control List (ACL).
