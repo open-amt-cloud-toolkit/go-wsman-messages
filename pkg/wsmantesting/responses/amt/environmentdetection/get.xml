@@ -14,8 +14,7 @@
             <g:DetectionAlgorithm>0</g:DetectionAlgorithm>
             <g:DetectionStrings>b332bb28-ef3a-43b0-b998-342285ac1e26.com</g:DetectionStrings>
             <g:ElementName>Intel(r) AMT Environment Detection Settings</g:ElementName>
-            <g:InstanceID>Intel(r) AMT Environment Detection Settings
-            </g:InstanceID>
+            <g:InstanceID>Intel(r) AMT Environment Detection Settings</g:InstanceID>
         </g:AMT_EnvironmentDetectionSettingData>
     </a:Body>
 </a:Envelope>
