@@ -8,11 +8,35 @@ package publickey
 import (
 	"encoding/xml"
 
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 )
 
 const AMT_PublicKeyCertificate = "AMT_PublicKeyCertificate"
 
+type (
+	ResponseCert struct {
+		*wsman.Message 
+		XMLName 	xml.Name		`xml:"Envelope"`
+		Header  	message.Header	`xml:"Header"`
+		BodyCert	BodyCert		`xml:"BodyCert"`
+	}
+	BodyCert struct {
+		XMLName				xml.Name	`xml:"BodyCert"`
+		KeyCert 			KeyCert		`xml:"AMT_PublicKeyCertificate"`
+
+		EnumerateResponse 	common.EnumerateResponse 
+	}
+	KeyCert struct {
+		ElementName           string
+		InstanceID            string 
+		X509Certificate       string 
+		TrustedRootCertficate bool  
+		Issuer                string 
+		Subject               string 
+	}
+)
 type PullResponseEnvelope struct {
 	XMLName xml.Name `xml:"Envelope"`
 	Header  message.Header
@@ -40,6 +64,14 @@ type PublicKeyCertificate struct {
 
 type Certificate struct {
 	base message.Base
+	client wsman.WSManClient 
+}
+
+func NewPublicKeyCertificateWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) Certificate {
+	return Certificate{
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_PublicKeyCertificate, client), 
+		client: client, 
+	}
 }
 
 func NewPublicKeyCertificate(wsmanMessageCreator *message.WSManMessageCreator) Certificate {
@@ -49,13 +81,50 @@ func NewPublicKeyCertificate(wsmanMessageCreator *message.WSManMessageCreator) C
 }
 
 // Get retrieves the representation of the instance
-func (PublicKeyCertificate Certificate) Get() string {
-	return PublicKeyCertificate.base.Get(nil)
+func (PublicKeyCertificate Certificate) Get() (response ResponseCert, err error) {
+
+	response = ResponseCert{
+		Message: &wsman.Message{
+			XMLInput: PublicKeyCertificate.base.Get(nil),
+		},
+	}
+
+	// send the message to AMT
+	err = PublicKeyCertificate.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 // Enumerates the instances of this class
-func (PublicKeyCertificate Certificate) Enumerate() string {
-	return PublicKeyCertificate.base.Enumerate()
+func (PublicKeyCertificate Certificate) Enumerate()(response ResponseCert, err error) {
+
+	response = ResponseCert{
+		Message: &wsman.Message{
+			XMLInput: PublicKeyCertificate.base.Enumerate(),
+		},
+	}
+	// send the message to AMT
+	err = PublicKeyCertificate.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 // Pulls instances of this class, following an Enumerate operation

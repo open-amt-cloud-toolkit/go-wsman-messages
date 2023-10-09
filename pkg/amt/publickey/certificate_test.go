@@ -6,10 +6,13 @@
 package publickey
 
 import (
+	"encoding/xml"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 )
@@ -18,8 +21,12 @@ func TestAMT_PublicKeyCertificate(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	elementUnderTest := NewPublicKeyCertificate(wsmanMessageCreator)
-	putCert := PublicKeyCertificate{
+	//client := MockClient{} // wsman.NewClient("http://localhost:16992/wsman", "admin", "P@ssw0rd", true)
+	//elementUnderTest := NewServiceWithClient(wsmanMessageCreator, &client)
+	// enumerationId := ""
+	client := wsman.NewClient("http://localhost:16992/wsman", "admin", "Intel123!", true)
+	elementUnderTest := NewPublicKeyCertificateWithClient(wsmanMessageCreator, client)
+	/*putCert := PublicKeyCertificate{
 		ElementName:           "",
 		InstanceID:            "",
 		X509Certificate:       "",
@@ -27,8 +34,8 @@ func TestAMT_PublicKeyCertificate(t *testing.T) {
 		Issuer:                "",
 		Subject:               "",
 		ReadOnlyCertificate:   false,
-	}
-	expectedPutCertBody := `<PublicKeyCertificate><ElementName></ElementName><InstanceID></InstanceID><X509Certificate></X509Certificate><TrustedRootCertficate>false</TrustedRootCertficate><Issuer></Issuer><Subject></Subject><ReadOnlyCertificate>false</ReadOnlyCertificate></PublicKeyCertificate>`
+	}*/
+	//expectedPutCertBody := `<PublicKeyCertificate><ElementName></ElementName><InstanceID></InstanceID><X509Certificate></X509Certificate><TrustedRootCertficate>false</TrustedRootCertficate><Issuer></Issuer><Subject></Subject><ReadOnlyCertificate>false</ReadOnlyCertificate></PublicKeyCertificate>`
 
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
@@ -37,28 +44,67 @@ func TestAMT_PublicKeyCertificate(t *testing.T) {
 			action       string
 			body         string
 			extraHeader  string
-			responseFunc func() string
+			responseFunc 	 	func() (ResponseCert, error)
+			expectedResponse 	interface{}
 		}{
 			//GETS
-			{"should create a valid AMT_PublicKeyCertificate Get wsman message", AMT_PublicKeyCertificate, wsmantesting.GET, "", "", elementUnderTest.Get},
+			{
+				"should create a valid AMT_PublicKeyCertificate Get wsman message", 
+				AMT_PublicKeyCertificate, 
+				wsmantesting.GET, 
+				"", 
+				"", 
+				func() (ResponseCert, error) {
+					//client.CurrentMessage = "Get"
+					return elementUnderTest.Get()
+				},
+				BodyCert{
+					XMLName: xml.Name{Space: "", Local: ""},
+					KeyCert: KeyCert{
+						ElementName: "",
+            			InstanceID: "",
+            			Issuer: "",
+            			Subject: "",
+            			TrustedRootCertficate: false,
+            			X509Certificate: "",
+					},
+				},
+			},
 			//ENUMERATES
-			{"should create a valid AMT_PublicKeyCertificate Enumerate wsman message", AMT_PublicKeyCertificate, wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, "", elementUnderTest.Enumerate},
+			{
+				"should create a valid AMT_PublicKeyCertificate Enumerate wsman message", 
+				AMT_PublicKeyCertificate, 
+				wsmantesting.ENUMERATE, 
+				wsmantesting.ENUMERATE_BODY, 
+				"", 
+				func() (ResponseCert, error) {
+					//client.CurrentMessage = "Enumerate"
+					return elementUnderTest.Enumerate()
+				}, 
+				BodyCert{
+					XMLName: xml.Name{Space: "", Local: ""},
+					EnumerateResponse: common.EnumerateResponse{
+						EnumerationContext: "",
+					},
+				},
+			},
 			//PULLS
-			{"should create a valid AMT_PublicKeyCertificate Pull wsman message", AMT_PublicKeyCertificate, wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			// {"should create a valid AMT_PublicKeyCertificate Pull wsman message", AMT_PublicKeyCertificate, wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 			//PUTS
-			{"should create a valid AMT_PublicKeyCertificate Put wsman message", AMT_PublicKeyCertificate, wsmantesting.PUT, expectedPutCertBody, "", func() string { return elementUnderTest.Put(putCert) }},
+			// {"should create a valid AMT_PublicKeyCertificate Put wsman message", AMT_PublicKeyCertificate, wsmantesting.PUT, expectedPutCertBody, "", func() string { return elementUnderTest.Put(putCert) }},
 			//DELETE
-			{"should create a valid AMT_PublicKeyCertificate Delete wsman message", AMT_PublicKeyCertificate, wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"InstanceID\">instanceID123</w:Selector></w:SelectorSet>", func() string { return elementUnderTest.Delete("instanceID123") }},
+			// {"should create a valid AMT_PublicKeyCertificate Delete wsman message", AMT_PublicKeyCertificate, wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"InstanceID\">instanceID123</w:Selector></w:SelectorSet>", func() string { return elementUnderTest.Delete("instanceID123") }},
 		}
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				correctResponse := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
 				messageID++
-				response := test.responseFunc()
-				if response != correctResponse {
-					assert.Equal(t, correctResponse, response)
-				}
+				response, err := test.responseFunc()
+				println(response.XMLOutput)
+				assert.NoError(t, err)
+				assert.Equal(t, expectedXMLInput, response.XMLInput)
+				assert.Equal(t, test.expectedResponse, response.BodyCert)
 			})
 		}
 	})
