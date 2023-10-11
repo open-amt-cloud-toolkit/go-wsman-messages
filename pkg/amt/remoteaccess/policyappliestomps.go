@@ -7,13 +7,36 @@ package remoteaccess
 
 import (
 	"encoding/xml"
+	"encoding/json"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
 
 const AMT_RemoteAccessPolicyAppliesToMPS = "AMT_RemoteAccessPolicyAppliesToMPS"
 
+type (
+	Response struct {
+		*wsman.Message
+		XMLName xml.Name       `xml:"Envelope"`
+		Header  message.Header `xml:"Header"`
+		Body    Body           `xml:"Body"`
+	}
+	Body struct {
+		XMLName            xml.Name        `xml:"Body"`
+		PolicyApplies 	   PolicyApplies   `xml:"AMT_RemoteAccessPolicyAppliesToMPS"`
+
+		EnumerateResponse common.EnumerateResponse
+	}
+	PolicyApplies struct{
+		CreationClassName		string 
+        Name					string 
+        SystemCreationClassName	string 
+        SystemName				string 
+	}
+)
 type RemoteAccessPolicyAppliesToMPS struct {
 	XMLName xml.Name `xml:"h:AMT_RemoteAccessPolicyAppliesToMPS"`
 	H       string   `xml:"xmlns:h,attr"`
@@ -60,6 +83,22 @@ const (
 
 type PolicyAppliesToMPS struct {
 	base message.Base
+	client wsman.WSManClient
+}
+
+func (w *Response) JSON() string {
+	jsonOutput, err := json.Marshal(w.Body)
+	if err != nil {
+		return ""
+	}
+	return string(jsonOutput)
+}
+
+func NewRemoteAccessPolicyAppliesToMPSWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) PolicyAppliesToMPS {
+	return PolicyAppliesToMPS{
+		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_RemoteAccessPolicyAppliesToMPS, client),
+		client: client,
+	}
 }
 
 func NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator *message.WSManMessageCreator) PolicyAppliesToMPS {
@@ -68,16 +107,50 @@ func NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator *message.WSManMessage
 	}
 }
 
+
 // Get retrieves the representation of the instance
-func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Get() string {
-	return RemoteAccessPolicyAppliesToMPS.base.Get(nil)
+func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Get()  (response Response, err error) {
+	response = Response{
+		Message: &wsman.Message{
+			XMLInput: RemoteAccessPolicyAppliesToMPS.base.Get(nil),
+		},
+	}
+	// send the message to AMT
+	err = RemoteAccessPolicyAppliesToMPS.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
+
 
 // Enumerates the instances of this class
-func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Enumerate() string {
-	return RemoteAccessPolicyAppliesToMPS.base.Enumerate()
-}
+func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &wsman.Message{
+			XMLInput: RemoteAccessPolicyAppliesToMPS.base.Enumerate(),
+		},
+	}
+	// send the message to AMT
+	err = RemoteAccessPolicyAppliesToMPS.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
 
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
 // Pulls instances of this class, following an Enumerate operation
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Pull(enumerationContext string) string {
 	return RemoteAccessPolicyAppliesToMPS.base.Pull(enumerationContext)

@@ -6,10 +6,41 @@
 package remoteaccess
 
 import (
+	"encoding/json"
+	"encoding/xml"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
 
 const AMT_RemoteAccessPolicyRule = "AMT_RemoteAccessPolicyRule"
+
+type (
+	ResponseRule struct {
+		*wsman.Message
+		XMLName 	xml.Name       `xml:"Envelope"`
+		Header  	message.Header `xml:"Header"`
+		BodyRule    BodyRule       `xml:"Body"`
+	}
+	BodyRule struct {
+		XMLName            			 xml.Name         `xml:"Body"`
+		RemotePolicyRule   RemotePolicyRule `xml:"AMT_RemoteAccessPolicyRule"`
+
+		EnumerateResponse common.EnumerateResponse
+	}
+	RemotePolicyRule struct {
+		CreationClassName		string  
+		ElementName 			string  
+		ExtendedData			string 
+		PolicyRuleName			string 
+		SystemCreationClassName string 
+		SystemName				string 
+		Trigger					int 
+		TunnelLifeTime			int 
+	}
+)
 
 type RemoteAccessPolicyRule struct {
 	Trigger        Trigger
@@ -28,6 +59,22 @@ const (
 
 type PolicyRule struct {
 	base message.Base
+	clientPolicy wsman.WSManClient
+}
+
+func (w *ResponseRule) JSONRule() string {
+	jsonOutput, err := json.Marshal(w.BodyRule)
+	if err != nil {
+		return ""
+	}
+	return string(jsonOutput)
+}
+
+func NewPolicyRuleWithClient(wsmanMessageCreator *message.WSManMessageCreator, clientPolicy wsman.WSManClient) PolicyRule {
+	return PolicyRule{
+		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_RemoteAccessPolicyRule, clientPolicy),
+		clientPolicy: clientPolicy,
+	}
 }
 
 func NewRemoteAccessPolicyRule(wsmanMessageCreator *message.WSManMessageCreator) PolicyRule {
@@ -37,14 +84,49 @@ func NewRemoteAccessPolicyRule(wsmanMessageCreator *message.WSManMessageCreator)
 }
 
 // Get retrieves the representation of the instance
-func (RemoteAccessPolicyRule PolicyRule) Get() string {
-	return RemoteAccessPolicyRule.base.Get(nil)
+func (RemoteAccessPolicyRule PolicyRule) Get() (response ResponseRule, err error) {
+	response = ResponseRule{
+		Message: &wsman.Message{
+			XMLInput: RemoteAccessPolicyRule.base.Get(nil),
+		},
+	}
+	// send the message to AMT
+	err = RemoteAccessPolicyRule.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
+
 // Enumerates the instances of this class
-func (RemoteAccessPolicyRule PolicyRule) Enumerate() string {
-	return RemoteAccessPolicyRule.base.Enumerate()
+func (RemoteAccessPolicyRule PolicyRule) Enumerate() (response ResponseRule, err error) {
+	response = ResponseRule{
+		Message: &wsman.Message{
+			XMLInput: RemoteAccessPolicyRule.base.Enumerate(),
+		},
+	}
+	// send the message to AMT
+	err = RemoteAccessPolicyRule.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
 }
+
 
 // Pulls instances of this class, following an Enumerate operation
 func (RemoteAccessPolicyRule PolicyRule) Pull(enumerationContext string) string {
