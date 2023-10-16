@@ -23,6 +23,18 @@ type ManagedElement struct {
 	Description string   `xml:"h:Description,omitempty"` // MaxLen=256
 	ElementName string   `xml:"h:ElementName,omitempty"` // MaxLen=256
 }
+
+type SettingData_OUTPUT struct {
+	ManagedElement_OUTPUT 
+	InstanceID string `xml:"InstanceID,omitempty"` // MaxLen=256
+}
+
+type ManagedElement_OUTPUT struct {
+	XMLName     xml.Name `xml:"ManagedElement"`
+	Caption     string   `xml:"Caption,omitempty"`     // MaxLen=64
+	Description string   `xml:"Description,omitempty"` // MaxLen=256
+	ElementName string   `xml:"ElementName,omitempty"` // MaxLen=256
+}
 type Collection struct {
 	ManagedElement
 }
