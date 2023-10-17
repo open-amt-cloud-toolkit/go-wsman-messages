@@ -67,7 +67,7 @@ func (c *Client) Post(msg string) (response []byte, err error) {
 
 	if c.username != "" && c.password != "" {
 		if c.useDigest {
-			auth, err := c.challenge.authorize("POST", c.endpoint)
+			auth, err := c.challenge.authorize("POST", "/wsman")
 			if err != nil {
 				return nil, fmt.Errorf("failed digest auth %v", err)
 			}

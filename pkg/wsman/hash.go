@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"regexp"
 	"strings"
 )
 
@@ -81,7 +82,7 @@ func (c *authChallenge) response(method, uri, cnonce string) (string, error) {
 
 func (c *authChallenge) authorize(method, uri string) (string, error) {
 	if c.Qop != "auth" && c.Qop != "" {
-		return "", fmt.Errorf("qop not implemented")
+		return "", fmt.Errorf("qop not implemented: %s", c.Qop)
 	}
 	response, err := c.response(method, uri, "")
 	if err != nil {
@@ -127,12 +128,14 @@ func (c *authChallenge) authorize(method, uri string) (string, error) {
 func (c *authChallenge) parseChallenge(input string) error {
 	const ws = " \n\r\t"
 	const qs = "\""
+	regex := regexp.MustCompile(`([^=,]*)=("[^"]*"|[^,"]*)`)
+
 	s := strings.Trim(input, ws)
 	if !strings.HasPrefix(s, "Digest ") {
 		return fmt.Errorf("challenge is bad, missing digest prefix: %s", input)
 	}
 	s = strings.Trim(s[7:], ws)
-	sl := strings.Split(s, ",")
+	sl := regex.FindAllString(s, -1)
 	c.Algorithm = "MD5"
 	var r []string
 	for _, elem := range sl {
@@ -157,6 +160,12 @@ func (c *authChallenge) parseChallenge(input string) error {
 			c.Algorithm = value
 		case "qop":
 			c.Qop = value
+			for _, qop := range strings.Split(value, ",") {
+				qop = strings.TrimSpace(qop)
+				if qop == "auth" {
+					c.Qop = "auth"
+				}
+			}
 		default:
 			return fmt.Errorf("challenge is bad, unexpected token: %s", sl)
 		}

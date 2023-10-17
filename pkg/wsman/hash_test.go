@@ -69,3 +69,49 @@ func TestAuthChallenge_HashURI(t *testing.T) {
 		assert.Equal(t, tc.expected, actual)
 	}
 }
+
+func TestAuthChallenge_parseChallenge(t *testing.T) {
+	c := &authChallenge{}
+
+	testCases := []struct {
+		description string
+		input       string
+		expectQOP   string
+	}{
+		{
+			description: "expect qop of auth for multiple options if auth is one of them",
+			input:       `Digest realm="Digest:CA8E24F8F3E8EFBD8322A0BC846BDE7D", nonce="EzyJAVIHAAAAAAAA2hsF/jk27ByMWRKu",stale="false",qop="auth,auth-int, auth"`,
+			expectQOP:   "auth",
+		},
+		{
+			description: "expect qop of auth for multiple options in any order",
+			input:       `Digest realm="Digest:CA8E24F8F3E8EFBD8322A0BC846BDE7D", nonce="EzyJAVIHAAAAAAAA2hsF/jk27ByMWRKu",stale="false",qop="auth-int,auth"`,
+			expectQOP:   "auth",
+		},
+		{
+			description: "expect qop of auth for single option",
+			input:       `Digest realm="Digest:81D0A72A91B91FC7B08CED6F26DC0D49", nonce="kGuhOSX9AAAAAAAAjlLGwSwRfxiBgr2z",stale="false",qop="auth"`,
+			expectQOP:   "auth",
+		},
+		{
+			description: "expect qop of auth and ignore unkown options",
+			input:       `Digest realm="Digest:81D0A72A91B91FC7B08CED6F26DC0D49", nonce="kGuhOSX9AAAAAAAAjlLGwSwRfxiBgr2z",stale="false",qop="auth,not-valid"`,
+			expectQOP:   "auth",
+		},
+		{
+			description: "expect qop equal to the original if auth not an option",
+			input:       `Digest realm="Digest:CA8E24F8F3E8EFBD8322A0BC846BDE7D", nonce="EzyJAVIHAAAAAAAA2hsF/jk27ByMWRKu",stale="false",qop="auth-conf,auth-int"`,
+			expectQOP:   "auth-conf,auth-int",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			err := c.parseChallenge(tc.input)
+			assert.Nil(t, err)
+			assert.Equal(t, tc.expectQOP, c.Qop)
+		})
+
+	}
+
+}
