@@ -13,8 +13,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
+	"github.com/stretchr/testify/assert"
 	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
@@ -62,21 +62,21 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
-			name         string
-			method       string
-			action       string
-			body         string
-			extraHeader  string
-			responseFunc 	 	func() (Response, error)
-			expectedResponse 	interface{}
+			name             string
+			method           string
+			action           string
+			body             string
+			extraHeader      string
+			responseFunc     func() (Response, error)
+			expectedResponse interface{}
 		}{
 			//GETS
 			{
-				"should create a valid AMT_ManagementPresenceRemoteSAP Get wsman message", 
-				"AMT_ManagementPresenceRemoteSAP", 
-				wsmantesting.GET, 
-				"", 
-				"", 
+				"should create a valid AMT_ManagementPresenceRemoteSAP Get wsman message",
+				"AMT_ManagementPresenceRemoteSAP",
+				wsmantesting.GET,
+				"",
+				"",
 				func() (Response, error) {
 					currentMessage = "Get"
 					return elementUnderTest.Get()
@@ -84,29 +84,29 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					ManagementRemote: ManagementRemote{
-						AccessInfo: "",
-            			CN: "",
-           				CreationClassName: "", 
-            			ElementName: "",
-            			InfoFormat: 0,
-            			Name: "",
-            			Port: 0,
-            			SystemCreationClassName: "",
-            			SystemName: "",
+						AccessInfo:              "",
+						CN:                      "",
+						CreationClassName:       "",
+						ElementName:             "",
+						InfoFormat:              0,
+						Name:                    "",
+						Port:                    0,
+						SystemCreationClassName: "",
+						SystemName:              "",
 					},
 				},
 			},
 			//ENUMERATES
 			{
-				"should create a valid AMT_ManagementPresenceRemoteSAP Enumerate wsman message", 
-				"AMT_ManagementPresenceRemoteSAP", 
-				wsmantesting.ENUMERATE, 
-				wsmantesting.ENUMERATE_BODY, 
-				"", 
+				"should create a valid AMT_ManagementPresenceRemoteSAP Enumerate wsman message",
+				"AMT_ManagementPresenceRemoteSAP",
+				wsmantesting.ENUMERATE,
+				wsmantesting.ENUMERATE_BODY,
+				"",
 				func() (Response, error) {
 					currentMessage = "Enumerate"
 					return elementUnderTest.Enumerate()
-				}, 
+				},
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{

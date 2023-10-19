@@ -9,45 +9,46 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
+
 const AMT_ManagementPresenceRemoteSAP = "AMT_ManagementPresenceRemoteSAP"
 
 type (
 	Response struct {
 		*wsman.Message
-		XMLName xml.Name		`xml:"Envelope"`
-		Header message.Header 	`xml:"Header"`
-		Body   Body				`xml:"Body"` 
+		XMLName xml.Name       `xml:"Envelope"`
+		Header  message.Header `xml:"Header"`
+		Body    Body           `xml:"Body"`
 	}
 	Body struct {
-		XMLName			 xml.Name			`xml:"Body"`
-		ManagementRemote ManagementRemote	`xml:"AMT_EnvironmentDetectionSettingData"`
+		XMLName          xml.Name         `xml:"Body"`
+		ManagementRemote ManagementRemote `xml:"AMT_EnvironmentDetectionSettingData"`
 
-		EnumerateResponse common.EnumerateResponse 
+		EnumerateResponse common.EnumerateResponse
 	}
 	ManagementRemote struct {
-		AccessInfo      		string 
-    	CN      				string 
-    	CreationClassName   	string
-		ElementName 			string
-		InfoFormat 				int
-		Name 					string
-		Port					int
-		SystemCreationClassName	string
-		SystemName 				string   
+		AccessInfo              string
+		CN                      string
+		CreationClassName       string
+		ElementName             string
+		InfoFormat              int
+		Name                    string
+		Port                    int
+		SystemCreationClassName string
+		SystemName              string
 	}
 )
 type RemoteSAP struct {
-	base message.Base
-	client wsman.WSManClient 
+	base   message.Base
+	client wsman.WSManClient
 }
 
 func NewManagementPresenceRemoteSAPWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) RemoteSAP {
-	return RemoteSAP {
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_ManagementPresenceRemoteSAP, client),
-		client: client,  
+	return RemoteSAP{
+		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_ManagementPresenceRemoteSAP, client),
+		client: client,
 	}
 }
 
