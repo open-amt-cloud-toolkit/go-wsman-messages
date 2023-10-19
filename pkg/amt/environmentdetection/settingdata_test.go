@@ -7,15 +7,15 @@ package environmentdetection
 
 import (
 	"encoding/xml"
-	"testing"
-	"os"
 	"fmt"
 	"io"
+	"os"
 	"strings"
+	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
+	"github.com/stretchr/testify/assert"
 	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 )
@@ -62,19 +62,19 @@ func TestAMT_EnvironmentDetectionSettingData(t *testing.T) {
 	elementUnderTest := NewEnvironmentDetectionSettingDataWithClient(wsmanMessageCreator, &client)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
-			name         		string
-			method       		string
-			action       		string
-			body         		string
-			responseFunc 	 	func() (Response, error)
-			expectedResponse 	interface{}
+			name             string
+			method           string
+			action           string
+			body             string
+			responseFunc     func() (Response, error)
+			expectedResponse interface{}
 		}{
 			//GETS
 			{
-				"should create a valid AMT_EnvironmentDetectionSettingData Get wsman message", 
-				"AMT_EnvironmentDetectionSettingData", 
-				wsmantesting.GET, 
-				"", 
+				"should create a valid AMT_EnvironmentDetectionSettingData Get wsman message",
+				"AMT_EnvironmentDetectionSettingData",
+				wsmantesting.GET,
+				"",
 				func() (Response, error) {
 					currentMessage = "Get"
 					return elementUnderTest.Get()
@@ -83,21 +83,21 @@ func TestAMT_EnvironmentDetectionSettingData(t *testing.T) {
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					DetectionSettingData: DetectionSettingData{
 						DetectionStrings: "b332bb28-ef3a-43b0-b998-342285ac1e26.com",
-						ElementName: "Intel(r) AMT Environment Detection Settings",
-						InstanceID:  "Intel(r) AMT Environment Detection Settings",
+						ElementName:      "Intel(r) AMT Environment Detection Settings",
+						InstanceID:       "Intel(r) AMT Environment Detection Settings",
 					},
 				},
 			},
 			//ENUMERATES
 			{
-				"should create a valid AMT_EnvironmentDetectionSettingData Enumerate wsman message", 
-				"AMT_EnvironmentDetectionSettingData", 
-				wsmantesting.ENUMERATE, 
-				wsmantesting.ENUMERATE_BODY, 
+				"should create a valid AMT_EnvironmentDetectionSettingData Enumerate wsman message",
+				"AMT_EnvironmentDetectionSettingData",
+				wsmantesting.ENUMERATE,
+				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
 					currentMessage = "Enumerate"
 					return elementUnderTest.Enumerate()
-				}, 
+				},
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{

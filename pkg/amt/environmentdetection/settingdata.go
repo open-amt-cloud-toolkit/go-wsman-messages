@@ -19,20 +19,20 @@ const AMT_EnvironmentDetectionSettingData = "AMT_EnvironmentDetectionSettingData
 type (
 	Response struct {
 		*wsman.Message
-		XMLName xml.Name		`xml:"Envelope"`
-		Header message.Header 	`xml:"Header"`
-		Body   Body				`xml:"Body"` 
+		XMLName xml.Name       `xml:"Envelope"`
+		Header  message.Header `xml:"Header"`
+		Body    Body           `xml:"Body"`
 	}
 	Body struct {
-		XMLName			xml.Name		`xml:"Body"`
-		DetectionSettingData	DetectionSettingData `xml:"AMT_EnvironmentDetectionSettingData"`
+		XMLName              xml.Name             `xml:"Body"`
+		DetectionSettingData DetectionSettingData `xml:"AMT_EnvironmentDetectionSettingData"`
 
-		EnumerateResponse common.EnumerateResponse 
+		EnumerateResponse common.EnumerateResponse
 	}
 	DetectionSettingData struct {
-		DetectionStrings	string 
-    	ElementName			string 
-    	InstanceID			string 
+		DetectionStrings string
+		ElementName      string
+		InstanceID       string
 	}
 )
 type EnvironmentDetectionSettingData struct {
@@ -50,14 +50,14 @@ const (
 )
 
 type SettingData struct {
-	base message.Base
+	base   message.Base
 	client wsman.WSManClient
 }
 
 func NewEnvironmentDetectionSettingDataWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) SettingData {
 	return SettingData{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_EnvironmentDetectionSettingData, client),
-		client: client, 
+		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_EnvironmentDetectionSettingData, client),
+		client: client,
 	}
 }
 
@@ -93,7 +93,7 @@ func (sd SettingData) Get() (response Response, err error) {
 
 // Enumerates the instances of this class
 func (sd SettingData) Enumerate() (response Response, err error) {
-	
+
 	response = Response{
 		Message: &wsman.Message{
 			XMLInput: sd.base.Enumerate(),
@@ -113,6 +113,7 @@ func (sd SettingData) Enumerate() (response Response, err error) {
 
 	return
 }
+
 // Pulls instances of this class, following an Enumerate operation
 func (EnvironmentDetectionSettingData SettingData) Pull(enumerationContext string) string {
 	return EnvironmentDetectionSettingData.base.Pull(enumerationContext)
