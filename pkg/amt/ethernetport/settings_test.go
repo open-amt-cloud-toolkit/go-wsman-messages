@@ -7,15 +7,15 @@ package ethernetport
 
 import (
 	"encoding/xml"
-	"testing"
 	"fmt"
 	"io"
 	"os"
 	"strings"
+	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
+	"github.com/stretchr/testify/assert"
 	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 )
@@ -63,19 +63,19 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
-			name         string
-			method       string
-			action       string
-			body         string
-			responseFunc 	 	func() (Response, error)
-			expectedResponse 	interface{}
+			name             string
+			method           string
+			action           string
+			body             string
+			responseFunc     func() (Response, error)
+			expectedResponse interface{}
 		}{
 			//GETS
 			{
-				"should create a valid AMT_EthernetPortSettings Get wsman message", 
-				"AMT_EthernetPortSettings", 
-				wsmantesting.GET, 
-				"", 
+				"should create a valid AMT_EthernetPortSettings Get wsman message",
+				"AMT_EthernetPortSettings",
+				wsmantesting.GET,
+				"",
 				func() (Response, error) {
 					currentMessage = "Get"
 					//return elementUnderTest.Get(selector)
@@ -84,36 +84,35 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					EthernetPort: EthernetPort{
-						DHCPEnabled: true,
-						DefaultGateway: "192.168.0.1",
-						ElementName: "Intel(r) AMT Ethernet Port Settings",
-						InstanceID: "Intel(r) AMT Ethernet Port Settings 0",
-						IpSyncEnabled: true, 
-						LinkIsUp: true, 
-						LinkPolicy: 14,
-						MACAddress: "c8-d9-d2-7a-1e-33",
+						DHCPEnabled:            true,
+						DefaultGateway:         "192.168.0.1",
+						ElementName:            "Intel(r) AMT Ethernet Port Settings",
+						InstanceID:             "Intel(r) AMT Ethernet Port Settings 0",
+						IpSyncEnabled:          true,
+						LinkIsUp:               true,
+						LinkPolicy:             14,
+						MACAddress:             "c8-d9-d2-7a-1e-33",
 						PhysicalConnectionType: 0,
-						PrimaryDNS: "68.105.28.11",
-						SecondaryDNS: "68.105.29.11",
-						SharedDynamicIP: true,
-						SharedMAC: true,
-						SharedStaticIp: false, 
-						SubnetMask: "255.255.255.0",
+						PrimaryDNS:             "68.105.28.11",
+						SecondaryDNS:           "68.105.29.11",
+						SharedDynamicIP:        true,
+						SharedMAC:              true,
+						SharedStaticIp:         false,
+						SubnetMask:             "255.255.255.0",
 					},
 				},
 			},
 
-		
 			//ENUMERATES
 			{
-				"should create a valid AMT_EthernetPortSettings Enumerate wsman message", 
-				"AMT_EthernetPortSettings", 
-				wsmantesting.ENUMERATE, 
-				wsmantesting.ENUMERATE_BODY, 
+				"should create a valid AMT_EthernetPortSettings Enumerate wsman message",
+				"AMT_EthernetPortSettings",
+				wsmantesting.ENUMERATE,
+				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
 					currentMessage = "Enumerate"
 					return elementUnderTest.Enumerate()
-				}, 
+				},
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{

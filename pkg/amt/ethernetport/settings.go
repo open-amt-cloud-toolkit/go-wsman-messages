@@ -15,49 +15,52 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
 
-type ( 
+type (
 	Response struct {
-		*wsman.Message 
-		XMLName xml.Name		`xml:"Envelope"`
-		Header  message.Header 	`xml:"Header"`
-		Body 	Body 			`xml:"Body"`
+		*wsman.Message
+		XMLName xml.Name       `xml:"Envelope"`
+		Header  message.Header `xml:"Header"`
+		Body    Body           `xml:"Body"`
 	}
 
 	Body struct {
-		XMLName				xml.Name		`xml:"Body"`
-		EthernetPort		EthernetPort 	`xml:"AMT_EthernetPortSettings"`
-		EnumerateResponse	common.EnumerateResponse
+		XMLName           xml.Name     `xml:"Body"`
+		EthernetPort      EthernetPort `xml:"AMT_EthernetPortSettings"`
+		EnumerateResponse common.EnumerateResponse
 	}
 
 	EthernetPort struct {
-		DHCPEnabled bool 
-		DefaultGateway string
-		ElementName string
-		InstanceID string 
-		IpSyncEnabled bool 
-		LinkIsUp bool 
-		LinkPolicy int 
-		MACAddress string
+		DHCPEnabled            bool
+		DefaultGateway         string
+		ElementName            string
+		InstanceID             string
+		IpSyncEnabled          bool
+		LinkIsUp               bool
+		LinkPolicy             int
+		MACAddress             string
 		PhysicalConnectionType int
-		PrimaryDNS string 
-		SecondaryDNS string 
-		SharedDynamicIP bool 
-		SharedMAC bool 
-		SharedStaticIp bool 
-		SubnetMask string 
+		PrimaryDNS             string
+		SecondaryDNS           string
+		SharedDynamicIP        bool
+		SharedMAC              bool
+		SharedStaticIp         bool
+		SubnetMask             string
 	}
 )
 
-/*type Selector struct {
-	XMLName xml.Name `xml:"w:Selector,omitempty"`
-	Name    string   `xml:"Name,attr"`
-	Value   string   `xml:",chardata"`
-}
-type Selector_OUTPUT struct {
-	XMLName xml.Name `xml:"Selector,omitempty"`
-	Name    string   `xml:"Name,attr"`
-	Value   string   `xml:",chardata"`
-}*/
+/*
+	type Selector struct {
+		XMLName xml.Name `xml:"w:Selector,omitempty"`
+		Name    string   `xml:"Name,attr"`
+		Value   string   `xml:",chardata"`
+	}
+
+	type Selector_OUTPUT struct {
+		XMLName xml.Name `xml:"Selector,omitempty"`
+		Name    string   `xml:"Name,attr"`
+		Value   string   `xml:",chardata"`
+	}
+*/
 type EthernetPortSettings struct {
 	models.SettingData
 	VLANTag                      int
@@ -83,7 +86,6 @@ type EthernetPortSettings struct {
 }
 
 type LinkPolicyValues int
-
 
 func (w *Response) JSON() string {
 	jsonOutput, err := json.Marshal(w.Body)
@@ -152,7 +154,7 @@ const (
 )
 
 type Settings struct {
-	base message.Base
+	base   message.Base
 	client wsman.WSManClient
 }
 
@@ -170,7 +172,7 @@ func NewEthernetPortSettings(wsmanMessageCreator *message.WSManMessageCreator) S
 }
 
 // Get retrieves the representation of the instance
-//func (s Settings) Get(selector *Selector) (response Response, err error) {
+// func (s Settings) Get(selector *Selector) (response Response, err error) {
 func (s Settings) Get() (response Response, err error) {
 	response = Response{
 		Message: &wsman.Message{
