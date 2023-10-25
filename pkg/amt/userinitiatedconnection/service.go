@@ -9,10 +9,10 @@ import (
 	"encoding/json"
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/redirection"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
 
@@ -23,21 +23,26 @@ const AMT_UserInitiatedConnectionService = "AMT_UserInitiatedConnectionService"
 type (
 	Response struct {
 		*wsman.Message
-		XMLName xml.Name 		`xml:"Envelope"`
-		Header  message.Header  `xml:"Header"`
-		Body	Body			`xml:"Body"`
+		XMLName xml.Name       `xml:"Envelope"`
+		Header  message.Header `xml:"Header"`
+		Body    Body           `xml:"Body"`
 	}
 	Body struct {
-		XMLName           		  xml.Name          	  `xml:"Body"`
-		User	  				  User  				  `xml:"AMT_AuthorizationService"`
-		
-		EnumerateResponse 		  common.EnumerateResponse
-		
+		XMLName xml.Name `xml:"Body"`
+		User    User     `xml:"AMT_UserInitiatedConnectionService"`
+
+		EnumerateResponse common.EnumerateResponse
 	}
 	User struct {
-
+		CreationClassName       string
+		ElementName             string
+		EnabledState            int
+		Name                    string
+		SystemCreationClassName string
+		SystemName              string
 	}
 )
+
 const (
 	AllInterfacesDisabled      RequestedState = 32768
 	BIOSInterfaceEnabled       RequestedState = 32769
@@ -54,7 +59,7 @@ func (w *Response) JSON() string {
 }
 
 type Service struct {
-	base message.Base
+	base   message.Base
 	client wsman.WSManClient
 }
 
@@ -70,6 +75,7 @@ func NewUserInitiatedConnectionServiceWithClient(wsmanMessageCreator *message.WS
 		client: client,
 	}
 }
+
 // Get retrieves the representation of the instance
 func (UserInitiatedConnectionService Service) Get() (response Response, err error) {
 
