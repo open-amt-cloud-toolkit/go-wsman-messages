@@ -20,7 +20,6 @@ import (
 	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 )
-
 type MockClient struct {
 }
 
@@ -60,7 +59,6 @@ func TestAMT_UserInitiatedConnectionService(t *testing.T) {
 	// enumerationId := ""
 	//client := wsman.NewClient("http://localhost:16992/wsman", "admin", "Intel123!", true)
 	elementUnderTest := NewUserInitiatedConnectionServiceWithClient(wsmanMessageCreator, &client)
-
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -77,6 +75,7 @@ func TestAMT_UserInitiatedConnectionService(t *testing.T) {
 				wsmantesting.GET,
 				"",
 				func() (Response, error) {
+					currentMessage = "Get"
 					currentMessage = "Get"
 					return elementUnderTest.Get()
 				},
