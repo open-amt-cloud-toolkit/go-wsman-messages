@@ -13,30 +13,6 @@ import (
 	"strings"
 )
 
-type Selector struct {
-	XMLName xml.Name `xml:"w:Selector,omitempty"`
-	Name    string   `xml:"Name,attr"`
-	Value   string   `xml:",chardata"`
-}
-type Selector_OUTPUT struct {
-	XMLName xml.Name `xml:"Selector,omitempty"`
-	Name    string   `xml:"Name,attr"`
-	Value   string   `xml:",chardata"`
-}
-
-type ReturnValue struct {
-	ReturnValue    int
-	ReturnValueStr string
-}
-type WSManMessageCreator struct {
-	MessageID        int
-	XmlCommonPrefix  string
-	XmlCommonEnd     string
-	AnonymousAddress string
-	DefaultTimeout   string
-	ResourceURIBase  string
-}
-
 func NewWSManMessageCreator(resourceUriBase string) *WSManMessageCreator {
 	return &WSManMessageCreator{
 		MessageID:        0,

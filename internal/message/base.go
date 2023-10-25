@@ -11,12 +11,6 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
 
-type Base struct {
-	WSManMessageCreator *WSManMessageCreator
-	className           string
-	client              wsman.WSManClient
-}
-
 func NewBase(wsmanMessageCreator *WSManMessageCreator, className string) Base {
 	return Base{
 		WSManMessageCreator: wsmanMessageCreator,
