@@ -27,10 +27,10 @@ type (
 		Body    Body           `xml:"Body"`
 	}
 	Body struct {
-		XMLName           		  xml.Name          	  		`xml:"Body"`
-		Setup	  				  Setup 				    	`xml:"AMT_SetupAndConfigurationService"`
-		
-		EnumerateResponse 		  common.EnumerateResponse
+		XMLName xml.Name `xml:"Body"`
+		Setup   Setup    `xml:"AMT_SetupAndConfigurationService"`
+
+		EnumerateResponse common.EnumerateResponse
 	}
 
 	Setup struct {
