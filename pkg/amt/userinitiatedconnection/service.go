@@ -29,13 +29,18 @@ type (
 	}
 	Body struct {
 		XMLName           		  xml.Name          	  `xml:"Body"`
-		User	  				  User  				  `xml:"AMT_AuthorizationService"`
+		User	  				  User  				  `xml:"AMT_UserInitiatedConnectionService"`
 		
 		EnumerateResponse 		  common.EnumerateResponse
 		
 	}
 	User struct {
-
+		CreationClassName 		string
+        ElementName				string 
+    	EnabledState			int 
+        Name					string 
+        SystemCreationClassName	string
+        SystemName				string 
 	}
 )
 const (

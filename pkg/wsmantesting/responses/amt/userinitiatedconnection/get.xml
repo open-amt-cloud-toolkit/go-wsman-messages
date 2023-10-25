@@ -20,7 +20,6 @@
             <g:CreationClassName>AMT_UserInitiatedConnectionService</g:CreationClassName>
             <g:ElementName>Intel(r) AMT User Initiated Connection Service</g:ElementName>
             <g:EnabledState>32771</g:EnabledState>
-            <g:LastConnectionReason></g:LastConnectionReason>
             <g:Name>Intel(r) AMT User Initiated Connection Service</g:Name>
             <g:SystemCreationClassName>CIM_ComputerSystem</g:SystemCreationClassName>
             <g:SystemName>Intel(r) AMT</g:SystemName>
