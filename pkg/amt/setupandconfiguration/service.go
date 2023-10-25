@@ -28,7 +28,7 @@ type (
 	}
 	Body struct {
 		XMLName           		  xml.Name          	  		`xml:"Body"`
-		Setup	  				  Setup 				    	`xml:"AMT_AuthorizationService"`
+		Setup	  				  Setup 				    	`xml:"AMT_SetupAndConfigurationService"`
 		
 		EnumerateResponse 		  common.EnumerateResponse
 	}
