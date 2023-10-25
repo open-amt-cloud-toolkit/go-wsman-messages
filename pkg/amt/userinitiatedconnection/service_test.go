@@ -20,6 +20,7 @@ import (
 	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 )
+
 type MockClient struct {
 }
 
