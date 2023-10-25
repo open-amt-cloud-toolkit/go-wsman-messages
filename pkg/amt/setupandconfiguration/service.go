@@ -6,15 +6,15 @@
 package setupandconfiguration
 
 import (
-	"encoding/xml"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
 
 const AMT_SetupAndConfigurationService = "AMT_SetupAndConfigurationService"
@@ -22,30 +22,30 @@ const AMT_SetupAndConfigurationService = "AMT_SetupAndConfigurationService"
 type (
 	Response struct {
 		*wsman.Message
-		XMLName xml.Name 		`xml:"Envelope"`
-		Header  message.Header  `xml:"Header"`
-		Body	Body			`xml:"Body"`
+		XMLName xml.Name       `xml:"Envelope"`
+		Header  message.Header `xml:"Header"`
+		Body    Body           `xml:"Body"`
 	}
 	Body struct {
-		XMLName           		  xml.Name          	  		`xml:"Body"`
-		Setup	  				  Setup 				    	`xml:"AMT_AuthorizationService"`
-		
-		EnumerateResponse 		  common.EnumerateResponse
+		XMLName xml.Name `xml:"Body"`
+		Setup   Setup    `xml:"AMT_SetupAndConfigurationService"`
+
+		EnumerateResponse common.EnumerateResponse
 	}
 
-	Setup struct{
-		CreationClassName				string
-		ElementName 					string 
-		EnabledState 					int 
-		Name							string 
-		PasswordModel 					int 
-		ProvisioningMode				int 
-		ProvisioningServerOTP			string 
-		ProvisioningState				int 
-		RequestedState 					int 
-		SystemCreationClassName			string 
-		SystemName              		string 
-		ZeroTouchConfigurationEnabled	bool
+	Setup struct {
+		CreationClassName             string
+		ElementName                   string
+		EnabledState                  int
+		Name                          string
+		PasswordModel                 int
+		ProvisioningMode              int
+		ProvisioningServerOTP         string
+		ProvisioningState             int
+		RequestedState                int
+		SystemCreationClassName       string
+		SystemName                    string
+		ZeroTouchConfigurationEnabled bool
 	}
 )
 type UnprovisionResponse struct {
@@ -90,14 +90,14 @@ func (w *Response) JSON() string {
 }
 
 type Service struct {
-	base message.Base
+	base   message.Base
 	client wsman.WSManClient
 }
 
 func NewSetupAndConfigurationService(wsmanMessageCreator *message.WSManMessageCreator) Service {
 	return Service{
-		base: message.NewBase(wsmanMessageCreator, AMT_SetupAndConfigurationService),
-		client: nil, 
+		base:   message.NewBase(wsmanMessageCreator, AMT_SetupAndConfigurationService),
+		client: nil,
 	}
 }
 
@@ -129,7 +129,6 @@ func (s Service) Get() (response Response, err error) {
 
 	return
 }
-
 
 // Enumerates the instances of this class
 func (s Service) Enumerate() (response Response, err error) {
