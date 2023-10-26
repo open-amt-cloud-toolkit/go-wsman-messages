@@ -6,8 +6,8 @@
 package remoteaccess
 
 import (
-	"encoding/xml"
 	"encoding/json"
+	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
@@ -25,16 +25,16 @@ type (
 		Body    Body           `xml:"Body"`
 	}
 	Body struct {
-		XMLName            xml.Name        `xml:"Body"`
-		PolicyApplies 	   PolicyApplies   `xml:"AMT_RemoteAccessPolicyAppliesToMPS"`
+		XMLName       xml.Name      `xml:"Body"`
+		PolicyApplies PolicyApplies `xml:"AMT_RemoteAccessPolicyAppliesToMPS"`
 
 		EnumerateResponse common.EnumerateResponse
 	}
-	PolicyApplies struct{
-		CreationClassName		string 
-        Name					string 
-        SystemCreationClassName	string 
-        SystemName				string 
+	PolicyApplies struct {
+		CreationClassName       string
+		Name                    string
+		SystemCreationClassName string
+		SystemName              string
 	}
 )
 type RemoteAccessPolicyAppliesToMPS struct {
@@ -82,7 +82,7 @@ const (
 )
 
 type PolicyAppliesToMPS struct {
-	base message.Base
+	base   message.Base
 	client wsman.WSManClient
 }
 
@@ -107,9 +107,8 @@ func NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator *message.WSManMessage
 	}
 }
 
-
 // Get retrieves the representation of the instance
-func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Get()  (response Response, err error) {
+func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Get() (response Response, err error) {
 	response = Response{
 		Message: &wsman.Message{
 			XMLInput: RemoteAccessPolicyAppliesToMPS.base.Get(nil),
@@ -128,7 +127,6 @@ func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Get()  (response Respon
 	}
 	return
 }
-
 
 // Enumerates the instances of this class
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Enumerate() (response Response, err error) {
@@ -151,6 +149,7 @@ func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Enumerate() (response R
 
 	return
 }
+
 // Pulls instances of this class, following an Enumerate operation
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Pull(enumerationContext string) string {
 	return RemoteAccessPolicyAppliesToMPS.base.Pull(enumerationContext)

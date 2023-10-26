@@ -20,25 +20,25 @@ const AMT_RemoteAccessPolicyRule = "AMT_RemoteAccessPolicyRule"
 type (
 	ResponseRule struct {
 		*wsman.Message
-		XMLName 	xml.Name       `xml:"Envelope"`
-		Header  	message.Header `xml:"Header"`
-		BodyRule    BodyRule       `xml:"Body"`
+		XMLName  xml.Name       `xml:"Envelope"`
+		Header   message.Header `xml:"Header"`
+		BodyRule BodyRule       `xml:"Body"`
 	}
 	BodyRule struct {
-		XMLName            			 xml.Name         `xml:"Body"`
-		RemotePolicyRule   RemotePolicyRule `xml:"AMT_RemoteAccessPolicyRule"`
+		XMLName          xml.Name         `xml:"Body"`
+		RemotePolicyRule RemotePolicyRule `xml:"AMT_RemoteAccessPolicyRule"`
 
 		EnumerateResponse common.EnumerateResponse
 	}
 	RemotePolicyRule struct {
-		CreationClassName		string  
-		ElementName 			string  
-		ExtendedData			string 
-		PolicyRuleName			string 
-		SystemCreationClassName string 
-		SystemName				string 
-		Trigger					int 
-		TunnelLifeTime			int 
+		CreationClassName       string
+		ElementName             string
+		ExtendedData            string
+		PolicyRuleName          string
+		SystemCreationClassName string
+		SystemName              string
+		Trigger                 int
+		TunnelLifeTime          int
 	}
 )
 
@@ -58,7 +58,7 @@ const (
 )
 
 type PolicyRule struct {
-	base message.Base
+	base         message.Base
 	clientPolicy wsman.WSManClient
 }
 
@@ -72,7 +72,7 @@ func (w *ResponseRule) JSONRule() string {
 
 func NewPolicyRuleWithClient(wsmanMessageCreator *message.WSManMessageCreator, clientPolicy wsman.WSManClient) PolicyRule {
 	return PolicyRule{
-		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_RemoteAccessPolicyRule, clientPolicy),
+		base:         message.NewBaseWithClient(wsmanMessageCreator, AMT_RemoteAccessPolicyRule, clientPolicy),
 		clientPolicy: clientPolicy,
 	}
 }
@@ -104,7 +104,6 @@ func (RemoteAccessPolicyRule PolicyRule) Get() (response ResponseRule, err error
 	return
 }
 
-
 // Enumerates the instances of this class
 func (RemoteAccessPolicyRule PolicyRule) Enumerate() (response ResponseRule, err error) {
 	response = ResponseRule{
@@ -126,7 +125,6 @@ func (RemoteAccessPolicyRule PolicyRule) Enumerate() (response ResponseRule, err
 
 	return
 }
-
 
 // Pulls instances of this class, following an Enumerate operation
 func (RemoteAccessPolicyRule PolicyRule) Pull(enumerationContext string) string {

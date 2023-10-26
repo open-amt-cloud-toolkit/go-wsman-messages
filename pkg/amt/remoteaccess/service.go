@@ -22,26 +22,26 @@ const AMT_RemoteAccessService = "AMT_RemoteAccessService"
 type (
 	ResponseStomps struct {
 		*wsman.Message
-		XMLName 	  xml.Name       		`xml:"Envelope"`
-		Header  	  message.Header 		`xml:"Header"`
-		BodyStomps    BodyStomps           	`xml:"Body"`
+		XMLName    xml.Name       `xml:"Envelope"`
+		Header     message.Header `xml:"Header"`
+		BodyStomps BodyStomps     `xml:"Body"`
 	}
 	BodyStomps struct {
-		XMLName            xml.Name       `xml:"Body"`
-		RemoteAccess 	   RemoteAccess   `xml:"AMT_RemoteAccessService"`
+		XMLName      xml.Name     `xml:"Body"`
+		RemoteAccess RemoteAccess `xml:"AMT_RemoteAccessService"`
 
 		EnumerateResponse common.EnumerateResponse
 	}
 	RemoteAccess struct {
-		CreationClassName 		string
-		ElementName 			string 
-		Name 					string 
-		SystemCreationClassName string 
-		SystemName				string 
+		CreationClassName       string
+		ElementName             string
+		Name                    string
+		SystemCreationClassName string
+		SystemName              string
 	}
 )
 type Service struct {
-	base message.Base
+	base   message.Base
 	client wsman.WSManClient
 }
 type MPServer struct {
@@ -89,6 +89,7 @@ func NewRemoteAccessServiceWithClient(wsmanMessageCreator *message.WSManMessageC
 		client: client,
 	}
 }
+
 // Get retrieves the representation of the instance
 func (RemoteAccessService Service) Get() (response ResponseStomps, err error) {
 	response = ResponseStomps{
@@ -109,6 +110,7 @@ func (RemoteAccessService Service) Get() (response ResponseStomps, err error) {
 	}
 	return
 }
+
 // Enumerates the instances of this class
 func (RemoteAccessService Service) Enumerate() (response ResponseStomps, err error) {
 	response = ResponseStomps{
@@ -131,11 +133,11 @@ func (RemoteAccessService Service) Enumerate() (response ResponseStomps, err err
 	return
 }
 
-
 // Pulls instances of this class, following an Enumerate operation
 func (RemoteAccessService Service) Pull(enumerationContext string) string {
 	return RemoteAccessService.base.Pull(enumerationContext)
 }
+
 /*func (r Service) AddMPS(mpServer MPServer) string {
 	header := r.base.WSManMessageCreator.CreateHeader(string(actions.AddMps), AMT_RemoteAccessService, nil, "", "")
 	body := fmt.Sprintf(`<Body><h:AddMpServer_INPUT xmlns:h="%s%s"><h:AccessInfo>%s</h:AccessInfo><h:InfoFormat>%d</h:InfoFormat><h:Port>%d</h:Port><h:AuthMethod>%d</h:AuthMethod><h:Username>%s</h:Username><h:Password>%s</h:Password><h:CN>%s</h:CN></h:AddMpServer_INPUT></Body>`, r.base.WSManMessageCreator.ResourceURIBase, AMT_RemoteAccessService, mpServer.AccessInfo, mpServer.InfoFormat, mpServer.Port, mpServer.AuthMethod, mpServer.Username, mpServer.Password, mpServer.CommonName)

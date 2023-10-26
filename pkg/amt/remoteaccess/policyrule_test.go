@@ -8,11 +8,11 @@ package remoteaccess
 import (
 	"encoding/xml"
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"io"
 	"os"
 	"strings"
 	"testing"
-	"github.com/stretchr/testify/assert"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
@@ -65,21 +65,21 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
-			name         string
-			method       string
-			action       string
-			body         string
-			extraHeader  string
+			name             string
+			method           string
+			action           string
+			body             string
+			extraHeader      string
 			responseFunc     func() (ResponseRule, error)
 			expectedResponse interface{}
 		}{
 			//GETS
 			{
-				"should create a valid AMT_RemoteAccessPolicyRule Get wsman message", 
-				"AMT_RemoteAccessPolicyRule", 
-				wsmantesting.GET, 
-				"", 
-				"", 
+				"should create a valid AMT_RemoteAccessPolicyRule Get wsman message",
+				"AMT_RemoteAccessPolicyRule",
+				wsmantesting.GET,
+				"",
+				"",
 				func() (ResponseRule, error) {
 					currentMessage = "Get"
 					return elementUnderTest.Get()
@@ -87,24 +87,24 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 				BodyRule{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					RemotePolicyRule: RemotePolicyRule{
-						CreationClassName: "AMT_RemoteAccessPolicyRule", 
-            			ElementName: "Inte(r) AMT:Remote Access Policy", 
-           				ExtendedData: "AAAAAAAAABk=",
-            			PolicyRuleName: "Periodic",
-            			SystemCreationClassName: "CIM_ComputerSystem", 
-            			SystemName: "Intel(r) AMT", 
-            			Trigger: 2,
-            			TunnelLifeTime: 0, 
+						CreationClassName:       "AMT_RemoteAccessPolicyRule",
+						ElementName:             "Inte(r) AMT:Remote Access Policy",
+						ExtendedData:            "AAAAAAAAABk=",
+						PolicyRuleName:          "Periodic",
+						SystemCreationClassName: "CIM_ComputerSystem",
+						SystemName:              "Intel(r) AMT",
+						Trigger:                 2,
+						TunnelLifeTime:          0,
 					},
 				},
 			},
 			//ENUMERATES
 			{
-				"should create a valid AMT_RemoteAccessPolicyRule Enumerate wsman message", 
-				"AMT_RemoteAccessPolicyRule", 
-				wsmantesting.ENUMERATE, 
-				wsmantesting.ENUMERATE_BODY, 
-				"", 
+				"should create a valid AMT_RemoteAccessPolicyRule Enumerate wsman message",
+				"AMT_RemoteAccessPolicyRule",
+				wsmantesting.ENUMERATE,
+				wsmantesting.ENUMERATE_BODY,
+				"",
 				func() (ResponseRule, error) {
 					currentMessage = "Enumerate"
 					return elementUnderTest.Enumerate()
@@ -120,7 +120,7 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 			//{"should create a valid AMT_RemoteAccessPolicyRule Pull wsman message", "AMT_RemoteAccessPolicyRule", wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 			//DELETE
 			//{"should create a valid AMT_RemoteAccessPolicyRule Delete wsman message", "AMT_RemoteAccessPolicyRule", wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"PolicyRuleName\">Instance</w:Selector></w:SelectorSet>", func() string {
-				//return elementUnderTest.Delete("Instance")
+			//return elementUnderTest.Delete("Instance")
 			//}},
 		}
 
