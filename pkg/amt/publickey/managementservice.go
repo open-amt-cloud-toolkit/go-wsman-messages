@@ -8,42 +8,42 @@ package publickey
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
 
 const AMT_PublicKeyManagementService = "AMT_PublicKeyManagementService"
 
-type ( 
+type (
 	Response struct {
-		*wsman.Message 
+		*wsman.Message
 		XMLName xml.Name       `xml:"Envelope"`
 		Header  message.Header `xml:"Header"`
 		Body    Body           `xml:"Body"`
 	}
 
 	Body struct {
-		XMLName							 xml.Name 					  `xml:"Body"`
+		XMLName                          xml.Name                     `xml:"Body"`
 		AddTrustedRootCertificate_OUTPUT AddTrustedCertificate_OUTPUT `xml:"AddTrustedRootCertificate_OUTPUT,omitempty"`
 		AddTrustedCertificate_OUTPUT     AddTrustedCertificate_OUTPUT `xml:"AddCertificate_OUTPUT,omitempty"`
 		AddKey_OUTPUT                    AddKey_OUTPUT                `xml:"AddKey_OUTPUT,omitempty"`
-		KeyManagement 					 KeyManagement 				  `xml:"AMT_PublicKeyManagementService"`
+		KeyManagement                    KeyManagement                `xml:"AMT_PublicKeyManagementService"`
 
 		EnumerateResponse common.EnumerateResponse
 	}
 
 	KeyManagement struct {
-		CreationClassName		string 
-		ElementName				string 
-		EnabledDefault			int 
-		EnabledState			int 
-		Name					string 
-		RequestedState			int 
-		SystemCreationClassName	string 
-		SystemName		 		string 
+		CreationClassName       string
+		ElementName             string
+		EnabledDefault          int
+		EnabledState            int
+		Name                    string
+		RequestedState          int
+		SystemCreationClassName string
+		SystemName              string
 	}
 )
 type AddTrustedCertificate_OUTPUT struct {
@@ -108,14 +108,14 @@ const (
 )
 
 type ManagementService struct {
-	base message.Base
-	client wsman.WSManClient 
+	base   message.Base
+	client wsman.WSManClient
 }
 
 func NewPublicKeyManagementServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) ManagementService {
 	return ManagementService{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_PublicKeyManagementService, client),
-		client: client, 
+		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_PublicKeyManagementService, client),
+		client: client,
 	}
 }
 

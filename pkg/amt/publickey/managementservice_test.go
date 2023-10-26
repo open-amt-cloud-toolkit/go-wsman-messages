@@ -14,7 +14,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
@@ -63,21 +63,21 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
-			name         string
-			method       string
-			action       string
-			body         string
-			extraHeader  string
-			responseFunc 	 	func() (Response, error)
-			expectedResponse 	interface{}
+			name             string
+			method           string
+			action           string
+			body             string
+			extraHeader      string
+			responseFunc     func() (Response, error)
+			expectedResponse interface{}
 		}{
 			//GETS
 			{
-				"should create a valid AMT_PublicKeyManagementService Get wsman message", 
-				"AMT_PublicKeyManagementService", 
-				wsmantesting.GET, 
-				"", 
-				"", 
+				"should create a valid AMT_PublicKeyManagementService Get wsman message",
+				"AMT_PublicKeyManagementService",
+				wsmantesting.GET,
+				"",
+				"",
 				func() (Response, error) {
 					currentMessage = "Get"
 					return elementUnderTest.Get()
@@ -85,28 +85,28 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					KeyManagement: KeyManagement{
-						CreationClassName: "AMT_PublicKeyManagementService",
-						ElementName: "Intel(r) AMT Certificate Store Service",
-						EnabledDefault: 5, 
-						EnabledState: 5,
-						Name: "Intel(r) AMT Public Key Management Service",
-						RequestedState: 12,
-						SystemCreationClassName: "CIM_ComputerSystem", 
-						SystemName: "Intel(r) AMT",
+						CreationClassName:       "AMT_PublicKeyManagementService",
+						ElementName:             "Intel(r) AMT Certificate Store Service",
+						EnabledDefault:          5,
+						EnabledState:            5,
+						Name:                    "Intel(r) AMT Public Key Management Service",
+						RequestedState:          12,
+						SystemCreationClassName: "CIM_ComputerSystem",
+						SystemName:              "Intel(r) AMT",
 					},
 				},
 			},
 			//ENUMERATES
 			{
-				"should create a valid AMT_PublicKeyManagementService Enumerate wsman message", 
-				"AMT_PublicKeyManagementService", 
-				wsmantesting.ENUMERATE, 
-				wsmantesting.ENUMERATE_BODY, 
-				"", 
+				"should create a valid AMT_PublicKeyManagementService Enumerate wsman message",
+				"AMT_PublicKeyManagementService",
+				wsmantesting.ENUMERATE,
+				wsmantesting.ENUMERATE_BODY,
+				"",
 				func() (Response, error) {
 					currentMessage = "Enumerate"
 					return elementUnderTest.Enumerate()
-				}, 
+				},
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{

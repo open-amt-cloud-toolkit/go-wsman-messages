@@ -8,33 +8,33 @@ package publickey
 import (
 	"encoding/xml"
 
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 )
 
 const AMT_PublicKeyCertificate = "AMT_PublicKeyCertificate"
 
 type (
 	ResponseCert struct {
-		*wsman.Message 
-		XMLName 	xml.Name		`xml:"Envelope"`
-		Header  	message.Header	`xml:"Header"`
-		BodyCert	BodyCert		`xml:"Body"`
+		*wsman.Message
+		XMLName  xml.Name       `xml:"Envelope"`
+		Header   message.Header `xml:"Header"`
+		BodyCert BodyCert       `xml:"Body"`
 	}
 	BodyCert struct {
-		XMLName				xml.Name	`xml:"Body"`
-		KeyCert 			KeyCert		`xml:"AMT_PublicKeyCertificate"`
+		XMLName xml.Name `xml:"Body"`
+		KeyCert KeyCert  `xml:"AMT_PublicKeyCertificate"`
 
-		EnumerateResponse 	common.EnumerateResponse 
+		EnumerateResponse common.EnumerateResponse
 	}
 	KeyCert struct {
 		ElementName           string
-		InstanceID            string 
-		X509Certificate       string 
-		TrustedRootCertficate bool  
-		Issuer                string 
-		Subject               string 
+		InstanceID            string
+		X509Certificate       string
+		TrustedRootCertficate bool
+		Issuer                string
+		Subject               string
 	}
 )
 type PullResponseEnvelope struct {
@@ -63,14 +63,14 @@ type PublicKeyCertificate struct {
 }
 
 type Certificate struct {
-	base message.Base
-	client wsman.WSManClient 
+	base   message.Base
+	client wsman.WSManClient
 }
 
 func NewPublicKeyCertificateWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) Certificate {
 	return Certificate{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_PublicKeyCertificate, client), 
-		client: client, 
+		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_PublicKeyCertificate, client),
+		client: client,
 	}
 }
 
@@ -105,7 +105,7 @@ func (PublicKeyCertificate Certificate) Get() (response ResponseCert, err error)
 }
 
 // Enumerates the instances of this class
-func (PublicKeyCertificate Certificate) Enumerate()(response ResponseCert, err error) {
+func (PublicKeyCertificate Certificate) Enumerate() (response ResponseCert, err error) {
 
 	response = ResponseCert{
 		Message: &wsman.Message{
