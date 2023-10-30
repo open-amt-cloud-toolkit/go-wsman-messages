@@ -16,7 +16,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
-	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 )
@@ -28,8 +27,6 @@ const (
 	EnvelopeResponseService = `<a:Envelope xmlns:a="http://www.w3.org/2003/05/soap-envelope" x-mlns:b="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd" xmlns:d="http://schemas.xmlsoap.org/ws/2005/02/trust" xmlns:e="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:f="http://schemas.dmtf.org/wbem/wsman/1/cimbinding.xsd" xmlns:g="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService" xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><a:Header><b:To>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:To><b:RelatesTo>0</b:RelatesTo><b:Action a:mustUnderstand="true">`
 	GetBodyService          = `<g:AMT_PublicKeyManagementService><g:CreationClassName>AMT_PublicKeyManagementService</g:CreationClassName><g:ElementName>Intel(r) AMT Public Key Management Service</g:ElementName><g:Name>Intel(r) AMT Public Key Management Service</g:Name><g:SystemCreationClassName>CIM_ComputerSystem</g:SystemCreationClassName><g:SystemName>ManagedSystem</g:SystemName></g:AMT_PublicKeyManagementService>`
 )
-
-//var currentMessage = ""
 
 func (c *MockClientService) Post(msg string) ([]byte, error) {
 	// read an xml file from disk:
@@ -55,12 +52,8 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := MockClientService{} // wsman.NewClient("http://localhost:16992/wsman", "admin", "P@ssw0rd", true)
-	//elementUnderTest := NewServiceWithClient(wsmanMessageCreator, &client)
-	// enumerationId := ""
-	//client := wsman.NewClient("http://localhost:16992/wsman", "admin", "Intel123!", true)
+	client := MockClientService{} 
 	elementUnderTest := NewPublicKeyManagementServiceWithClient(wsmanMessageCreator, &client)
-
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -155,7 +148,6 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
-				//println(response.XMLOutput)
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.Body)

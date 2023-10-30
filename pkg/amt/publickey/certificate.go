@@ -128,17 +128,17 @@ func (PublicKeyCertificate Certificate) Enumerate() (response ResponseCert, err 
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (PublicKeyCertificate Certificate) Pull(enumerationContext string) string {
-	return PublicKeyCertificate.base.Pull(enumerationContext)
-}
+// func (PublicKeyCertificate Certificate) Pull(enumerationContext string) string {
+// 	return PublicKeyCertificate.base.Pull(enumerationContext)
+// }
 
 // Put will change properties of the selected instance
-func (PublicKeyCertificate Certificate) Put(publicKeyCertificate PublicKeyCertificate) string {
-	return PublicKeyCertificate.base.Put(publicKeyCertificate, false, nil)
-}
+// func (PublicKeyCertificate Certificate) Put(publicKeyCertificate PublicKeyCertificate) string {
+// 	return PublicKeyCertificate.base.Put(publicKeyCertificate, false, nil)
+// }
 
 // Delete removes a the specified instance
-func (PublicKeyCertificate Certificate) Delete(instanceID string) string {
-	selector := message.Selector{Name: "InstanceID", Value: instanceID}
-	return PublicKeyCertificate.base.Delete(selector)
-}
+// func (PublicKeyCertificate Certificate) Delete(instanceID string) string {
+// 	selector := message.Selector{Name: "InstanceID", Value: instanceID}
+// 	return PublicKeyCertificate.base.Delete(selector)
+// }
