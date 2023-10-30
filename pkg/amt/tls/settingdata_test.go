@@ -53,7 +53,7 @@ func TestAMT_TLSSettingData(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := MockClient{} 
+	client := MockClient{}
 	elementUnderTest := NewTLSSettingDataWithClient(wsmanMessageCreator, &client)
 
 	t.Run("amt_* Tests", func(t *testing.T) {
