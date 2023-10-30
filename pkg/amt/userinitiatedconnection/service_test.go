@@ -16,8 +16,8 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 )
 
 type MockClient struct {
@@ -54,7 +54,7 @@ func TestAMT_UserInitiatedConnectionService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := MockClient{} 
+	client := MockClient{}
 	elementUnderTest := NewUserInitiatedConnectionServiceWithClient(wsmanMessageCreator, &client)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
