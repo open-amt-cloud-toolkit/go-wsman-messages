@@ -10,8 +10,6 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/redirection"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
@@ -123,12 +121,12 @@ func (UserInitiatedConnectionService Service) Enumerate() (response Response, er
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (UserInitiatedConnectionService Service) Pull(enumerationContext string) string {
-	return UserInitiatedConnectionService.base.Pull(enumerationContext)
-}
+// func (UserInitiatedConnectionService Service) Pull(enumerationContext string) string {
+// 	return UserInitiatedConnectionService.base.Pull(enumerationContext)
+// }
 
-// RequestStateChange requests that the state of the element be changed to the value specified in the RequestedState parameter . . .
-func (UserInitiatedConnectionService Service) RequestStateChange(requestedState RequestedState) string {
-	return UserInitiatedConnectionService.base.RequestStateChange(actions.RequestStateChange(redirection.AMT_RedirectionService), int(requestedState))
+// // RequestStateChange requests that the state of the element be changed to the value specified in the RequestedState parameter . . .
+// func (UserInitiatedConnectionService Service) RequestStateChange(requestedState RequestedState) string {
+// 	return UserInitiatedConnectionService.base.RequestStateChange(actions.RequestStateChange(redirection.AMT_RedirectionService), int(requestedState))
 
-}
+// }
