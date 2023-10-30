@@ -16,8 +16,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
-	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 )
@@ -57,11 +55,7 @@ func TestAMT_RemoteAccessService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	/*client := wsmantesting.MockClient{
-	 	PackageUnderTest: "amt/remoteaccess",
-	}*/
 	client := MockClient{}
-	//client := wsman.NewServiceWithClient("http://localhost:16992/wsman", "admin", "Intel123!", true)
 	elementUnderTest := NewRemoteAccessServiceWithClient(wsmanMessageCreator, &client)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
@@ -69,7 +63,7 @@ func TestAMT_RemoteAccessService(t *testing.T) {
 			method           string
 			action           string
 			body             string
-			responseFunc     func() (ResponseStomps, error)
+			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
 			//GETS
@@ -78,11 +72,11 @@ func TestAMT_RemoteAccessService(t *testing.T) {
 				"AMT_RemoteAccessService",
 				wsmantesting.GET,
 				"",
-				func() (ResponseStomps, error) {
+				func() (Response, error) {
 					currentMessage = "Get"
 					return elementUnderTest.Get()
 				},
-				BodyStomps{
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					RemoteAccess: RemoteAccess{
 						CreationClassName:       "AMT_RemoteAccessService",
@@ -99,11 +93,11 @@ func TestAMT_RemoteAccessService(t *testing.T) {
 				"AMT_RemoteAccessService",
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
-				func() (ResponseStomps, error) {
+				func() (Response, error) {
 					currentMessage = "Enumerate"
 					return elementUnderTest.Enumerate()
 				},
-				BodyStomps{
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "D3000000-0000-0000-0000-000000000000",
@@ -143,10 +137,9 @@ func TestAMT_RemoteAccessService(t *testing.T) {
 				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
-				//println(response.XMLOutput)
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
-				assert.Equal(t, test.expectedResponse, response.BodyStomps)
+				assert.Equal(t, test.expectedResponse, response.Body)
 			})
 		}
 	})

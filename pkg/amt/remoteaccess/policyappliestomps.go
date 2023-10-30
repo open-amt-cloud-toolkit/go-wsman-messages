@@ -18,13 +18,13 @@ import (
 const AMT_RemoteAccessPolicyAppliesToMPS = "AMT_RemoteAccessPolicyAppliesToMPS"
 
 type (
-	Response struct {
+	ResponseApplies struct {
 		*wsman.Message
-		XMLName xml.Name       `xml:"Envelope"`
-		Header  message.Header `xml:"Header"`
-		Body    Body           `xml:"Body"`
+		XMLName 	xml.Name       `xml:"Envelope"`
+		Header  	message.Header `xml:"Header"`
+		BodyApplies BodyApplies    `xml:"Body"`
 	}
-	Body struct {
+	BodyApplies struct {
 		XMLName       xml.Name      `xml:"Body"`
 		PolicyApplies PolicyApplies `xml:"AMT_RemoteAccessPolicyAppliesToMPS"`
 
@@ -86,8 +86,8 @@ type PolicyAppliesToMPS struct {
 	client wsman.WSManClient
 }
 
-func (w *Response) JSON() string {
-	jsonOutput, err := json.Marshal(w.Body)
+func (w *ResponseApplies) JSON() string {
+	jsonOutput, err := json.Marshal(w.BodyApplies)
 	if err != nil {
 		return ""
 	}
@@ -108,8 +108,8 @@ func NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator *message.WSManMessage
 }
 
 // Get retrieves the representation of the instance
-func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Get() (response Response, err error) {
-	response = Response{
+func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Get() (response ResponseApplies, err error) {
+	response = ResponseApplies{
 		Message: &wsman.Message{
 			XMLInput: RemoteAccessPolicyAppliesToMPS.base.Get(nil),
 		},
@@ -129,8 +129,8 @@ func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Get() (response Respons
 }
 
 // Enumerates the instances of this class
-func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Enumerate() (response Response, err error) {
-	response = Response{
+func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Enumerate() (response ResponseApplies, err error) {
+	response = ResponseApplies{
 		Message: &wsman.Message{
 			XMLInput: RemoteAccessPolicyAppliesToMPS.base.Enumerate(),
 		},
@@ -151,22 +151,22 @@ func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Enumerate() (response R
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Pull(enumerationContext string) string {
-	return RemoteAccessPolicyAppliesToMPS.base.Pull(enumerationContext)
-}
+// func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Pull(enumerationContext string) string {
+// 	return RemoteAccessPolicyAppliesToMPS.base.Pull(enumerationContext)
+// }
 
-// Put will change properties of the selected instance
-func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Put(remoteAccessPolicyAppliesToMPS *RemoteAccessPolicyAppliesToMPS) string {
-	return RemoteAccessPolicyAppliesToMPS.base.Put(remoteAccessPolicyAppliesToMPS, false, nil)
-}
+// // Put will change properties of the selected instance
+// func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Put(remoteAccessPolicyAppliesToMPS *RemoteAccessPolicyAppliesToMPS) string {
+// 	return RemoteAccessPolicyAppliesToMPS.base.Put(remoteAccessPolicyAppliesToMPS, false, nil)
+// }
 
-// Delete removes a the specified instance
-func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Delete(handle string) string {
-	selector := message.Selector{Name: "Name", Value: handle}
-	return RemoteAccessPolicyAppliesToMPS.base.Delete(selector)
-}
+// // Delete removes a the specified instance
+// func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Delete(handle string) string {
+// 	selector := message.Selector{Name: "Name", Value: handle}
+// 	return RemoteAccessPolicyAppliesToMPS.base.Delete(selector)
+// }
 
-// Creates a new instance of this class
-func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Create(remoteAccessPolicyAppliesToMPS RemoteAccessPolicyAppliesToMPS) string {
-	return RemoteAccessPolicyAppliesToMPS.base.Create(remoteAccessPolicyAppliesToMPS, nil)
-}
+// // Creates a new instance of this class
+// func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Create(remoteAccessPolicyAppliesToMPS RemoteAccessPolicyAppliesToMPS) string {
+// 	return RemoteAccessPolicyAppliesToMPS.base.Create(remoteAccessPolicyAppliesToMPS, nil)
+// }

@@ -6,13 +6,10 @@
 package remoteaccess
 
 import (
-	//"fmt"
-
 	"encoding/json"
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
@@ -20,13 +17,13 @@ import (
 const AMT_RemoteAccessService = "AMT_RemoteAccessService"
 
 type (
-	ResponseStomps struct {
+	Response struct {
 		*wsman.Message
 		XMLName    xml.Name       `xml:"Envelope"`
 		Header     message.Header `xml:"Header"`
-		BodyStomps BodyStomps     `xml:"Body"`
+		Body	   Body		      `xml:"Body"`
 	}
-	BodyStomps struct {
+	Body struct {
 		XMLName      xml.Name     `xml:"Body"`
 		RemoteAccess RemoteAccess `xml:"AMT_RemoteAccessService"`
 
@@ -69,8 +66,8 @@ const (
 	UsernamePasswordAuthentication MPServerAuthMethod = 2
 )
 
-func (w *ResponseStomps) JSONStomps() string {
-	jsonOutput, err := json.Marshal(w.BodyStomps)
+func (w *Response) JSONStomps() string {
+	jsonOutput, err := json.Marshal(w.Body)
 	if err != nil {
 		return ""
 	}
@@ -91,8 +88,8 @@ func NewRemoteAccessServiceWithClient(wsmanMessageCreator *message.WSManMessageC
 }
 
 // Get retrieves the representation of the instance
-func (RemoteAccessService Service) Get() (response ResponseStomps, err error) {
-	response = ResponseStomps{
+func (RemoteAccessService Service) Get() (response Response, err error) {
+	response = Response{
 		Message: &wsman.Message{
 			XMLInput: RemoteAccessService.base.Get(nil),
 		},
@@ -112,8 +109,8 @@ func (RemoteAccessService Service) Get() (response ResponseStomps, err error) {
 }
 
 // Enumerates the instances of this class
-func (RemoteAccessService Service) Enumerate() (response ResponseStomps, err error) {
-	response = ResponseStomps{
+func (RemoteAccessService Service) Enumerate() (response Response, err error) {
+	response = Response{
 		Message: &wsman.Message{
 			XMLInput: RemoteAccessService.base.Enumerate(),
 		},
@@ -134,9 +131,9 @@ func (RemoteAccessService Service) Enumerate() (response ResponseStomps, err err
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (RemoteAccessService Service) Pull(enumerationContext string) string {
-	return RemoteAccessService.base.Pull(enumerationContext)
-}
+// func (RemoteAccessService Service) Pull(enumerationContext string) string {
+// 	return RemoteAccessService.base.Pull(enumerationContext)
+// }
 
 /*func (r Service) AddMPS(mpServer MPServer) string {
 	header := r.base.WSManMessageCreator.CreateHeader(string(actions.AddMps), AMT_RemoteAccessService, nil, "", "")

@@ -10,7 +10,6 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
@@ -127,17 +126,17 @@ func (RemoteAccessPolicyRule PolicyRule) Enumerate() (response ResponseRule, err
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (RemoteAccessPolicyRule PolicyRule) Pull(enumerationContext string) string {
-	return RemoteAccessPolicyRule.base.Pull(enumerationContext)
-}
+// func (RemoteAccessPolicyRule PolicyRule) Pull(enumerationContext string) string {
+// 	return RemoteAccessPolicyRule.base.Pull(enumerationContext)
+// }
 
-// Put will change properties of the selected instance
-func (RemoteAccessPolicyRule PolicyRule) Put(remoteAccessPolicyRule RemoteAccessPolicyRule) string {
-	return RemoteAccessPolicyRule.base.Put(remoteAccessPolicyRule, false, nil)
-}
+// // Put will change properties of the selected instance
+// func (RemoteAccessPolicyRule PolicyRule) Put(remoteAccessPolicyRule RemoteAccessPolicyRule) string {
+// 	return RemoteAccessPolicyRule.base.Put(remoteAccessPolicyRule, false, nil)
+// }
 
-// Delete removes a the specified instance
-func (RemoteAccessPolicyRule PolicyRule) Delete(handle string) string {
-	selector := message.Selector{Name: "PolicyRuleName", Value: handle}
-	return RemoteAccessPolicyRule.base.Delete(selector)
-}
+// // Delete removes a the specified instance
+// func (RemoteAccessPolicyRule PolicyRule) Delete(handle string) string {
+// 	selector := message.Selector{Name: "PolicyRuleName", Value: handle}
+// 	return RemoteAccessPolicyRule.base.Delete(selector)
+// }
