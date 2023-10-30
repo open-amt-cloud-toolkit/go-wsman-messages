@@ -20,8 +20,8 @@ const AMT_RemoteAccessPolicyAppliesToMPS = "AMT_RemoteAccessPolicyAppliesToMPS"
 type (
 	ResponseApplies struct {
 		*wsman.Message
-		XMLName 	xml.Name       `xml:"Envelope"`
-		Header  	message.Header `xml:"Header"`
+		XMLName     xml.Name       `xml:"Envelope"`
+		Header      message.Header `xml:"Header"`
 		BodyApplies BodyApplies    `xml:"Body"`
 	}
 	BodyApplies struct {

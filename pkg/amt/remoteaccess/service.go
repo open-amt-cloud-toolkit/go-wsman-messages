@@ -19,9 +19,9 @@ const AMT_RemoteAccessService = "AMT_RemoteAccessService"
 type (
 	Response struct {
 		*wsman.Message
-		XMLName    xml.Name       `xml:"Envelope"`
-		Header     message.Header `xml:"Header"`
-		Body	   Body		      `xml:"Body"`
+		XMLName xml.Name       `xml:"Envelope"`
+		Header  message.Header `xml:"Header"`
+		Body    Body           `xml:"Body"`
 	}
 	Body struct {
 		XMLName      xml.Name     `xml:"Body"`
