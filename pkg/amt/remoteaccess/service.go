@@ -6,16 +6,40 @@
 package remoteaccess
 
 import (
-	"fmt"
+	"encoding/json"
+	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
 
 const AMT_RemoteAccessService = "AMT_RemoteAccessService"
 
+type (
+	Response struct {
+		*wsman.Message
+		XMLName xml.Name       `xml:"Envelope"`
+		Header  message.Header `xml:"Header"`
+		Body    Body           `xml:"Body"`
+	}
+	Body struct {
+		XMLName      xml.Name     `xml:"Body"`
+		RemoteAccess RemoteAccess `xml:"AMT_RemoteAccessService"`
+
+		EnumerateResponse common.EnumerateResponse
+	}
+	RemoteAccess struct {
+		CreationClassName       string
+		ElementName             string
+		Name                    string
+		SystemCreationClassName string
+		SystemName              string
+	}
+)
 type Service struct {
-	base message.Base
+	base   message.Base
+	client wsman.WSManClient
 }
 type MPServer struct {
 	AccessInfo string
@@ -42,27 +66,76 @@ const (
 	UsernamePasswordAuthentication MPServerAuthMethod = 2
 )
 
+func (w *Response) JSONStomps() string {
+	jsonOutput, err := json.Marshal(w.Body)
+	if err != nil {
+		return ""
+	}
+	return string(jsonOutput)
+}
+
 func NewRemoteAccessService(wsmanMessageCreator *message.WSManMessageCreator) Service {
 	return Service{
 		base: message.NewBase(wsmanMessageCreator, AMT_RemoteAccessService),
 	}
 }
 
+func NewRemoteAccessServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) Service {
+	return Service{
+		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_RemoteAccessService, client),
+		client: client,
+	}
+}
+
 // Get retrieves the representation of the instance
-func (RemoteAccessService Service) Get() string {
-	return RemoteAccessService.base.Get(nil)
+func (RemoteAccessService Service) Get() (response Response, err error) {
+	response = Response{
+		Message: &wsman.Message{
+			XMLInput: RemoteAccessService.base.Get(nil),
+		},
+	}
+	// send the message to AMT
+	err = RemoteAccessService.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Enumerates the instances of this class
-func (RemoteAccessService Service) Enumerate() string {
-	return RemoteAccessService.base.Enumerate()
+func (RemoteAccessService Service) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &wsman.Message{
+			XMLInput: RemoteAccessService.base.Enumerate(),
+		},
+	}
+	// send the message to AMT
+	err = RemoteAccessService.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (RemoteAccessService Service) Pull(enumerationContext string) string {
-	return RemoteAccessService.base.Pull(enumerationContext)
-}
-func (r Service) AddMPS(mpServer MPServer) string {
+// func (RemoteAccessService Service) Pull(enumerationContext string) string {
+// 	return RemoteAccessService.base.Pull(enumerationContext)
+// }
+
+/*func (r Service) AddMPS(mpServer MPServer) string {
 	header := r.base.WSManMessageCreator.CreateHeader(string(actions.AddMps), AMT_RemoteAccessService, nil, "", "")
 	body := fmt.Sprintf(`<Body><h:AddMpServer_INPUT xmlns:h="%s%s"><h:AccessInfo>%s</h:AccessInfo><h:InfoFormat>%d</h:InfoFormat><h:Port>%d</h:Port><h:AuthMethod>%d</h:AuthMethod><h:Username>%s</h:Username><h:Password>%s</h:Password><h:CN>%s</h:CN></h:AddMpServer_INPUT></Body>`, r.base.WSManMessageCreator.ResourceURIBase, AMT_RemoteAccessService, mpServer.AccessInfo, mpServer.InfoFormat, mpServer.Port, mpServer.AuthMethod, mpServer.Username, mpServer.Password, mpServer.CommonName)
 	return r.base.WSManMessageCreator.CreateXML(header, body)
@@ -78,4 +151,4 @@ func (r Service) AddRemoteAccessPolicyRule(remoteAccessPolicyRule RemoteAccessPo
 		r.base.WSManMessageCreator.ResourceURIBase,
 		"AMT_ManagementPresenceRemoteSAP", selector.Name, selector.Value)
 	return r.base.WSManMessageCreator.CreateXML(header, body)
-}
+}*/

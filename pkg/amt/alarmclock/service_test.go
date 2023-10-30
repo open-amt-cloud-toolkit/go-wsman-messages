@@ -7,6 +7,10 @@ package alarmclock
 
 import (
 	"encoding/xml"
+	"fmt"
+	"io"
+	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -18,18 +22,43 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// MockClient is a mock implementation of the wsman.Client interface for testing.
+type MockClient struct {
+}
+
 const (
 	EnvelopeResponse = `<a:Envelope xmlns:a="http://www.w3.org/2003/05/soap-envelope" xmlns:b="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd" xmlns:d="http://schemas.xmlsoap.org/ws/2005/02/trust" xmlns:e="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:f="http://schemas.dmtf.org/wbem/wsman/1/cimbinding.xsd" xmlns:g="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AlarmClockService" xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><a:Header><b:To>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:To><b:RelatesTo>0</b:RelatesTo><b:Action a:mustUnderstand="true">`
 	GetBody          = `<g:AMT_AlarmClockService><g:CreationClassName>AMT_AlarmClockService</g:CreationClassName><g:ElementName>Intel(r) AMT Alarm Clock Service</g:ElementName><g:Name>Intel(r) AMT Alarm Clock Service</g:Name><g:SystemCreationClassName>CIM_ComputerSystem</g:SystemCreationClassName><g:SystemName>ManagedSystem</g:SystemName></g:AMT_AlarmClockService>`
 )
 
+var currentMessage = ""
+
+func (c *MockClient) Post(msg string) ([]byte, error) {
+	// read an xml file from disk:
+	xmlFile, err := os.Open("../../wsmantesting/responses/alarmclock/" + strings.ToLower(currentMessage) + ".xml")
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return nil, err
+	}
+	defer xmlFile.Close()
+	// read file into string
+	xmlData, err := io.ReadAll(xmlFile)
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+		return nil, err
+	}
+	// strip carriage returns and new line characters
+	xmlData = []byte(strings.ReplaceAll(string(xmlData), "\r\n", ""))
+
+	// Simulate a successful response for testing.
+	return []byte(xmlData), nil
+}
+
 func TestAMT_AlarmClockService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := wsmantesting.MockClient{
-		PackageUnderTest: "amt/alarmclock",
-	} // wsman.NewClient("http://localhost:16992/wsman", "admin", "P@ssw0rd", true)
+	client := MockClient{} // wsman.NewClient("http://localhost:16992/wsman", "admin", "P@ssw0rd", true)
 	elementUnderTest := NewServiceWithClient(wsmanMessageCreator, &client)
 	// enumerationId := ""
 	t.Run("amt_* Tests", func(t *testing.T) {
@@ -47,7 +76,7 @@ func TestAMT_AlarmClockService(t *testing.T) {
 				wsmantesting.GET,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					currentMessage = "Get"
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -67,7 +96,7 @@ func TestAMT_AlarmClockService(t *testing.T) {
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					currentMessage = "Enumerate"
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -83,7 +112,7 @@ func TestAMT_AlarmClockService(t *testing.T) {
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					currentMessage = "Pull"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
