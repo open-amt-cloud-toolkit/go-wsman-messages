@@ -8,10 +8,8 @@ package setupandconfiguration
 import (
 	"encoding/json"
 	"encoding/xml"
-	"fmt"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/amt/actions"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
@@ -108,7 +106,6 @@ func NewSetupAndConfigurationServiceWithClient(wsmanMessageCreator *message.WSMa
 	}
 }
 func (s Service) Get() (response Response, err error) {
-
 	response = Response{
 		Message: &wsman.Message{
 			XMLInput: s.base.Get(nil),
@@ -153,37 +150,37 @@ func (s Service) Enumerate() (response Response, err error) {
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (s Service) Pull(enumerationContext string) string {
-	return s.base.Pull(enumerationContext)
-}
+// func (s Service) Pull(enumerationContext string) string {
+// 	return s.base.Pull(enumerationContext)
+// }
 
-// Put will change properties of the selected instance
-func (s Service) Put(setupAndConfigurationService SetupAndConfigurationService) string {
-	return s.base.Put(setupAndConfigurationService, false, nil)
-}
-func (s Service) CommitChanges() string {
-	header := s.base.WSManMessageCreator.CreateHeader(string(actions.CommitChanges), AMT_SetupAndConfigurationService, nil, "", "")
-	body := s.base.WSManMessageCreator.CreateBody("CommitChanges_INPUT", AMT_SetupAndConfigurationService, nil)
-	return s.base.WSManMessageCreator.CreateXML(header, body)
-}
+// // Put will change properties of the selected instance
+// func (s Service) Put(setupAndConfigurationService SetupAndConfigurationService) string {
+// 	return s.base.Put(setupAndConfigurationService, false, nil)
+// }
+// func (s Service) CommitChanges() string {
+// 	header := s.base.WSManMessageCreator.CreateHeader(string(actions.CommitChanges), AMT_SetupAndConfigurationService, nil, "", "")
+// 	body := s.base.WSManMessageCreator.CreateBody("CommitChanges_INPUT", AMT_SetupAndConfigurationService, nil)
+// 	return s.base.WSManMessageCreator.CreateXML(header, body)
+// }
 
-func (s Service) GetUuid() string {
-	header := s.base.WSManMessageCreator.CreateHeader(string(actions.GetUuid), AMT_SetupAndConfigurationService, nil, "", "")
-	body := s.base.WSManMessageCreator.CreateBody("GetUuid_INPUT", AMT_SetupAndConfigurationService, nil)
-	return s.base.WSManMessageCreator.CreateXML(header, body)
-}
+// func (s Service) GetUuid() string {
+// 	header := s.base.WSManMessageCreator.CreateHeader(string(actions.GetUuid), AMT_SetupAndConfigurationService, nil, "", "")
+// 	body := s.base.WSManMessageCreator.CreateBody("GetUuid_INPUT", AMT_SetupAndConfigurationService, nil)
+// 	return s.base.WSManMessageCreator.CreateXML(header, body)
+// }
 
-func (s Service) SetMEBXPassword(password string) string {
-	header := s.base.WSManMessageCreator.CreateHeader(string(actions.SetMEBxPassword), AMT_SetupAndConfigurationService, nil, "", "")
-	body := fmt.Sprintf(`<Body><h:SetMEBxPassword_INPUT xmlns:h="%s%s"><h:Password>%s</h:Password></h:SetMEBxPassword_INPUT></Body>`, s.base.WSManMessageCreator.ResourceURIBase, AMT_SetupAndConfigurationService, password)
-	return s.base.WSManMessageCreator.CreateXML(header, body)
-}
+// func (s Service) SetMEBXPassword(password string) string {
+// 	header := s.base.WSManMessageCreator.CreateHeader(string(actions.SetMEBxPassword), AMT_SetupAndConfigurationService, nil, "", "")
+// 	body := fmt.Sprintf(`<Body><h:SetMEBxPassword_INPUT xmlns:h="%s%s"><h:Password>%s</h:Password></h:SetMEBxPassword_INPUT></Body>`, s.base.WSManMessageCreator.ResourceURIBase, AMT_SetupAndConfigurationService, password)
+// 	return s.base.WSManMessageCreator.CreateXML(header, body)
+// }
 
-func (s Service) Unprovision(provisioningMode int) string {
-	if provisioningMode == 0 {
-		provisioningMode = 1
-	}
-	header := s.base.WSManMessageCreator.CreateHeader(string(actions.Unprovision), AMT_SetupAndConfigurationService, nil, "", "")
-	body := fmt.Sprintf(`<Body><h:Unprovision_INPUT xmlns:h="%s%s"><h:ProvisioningMode>%d</h:ProvisioningMode></h:Unprovision_INPUT></Body>`, s.base.WSManMessageCreator.ResourceURIBase, AMT_SetupAndConfigurationService, provisioningMode)
-	return s.base.WSManMessageCreator.CreateXML(header, body)
-}
+// func (s Service) Unprovision(provisioningMode int) string {
+// 	if provisioningMode == 0 {
+// 		provisioningMode = 1
+// 	}
+// 	header := s.base.WSManMessageCreator.CreateHeader(string(actions.Unprovision), AMT_SetupAndConfigurationService, nil, "", "")
+// 	body := fmt.Sprintf(`<Body><h:Unprovision_INPUT xmlns:h="%s%s"><h:ProvisioningMode>%d</h:ProvisioningMode></h:Unprovision_INPUT></Body>`, s.base.WSManMessageCreator.ResourceURIBase, AMT_SetupAndConfigurationService, provisioningMode)
+// 	return s.base.WSManMessageCreator.CreateXML(header, body)
+// }
