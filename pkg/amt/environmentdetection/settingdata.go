@@ -69,7 +69,6 @@ func NewEnvironmentDetectionSettingData(wsmanMessageCreator *message.WSManMessag
 
 // Get retrieves the representation of the instance
 func (sd SettingData) Get() (response Response, err error) {
-
 	response = Response{
 		Message: &wsman.Message{
 			XMLInput: sd.base.Get(nil),
@@ -93,7 +92,6 @@ func (sd SettingData) Get() (response Response, err error) {
 
 // Enumerates the instances of this class
 func (sd SettingData) Enumerate() (response Response, err error) {
-
 	response = Response{
 		Message: &wsman.Message{
 			XMLInput: sd.base.Enumerate(),
@@ -115,11 +113,11 @@ func (sd SettingData) Enumerate() (response Response, err error) {
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (EnvironmentDetectionSettingData SettingData) Pull(enumerationContext string) string {
-	return EnvironmentDetectionSettingData.base.Pull(enumerationContext)
-}
+// func (EnvironmentDetectionSettingData SettingData) Pull(enumerationContext string) string {
+// 	return EnvironmentDetectionSettingData.base.Pull(enumerationContext)
+// }
 
-// Put will change properties of the selected instance
-func (EnvironmentDetectionSettingData SettingData) Put(environmentDetectionSettingData EnvironmentDetectionSettingData) string {
-	return EnvironmentDetectionSettingData.base.Put(environmentDetectionSettingData, false, nil)
-}
+// // Put will change properties of the selected instance
+// func (EnvironmentDetectionSettingData SettingData) Put(environmentDetectionSettingData EnvironmentDetectionSettingData) string {
+// 	return EnvironmentDetectionSettingData.base.Put(environmentDetectionSettingData, false, nil)
+// }
