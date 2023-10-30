@@ -14,8 +14,7 @@
             <g:ElementName>Intel(r) AMT Redirection Service</g:ElementName>
             <g:EnabledState>32771</g:EnabledState>
             <g:ListenerEnabled>true</g:ListenerEnabled>
-            <g:Name>Intel(r) AMT Redirection Service
-            </g:Name>
+            <g:Name>Intel(r) AMT Redirection Service</g:Name>
             <g:SystemCreationClassName>CIM_ComputerSystem</g:SystemCreationClassName>
             <g:SystemName>Intel(r) AMT</g:SystemName>
         </g:AMT_RedirectionService>

@@ -54,7 +54,7 @@ func TestAMT_RedirectionService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := MockClient{} 
+	client := MockClient{}
 	elementUnderTest := NewRedirectionServiceWithClient(wsmanMessageCreator, &client)
 
 	t.Run("amt_* Tests", func(t *testing.T) {
@@ -83,7 +83,7 @@ func TestAMT_RedirectionService(t *testing.T) {
 						ElementName:             "Intel(r) AMT Redirection Service",
 						EnabledState:            32771,
 						ListenerEnabled:         true,
-						Name:                    "Intel(r) AMT Redirection Service            ",
+						Name:                    "Intel(r) AMT Redirection Service",
 						SystemCreationClassName: "CIM_ComputerSystem",
 						SystemName:              "Intel(r) AMT",
 					},
