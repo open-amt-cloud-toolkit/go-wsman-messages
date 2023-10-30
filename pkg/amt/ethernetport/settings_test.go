@@ -15,9 +15,8 @@ import (
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
-	"github.com/stretchr/testify/assert"
-	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
+	"github.com/stretchr/testify/assert"
 )
 
 type MockClient struct {
@@ -52,13 +51,9 @@ func (c *MockClient) Post(msg string) ([]byte, error) {
 }
 func TestAMT_EthernetPortSettings(t *testing.T) {
 	messageID := 0
-	//selector := &Selector{Name: "InstanceID", Value: "Intel(r) AMT Ethernet Port Settings 0"}
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := MockClient{} // wsman.NewClient("http://localhost:16992/wsman", "admin", "P@ssw0rd", true)
-	//elementUnderTest := NewServiceWithClient(wsmanMessageCreator, &client)
-	// enumerationId := ""
-	//client := wsman.NewClient("http://localhost:1699/wsman", "admin", "Intel123!", true)
+	client := MockClient{}
 	elementUnderTest := NewEthernetPortSettingsWithClient(wsmanMessageCreator, &client)
 
 	t.Run("amt_* Tests", func(t *testing.T) {
@@ -78,7 +73,6 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 				"",
 				func() (Response, error) {
 					currentMessage = "Get"
-					//return elementUnderTest.Get(selector)
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -129,7 +123,6 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
-				//println(response.XMLOutput)
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.Body)

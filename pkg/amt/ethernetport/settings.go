@@ -47,20 +47,6 @@ type (
 		SubnetMask             string
 	}
 )
-
-/*
-	type Selector struct {
-		XMLName xml.Name `xml:"w:Selector,omitempty"`
-		Name    string   `xml:"Name,attr"`
-		Value   string   `xml:",chardata"`
-	}
-
-	type Selector_OUTPUT struct {
-		XMLName xml.Name `xml:"Selector,omitempty"`
-		Name    string   `xml:"Name,attr"`
-		Value   string   `xml:",chardata"`
-	}
-*/
 type EthernetPortSettings struct {
 	models.SettingData
 	VLANTag                      int
@@ -172,11 +158,9 @@ func NewEthernetPortSettings(wsmanMessageCreator *message.WSManMessageCreator) S
 }
 
 // Get retrieves the representation of the instance
-// func (s Settings) Get(selector *Selector) (response Response, err error) {
 func (s Settings) Get() (response Response, err error) {
 	response = Response{
 		Message: &wsman.Message{
-			//XMLInput: s.base.Get((*message.Selector)(selector)),
 			XMLInput: s.base.Get(nil),
 		},
 	}
@@ -218,12 +202,12 @@ func (s Settings) Enumerate() (response Response, err error) {
 	return
 }
 
-// Pulls instances of this class, following an Enumerate operation
-func (EthernetPortSettings Settings) Pull(enumerationContext string) string {
-	return EthernetPortSettings.base.Pull(enumerationContext)
-}
+// // Pulls instances of this class, following an Enumerate operation
+// func (EthernetPortSettings Settings) Pull(enumerationContext string) string {
+// 	return EthernetPortSettings.base.Pull(enumerationContext)
+// }
 
-// Put will change properties of the selected instance
-func (EthernetPortSettings Settings) Put(ethernetPortSettings EthernetPortSettings) string {
-	return EthernetPortSettings.base.Put(ethernetPortSettings, false, nil)
-}
+// // Put will change properties of the selected instance
+// func (EthernetPortSettings Settings) Put(ethernetPortSettings EthernetPortSettings) string {
+// 	return EthernetPortSettings.base.Put(ethernetPortSettings, false, nil)
+// }
