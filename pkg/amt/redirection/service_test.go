@@ -17,7 +17,6 @@ import (
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
-	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
 )
 
@@ -55,10 +54,7 @@ func TestAMT_RedirectionService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := MockClient{} // wsman.NewClient("http://localhost:16992/wsman", "admin", "P@ssw0rd", true)
-	//elementUnderTest := NewServiceWithClient(wsmanMessageCreator, &client)
-	// enumerationId := ""
-	//client := wsman.NewClient("http://localhost:16992/wsman", "admin", "Intel123!", true)
+	client := MockClient{} 
 	elementUnderTest := NewRedirectionServiceWithClient(wsmanMessageCreator, &client)
 
 	t.Run("amt_* Tests", func(t *testing.T) {
@@ -118,8 +114,6 @@ func TestAMT_RedirectionService(t *testing.T) {
 				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
-				//println(response.XMLInput)
-				//println(response.XMLOutput)
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.Body)
