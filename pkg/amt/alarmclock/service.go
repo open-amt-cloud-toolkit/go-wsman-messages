@@ -20,8 +20,6 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
 
-const AMT_AlarmClockService = "AMT_AlarmClockService"
-
 // INPUTS
 
 // AlarmClockOccurrence represents a single alarm clock setting
@@ -95,6 +93,8 @@ func (w *Response) JSON() string {
 	}
 	return string(jsonOutput)
 }
+
+const AMT_AlarmClockService = "AMT_AlarmClockService"
 
 type Service struct {
 	base   message.Base
