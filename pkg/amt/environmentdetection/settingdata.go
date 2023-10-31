@@ -34,6 +34,7 @@ type (
 		InstanceID       string
 	}
 )
+
 // type EnvironmentDetectionSettingData struct {
 // 	models.SettingData
 // 	DetectionAlgorithm         DetectionAlgorithm
