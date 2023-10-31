@@ -6,7 +6,6 @@
 package authorization
 
 import (
-	"encoding/json"
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
@@ -69,14 +68,6 @@ const (
 )
 
 type RealmValues int
-
-func (w *Response) JSON() string {
-	jsonOutput, err := json.Marshal(w.Body)
-	if err != nil {
-		return ""
-	}
-	return string(jsonOutput)
-}
 
 const AMT_AuthorizationService = "AMT_AuthorizationService"
 
