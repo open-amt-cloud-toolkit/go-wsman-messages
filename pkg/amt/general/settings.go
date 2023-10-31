@@ -15,7 +15,6 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
 
-
 const AMT_GeneralSettings = "AMT_GeneralSettings"
 
 type (
@@ -100,7 +99,7 @@ func (w *Response) JSON() string {
 }
 
 type Settings struct {
-	base message.Base
+	base   message.Base
 	client wsman.WSManClient
 }
 

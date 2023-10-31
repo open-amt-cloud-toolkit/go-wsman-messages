@@ -13,11 +13,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsmantesting"
+	"github.com/stretchr/testify/assert"
 )
 
 type MockClient struct {
@@ -54,15 +54,15 @@ func TestAMT_GeneralSettings(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	
+
 	client := MockClient{}
 	elementUnderTest := NewGeneralSettingsWithClient(wsmanMessageCreator, &client)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
-			name         string
-			method       string
-			action       string
-			body         string
+			name             string
+			method           string
+			action           string
+			body             string
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
@@ -80,7 +80,7 @@ func TestAMT_GeneralSettings(t *testing.T) {
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					AMTGeneralSettings: GeneralSettings{
 						XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings", Local: "AMT_GeneralSettings"},
-						SettingData:            	   models.SettingData{InstanceID: "Intel(r) AMT: General Settings", ManagedElement: models.ManagedElement{ElementName: ""}},
+						SettingData:                   models.SettingData{InstanceID: "Intel(r) AMT: General Settings", ManagedElement: models.ManagedElement{ElementName: ""}},
 						AMTNetworkEnabled:             1,
 						DDNSPeriodicUpdateInterval:    1440,
 						DDNSTTL:                       900,
@@ -116,29 +116,29 @@ func TestAMT_GeneralSettings(t *testing.T) {
 					currentMessage = "Enumerate"
 					return elementUnderTest.Enumerate()
 				},
-				Body{ 
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "14000000-0000-0000-0000-000000000000",
 					},
-			  	},
+				},
 			},
 			//PULLS
-		// 	{
-		// 		"should create a valid AMT_GeneralSettings Pull wsman message",
-		// 		"AMT_GeneralSettings",
-		// 		wsmantesting.PULL,
-		// 		wsmantesting.PULL_BODY,
-		// 		func() (Response, error) {
-		// 			currentMessage = "Pull"
-		// 			wsmantesting.EnumerationContext
-		// 			return elementUnderTest.Pull("14000000-0000-0000-0000-000000000000")
-		// 		},
-		// 		Body{ 
-		// 			XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-		// 		},
-		// 	},
-		// }
+			// 	{
+			// 		"should create a valid AMT_GeneralSettings Pull wsman message",
+			// 		"AMT_GeneralSettings",
+			// 		wsmantesting.PULL,
+			// 		wsmantesting.PULL_BODY,
+			// 		func() (Response, error) {
+			// 			currentMessage = "Pull"
+			// 			wsmantesting.EnumerationContext
+			// 			return elementUnderTest.Pull("14000000-0000-0000-0000-000000000000")
+			// 		},
+			// 		Body{
+			// 			XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+			// 		},
+			// 	},
+			// }
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
