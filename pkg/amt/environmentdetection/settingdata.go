@@ -9,6 +9,7 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 )
@@ -35,19 +36,19 @@ type (
 	}
 )
 
-// type EnvironmentDetectionSettingData struct {
-// 	models.SettingData
-// 	DetectionAlgorithm         DetectionAlgorithm
-// 	DetectionStrings           []string
-// 	DetectionIPv6LocalPrefixes []string
-// }
+type EnvironmentDetectionSettingData struct {
+	models.SettingData
+	DetectionAlgorithm         DetectionAlgorithm
+	DetectionStrings           []string
+	DetectionIPv6LocalPrefixes []string
+}
 
-// type DetectionAlgorithm uint8
+type DetectionAlgorithm uint8
 
-// const (
-// 	LocalDomains DetectionAlgorithm = iota
-// 	RemoteURLs
-// )
+const (
+	LocalDomains DetectionAlgorithm = iota
+	RemoteURLs
+)
 
 type SettingData struct {
 	base   message.Base
