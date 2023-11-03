@@ -53,6 +53,7 @@ func (c *authChallenge) response(method, uri, cnonce string) (string, error) {
 	c.NonceCount++
 
 	if strings.Contains(c.Qop, "auth") || c.Qop == "" {
+		nonceData := c.Nonce
 		if strings.Contains(c.Qop, "auth") {
 			if cnonce != "" {
 				c.CNonce = cnonce
@@ -63,15 +64,12 @@ func (c *authChallenge) response(method, uri, cnonce string) (string, error) {
 				}
 				c.CNonce = fmt.Sprintf("%x", b)[:16]
 			}
+			c.Qop = "auth"
+			nonceData = fmt.Sprintf("%s:%08x:%s:%s", nonceData, c.NonceCount, c.CNonce, c.Qop)
 		}
 
 		hashedCredentials := c.hashCredentials()
 		hashedURI := c.hashURI(method, uri)
-		nonceData := c.Nonce
-		if strings.Contains(c.Qop, "auth") {
-			c.Qop = "auth"
-			nonceData = fmt.Sprintf("%s:%08x:%s:%s", nonceData, c.NonceCount, c.CNonce, c.Qop)
-		}
 		response := hashWithHash(hashedCredentials, fmt.Sprintf("%s:%s", nonceData, hashedURI))
 
 		return response, nil
