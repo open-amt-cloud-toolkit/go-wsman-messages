@@ -17,6 +17,7 @@ import (
 
 const AMT_GeneralSettings = "AMT_GeneralSettings"
 
+// OUTPUTS
 type (
 	Response struct {
 		*wsman.Message
