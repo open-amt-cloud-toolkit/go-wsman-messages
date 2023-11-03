@@ -16,6 +16,8 @@ import (
 const ContentType = "application/soap+xml; charset=utf-8"
 const NS_WSMAN = "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"
 const NS_WSMID = "http://schemas.dmtf.org/wbem/wsman/identity/1/wsmanidentity.xsd"
+const TLSPort = "16993"
+const NonTLSPort = "16992"
 
 type Message struct {
 	XMLInput  string
@@ -38,16 +40,26 @@ type Client struct {
 	challenge    *authChallenge
 }
 
-func NewClient(target, username, password string, useDigest bool) *Client {
+func NewClient(target, username, password string, useDigest, useTLS, selfSignedAllowed bool) *Client {
+	path := "/wsman"
+	port := NonTLSPort
+	if useTLS {
+		port = TLSPort
+	}
+	protocol := "http"
+	if port == TLSPort {
+		protocol = "https"
+	}
 	res := &Client{
-		endpoint:  target,
+		endpoint:  protocol + "://" + target + ":" + port + path,
 		username:  username,
 		password:  password,
 		useDigest: useDigest,
 	}
+
 	res.Timeout = 10 * time.Second
 	res.Transport = &http.Transport{
-		TLSClientConfig: &tls.Config{},
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: selfSignedAllowed},
 	}
 	if res.useDigest {
 		res.challenge = &authChallenge{Username: res.username, Password: res.password}
@@ -57,7 +69,6 @@ func NewClient(target, username, password string, useDigest bool) *Client {
 
 // Post overrides http.Client's Post method
 func (c *Client) Post(msg string) (response []byte, err error) {
-
 	msgBody := []byte(msg)
 	bodyReader := bytes.NewReader(msgBody)
 	req, err := http.NewRequest("POST", c.endpoint, bodyReader)
@@ -67,6 +78,7 @@ func (c *Client) Post(msg string) (response []byte, err error) {
 
 	if c.username != "" && c.password != "" {
 		if c.useDigest {
+
 			auth, err := c.challenge.authorize("POST", c.endpoint)
 			if err != nil {
 				return nil, fmt.Errorf("failed digest auth %v", err)

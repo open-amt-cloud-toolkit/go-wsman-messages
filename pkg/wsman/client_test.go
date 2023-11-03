@@ -13,14 +13,17 @@ import (
 )
 
 func TestNewClient(t *testing.T) {
-	target := "https://example.com/wsman"
+	target := "example.com"
+	expectdedTarget := "http://example.com:16992/wsman"
 	username := "user"
 	password := "password"
 	useDigest := false
+	useTLS := false
+	selfSignedAllowed := false
 
-	client := NewClient(target, username, password, useDigest)
+	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
 
-	if client.endpoint != target {
+	if client.endpoint != expectdedTarget {
 		t.Errorf("Expected endpoint to be %s, but got %s", target, client.endpoint)
 	}
 	if client.username != username {
@@ -46,9 +49,13 @@ func TestClient_Post(t *testing.T) {
 	username := "user"
 	password := "password"
 	useDigest := false
+	useTLS := false
+	selfSignedAllowed := false
 
-	client := NewClient(target, username, password, useDigest)
+	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
 	msg := "<SampleRequest>Request</SampleRequest>"
+
+	client.endpoint = ts.URL
 
 	response, err := client.Post(msg)
 	if err != nil {
@@ -91,10 +98,13 @@ func TestClient_PostWithDigestAuth(t *testing.T) {
 	username := "user"
 	password := "password"
 	useDigest := true
+	useTLS := false
+	selfSignedAllowed := false
 
-	client := NewClient(target, username, password, useDigest)
+	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
+	client.endpoint = ts.URL
 	response, err := client.Post(msg)
 	if err != nil {
 		t.Errorf("Unexpected error during POST with digest auth: %v", err)
@@ -117,10 +127,13 @@ func TestClient_PostWithDigestAuthUnauthorized(t *testing.T) {
 	username := "wronguser"
 	password := "wrongpassword"
 	useDigest := true
+	useTLS := false
+	selfSignedAllowed := false
 
-	client := NewClient(target, username, password, useDigest)
+	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
+	client.endpoint = ts.URL
 	_, err := client.Post(msg)
 	if err == nil {
 		t.Error("Expected error during POST with wrong digest auth credentials, but got nil")
@@ -145,10 +158,13 @@ func TestClient_PostWithBasicAuth(t *testing.T) {
 	username := "user"
 	password := "password"
 	useDigest := false
+	useTLS := false
+	selfSignedAllowed := false
 
-	client := NewClient(target, username, password, useDigest)
+	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
+	client.endpoint = ts.URL
 	response, err := client.Post(msg)
 	if err != nil {
 		t.Errorf("Unexpected error during POST with basic auth: %v", err)
@@ -169,10 +185,13 @@ func TestClient_PostUnauthorized(t *testing.T) {
 	username := "wronguser"
 	password := "wrongpassword"
 	useDigest := false
+	useTLS := false
+	selfSignedAllowed := false
 
-	client := NewClient(target, username, password, useDigest)
+	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
+	client.endpoint = ts.URL
 	_, err := client.Post(msg)
 	if err == nil {
 		t.Error("Expected error during POST with wrong credentials, but got nil")
@@ -191,10 +210,13 @@ func TestClient_PostInvalidResponse(t *testing.T) {
 	username := "user"
 	password := "password"
 	useDigest := false
+	useTLS := false
+	selfSignedAllowed := false
 
-	client := NewClient(target, username, password, useDigest)
+	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
+	client.endpoint = ts.URL
 	_, err := client.Post(msg)
 	if err == nil {
 		t.Error("Expected error during POST with invalid response, but got nil")

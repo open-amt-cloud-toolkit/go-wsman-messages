@@ -69,3 +69,36 @@ func TestAuthChallenge_HashURI(t *testing.T) {
 		assert.Equal(t, tc.expected, actual)
 	}
 }
+
+func TestResponse(t *testing.T) {
+	c := &authChallenge{}
+	testCases := []struct {
+		method   string
+		uri      string
+		cnonce   string
+		expected string
+	}{
+		{"POST", "/path", "1b2311bfa21bfd81", "b9c5d3509b8a70d95a6204668265e6f9"},
+	}
+
+	for _, tc := range testCases {
+		actual, _ := c.response(tc.method, tc.uri, tc.cnonce)
+		assert.Equal(t, tc.expected, actual)
+	}
+}
+
+func TestAuthorize(t *testing.T) {
+	c := &authChallenge{}
+	testCases := []struct {
+		method   string
+		uri      string
+		expected string
+	}{
+		{"POST", "/path", "Digest username=\"\", realm=\"\", nonce=\"\", uri=\"/path\", response=\"b9c5d3509b8a70d95a6204668265e6f9\""},
+	}
+
+	for _, tc := range testCases {
+		actual, _ := c.authorize(tc.method, tc.uri)
+		assert.Equal(t, tc.expected, actual)
+	}
+}
