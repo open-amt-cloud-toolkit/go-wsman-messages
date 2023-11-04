@@ -28,6 +28,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/tls"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/userinitiatedconnection"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/wifiportconfiguration"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
 type Messages struct {
@@ -61,7 +62,7 @@ type Messages struct {
 	WiFiPortConfigurationService    wifiportconfiguration.Service
 }
 
-func NewMessages() Messages {
+func NewMessages(client *client.Client) Messages {
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	m := Messages{

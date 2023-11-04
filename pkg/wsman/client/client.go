@@ -2,7 +2,7 @@
  * Copyright (c) Intel Corporation 2023
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
-package wsman
+package client
 
 import (
 	"bytes"
@@ -40,7 +40,7 @@ type Client struct {
 	challenge    *authChallenge
 }
 
-func NewClient(target, username, password string, useDigest, useTLS, selfSignedAllowed bool) *Client {
+func NewWsmanClient(target, username, password string, useDigest, useTLS, selfSignedAllowed bool) *Client {
 	path := "/wsman"
 	port := NonTLSPort
 	if useTLS {

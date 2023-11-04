@@ -10,14 +10,14 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
 type (
 	Response struct {
-		*wsman.Message
+		*client.Message
 		XMLName xml.Name       `xml:"Envelope"`
 		Header  message.Header `xml:"Header"`
 		Body    Body           `xml:"Body"`
@@ -58,10 +58,10 @@ func (w *Response) JSON() string {
 
 type SettingData struct {
 	base   message.Base
-	client wsman.WSManClient
+	client client.WSManClient
 }
 
-func NewTLSSettingDataWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) SettingData {
+func NewTLSSettingDataWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSManClient) SettingData {
 	return SettingData{
 		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_TLSSettingData, client),
 		client: client,
@@ -77,7 +77,7 @@ func NewTLSSettingData(wsmanMessageCreator *message.WSManMessageCreator) Setting
 // Get retrieves the representation of the instance
 func (TLSSettingData SettingData) Get() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: TLSSettingData.base.Get(nil),
 		},
 	}
@@ -100,7 +100,7 @@ func (TLSSettingData SettingData) Get() (response Response, err error) {
 // Enumerates the instances of this class
 func (TLSSettingData SettingData) Enumerate() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: TLSSettingData.base.Enumerate(),
 		},
 	}

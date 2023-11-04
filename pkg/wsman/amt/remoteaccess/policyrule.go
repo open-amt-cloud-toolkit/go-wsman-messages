@@ -10,7 +10,7 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
@@ -18,7 +18,7 @@ const AMT_RemoteAccessPolicyRule = "AMT_RemoteAccessPolicyRule"
 
 type (
 	ResponseRule struct {
-		*wsman.Message
+		*client.Message
 		XMLName  xml.Name       `xml:"Envelope"`
 		Header   message.Header `xml:"Header"`
 		BodyRule BodyRule       `xml:"Body"`
@@ -58,7 +58,7 @@ const (
 
 type PolicyRule struct {
 	base         message.Base
-	clientPolicy wsman.WSManClient
+	clientPolicy client.WSManClient
 }
 
 func (w *ResponseRule) JSONRule() string {
@@ -69,7 +69,7 @@ func (w *ResponseRule) JSONRule() string {
 	return string(jsonOutput)
 }
 
-func NewPolicyRuleWithClient(wsmanMessageCreator *message.WSManMessageCreator, clientPolicy wsman.WSManClient) PolicyRule {
+func NewPolicyRuleWithClient(wsmanMessageCreator *message.WSManMessageCreator, clientPolicy client.WSManClient) PolicyRule {
 	return PolicyRule{
 		base:         message.NewBaseWithClient(wsmanMessageCreator, AMT_RemoteAccessPolicyRule, clientPolicy),
 		clientPolicy: clientPolicy,
@@ -85,7 +85,7 @@ func NewRemoteAccessPolicyRule(wsmanMessageCreator *message.WSManMessageCreator)
 // Get retrieves the representation of the instance
 func (RemoteAccessPolicyRule PolicyRule) Get() (response ResponseRule, err error) {
 	response = ResponseRule{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: RemoteAccessPolicyRule.base.Get(nil),
 		},
 	}
@@ -106,7 +106,7 @@ func (RemoteAccessPolicyRule PolicyRule) Get() (response ResponseRule, err error
 // Enumerates the instances of this class
 func (RemoteAccessPolicyRule PolicyRule) Enumerate() (response ResponseRule, err error) {
 	response = ResponseRule{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: RemoteAccessPolicyRule.base.Enumerate(),
 		},
 	}

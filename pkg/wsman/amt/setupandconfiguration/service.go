@@ -10,7 +10,7 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
@@ -19,7 +19,7 @@ const AMT_SetupAndConfigurationService = "AMT_SetupAndConfigurationService"
 
 type (
 	Response struct {
-		*wsman.Message
+		*client.Message
 		XMLName xml.Name       `xml:"Envelope"`
 		Header  message.Header `xml:"Header"`
 		Body    Body           `xml:"Body"`
@@ -89,7 +89,7 @@ func (w *Response) JSON() string {
 
 type Service struct {
 	base   message.Base
-	client wsman.WSManClient
+	client client.WSManClient
 }
 
 func NewSetupAndConfigurationService(wsmanMessageCreator *message.WSManMessageCreator) Service {
@@ -99,7 +99,7 @@ func NewSetupAndConfigurationService(wsmanMessageCreator *message.WSManMessageCr
 	}
 }
 
-func NewSetupAndConfigurationServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) Service {
+func NewSetupAndConfigurationServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSManClient) Service {
 	return Service{
 		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_SetupAndConfigurationService, client),
 		client: client,
@@ -107,7 +107,7 @@ func NewSetupAndConfigurationServiceWithClient(wsmanMessageCreator *message.WSMa
 }
 func (s Service) Get() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: s.base.Get(nil),
 		},
 	}
@@ -130,7 +130,7 @@ func (s Service) Get() (response Response, err error) {
 // Enumerates the instances of this class
 func (s Service) Enumerate() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: s.base.Enumerate(),
 		},
 	}

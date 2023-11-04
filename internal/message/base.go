@@ -8,7 +8,7 @@ package message
 import (
 	"fmt"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
+	wsman "github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
 type Base struct {

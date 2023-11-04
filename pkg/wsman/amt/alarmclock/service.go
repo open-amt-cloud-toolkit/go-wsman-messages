@@ -14,9 +14,9 @@ import (
 	"time"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/actions"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
@@ -39,7 +39,7 @@ type AlarmClockOccurrence struct {
 // OUTPUTS
 type (
 	Response struct {
-		*wsman.Message
+		*client.Message
 		XMLName xml.Name       `xml:"Envelope"`
 		Header  message.Header `xml:"Header"`
 		Body    Body           `xml:"Body"`
@@ -98,7 +98,7 @@ const AMT_AlarmClockService = "AMT_AlarmClockService"
 
 type Service struct {
 	base   message.Base
-	client wsman.WSManClient
+	client client.WSManClient
 }
 
 func NewService(wsmanMessageCreator *message.WSManMessageCreator) Service {
@@ -107,7 +107,7 @@ func NewService(wsmanMessageCreator *message.WSManMessageCreator) Service {
 		client: nil,
 	}
 }
-func NewServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) Service {
+func NewServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSManClient) Service {
 	return Service{
 		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_AlarmClockService, client),
 		client: client,
@@ -118,7 +118,7 @@ func NewServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, clie
 func (acs Service) Get() (response Response, err error) {
 
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: acs.base.Get(nil),
 		},
 	}
@@ -141,7 +141,7 @@ func (acs Service) Get() (response Response, err error) {
 // Enumerates the instances of this class
 func (acs Service) Enumerate() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: acs.base.Enumerate(),
 		},
 	}
@@ -163,7 +163,7 @@ func (acs Service) Enumerate() (response Response, err error) {
 // Pulls instances of this class, following an Enumerate operation
 func (acs Service) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: acs.base.Pull(enumerationContext),
 		},
 	}
@@ -224,7 +224,7 @@ func (acs Service) AddAlarm(alarmClockOccurrence AlarmClockOccurrence) (response
 	body.WriteString(`</s:DeleteOnCompletion></p:AlarmTemplate></p:AddAlarm_INPUT></Body>`)
 
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: acs.base.WSManMessageCreator.CreateXML(header, body.String()),
 		},
 	}

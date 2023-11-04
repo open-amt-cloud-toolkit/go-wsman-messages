@@ -9,6 +9,7 @@ import (
 	// "reflect"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/alarmclock"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/hostbasedsetup"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/ieee8021x"
@@ -24,7 +25,7 @@ type Messages struct {
 	IEEE8021xSettings          ieee8021x.Settings
 }
 
-func NewMessages() Messages {
+func NewMessages(client *client.Client) Messages {
 	resourceUriBase := "http://intel.com/wbem/wscim/1/ips-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	m := Messages{
