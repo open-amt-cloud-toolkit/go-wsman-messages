@@ -62,6 +62,7 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 			method           string
 			action           string
 			body             string
+			extraHeader      string
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
@@ -71,9 +72,14 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 				"AMT_EthernetPortSettings",
 				wsmantesting.GET,
 				"",
+				"<w:SelectorSet><w:Selector Name=\"test\">test</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
 					currentMessage = "Get"
-					return elementUnderTest.Get()
+					selector := Selector{
+						Name:  "test",
+						Value: "test",
+					}
+					return elementUnderTest.Get(selector)
 				},
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
@@ -103,6 +109,7 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 				"AMT_EthernetPortSettings",
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
+				"",
 				func() (Response, error) {
 					currentMessage = "Enumerate"
 					return elementUnderTest.Enumerate()
@@ -120,7 +127,7 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
