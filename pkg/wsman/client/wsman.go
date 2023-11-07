@@ -40,7 +40,7 @@ type Client struct {
 	challenge    *authChallenge
 }
 
-func NewWsmanClient(target, username, password string, useDigest, useTLS, selfSignedAllowed bool) *Client {
+func NewWsman(target, username, password string, useDigest, useTLS, selfSignedAllowed bool) *Client {
 	path := "/wsman"
 	port := NonTLSPort
 	if useTLS {

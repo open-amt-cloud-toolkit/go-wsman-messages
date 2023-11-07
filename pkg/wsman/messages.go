@@ -29,7 +29,7 @@ type ClientParameters struct {
 }
 
 func NewMessages(cp ClientParameters) Messages {
-	client := client.NewWsmanClient(cp.Target, cp.Username, cp.Password, cp.UseDigest, cp.UseTLS, cp.SelfSignedAllowed)
+	client := client.NewWsman(cp.Target, cp.Username, cp.Password, cp.UseDigest, cp.UseTLS, cp.SelfSignedAllowed)
 	m := Messages{
 		client: client,
 	}
