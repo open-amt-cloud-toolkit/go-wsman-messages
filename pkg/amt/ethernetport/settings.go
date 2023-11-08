@@ -71,6 +71,8 @@ type EthernetPortSettings struct {
 	PhysicalNicMedium            PhysicalNicMedium
 }
 
+type Selector message.Selector
+
 type LinkPolicyValues int
 
 func (w *Response) JSON() string {
@@ -158,10 +160,10 @@ func NewEthernetPortSettings(wsmanMessageCreator *message.WSManMessageCreator) S
 }
 
 // Get retrieves the representation of the instance
-func (s Settings) Get() (response Response, err error) {
+func (s Settings) Get(selector Selector) (response Response, err error) {
 	response = Response{
 		Message: &wsman.Message{
-			XMLInput: s.base.Get(nil),
+			XMLInput: s.base.Get((*message.Selector)(&selector)),
 		},
 	}
 
