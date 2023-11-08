@@ -52,8 +52,9 @@ func (c *authChallenge) hashURI(method, uri string) string {
 func (c *authChallenge) response(method, uri, cnonce string) (string, error) {
 	c.NonceCount++
 
-	if c.Qop == "auth" || c.Qop == "" {
-		if c.Qop == "auth" {
+	if strings.Contains(c.Qop, "auth") || c.Qop == "" {
+		nonceData := c.Nonce
+		if strings.Contains(c.Qop, "auth") {
 			if cnonce != "" {
 				c.CNonce = cnonce
 			} else {
@@ -63,14 +64,12 @@ func (c *authChallenge) response(method, uri, cnonce string) (string, error) {
 				}
 				c.CNonce = fmt.Sprintf("%x", b)[:16]
 			}
+			c.Qop = "auth"
+			nonceData = fmt.Sprintf("%s:%08x:%s:%s", nonceData, c.NonceCount, c.CNonce, c.Qop)
 		}
 
 		hashedCredentials := c.hashCredentials()
 		hashedURI := c.hashURI(method, uri)
-		nonceData := c.Nonce
-		if c.Qop == "auth" {
-			nonceData = fmt.Sprintf("%s:%08x:%s:%s", nonceData, c.NonceCount, c.CNonce, c.Qop)
-		}
 		response := hashWithHash(hashedCredentials, fmt.Sprintf("%s:%s", nonceData, hashedURI))
 
 		return response, nil
@@ -80,7 +79,8 @@ func (c *authChallenge) response(method, uri, cnonce string) (string, error) {
 }
 
 func (c *authChallenge) authorize(method, uri string) (string, error) {
-	if c.Qop != "auth" && c.Qop != "" {
+
+	if !strings.Contains(c.Qop, "auth") && c.Qop != "" {
 		return "", fmt.Errorf("qop not implemented")
 	}
 	response, err := c.response(method, uri, "")
@@ -112,11 +112,11 @@ func (c *authChallenge) authorize(method, uri string) (string, error) {
 		sb.WriteString(`"`)
 	}
 	if c.Qop != "" {
-		sb.WriteString(", qop=")
+		sb.WriteString(`, qop="`)
 		sb.WriteString(c.Qop)
-		sb.WriteString(", nc=")
+		sb.WriteString(`", nc="`)
 		sb.WriteString(fmt.Sprintf("%08x", c.NonceCount))
-		sb.WriteString(`, cnonce="`)
+		sb.WriteString(`", cnonce="`)
 		sb.WriteString(c.CNonce)
 		sb.WriteString(`"`)
 	}
@@ -132,7 +132,7 @@ func (c *authChallenge) parseChallenge(input string) error {
 		return fmt.Errorf("challenge is bad, missing digest prefix: %s", input)
 	}
 	s = strings.Trim(s[7:], ws)
-	sl := strings.Split(s, ",")
+	sl := strings.Split(s, "\",")
 	c.Algorithm = "MD5"
 	var r []string
 	for _, elem := range sl {
