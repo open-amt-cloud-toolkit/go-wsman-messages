@@ -13,10 +13,12 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/hostbasedsetup"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/ieee8021x"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/optin"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
 )
 
 func TestNewMessages(t *testing.T) {
-	m := NewMessages()
+	mock := wsmantesting.ClientMock{}
+	m := NewMessages(&mock)
 
 	if m.wsmanMessageCreator == nil {
 		t.Error("wsmanMessageCreator is not initialized")

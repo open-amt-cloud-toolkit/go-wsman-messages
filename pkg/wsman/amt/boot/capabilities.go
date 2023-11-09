@@ -5,9 +5,7 @@
 
 package boot
 
-import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-)
+import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 
 const AMT_BootCapabilities = "AMT_BootCapabilities"
 

@@ -30,10 +30,12 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/tls"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/userinitiatedconnection"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/wifiportconfiguration"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
 )
 
 func TestNewMessages(t *testing.T) {
-	m := NewMessages()
+	mock := wsmantesting.ClientMock{}
+	m := NewMessages(&mock)
 
 	if m.wsmanMessageCreator == nil {
 		t.Error("wsmanMessageCreator is not initialized")
