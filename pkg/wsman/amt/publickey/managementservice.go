@@ -9,7 +9,7 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
@@ -18,7 +18,7 @@ const AMT_PublicKeyManagementService = "AMT_PublicKeyManagementService"
 
 type (
 	Response struct {
-		*wsman.Message
+		*client.Message
 		XMLName xml.Name       `xml:"Envelope"`
 		Header  message.Header `xml:"Header"`
 		Body    Body           `xml:"Body"`
@@ -108,10 +108,10 @@ const (
 
 type ManagementService struct {
 	base   message.Base
-	client wsman.WSManClient
+	client client.WSMan
 }
 
-func NewPublicKeyManagementServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) ManagementService {
+func NewPublicKeyManagementServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) ManagementService {
 	return ManagementService{
 		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_PublicKeyManagementService, client),
 		client: client,
@@ -128,7 +128,7 @@ func NewPublicKeyManagementService(wsmanMessageCreator *message.WSManMessageCrea
 func (PublicKeyManagementService ManagementService) Get() (response Response, err error) {
 
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: PublicKeyManagementService.base.Get(nil),
 		},
 	}
@@ -152,7 +152,7 @@ func (PublicKeyManagementService ManagementService) Get() (response Response, er
 func (PublicKeyManagementService ManagementService) Enumerate() (response Response, err error) {
 
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: PublicKeyManagementService.base.Enumerate(),
 		},
 	}

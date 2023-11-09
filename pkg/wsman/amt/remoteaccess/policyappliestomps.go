@@ -10,7 +10,7 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
@@ -19,7 +19,7 @@ const AMT_RemoteAccessPolicyAppliesToMPS = "AMT_RemoteAccessPolicyAppliesToMPS"
 
 type (
 	ResponseApplies struct {
-		*wsman.Message
+		*client.Message
 		XMLName     xml.Name       `xml:"Envelope"`
 		Header      message.Header `xml:"Header"`
 		BodyApplies BodyApplies    `xml:"Body"`
@@ -83,7 +83,7 @@ const (
 
 type PolicyAppliesToMPS struct {
 	base   message.Base
-	client wsman.WSManClient
+	client client.WSMan
 }
 
 func (w *ResponseApplies) JSON() string {
@@ -94,7 +94,7 @@ func (w *ResponseApplies) JSON() string {
 	return string(jsonOutput)
 }
 
-func NewRemoteAccessPolicyAppliesToMPSWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) PolicyAppliesToMPS {
+func NewRemoteAccessPolicyAppliesToMPSWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) PolicyAppliesToMPS {
 	return PolicyAppliesToMPS{
 		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_RemoteAccessPolicyAppliesToMPS, client),
 		client: client,
@@ -110,7 +110,7 @@ func NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator *message.WSManMessage
 // Get retrieves the representation of the instance
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Get() (response ResponseApplies, err error) {
 	response = ResponseApplies{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: RemoteAccessPolicyAppliesToMPS.base.Get(nil),
 		},
 	}
@@ -131,7 +131,7 @@ func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Get() (response Respons
 // Enumerates the instances of this class
 func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Enumerate() (response ResponseApplies, err error) {
 	response = ResponseApplies{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: RemoteAccessPolicyAppliesToMPS.base.Enumerate(),
 		},
 	}
