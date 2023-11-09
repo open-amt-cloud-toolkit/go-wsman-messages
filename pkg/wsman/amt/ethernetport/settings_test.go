@@ -122,7 +122,42 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 				},
 			},
 			//PULLS
-			// {"should create a valid AMT_EthernetPortSettings Pull wsman message", "AMT_EthernetPortSettings", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{
+				"should create a valid AMT_EthernetPortSettings Pull wsman message",
+				"AMT_EthernetPortSettings",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				"",
+				func() (Response, error) {
+					currentMessage = "Pull"
+					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponse: PullResponse{
+						Items: []Item{
+							{
+								EthernetPort: EthernetPort{
+									DHCPEnabled:            true,
+									DefaultGateway:         "192.168.6.1",
+									ElementName:            "Intel(r) AMT Ethernet Port Settings",
+									InstanceID:             "Intel(r) AMT Ethernet Port Settings 1",
+									IpSyncEnabled:          true,
+									LinkIsUp:               false,
+									LinkPolicy:             14,
+									MACAddress:             "00-00-00-00-00-00",
+									PhysicalConnectionType: 3,
+									PrimaryDNS:             "192.168.6.1",
+									SharedDynamicIP:        true,
+									SharedMAC:              true,
+									SharedStaticIp:         false,
+									SubnetMask:             "255.255.255.0",
+								},
+							},
+						},
+					},
+				},
+			},
 		}
 
 		for _, test := range tests {

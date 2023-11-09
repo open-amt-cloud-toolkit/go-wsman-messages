@@ -27,6 +27,7 @@ type (
 		XMLName           xml.Name     `xml:"Body"`
 		EthernetPort      EthernetPort `xml:"AMT_EthernetPortSettings"`
 		EnumerateResponse common.EnumerateResponse
+		PullResponse 	  PullResponse 
 	}
 
 	EthernetPort struct {
@@ -45,6 +46,13 @@ type (
 		SharedMAC              bool
 		SharedStaticIp         bool
 		SubnetMask             string
+	}
+
+	PullResponse struct {
+		Items []Item
+	}
+	Item struct{
+		EthernetPort	EthernetPort	`xml:"AMT_EthernetPortSettings"`
 	}
 )
 type EthernetPortSettings struct {
@@ -205,9 +213,26 @@ func (s Settings) Enumerate() (response Response, err error) {
 }
 
 // // Pulls instances of this class, following an Enumerate operation
-// func (EthernetPortSettings Settings) Pull(enumerationContext string) string {
-// 	return EthernetPortSettings.base.Pull(enumerationContext)
-// }
+func (s Settings) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &wsman.Message{
+			XMLInput: s.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = s.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 // // Put will change properties of the selected instance
 // func (EthernetPortSettings Settings) Put(ethernetPortSettings EthernetPortSettings) string {
