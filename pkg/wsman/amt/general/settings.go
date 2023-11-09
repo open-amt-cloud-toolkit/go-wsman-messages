@@ -30,6 +30,7 @@ type (
 		AMTGeneralSettings GeneralSettings `xml:"AMT_GeneralSettings"`
 
 		EnumerateResponse common.EnumerateResponse
+		PullResponse 	  PullResponse
 	}
 	GeneralSettings struct {
 		models.SettingData
@@ -57,6 +58,12 @@ type (
 		ThunderboltDockEnabled        ThunderboltDockEnabled
 		OemID                         int
 		DHCPSyncRequiresHostname      int
+	}
+	PullResponse struct {
+		Items []Item
+	}
+	Item struct {
+		AMTGeneralSettings GeneralSettings `xml:"AMT_GeneralSettings"`
 	}
 )
 
