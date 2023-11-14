@@ -10,7 +10,7 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
@@ -20,7 +20,7 @@ const AMT_UserInitiatedConnectionService = "AMT_UserInitiatedConnectionService"
 
 type (
 	Response struct {
-		*wsman.Message
+		*client.Message
 		XMLName xml.Name       `xml:"Envelope"`
 		Header  message.Header `xml:"Header"`
 		Body    Body           `xml:"Body"`
@@ -58,7 +58,7 @@ func (w *Response) JSON() string {
 
 type Service struct {
 	base   message.Base
-	client wsman.WSManClient
+	client client.WSMan
 }
 
 func NewUserInitiatedConnectionService(wsmanMessageCreator *message.WSManMessageCreator) Service {
@@ -67,7 +67,7 @@ func NewUserInitiatedConnectionService(wsmanMessageCreator *message.WSManMessage
 	}
 }
 
-func NewUserInitiatedConnectionServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) Service {
+func NewUserInitiatedConnectionServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
 	return Service{
 		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_UserInitiatedConnectionService, client),
 		client: client,
@@ -78,7 +78,7 @@ func NewUserInitiatedConnectionServiceWithClient(wsmanMessageCreator *message.WS
 func (UserInitiatedConnectionService Service) Get() (response Response, err error) {
 
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: UserInitiatedConnectionService.base.Get(nil),
 		},
 	}
@@ -101,7 +101,7 @@ func (UserInitiatedConnectionService Service) Get() (response Response, err erro
 // Enumerates the instances of this class
 func (UserInitiatedConnectionService Service) Enumerate() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: UserInitiatedConnectionService.base.Enumerate(),
 		},
 	}

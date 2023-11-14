@@ -10,14 +10,14 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
 type (
 	Response struct {
-		*wsman.Message
+		*client.Message
 		XMLName xml.Name       `xml:"Envelope"`
 		Header  message.Header `xml:"Header"`
 		Body    Body           `xml:"Body"`
@@ -143,10 +143,10 @@ const (
 
 type Settings struct {
 	base   message.Base
-	client wsman.WSManClient
+	client client.WSMan
 }
 
-func NewEthernetPortSettingsWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) Settings {
+func NewEthernetPortSettingsWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Settings {
 	return Settings{
 		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_EthernetPortSettings, client),
 		client: client,
@@ -162,7 +162,7 @@ func NewEthernetPortSettings(wsmanMessageCreator *message.WSManMessageCreator) S
 // Get retrieves the representation of the instance
 func (s Settings) Get(selector Selector) (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: s.base.Get((*message.Selector)(&selector)),
 		},
 	}
@@ -185,7 +185,7 @@ func (s Settings) Get(selector Selector) (response Response, err error) {
 // Enumerates the instances of this class
 func (s Settings) Enumerate() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: s.base.Enumerate(),
 		},
 	}

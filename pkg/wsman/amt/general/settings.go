@@ -10,8 +10,8 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
@@ -20,7 +20,7 @@ const AMT_GeneralSettings = "AMT_GeneralSettings"
 // OUTPUTS
 type (
 	Response struct {
-		*wsman.Message
+		*client.Message
 		XMLName xml.Name       `xml:"Envelope"`
 		Header  message.Header `xml:"Header"`
 		Body    Body           `xml:"Body"`
@@ -108,10 +108,10 @@ func (w *Response) JSON() string {
 
 type Settings struct {
 	base   message.Base
-	client wsman.WSManClient
+	client client.WSMan
 }
 
-func NewGeneralSettingsWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) Settings {
+func NewGeneralSettingsWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Settings {
 	return Settings{
 		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_GeneralSettings, client),
 		client: client,
@@ -127,7 +127,7 @@ func NewGeneralSettings(wsmanMessageCreator *message.WSManMessageCreator) Settin
 // Get retrieves the representation of the instance
 func (GeneralSettings Settings) Get() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: GeneralSettings.base.Get(nil),
 		},
 	}
@@ -148,7 +148,7 @@ func (GeneralSettings Settings) Get() (response Response, err error) {
 // Enumerates the instances of this class
 func (GeneralSettings Settings) Enumerate() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: GeneralSettings.base.Enumerate(),
 		},
 	}
@@ -170,7 +170,7 @@ func (GeneralSettings Settings) Enumerate() (response Response, err error) {
 // Pulls instances of this class, following an Enumerate operation
 func (GeneralSettings Settings) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: GeneralSettings.base.Pull(enumerationContext),
 		},
 	}

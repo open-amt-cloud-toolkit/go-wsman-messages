@@ -11,6 +11,7 @@ import (
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/concrete"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/credential"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/bios"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/boot"
@@ -27,8 +28,8 @@ import (
 )
 
 func TestNewMessages(t *testing.T) {
-	m := NewMessages()
-
+	mock := &wsmantesting.ClientMock{}
+	m := NewMessages(mock)
 	if m.wsmanMessageCreator == nil {
 		t.Error("wsmanMessageCreator is not initialized")
 	}

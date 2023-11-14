@@ -5,9 +5,7 @@
 
 package physical
 
-import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-)
+import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 
 type Card struct {
 	base message.Base

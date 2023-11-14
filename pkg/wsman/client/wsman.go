@@ -2,7 +2,7 @@
  * Copyright (c) Intel Corporation 2023
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
-package wsman
+package client
 
 import (
 	"bytes"
@@ -24,13 +24,13 @@ type Message struct {
 	XMLOutput string
 }
 
-// WSManClient is an interface for the wsman.Client.
-type WSManClient interface {
+// WSMan is an interface for the wsman.Client.
+type WSMan interface {
 	Post(msg string) (response []byte, err error)
 }
 
-// Client is a thin wrapper around http.Client.
-type Client struct {
+// Target is a thin wrapper around http.Target.
+type Target struct {
 	http.Client
 	endpoint     string
 	username     string
@@ -40,7 +40,7 @@ type Client struct {
 	challenge    *authChallenge
 }
 
-func NewClient(target, username, password string, useDigest, useTLS, selfSignedAllowed bool) *Client {
+func NewWsman(target, username, password string, useDigest, useTLS, selfSignedAllowed bool) *Target {
 	path := "/wsman"
 	port := NonTLSPort
 	if useTLS {
@@ -50,7 +50,7 @@ func NewClient(target, username, password string, useDigest, useTLS, selfSignedA
 	if port == TLSPort {
 		protocol = "https"
 	}
-	res := &Client{
+	res := &Target{
 		endpoint:  protocol + "://" + target + ":" + port + path,
 		username:  username,
 		password:  password,
@@ -68,7 +68,7 @@ func NewClient(target, username, password string, useDigest, useTLS, selfSignedA
 }
 
 // Post overrides http.Client's Post method
-func (c *Client) Post(msg string) (response []byte, err error) {
+func (c *Target) Post(msg string) (response []byte, err error) {
 	msgBody := []byte(msg)
 	bodyReader := bytes.NewReader(msgBody)
 	req, err := http.NewRequest("POST", c.endpoint, bodyReader)
