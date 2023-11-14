@@ -2,7 +2,7 @@
  * Copyright (c) Intel Corporation 2023
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
-package wsman
+package client
 
 import (
 	"strings"
@@ -21,7 +21,7 @@ func TestNewClient(t *testing.T) {
 	useTLS := false
 	selfSignedAllowed := false
 
-	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
 
 	if client.endpoint != expectedTarget {
 		t.Errorf("Expected endpoint to be %s, but got %s", target, client.endpoint)
@@ -46,7 +46,7 @@ func TestNewClient_TLS(t *testing.T) {
 	useTLS := true
 	selfSignedAllowed := true
 
-	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
 
 	if client.endpoint != expectedTarget {
 		t.Errorf("Expected endpoint to be %s, but got %s", target, client.endpoint)
@@ -77,7 +77,7 @@ func TestClient_Post(t *testing.T) {
 	useTLS := false
 	selfSignedAllowed := false
 
-	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	client.endpoint = ts.URL
@@ -126,7 +126,7 @@ func TestClient_PostWithDigestAuth(t *testing.T) {
 	useTLS := false
 	selfSignedAllowed := false
 
-	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	client.endpoint = ts.URL
@@ -155,7 +155,7 @@ func TestClient_PostWithDigestAuthUnauthorized(t *testing.T) {
 	useTLS := false
 	selfSignedAllowed := false
 
-	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	client.endpoint = ts.URL
@@ -186,7 +186,7 @@ func TestClient_PostWithBasicAuth(t *testing.T) {
 	useTLS := false
 	selfSignedAllowed := false
 
-	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	client.endpoint = ts.URL
@@ -213,7 +213,7 @@ func TestClient_PostUnauthorized(t *testing.T) {
 	useTLS := false
 	selfSignedAllowed := false
 
-	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	client.endpoint = ts.URL
@@ -238,7 +238,7 @@ func TestClient_PostInvalidResponse(t *testing.T) {
 	useTLS := false
 	selfSignedAllowed := false
 
-	client := NewClient(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	client.endpoint = ts.URL

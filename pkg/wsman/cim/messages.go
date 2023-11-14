@@ -21,6 +21,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/software"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/system"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/wifi"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
 type Messages struct {
@@ -49,7 +50,7 @@ type Messages struct {
 	WiFiPort                  wifi.Port
 }
 
-func NewMessages() Messages {
+func NewMessages(client client.WSMan) Messages {
 	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	m := Messages{

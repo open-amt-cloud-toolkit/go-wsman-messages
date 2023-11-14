@@ -10,7 +10,7 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
@@ -18,7 +18,7 @@ const AMT_RemoteAccessService = "AMT_RemoteAccessService"
 
 type (
 	Response struct {
-		*wsman.Message
+		*client.Message
 		XMLName xml.Name       `xml:"Envelope"`
 		Header  message.Header `xml:"Header"`
 		Body    Body           `xml:"Body"`
@@ -39,7 +39,7 @@ type (
 )
 type Service struct {
 	base   message.Base
-	client wsman.WSManClient
+	client client.WSMan
 }
 type MPServer struct {
 	AccessInfo string
@@ -80,7 +80,7 @@ func NewRemoteAccessService(wsmanMessageCreator *message.WSManMessageCreator) Se
 	}
 }
 
-func NewRemoteAccessServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) Service {
+func NewRemoteAccessServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
 	return Service{
 		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_RemoteAccessService, client),
 		client: client,
@@ -90,7 +90,7 @@ func NewRemoteAccessServiceWithClient(wsmanMessageCreator *message.WSManMessageC
 // Get retrieves the representation of the instance
 func (RemoteAccessService Service) Get() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: RemoteAccessService.base.Get(nil),
 		},
 	}
@@ -111,7 +111,7 @@ func (RemoteAccessService Service) Get() (response Response, err error) {
 // Enumerates the instances of this class
 func (RemoteAccessService Service) Enumerate() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: RemoteAccessService.base.Enumerate(),
 		},
 	}
