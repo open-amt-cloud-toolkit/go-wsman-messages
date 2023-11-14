@@ -30,7 +30,7 @@ type (
 		AMTGeneralSettings GeneralSettings `xml:"AMT_GeneralSettings"`
 
 		EnumerateResponse common.EnumerateResponse
-		PullResponse 	  PullResponse
+		PullResponse      PullResponse
 	}
 	GeneralSettings struct {
 		models.SettingData
