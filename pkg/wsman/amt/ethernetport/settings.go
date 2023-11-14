@@ -27,7 +27,7 @@ type (
 		XMLName           xml.Name     `xml:"Body"`
 		EthernetPort      EthernetPort `xml:"AMT_EthernetPortSettings"`
 		EnumerateResponse common.EnumerateResponse
-		PullResponse 	  PullResponse 
+		PullResponse      PullResponse
 	}
 
 	EthernetPort struct {
@@ -51,8 +51,8 @@ type (
 	PullResponse struct {
 		Items []Item
 	}
-	Item struct{
-		EthernetPort	EthernetPort	`xml:"AMT_EthernetPortSettings"`
+	Item struct {
+		EthernetPort EthernetPort `xml:"AMT_EthernetPortSettings"`
 	}
 )
 type EthernetPortSettings struct {
