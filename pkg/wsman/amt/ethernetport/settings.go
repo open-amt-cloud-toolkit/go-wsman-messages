@@ -215,7 +215,7 @@ func (s Settings) Enumerate() (response Response, err error) {
 // // Pulls instances of this class, following an Enumerate operation
 func (s Settings) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: s.base.Pull(enumerationContext),
 		},
 	}
