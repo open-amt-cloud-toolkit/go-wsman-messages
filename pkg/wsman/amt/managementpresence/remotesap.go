@@ -9,7 +9,7 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
@@ -17,7 +17,7 @@ const AMT_ManagementPresenceRemoteSAP = "AMT_ManagementPresenceRemoteSAP"
 
 type (
 	Response struct {
-		*wsman.Message
+		*client.Message
 		XMLName xml.Name       `xml:"Envelope"`
 		Header  message.Header `xml:"Header"`
 		Body    Body           `xml:"Body"`
@@ -42,10 +42,10 @@ type (
 )
 type RemoteSAP struct {
 	base   message.Base
-	client wsman.WSManClient
+	client client.WSMan
 }
 
-func NewManagementPresenceRemoteSAPWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) RemoteSAP {
+func NewManagementPresenceRemoteSAPWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) RemoteSAP {
 	return RemoteSAP{
 		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_ManagementPresenceRemoteSAP, client),
 		client: client,
@@ -61,7 +61,7 @@ func NewManagementPresenceRemoteSAP(wsmanMessageCreator *message.WSManMessageCre
 // Get retrieves the representation of the instance
 func (ManagementPresenceRemoteSAP RemoteSAP) Get() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: ManagementPresenceRemoteSAP.base.Get(nil),
 		},
 	}
@@ -84,7 +84,7 @@ func (ManagementPresenceRemoteSAP RemoteSAP) Get() (response Response, err error
 // Enumerates the instances of this class
 func (ManagementPresenceRemoteSAP RemoteSAP) Enumerate() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: ManagementPresenceRemoteSAP.base.Enumerate(),
 		},
 	}
