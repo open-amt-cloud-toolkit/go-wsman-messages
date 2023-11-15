@@ -9,13 +9,13 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
 type (
 	Response struct {
-		*wsman.Message
+		*client.Message
 		XMLName xml.Name       `xml:"Envelope"`
 		Header  message.Header `xml:"Header"`
 		Body    Body           `xml:"Body"`
@@ -94,7 +94,7 @@ const (
 
 type AuthorizationService struct {
 	base   message.Base
-	client wsman.WSManClient
+	client client.WSMan
 }
 type EnumerateUserAclEntries_INPUT struct {
 	XMLName    xml.Name `xml:"h:EnumerateUserAclEntries_INPUT"`
@@ -143,7 +143,7 @@ func NewAuthorizationService(wsmanMessageCreator *message.WSManMessageCreator) A
 		client: nil,
 	}
 }
-func NewServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) AuthorizationService {
+func NewServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) AuthorizationService {
 	return AuthorizationService{
 		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_AuthorizationService, client),
 		client: client,
@@ -153,7 +153,7 @@ func NewServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, clie
 // Get retrieves the representation of the instance
 func (as AuthorizationService) Get() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: as.base.Get(nil),
 		},
 	}
@@ -176,7 +176,7 @@ func (as AuthorizationService) Get() (response Response, err error) {
 // Enumerates the instances of this class
 func (as AuthorizationService) Enumerate() (response Response, err error) {
 	response = Response{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: as.base.Enumerate(),
 		},
 	}

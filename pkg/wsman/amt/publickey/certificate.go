@@ -9,7 +9,7 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
@@ -17,7 +17,7 @@ const AMT_PublicKeyCertificate = "AMT_PublicKeyCertificate"
 
 type (
 	ResponseCert struct {
-		*wsman.Message
+		*client.Message
 		XMLName  xml.Name       `xml:"Envelope"`
 		Header   message.Header `xml:"Header"`
 		BodyCert BodyCert       `xml:"Body"`
@@ -64,10 +64,10 @@ type PublicKeyCertificate struct {
 
 type Certificate struct {
 	base   message.Base
-	client wsman.WSManClient
+	client client.WSMan
 }
 
-func NewPublicKeyCertificateWithClient(wsmanMessageCreator *message.WSManMessageCreator, client wsman.WSManClient) Certificate {
+func NewPublicKeyCertificateWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Certificate {
 	return Certificate{
 		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_PublicKeyCertificate, client),
 		client: client,
@@ -84,7 +84,7 @@ func NewPublicKeyCertificate(wsmanMessageCreator *message.WSManMessageCreator) C
 func (PublicKeyCertificate Certificate) Get() (response ResponseCert, err error) {
 
 	response = ResponseCert{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: PublicKeyCertificate.base.Get(nil),
 		},
 	}
@@ -108,7 +108,7 @@ func (PublicKeyCertificate Certificate) Get() (response ResponseCert, err error)
 func (PublicKeyCertificate Certificate) Enumerate() (response ResponseCert, err error) {
 
 	response = ResponseCert{
-		Message: &wsman.Message{
+		Message: &client.Message{
 			XMLInput: PublicKeyCertificate.base.Enumerate(),
 		},
 	}

@@ -5,9 +5,7 @@
 
 package ieee8021x
 
-import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-)
+import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 
 type CredentialContext struct {
 	base message.Base
