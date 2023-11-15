@@ -28,6 +28,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/tls"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/userinitiatedconnection"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/wifiportconfiguration"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
 type Messages struct {
@@ -61,7 +62,7 @@ type Messages struct {
 	WiFiPortConfigurationService    wifiportconfiguration.Service
 }
 
-func NewMessages() Messages {
+func NewMessages(client client.WSMan) Messages {
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	m := Messages{
@@ -74,7 +75,7 @@ func NewMessages() Messages {
 	m.BootSettingData = boot.NewBootSettingData(wsmanMessageCreator)
 	m.EnvironmentDetectionSettingData = environmentdetection.NewEnvironmentDetectionSettingData(wsmanMessageCreator)
 	m.EthernetPortSettings = ethernetport.NewEthernetPortSettings(wsmanMessageCreator)
-	m.GeneralSettings = general.NewGeneralSettings(wsmanMessageCreator)
+	m.GeneralSettings = general.NewGeneralSettingsWithClient(wsmanMessageCreator, client)
 	m.IEEE8021xCredentialContext = ieee8021x.NewIEEE8021xCredentialContext(wsmanMessageCreator)
 	m.IEEE8021xProfile = ieee8021x.NewIEEE8021xProfile(wsmanMessageCreator)
 	m.KerberosSettingData = kerberos.NewKerberosSettingData(wsmanMessageCreator)

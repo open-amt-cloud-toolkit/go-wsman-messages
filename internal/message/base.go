@@ -8,13 +8,13 @@ package message
 import (
 	"fmt"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
 type Base struct {
 	WSManMessageCreator *WSManMessageCreator
 	className           string
-	client              wsman.WSManClient
+	client              client.WSMan
 }
 
 func NewBase(wsmanMessageCreator *WSManMessageCreator, className string) Base {
@@ -24,7 +24,7 @@ func NewBase(wsmanMessageCreator *WSManMessageCreator, className string) Base {
 	}
 }
 
-func NewBaseWithClient(wsmanMessageCreator *WSManMessageCreator, className string, client wsman.WSManClient) Base {
+func NewBaseWithClient(wsmanMessageCreator *WSManMessageCreator, className string, client client.WSMan) Base {
 	return Base{
 		WSManMessageCreator: wsmanMessageCreator,
 		className:           className,
@@ -88,7 +88,7 @@ func (b *Base) RequestStateChange(actionName string, requestedState int) string 
 	return b.WSManMessageCreator.CreateXML(header, body)
 }
 
-func (b *Base) Execute(message *wsman.Message) error {
+func (b *Base) Execute(message *client.Message) error {
 	if b.client != nil {
 		xmlResponse, err := b.client.Post(message.XMLInput)
 		message.XMLOutput = string(xmlResponse)
