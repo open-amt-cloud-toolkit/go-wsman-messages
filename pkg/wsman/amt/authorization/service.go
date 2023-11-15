@@ -24,7 +24,8 @@ type (
 		XMLName                 xml.Name                `xml:"Body"`
 		AuthorizationOccurrence AuthorizationOccurrence `xml:"AMT_AuthorizationService"`
 
-		EnumerateResponse common.EnumerateResponse
+		EnumerateResponse 		common.EnumerateResponse
+		PullResponse 	  		PullResponse
 	}
 
 	AuthorizationOccurrence struct {
@@ -36,6 +37,12 @@ type (
 		RequestedState          int
 		SystemCreationClassName string
 		SystemName              string
+	}
+	PullResponse struct {
+		Items []Item
+	}
+	Item struct {
+		AuthorizationOccurrence AuthorizationOccurrence `xml:"AMT_AuthorizationService"`
 	}
 )
 type AddUserAclEntry struct {
@@ -196,26 +203,26 @@ func (as AuthorizationService) Enumerate() (response Response, err error) {
 }
 
 // Pulls instances of this class, following an Enumerate operation
-// func (as AuthorizationService) Pull(enumerationContext string) (response Response, err error) {
-// 	response = Response{
-// 		Message: &wsman.Message{
-// 			XMLInput: as.base.Pull(enumerationContext),
-// 		},
-// 	}
-// 	// send the message to AMT
-// 	err = as.base.Execute(response.Message)
-// 	if err != nil {
-// 		return
-// 	}
+func (as AuthorizationService) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: as.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = as.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
 
-// 	// put the xml response into the go struct
-// 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
-// 	if err != nil {
-// 		return
-// 	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
 
-// 	return
-// }
+	return
+}
 
 // EnumerateUserAclEntries enumerates entries in the User Access Control List (ACL).
 // func (as AuthorizationService) EnumerateUserAclEntries(startIndex int) string {

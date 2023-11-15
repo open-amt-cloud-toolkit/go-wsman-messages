@@ -16,6 +16,8 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
+	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
+	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -54,6 +56,7 @@ func TestAMT_AuthorizationService(t *testing.T) {
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	client := MockClient{}
+	//client := client.NewWsman("localhost", "admin", "Intel123!", true, false, false)
 	elementUnderTest := NewServiceWithClient(wsmanMessageCreator, &client)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
@@ -103,8 +106,36 @@ func TestAMT_AuthorizationService(t *testing.T) {
 					},
 				},
 			},
-			// //PULLS
-			// {"should create a valid AMT_AuthorizationService Pull wsman message", "AMT_AuthorizationService", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			//PULLS
+			{
+				"should create a valid AMT_AuthorizationService Pull wsman message", 
+				"AMT_AuthorizationService", 
+				wsmantesting.PULL, 
+				wsmantesting.PULL_BODY, 
+				func() (Response, error) {
+					currentMessage = "Pull"
+					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponse: PullResponse{
+						Items: []Item{
+							{
+								AuthorizationOccurrence: AuthorizationOccurrence{
+									AllowHttpQopAuthOnly:    1,
+									CreationClassName:       "AMT_AuthorizationService",
+									ElementName:             "Intel(r) AMT Authorization Service",
+									EnabledState:            5,
+									Name:                    "Intel(r) AMT Authorization Service",
+									RequestedState:          12,
+									SystemCreationClassName: "CIM_ComputerSystem",
+									SystemName:              "Intel(r) AMT",
+								},
+							},
+						},
+					},
+				},
+			},
 			// // AUTHORIZATION SERVICE
 
 			// // ADD USER ACL ENTRY EX
