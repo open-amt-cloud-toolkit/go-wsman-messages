@@ -34,7 +34,7 @@ type (
 		DefaultGateway         string
 		ElementName            string
 		InstanceID             string
-		IPAddress 			   string
+		IPAddress              string
 		IpSyncEnabled          bool
 		LinkIsUp               bool
 		LinkPolicy             int

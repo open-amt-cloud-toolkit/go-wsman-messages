@@ -124,21 +124,50 @@ func TestAMT_GeneralSettings(t *testing.T) {
 				},
 			},
 			//PULLS
-			// 	{
-			// 		"should create a valid AMT_GeneralSettings Pull wsman message",
-			// 		"AMT_GeneralSettings",
-			// 		wsmantesting.PULL,
-			// 		wsmantesting.PULL_BODY,
-			// 		func() (Response, error) {
-			// 			currentMessage = "Pull"
-			// 			wsmantesting.EnumerationContext
-			// 			return elementUnderTest.Pull("14000000-0000-0000-0000-000000000000")
-			// 		},
-			// 		Body{
-			// 			XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-			// 		},
-			// 	},
-			// }
+			{
+				"should create a valid AMT_GeneralSettings Pull wsman message",
+				"AMT_GeneralSettings",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				func() (Response, error) {
+					currentMessage = "Pull"
+					//wsmantesting.EnumerationContext
+					//return elementUnderTest.Pull("14000000-0000-0000-0000-000000000000")
+					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponse: PullResponse{
+						Items: []Item{
+							{
+								AMTGeneralSettings: GeneralSettings{
+									XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings", Local: "AMT_GeneralSettings"},
+									SettingData:                   models.SettingData{InstanceID: "Intel(r) AMT: General Settings", ManagedElement: models.ManagedElement{ElementName: ""}},
+									AMTNetworkEnabled:             1,
+									DDNSPeriodicUpdateInterval:    1440,
+									DDNSTTL:                       900,
+									DDNSUpdateByDHCPServerEnabled: true,
+									DDNSUpdateEnabled:             false,
+									DHCPSyncRequiresHostname:      0, //Intel SDK documentation missing
+									DHCPv6ConfigurationTimeout:    0,
+									DigestRealm:                   "Digest:6EE8C61BA74893E059F032EA919D699E",
+									IdleWakeTimeout:               65535,
+									NetworkInterfaceEnabled:       true,
+									PingResponseEnabled:           true,
+									PowerSource:                   0,
+									PreferredAddressFamily:        0,
+									PresenceNotificationInterval:  0,
+									PrivacyLevel:                  0,
+									RmcpPingResponseEnabled:       true,
+									SharedFQDN:                    true,
+									ThunderboltDockEnabled:        0,
+									WsmanOnlyMode:                 false,
+								},
+							},
+						},
+					},
+				},
+			},
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
