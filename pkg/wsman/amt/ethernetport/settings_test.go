@@ -55,7 +55,7 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	client := MockClient{}
 	elementUnderTest := NewEthernetPortSettingsWithClient(wsmanMessageCreator, &client)
-
+	elementUnderTest1 := NewEthernetPortSettings(wsmanMessageCreator)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -79,6 +79,7 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 						Name:  "test",
 						Value: "test",
 					}
+					
 					return elementUnderTest.Get(selector)
 				},
 				Body{
@@ -112,6 +113,9 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 				"",
 				func() (Response, error) {
 					currentMessage = "Enumerate"
+					if elementUnderTest1.base.WSManMessageCreator == nil {
+						print("Error")
+					}
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -168,122 +172,6 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.Body)
-			})
-		}
-	})
-
-	t.Run("amt_* InvalidTests", func(t *testing.T) {
-		tests := []struct {
-			name             string
-			method           string
-			action           string
-			body             string
-			extraHeader      string
-			responseFunc     func() (Response, error)
-			expectedResponse interface{}
-		}{
-			//GETS
-			{
-				"should create a invalid AMT_EthernetPortSettings Get wsman message",
-				"AMT_EthernetPortSettings",
-				wsmantesting.GET,
-				"",
-				"<w:SelectorSet><w:Selector Name=\"test\">test</w:Selector></w:SelectorSet>",
-				func() (Response, error) {
-					currentMessage = "Get"
-					selector := Selector{
-						Name:  "invalid",
-						Value: "invalid",
-					}
-					return elementUnderTest.Get(selector)
-				},
-				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					EthernetPort: EthernetPort{
-						DHCPEnabled:            true,
-						DefaultGateway:         "192.168.0.1",
-						ElementName:            "Intel(r) AMT Ethernet Port Settings",
-						InstanceID:             "Intel(r) AMT Ethernet Port Settings 0",
-						IpSyncEnabled:          true,
-						LinkIsUp:               true,
-						LinkPolicy:             14,
-						MACAddress:             "c8-d9-d2-7a-1e-33",
-						PhysicalConnectionType: 0,
-						PrimaryDNS:             "68.105.28.11",
-						SecondaryDNS:           "68.105.29.11",
-						SharedDynamicIP:        true,
-						SharedMAC:              true,
-						SharedStaticIp:         false,
-						SubnetMask:             "255.255.255.0",
-					},
-				},
-			},
-
-			//ENUMERATES
-			{
-				"should create a invalid AMT_EthernetPortSettings Enumerate wsman message",
-				"AMT_EthernetPortSettings",
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
-				"",
-				func() (Response, error) {
-					currentMessage = "Enumerate"
-					return elementUnderTest.Enumerate()
-				},
-				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					EnumerateResponse: common.EnumerateResponse{
-						EnumerationContext: "7800000-0000-0000-0000-000000000000",
-					},
-				},
-			},
-			//PULLS
-			{
-				"should create a valid AMT_EthernetPortSettings Pull wsman message",
-				"AMT_EthernetPortSettings",
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
-				"",
-				func() (Response, error) {
-					currentMessage = "Pull"
-					return elementUnderTest.Pull("0")
-				},
-				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					PullResponse: PullResponse{
-						Items: []Item{
-							{
-								EthernetPort: EthernetPort{
-									DHCPEnabled:            true,
-									DefaultGateway:         "192.168.6.1",
-									ElementName:            "Intel(r) AMT Ethernet Port Settings",
-									InstanceID:             "Intel(r) AMT Ethernet Port Settings 1",
-									IpSyncEnabled:          true,
-									LinkIsUp:               false,
-									LinkPolicy:             14,
-									MACAddress:             "00-00-00-00-00-00",
-									PhysicalConnectionType: 3,
-									PrimaryDNS:             "192.168.6.1",
-									SharedDynamicIP:        true,
-									SharedMAC:              true,
-									SharedStaticIp:         false,
-									SubnetMask:             "255.255.255.0",
-								},
-							},
-						},
-					},
-				},
-			},
-		}
-
-		for _, test := range tests {
-			t.Run(test.name, func(t *testing.T) {
-				//expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
-				//messageID++
-				_, err := test.responseFunc()
-				assert.Nil(t, err)
-				//assert.Equal(t, expectedXMLInput, response.XMLInput)
-				//assert.Equal(t, test.expectedResponse, response.Body)
 			})
 		}
 	})

@@ -6,7 +6,6 @@
 package ethernetport
 
 import (
-	"encoding/json"
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
@@ -35,6 +34,7 @@ type (
 		DefaultGateway         string
 		ElementName            string
 		InstanceID             string
+		IPAddress 			   string
 		IpSyncEnabled          bool
 		LinkIsUp               bool
 		LinkPolicy             int
@@ -82,14 +82,6 @@ type EthernetPortSettings struct {
 type Selector message.Selector
 
 type LinkPolicyValues int
-
-func (w *Response) JSON() string {
-	jsonOutput, err := json.Marshal(w.Body)
-	if err != nil {
-		return ""
-	}
-	return string(jsonOutput)
-}
 
 const AMT_EthernetPortSettings = "AMT_EthernetPortSettings"
 
