@@ -24,8 +24,8 @@ type (
 		XMLName                 xml.Name                `xml:"Body"`
 		AuthorizationOccurrence AuthorizationOccurrence `xml:"AMT_AuthorizationService"`
 
-		EnumerateResponse 		common.EnumerateResponse
-		PullResponse 	  		PullResponse
+		EnumerateResponse common.EnumerateResponse
+		PullResponse      PullResponse
 	}
 
 	AuthorizationOccurrence struct {
