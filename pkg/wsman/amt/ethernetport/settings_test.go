@@ -79,7 +79,7 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 						Name:  "test",
 						Value: "test",
 					}
-
+					
 					return elementUnderTest.Get(selector)
 				},
 				Body{
