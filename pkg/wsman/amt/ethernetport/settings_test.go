@@ -79,7 +79,7 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 						Name:  "test",
 						Value: "test",
 					}
-					
+
 					return elementUnderTest.Get(selector)
 				},
 				Body{
@@ -193,7 +193,7 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 				wsmantesting.PULL_BODY,
 				"",
 				func() (Response, error) {
-					currentMessage = "Pqll"
+					currentMessage = "Error"
 					response, err := elementUnderTest.Pull("")
 					return response, err
 				},
