@@ -6,7 +6,6 @@
 package ethernetport
 
 import (
-	"encoding/json"
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
@@ -27,24 +26,57 @@ type (
 		XMLName           xml.Name     `xml:"Body"`
 		EthernetPort      EthernetPort `xml:"AMT_EthernetPortSettings"`
 		EnumerateResponse common.EnumerateResponse
+		PullResponse      PullResponse
 	}
 
+	// EthernetPort struct {
+	// 	DHCPEnabled            bool
+	// 	DefaultGateway         string
+	// 	ElementName            string
+	// 	InstanceID             string
+	// 	IPAddress              string
+	// 	IpSyncEnabled          bool
+	// 	LinkIsUp               bool
+	// 	LinkPolicy             int
+	// 	MACAddress             string
+	// 	PhysicalConnectionType int
+	// 	PrimaryDNS             string
+	// 	SecondaryDNS           string
+	// 	SharedDynamicIP        bool
+	// 	SharedMAC              bool
+	// 	SharedStaticIp         bool
+	// 	SubnetMask             string
+	// }
 	EthernetPort struct {
-		DHCPEnabled            bool
-		DefaultGateway         string
-		ElementName            string
-		InstanceID             string
-		IpSyncEnabled          bool
-		LinkIsUp               bool
-		LinkPolicy             int
-		MACAddress             string
-		PhysicalConnectionType int
-		PrimaryDNS             string
-		SecondaryDNS           string
-		SharedDynamicIP        bool
-		SharedMAC              bool
-		SharedStaticIp         bool
-		SubnetMask             string
+		ElementName                  string
+		InstanceID                   string
+		VLANTag                      int
+		SharedMAC                    bool
+		MACAddress                   string
+		LinkIsUp                     bool
+		LinkPolicy                   []int
+		LinkPreference               int
+		LinkControl                  int
+		SharedStaticIp               bool
+		SharedDynamicIP              bool
+		IpSyncEnabled                bool
+		DHCPEnabled                  bool
+		IPAddress                    string
+		SubnetMask                   string
+		DefaultGateway               string
+		PrimaryDNS                   string
+		SecondaryDNS                 string
+		ConsoleTcpMaxRetransmissions int
+		WLANLinkProtectionLevel      int
+		PhysicalConnectionType       int
+		PhysicalNicMedium            int
+	}
+
+	PullResponse struct {
+		Items []Item
+	}
+	Item struct {
+		EthernetPort EthernetPort `xml:"AMT_EthernetPortSettings"`
 	}
 )
 type EthernetPortSettings struct {
@@ -74,14 +106,6 @@ type EthernetPortSettings struct {
 type Selector message.Selector
 
 type LinkPolicyValues int
-
-func (w *Response) JSON() string {
-	jsonOutput, err := json.Marshal(w.Body)
-	if err != nil {
-		return ""
-	}
-	return string(jsonOutput)
-}
 
 const AMT_EthernetPortSettings = "AMT_EthernetPortSettings"
 
@@ -205,9 +229,26 @@ func (s Settings) Enumerate() (response Response, err error) {
 }
 
 // // Pulls instances of this class, following an Enumerate operation
-// func (EthernetPortSettings Settings) Pull(enumerationContext string) string {
-// 	return EthernetPortSettings.base.Pull(enumerationContext)
-// }
+func (s Settings) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: s.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = s.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 // // Put will change properties of the selected instance
 // func (EthernetPortSettings Settings) Put(ethernetPortSettings EthernetPortSettings) string {
