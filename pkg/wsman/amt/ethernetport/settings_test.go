@@ -79,7 +79,7 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 						Name:  "test",
 						Value: "test",
 					}
-
+					
 					return elementUnderTest.Get(selector)
 				},
 				Body{
@@ -172,6 +172,67 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.Body)
+			})
+		}
+	})
+
+	t.Run("amt_* Tests", func(t *testing.T) {
+		tests := []struct {
+			name             string
+			method           string
+			action           string
+			body             string
+			extraHeader      string
+			responseFunc     func() (Response, error)
+			expectedResponse interface{}
+		}{
+			{
+				"should create an invalid AMT_EthernetPortSettings Pull wsman message",
+				"AMT_EthernetPortSettings",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				"",
+				func() (Response, error) {
+					currentMessage = "Pqll"
+					response, err := elementUnderTest.Pull("")
+					return response, err 
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponse: PullResponse{
+						Items: []Item{
+							{
+								EthernetPort: EthernetPort{
+									DHCPEnabled:            true,
+									DefaultGateway:         "192.168.6.1",
+									ElementName:            "Intel(r) AMT Ethernet Port Settings",
+									InstanceID:             "Intel(r) AMT Ethernet Port Settings 1",
+									IpSyncEnabled:          true,
+									LinkIsUp:               false,
+									LinkPolicy:             14,
+									MACAddress:             "00-00-00-00-00-00",
+									PhysicalConnectionType: 3,
+									PrimaryDNS:             "192.168.6.1",
+									SharedDynamicIP:        true,
+									SharedMAC:              true,
+									SharedStaticIp:         false,
+									SubnetMask:             "255.255.255.0",
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+
+		for _, test := range tests {
+			t.Run(test.name, func(t *testing.T) {
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				messageID++
+				response, err := test.responseFunc()
+				assert.Error(t, err)
+				assert.NotEqual(t, expectedXMLInput, response.XMLInput)
+				assert.NotEqual(t, test.expectedResponse, response.Body)
 			})
 		}
 	})
