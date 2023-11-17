@@ -29,23 +29,47 @@ type (
 		PullResponse      PullResponse
 	}
 
+	// EthernetPort struct {
+	// 	DHCPEnabled            bool
+	// 	DefaultGateway         string
+	// 	ElementName            string
+	// 	InstanceID             string
+	// 	IPAddress              string
+	// 	IpSyncEnabled          bool
+	// 	LinkIsUp               bool
+	// 	LinkPolicy             int
+	// 	MACAddress             string
+	// 	PhysicalConnectionType int
+	// 	PrimaryDNS             string
+	// 	SecondaryDNS           string
+	// 	SharedDynamicIP        bool
+	// 	SharedMAC              bool
+	// 	SharedStaticIp         bool
+	// 	SubnetMask             string
+	// }
 	EthernetPort struct {
-		DHCPEnabled            bool
-		DefaultGateway         string
-		ElementName            string
-		InstanceID             string
-		IPAddress              string
-		IpSyncEnabled          bool
-		LinkIsUp               bool
-		LinkPolicy             int
-		MACAddress             string
-		PhysicalConnectionType int
-		PrimaryDNS             string
-		SecondaryDNS           string
-		SharedDynamicIP        bool
-		SharedMAC              bool
-		SharedStaticIp         bool
-		SubnetMask             string
+		ElementName                  string
+		InstanceID                   string
+		VLANTag                      int
+		SharedMAC                    bool
+		MACAddress                   string
+		LinkIsUp                     bool
+		LinkPolicy                   []int
+		LinkPreference               int
+		LinkControl                  int
+		SharedStaticIp               bool
+		SharedDynamicIP              bool
+		IpSyncEnabled                bool
+		DHCPEnabled                  bool
+		IPAddress                    string
+		SubnetMask                   string
+		DefaultGateway               string
+		PrimaryDNS                   string
+		SecondaryDNS                 string
+		ConsoleTcpMaxRetransmissions int
+		WLANLinkProtectionLevel      int
+		PhysicalConnectionType       int
+		PhysicalNicMedium            int
 	}
 
 	PullResponse struct {
