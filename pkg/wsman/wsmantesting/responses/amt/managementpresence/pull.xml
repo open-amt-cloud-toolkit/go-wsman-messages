@@ -14,8 +14,7 @@
                 <h:AMT_ManagementPresenceRemoteSAP>
                     <h:AccessInfo>192.168.10.196</h:AccessInfo>
                     <h:CN>192.168.10.196</h:CN>
-                    <h:CreationClassName>AMT_ManagementPresenceRemoteSAP
-                    </h:CreationClassName>
+                    <h:CreationClassName>AMT_ManagementPresenceRemoteSAP</h:CreationClassName>
                     <h:ElementName>Intel(r) AMT:Management Presence Server</h:ElementName>
                     <h:InfoFormat>3</h:InfoFormat>
                     <h:Name>Intel(r) AMT:Management Presence Server 0</h:Name>
