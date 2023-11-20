@@ -137,7 +137,7 @@ func (sd SettingData) Pull(enumerationContext string) (response Response, err er
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return 
 	}
 
 	return
