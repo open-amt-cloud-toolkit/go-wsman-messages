@@ -115,10 +115,10 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 			},
 			//PULLS
 			{
-				"should create a valid AMT_ManagementPresenceRemoteSAP Pull wsman message", 
-				"AMT_ManagementPresenceRemoteSAP", 
-				wsmantesting.PULL, 
-				wsmantesting.PULL_BODY, 
+				"should create a valid AMT_ManagementPresenceRemoteSAP Pull wsman message",
+				"AMT_ManagementPresenceRemoteSAP",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
 				"",
 				func() (Response, error) {
 					currentMessage = "Pull"
@@ -171,8 +171,8 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 			expectedResponse interface{}
 		}{
 			{
-				"should create an invalid AMT_ManagementPresenceRemoteSAP Pull wsman message", 
-				"AMT_ManagementPresenceRemoteSAP", 
+				"should create an invalid AMT_ManagementPresenceRemoteSAP Pull wsman message",
+				"AMT_ManagementPresenceRemoteSAP",
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",

@@ -27,7 +27,7 @@ type (
 		ManagementRemote ManagementRemote `xml:"AMT_ManagementPresenceRemoteSAP"`
 
 		EnumerateResponse common.EnumerateResponse
-		PullResponse 	  PullResponse 
+		PullResponse      PullResponse
 	}
 	ManagementRemote struct {
 		AccessInfo              string
@@ -131,7 +131,6 @@ func (ManagementPresenceRemoteSAP RemoteSAP) Pull(enumerationContext string) (re
 
 	return
 }
-
 
 // // Delete removes a the specified instance
 // func (ManagementPresenceRemoteSAP RemoteSAP) Delete(handle string) string {
