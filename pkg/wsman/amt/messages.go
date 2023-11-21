@@ -70,7 +70,7 @@ func NewMessages(client client.WSMan) Messages {
 	}
 	m.AlarmClockService = alarmclock.NewService(wsmanMessageCreator)
 	m.AuditLog = auditlog.NewAuditLog(wsmanMessageCreator)
-	m.AuthorizationService = authorization.NewAuthorizationService(wsmanMessageCreator)
+	m.AuthorizationService = authorization.NewServiceWithClient(wsmanMessageCreator, client)
 	m.BootCapabilities = boot.NewBootCapabilities(wsmanMessageCreator)
 	m.BootSettingData = boot.NewBootSettingData(wsmanMessageCreator)
 	m.EnvironmentDetectionSettingData = environmentdetection.NewEnvironmentDetectionSettingData(wsmanMessageCreator)
