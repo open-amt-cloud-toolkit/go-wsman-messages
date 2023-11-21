@@ -13,10 +13,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
+	"github.com/stretchr/testify/assert"
 )
 
 type MockClient struct {
@@ -111,10 +111,10 @@ func TestAMT_RedirectionService(t *testing.T) {
 			},
 			//PULLS
 			{
-				"should create a valid AMT_RedirectionService Pull wsman message", 
-				"AMT_RedirectionService", 
-				wsmantesting.PULL, 
-				wsmantesting.PULL_BODY, 
+				"should create a valid AMT_RedirectionService Pull wsman message",
+				"AMT_RedirectionService",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
 				func() (Response, error) {
 					currentMessage = "Pull"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)

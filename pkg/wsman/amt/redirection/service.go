@@ -183,7 +183,6 @@ func (s Service) Pull(enumerationContext string) (response Response, err error) 
 	return
 }
 
-
 // // Put will change properties of the selected instance
 // func (RedirectionService Service) Put(redirectionService RedirectionService) string {
 // 	return RedirectionService.base.Put(redirectionService, false, nil)
