@@ -6,7 +6,7 @@
 package redirection
 
 import (
-	//"encoding/json"
+	"encoding/json"
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
@@ -96,13 +96,13 @@ type Service struct {
 	client client.WSMan
 }
 
-// func (w *Response) JSON() string {
-// 	jsonOutput, err := json.Marshal(w.Body)
-// 	if err != nil {
-// 		return ""
-// 	}
-// 	return string(jsonOutput)
-// }
+func (w *Response) JSON() string {
+	jsonOutput, err := json.Marshal(w.Body)
+	if err != nil {
+		return ""
+	}
+	return string(jsonOutput)
+}
 
 func NewRedirectionService(wsmanMessageCreator *message.WSManMessageCreator) Service {
 	return Service{
