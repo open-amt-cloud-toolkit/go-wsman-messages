@@ -16,8 +16,6 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
-	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
-	//"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -56,7 +54,6 @@ func TestAMT_AuthorizationService(t *testing.T) {
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	client := MockClient{}
-	//client := client.NewWsman("localhost", "admin", "Intel123!", true, false, false)
 	elementUnderTest := NewServiceWithClient(wsmanMessageCreator, &client)
 	elementUnderTest1 := NewAuthorizationService(wsmanMessageCreator)
 	t.Run("amt_* Tests", func(t *testing.T) {
