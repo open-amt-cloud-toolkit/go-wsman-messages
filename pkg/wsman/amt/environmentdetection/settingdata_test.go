@@ -56,6 +56,7 @@ func TestAMT_EnvironmentDetectionSettingData(t *testing.T) {
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	client := MockClient{}
 	elementUnderTest := NewEnvironmentDetectionSettingDataWithClient(wsmanMessageCreator, &client)
+	elementUnderTest1 := NewEnvironmentDetectionSettingData(wsmanMessageCreator)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -92,6 +93,9 @@ func TestAMT_EnvironmentDetectionSettingData(t *testing.T) {
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
 					currentMessage = "Enumerate"
+					if elementUnderTest1.base.WSManMessageCreator == nil {
+						print("Error")
+					}
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -101,8 +105,32 @@ func TestAMT_EnvironmentDetectionSettingData(t *testing.T) {
 					},
 				},
 			},
-			// //PULLS
-			// {"should create a valid AMT_EnvironmentDetectionSettingData Pull wsman message", "AMT_EnvironmentDetectionSettingData", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			//PULLS
+			{
+				"should create a valid AMT_EnvironmentDetectionSettingData Pull wsman message",
+				"AMT_EnvironmentDetectionSettingData",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				func() (Response, error) {
+					currentMessage = "Pull"
+					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponse: PullResponse{
+						Items: []Item{
+							{
+								DetectionSettingData: DetectionSettingData{
+									DetectionAlgorithm: 0,
+									DetectionStrings:   "00d032fb-4341-42a5-a353-aaf83ff9d410.com",
+									ElementName:        "Intel(r) AMT Environment Detection Settings",
+									InstanceID:         "Intel(r) AMT Environment Detection Settings",
+								},
+							},
+						},
+					},
+				},
+			},
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
@@ -112,6 +140,57 @@ func TestAMT_EnvironmentDetectionSettingData(t *testing.T) {
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.Body)
+			})
+		}
+	})
+
+	t.Run("amt_* Tests", func(t *testing.T) {
+		tests := []struct {
+			name             string
+			method           string
+			action           string
+			body             string
+			extraHeader      string
+			responseFunc     func() (Response, error)
+			expectedResponse interface{}
+		}{
+			{
+				"should create an invalid AMT_EnvironmentDetectionSettingData Pull wsman message",
+				"AMT_EnvironmentDetectionSettingData",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				"",
+				func() (Response, error) {
+					currentMessage = "Error"
+					response, err := elementUnderTest.Pull("")
+					return response, err
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponse: PullResponse{
+						Items: []Item{
+							{
+								DetectionSettingData: DetectionSettingData{
+									DetectionAlgorithm: 0,
+									DetectionStrings:   "00d032fb-4341-42a5-a353-aaf83ff9d410.com",
+									ElementName:        "Intel(r) AMT Environment Detection Settings",
+									InstanceID:         "Intel(r) AMT Environment Detection Settings",
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+
+		for _, test := range tests {
+			t.Run(test.name, func(t *testing.T) {
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				messageID++
+				response, err := test.responseFunc()
+				assert.Error(t, err)
+				assert.NotEqual(t, expectedXMLInput, response.XMLInput)
+				assert.NotEqual(t, test.expectedResponse, response.Body)
 			})
 		}
 	})
