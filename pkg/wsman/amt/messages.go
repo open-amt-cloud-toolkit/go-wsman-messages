@@ -85,7 +85,7 @@ func NewMessages(client client.WSMan) Messages {
 	m.PublicKeyCertificate = publickey.NewPublicKeyCertificate(wsmanMessageCreator)
 	m.PublicKeyManagementService = publickey.NewPublicKeyManagementService(wsmanMessageCreator)
 	m.PublicPrivateKeyPair = publicprivate.NewPublicPrivateKeyPair(wsmanMessageCreator)
-	m.RedirectionService = redirection.NewRedirectionService(wsmanMessageCreator)
+	m.RedirectionService = redirection.NewRedirectionServiceWithClient(wsmanMessageCreator, client)
 	m.RemoteAccessPolicyAppliesToMPS = remoteaccess.NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator)
 	m.RemoteAccessPolicyRule = remoteaccess.NewRemoteAccessPolicyRule(wsmanMessageCreator)
 	m.RemoteAccessService = remoteaccess.NewRemoteAccessService(wsmanMessageCreator)
