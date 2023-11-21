@@ -26,6 +26,7 @@ type (
 		Redirection Redirection `xml:"AMT_RedirectionService"`
 
 		EnumerateResponse common.EnumerateResponse
+		PullResponse      PullResponse
 	}
 	Redirection struct {
 		CreationClassName       string
@@ -35,6 +36,12 @@ type (
 		Name                    string
 		SystemCreationClassName string
 		SystemName              string
+	}
+	PullResponse struct {
+		Items []Item
+	}
+	Item struct {
+		Redirection Redirection `xml:"AMT_RedirectionService"`
 	}
 )
 type RedirectionResponse struct {
@@ -155,10 +162,26 @@ func (s Service) Enumerate() (response Response, err error) {
 	return
 }
 
-// Pulls instances of this class, following an Enumerate operation
-// func (RedirectionService Service) Pull(enumerationContext string) string {
-// 	return RedirectionService.base.Pull(enumerationContext)
-// }
+func (s Service) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: s.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = s.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 // // Put will change properties of the selected instance
 // func (RedirectionService Service) Put(redirectionService RedirectionService) string {

@@ -13,11 +13,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
+	"github.com/stretchr/testify/assert"
 )
 
 type MockClient struct {
@@ -56,6 +55,7 @@ func TestAMT_RedirectionService(t *testing.T) {
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	client := MockClient{}
 	elementUnderTest := NewRedirectionServiceWithClient(wsmanMessageCreator, &client)
+	elementUnderTest1 := NewRedirectionService(wsmanMessageCreator)
 
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
@@ -97,6 +97,9 @@ func TestAMT_RedirectionService(t *testing.T) {
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
 					currentMessage = "Enumerate"
+					if elementUnderTest1.base.WSManMessageCreator == nil {
+						print("Error")
+					}
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -107,7 +110,34 @@ func TestAMT_RedirectionService(t *testing.T) {
 				},
 			},
 			//PULLS
-			//{"should create a valid AMT_RedirectionService Pull wsman message", "AMT_RedirectionService", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{
+				"should create a valid AMT_RedirectionService Pull wsman message",
+				"AMT_RedirectionService",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				func() (Response, error) {
+					currentMessage = "Pull"
+					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponse: PullResponse{
+						Items: []Item{
+							{
+								Redirection: Redirection{
+									CreationClassName:       "AMT_RedirectionService",
+									ElementName:             "Intel(r) AMT Redirection Service",
+									EnabledState:            32771,
+									ListenerEnabled:         true,
+									Name:                    "Intel(r) AMT Redirection Service",
+									SystemCreationClassName: "CIM_ComputerSystem",
+									SystemName:              "Intel(r) AMT",
+								},
+							},
+						},
+					},
+				},
+			},
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
@@ -121,5 +151,59 @@ func TestAMT_RedirectionService(t *testing.T) {
 			})
 		}
 
+	})
+
+	t.Run("amt_* Tests", func(t *testing.T) {
+		tests := []struct {
+			name             string
+			method           string
+			action           string
+			body             string
+			extraHeader      string
+			responseFunc     func() (Response, error)
+			expectedResponse interface{}
+		}{
+			{
+				"should create an invalid AMT_RedirectionService Pull wsman message",
+				"AMT_EthernetPortSettings",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				"",
+				func() (Response, error) {
+					currentMessage = "Error"
+					response, err := elementUnderTest.Pull("")
+					return response, err
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponse: PullResponse{
+						Items: []Item{
+							{
+								Redirection: Redirection{
+									CreationClassName:       "AMT_RedirectionService",
+									ElementName:             "Intel(r) AMT Redirection Service",
+									EnabledState:            32771,
+									ListenerEnabled:         true,
+									Name:                    "Intel(r) AMT Redirection Service",
+									SystemCreationClassName: "CIM_ComputerSystem",
+									SystemName:              "Intel(r) AMT",
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+
+		for _, test := range tests {
+			t.Run(test.name, func(t *testing.T) {
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				messageID++
+				response, err := test.responseFunc()
+				assert.Error(t, err)
+				assert.NotEqual(t, expectedXMLInput, response.XMLInput)
+				assert.NotEqual(t, test.expectedResponse, response.Body)
+			})
+		}
 	})
 }
