@@ -28,11 +28,19 @@ type (
 		DetectionSettingData DetectionSettingData `xml:"AMT_EnvironmentDetectionSettingData"`
 
 		EnumerateResponse common.EnumerateResponse
+		PullResponse      PullResponse
 	}
 	DetectionSettingData struct {
-		DetectionStrings string
-		ElementName      string
-		InstanceID       string
+		DetectionAlgorithm int
+		DetectionStrings   string
+		ElementName        string
+		InstanceID         string
+	}
+	PullResponse struct {
+		Items []Item
+	}
+	Item struct {
+		DetectionSettingData DetectionSettingData `xml:"AMT_EnvironmentDetectionSettingData"`
 	}
 )
 
@@ -114,9 +122,26 @@ func (sd SettingData) Enumerate() (response Response, err error) {
 }
 
 // Pulls instances of this class, following an Enumerate operation
-// func (EnvironmentDetectionSettingData SettingData) Pull(enumerationContext string) string {
-// 	return EnvironmentDetectionSettingData.base.Pull(enumerationContext)
-// }
+func (sd SettingData) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: sd.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = sd.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 // // Put will change properties of the selected instance
 // func (EnvironmentDetectionSettingData SettingData) Put(environmentDetectionSettingData EnvironmentDetectionSettingData) string {
