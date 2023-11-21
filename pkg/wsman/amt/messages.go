@@ -79,7 +79,7 @@ func NewMessages(client client.WSMan) Messages {
 	m.IEEE8021xCredentialContext = ieee8021x.NewIEEE8021xCredentialContext(wsmanMessageCreator)
 	m.IEEE8021xProfile = ieee8021x.NewIEEE8021xProfile(wsmanMessageCreator)
 	m.KerberosSettingData = kerberos.NewKerberosSettingData(wsmanMessageCreator)
-	m.ManagementPresenceRemoteSAP = managementpresence.NewManagementPresenceRemoteSAP(wsmanMessageCreator)
+	m.ManagementPresenceRemoteSAP = managementpresence.NewManagementPresenceRemoteSAPWithClient(wsmanMessageCreator, client)
 	m.MessageLog = messagelog.NewMessageLog(wsmanMessageCreator)
 	m.MPSUsernamePassword = mps.NewMPSUsernamePassword(wsmanMessageCreator)
 	m.PublicKeyCertificate = publickey.NewPublicKeyCertificate(wsmanMessageCreator)
