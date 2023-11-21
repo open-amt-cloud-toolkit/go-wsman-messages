@@ -24,9 +24,10 @@ type (
 	}
 	Body struct {
 		XMLName          xml.Name         `xml:"Body"`
-		ManagementRemote ManagementRemote `xml:"AMT_EnvironmentDetectionSettingData"`
+		ManagementRemote ManagementRemote `xml:"AMT_ManagementPresenceRemoteSAP"`
 
 		EnumerateResponse common.EnumerateResponse
+		PullResponse      PullResponse
 	}
 	ManagementRemote struct {
 		AccessInfo              string
@@ -38,6 +39,12 @@ type (
 		Port                    int
 		SystemCreationClassName string
 		SystemName              string
+	}
+	PullResponse struct {
+		Items []Item
+	}
+	Item struct {
+		ManagementRemote ManagementRemote `xml:"AMT_ManagementPresenceRemoteSAP"`
 	}
 )
 type RemoteSAP struct {
@@ -104,9 +111,26 @@ func (ManagementPresenceRemoteSAP RemoteSAP) Enumerate() (response Response, err
 }
 
 // Pulls instances of this class, following an Enumerate operation
-// func (ManagementPresenceRemoteSAP RemoteSAP) Pull(enumerationContext string) string {
-// 	return ManagementPresenceRemoteSAP.base.Pull(enumerationContext)
-// }
+func (ManagementPresenceRemoteSAP RemoteSAP) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: ManagementPresenceRemoteSAP.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = ManagementPresenceRemoteSAP.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 // // Delete removes a the specified instance
 // func (ManagementPresenceRemoteSAP RemoteSAP) Delete(handle string) string {

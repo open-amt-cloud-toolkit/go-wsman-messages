@@ -55,7 +55,7 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	client := MockClient{}
 	elementUnderTest := NewManagementPresenceRemoteSAPWithClient(wsmanMessageCreator, &client)
-
+	elementUnderTest1 := NewManagementPresenceRemoteSAP(wsmanMessageCreator)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -80,15 +80,15 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					ManagementRemote: ManagementRemote{
-						AccessInfo:              "",
-						CN:                      "",
-						CreationClassName:       "",
-						ElementName:             "",
-						InfoFormat:              0,
-						Name:                    "",
-						Port:                    0,
-						SystemCreationClassName: "",
-						SystemName:              "",
+						AccessInfo:              "192.168.0.208",
+						CN:                      "192.168.0.208",
+						CreationClassName:       "AMT_ManagementPresenceRemoteSAP",
+						ElementName:             "Intel(r) AMT:Management Presence Server",
+						InfoFormat:              3,
+						Name:                    "Intel(r) AMT:Management Presence Server 0",
+						Port:                    4433,
+						SystemCreationClassName: "CIM_ComputerSystem",
+						SystemName:              "Intel(r) AMT",
 					},
 				},
 			},
@@ -101,6 +101,9 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 				"",
 				func() (Response, error) {
 					currentMessage = "Enumerate"
+					if elementUnderTest1.base.WSManMessageCreator == nil {
+						print("Error")
+					}
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -111,7 +114,37 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 				},
 			},
 			//PULLS
-			// {"should create a valid AMT_ManagementPresenceRemoteSAP Pull wsman message", "AMT_ManagementPresenceRemoteSAP", wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{
+				"should create a valid AMT_ManagementPresenceRemoteSAP Pull wsman message",
+				"AMT_ManagementPresenceRemoteSAP",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				"",
+				func() (Response, error) {
+					currentMessage = "Pull"
+					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponse: PullResponse{
+						Items: []Item{
+							{
+								ManagementRemote: ManagementRemote{
+									AccessInfo:              "192.168.10.196",
+									CN:                      "192.168.10.196",
+									CreationClassName:       "AMT_ManagementPresenceRemoteSAP",
+									ElementName:             "Intel(r) AMT:Management Presence Server",
+									InfoFormat:              3,
+									Name:                    "Intel(r) AMT:Management Presence Server 0",
+									Port:                    4433,
+									SystemCreationClassName: "CIM_ComputerSystem",
+									SystemName:              "Intel(r) AMT",
+								},
+							},
+						},
+					},
+				},
+			},
 			//DELETE
 			// {"should create a valid AMT_ManagementPresenceRemoteSAP Delete wsman message", "AMT_ManagementPresenceRemoteSAP", wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"Name\">instanceID123</w:Selector></w:SelectorSet>", func() string { return elementUnderTest.Delete("instanceID123") }},
 		}
@@ -124,6 +157,61 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.Body)
+			})
+		}
+	})
+	t.Run("amt_* Tests", func(t *testing.T) {
+		tests := []struct {
+			name             string
+			method           string
+			action           string
+			body             string
+			extraHeader      string
+			responseFunc     func() (Response, error)
+			expectedResponse interface{}
+		}{
+			{
+				"should create an invalid AMT_ManagementPresenceRemoteSAP Pull wsman message",
+				"AMT_ManagementPresenceRemoteSAP",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				"",
+				func() (Response, error) {
+					currentMessage = "Error"
+					response, err := elementUnderTest.Pull("")
+					return response, err
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponse: PullResponse{
+						Items: []Item{
+							{
+								ManagementRemote: ManagementRemote{
+									AccessInfo:              "192.168.10.196",
+									CN:                      "192.168.10.196",
+									CreationClassName:       "AMT_ManagementPresenceRemoteSAP",
+									ElementName:             "Intel(r) AMT:Management Presence Server",
+									InfoFormat:              3,
+									Name:                    "Intel(r) AMT:Management Presence Server 0",
+									Port:                    4433,
+									SystemCreationClassName: "CIM_ComputerSystem",
+									SystemName:              "Intel(r) AMT",
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+
+		for _, test := range tests {
+			t.Run(test.name, func(t *testing.T) {
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				messageID++
+				response, err := test.responseFunc()
+				assert.Error(t, err)
+				assert.NotEqual(t, expectedXMLInput, response.XMLInput)
+				assert.NotEqual(t, test.expectedResponse, response.Body)
 			})
 		}
 	})
