@@ -178,7 +178,6 @@ func (s Service) Pull(enumerationContext string) (response Response, err error) 
 	return
 }
 
-
 // // Put will change properties of the selected instance
 // func (s Service) Put(setupAndConfigurationService SetupAndConfigurationService) string {
 // 	return s.base.Put(setupAndConfigurationService, false, nil)
