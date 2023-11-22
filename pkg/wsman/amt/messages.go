@@ -89,7 +89,7 @@ func NewMessages(client client.WSMan) Messages {
 	m.RemoteAccessPolicyAppliesToMPS = remoteaccess.NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator)
 	m.RemoteAccessPolicyRule = remoteaccess.NewRemoteAccessPolicyRule(wsmanMessageCreator)
 	m.RemoteAccessService = remoteaccess.NewRemoteAccessService(wsmanMessageCreator)
-	m.SetupAndConfigurationService = setupandconfiguration.NewSetupAndConfigurationService(wsmanMessageCreator)
+	m.SetupAndConfigurationService = setupandconfiguration.NewSetupAndConfigurationServiceWithClient(wsmanMessageCreator, client)
 	m.TimeSynchronizationService = timesynchronization.NewTimeSynchronizationService(wsmanMessageCreator)
 	m.TLSCredentialContext = tls.NewTLSCredentialContext(wsmanMessageCreator)
 	m.TLSSettingData = tls.NewTLSSettingData(wsmanMessageCreator)
