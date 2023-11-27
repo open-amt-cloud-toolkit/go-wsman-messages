@@ -92,7 +92,7 @@ func NewMessages(client client.WSMan) Messages {
 	m.SetupAndConfigurationService = setupandconfiguration.NewSetupAndConfigurationServiceWithClient(wsmanMessageCreator, client)
 	m.TimeSynchronizationService = timesynchronization.NewTimeSynchronizationService(wsmanMessageCreator)
 	m.TLSCredentialContext = tls.NewTLSCredentialContext(wsmanMessageCreator)
-	m.TLSSettingData = tls.NewTLSSettingData(wsmanMessageCreator)
+	m.TLSSettingData = tls.NewTLSSettingDataWithClient(wsmanMessageCreator, client)
 	m.UserInitiatedConnectionService = userinitiatedconnection.NewUserInitiatedConnectionServiceWithClient(wsmanMessageCreator, client)
 	m.WiFiPortConfigurationService = wifiportconfiguration.NewWiFiPortConfigurationService(wsmanMessageCreator)
 	return m

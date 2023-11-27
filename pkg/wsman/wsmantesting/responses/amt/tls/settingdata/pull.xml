@@ -16,8 +16,7 @@
                     <h:ElementName>Intel(r) AMT 802.3 TLS Settings</h:ElementName>
                     <h:Enabled>false</h:Enabled>
                     <h:InstanceID>Intel(r) AMT 802.3 TLS Settings</h:InstanceID>
-                    <h:MutualAuthe ntication>false
-                    </h:MutualAuthentication>
+                    <h:MutualAuthentication>false</h:MutualAuthentication>
                     <h:NonSecureConnectionsSupported>true</h:NonSecureConnectionsSupported>
                 </h:AMT_TLSSettingData>
                 <h:AMT_TLSSettingData>
