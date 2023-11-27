@@ -27,7 +27,7 @@ type (
 		TlsSetting TlsSetting `xml:"AMT_TLSSettingData"`
 
 		EnumerateResponse common.EnumerateResponse
-		PullResponse	  PullResponse
+		PullResponse      PullResponse
 	}
 	TlsSetting struct {
 		AcceptNonSecureConnections bool
@@ -147,7 +147,6 @@ func (TLSSettingData SettingData) Pull(enumerationContext string) (response Resp
 
 	return
 }
-
 
 // Put will change properties of the selected instance
 // func (TLSSettingData SettingData) Put(tlsSettingData TLSSettingData) string {

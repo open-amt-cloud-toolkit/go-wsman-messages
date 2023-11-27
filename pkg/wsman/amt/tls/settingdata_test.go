@@ -109,10 +109,10 @@ func TestAMT_TLSSettingData(t *testing.T) {
 			},
 			//PULLS
 			{
-				"should create a valid AMT_TLSSettingData Pull wsman message", 
-				"AMT_TLSSettingData", 
-				wsmantesting.PULL, 
-				wsmantesting.PULL_BODY, 
+				"should create a valid AMT_TLSSettingData Pull wsman message",
+				"AMT_TLSSettingData",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
 				func() (Response, error) {
 					currentMessage = "Pull"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
@@ -159,10 +159,10 @@ func TestAMT_TLSSettingData(t *testing.T) {
 			expectedResponse interface{}
 		}{
 			{
-				"should create an invalid AMT_TLSSettingData Pull wsman message", 
-				"AMT_TLSSettingData", 
-				wsmantesting.PULL, 
-				wsmantesting.PULL_BODY, 
+				"should create an invalid AMT_TLSSettingData Pull wsman message",
+				"AMT_TLSSettingData",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
 				"",
 				func() (Response, error) {
 					currentMessage = "Error"
