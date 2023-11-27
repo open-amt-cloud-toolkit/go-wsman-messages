@@ -30,7 +30,7 @@ type (
 		User    User     `xml:"AMT_UserInitiatedConnectionService"`
 
 		EnumerateResponse common.EnumerateResponse
-		PullResponse	  PullResponse
+		PullResponse      PullResponse
 	}
 	User struct {
 		CreationClassName       string
@@ -44,7 +44,7 @@ type (
 		Items []Item
 	}
 	Item struct {
-		User 	User 	`xml:"AMT_UserInitiatedConnectionService"`
+		User User `xml:"AMT_UserInitiatedConnectionService"`
 	}
 )
 

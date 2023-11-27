@@ -110,10 +110,10 @@ func TestAMT_UserInitiatedConnectionService(t *testing.T) {
 			},
 			//PULLS
 			{
-				"should create a valid AMT_UserInitiatedConnectionService Pull wsman message", 
-				"AMT_UserInitiatedConnectionService", 
-				wsmantesting.PULL, 
-				wsmantesting.PULL_BODY, 
+				"should create a valid AMT_UserInitiatedConnectionService Pull wsman message",
+				"AMT_UserInitiatedConnectionService",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
 				func() (Response, error) {
 					currentMessage = "Pull"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
@@ -160,11 +160,11 @@ func TestAMT_UserInitiatedConnectionService(t *testing.T) {
 			expectedResponse interface{}
 		}{
 			{
-				"should create an invalid AMT_UserInitiatedConnectionService Pull wsman message", 
-				"AMT_UserInitiatedConnectionService", 
-				wsmantesting.PULL, 
+				"should create an invalid AMT_UserInitiatedConnectionService Pull wsman message",
+				"AMT_UserInitiatedConnectionService",
+				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
-				"", 
+				"",
 				func() (Response, error) {
 					currentMessage = "Error"
 					response, err := elementUnderTest.Pull("")
