@@ -27,6 +27,7 @@ type (
 		TlsSetting TlsSetting `xml:"AMT_TLSSettingData"`
 
 		EnumerateResponse common.EnumerateResponse
+		PullResponse      PullResponse
 	}
 	TlsSetting struct {
 		AcceptNonSecureConnections bool
@@ -34,6 +35,12 @@ type (
 		Enabled                    bool
 		InstanceID                 string
 		MutualAuthentication       bool
+	}
+	PullResponse struct {
+		Items []Item
+	}
+	Item struct {
+		TlsSetting TlsSetting `xml:"AMT_TLSSettingData"`
 	}
 )
 
@@ -120,9 +127,26 @@ func (TLSSettingData SettingData) Enumerate() (response Response, err error) {
 }
 
 // Pulls instances of this class, following an Enumerate operation
-// func (TLSSettingData SettingData) Pull(enumerationContext string) string {
-// 	return TLSSettingData.base.Pull(enumerationContext)
-// }
+func (TLSSettingData SettingData) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: TLSSettingData.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = TLSSettingData.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 // Put will change properties of the selected instance
 // func (TLSSettingData SettingData) Put(tlsSettingData TLSSettingData) string {
