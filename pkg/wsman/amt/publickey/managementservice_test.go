@@ -57,7 +57,7 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 	elementUnderTest1 := NewPublicKeyManagementService(wsmanMessageCreator)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
-			name             string 
+			name             string
 			method           string
 			action           string
 			body             string
@@ -143,7 +143,6 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 				},
 			},
 
-
 			// // PUBLIC KEY MANAGEMENT SERVICE
 			// {"should return a valid amt_PublicKeyManagementService AddTrustedRootCertificate wsman message", "AMT_PublicKeyManagementService", `http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/AddTrustedRootCertificate`, fmt.Sprintf(`<h:AddTrustedRootCertificate_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService"><h:CertificateBlob>%s</h:CertificateBlob></h:AddTrustedRootCertificate_INPUT>`, wsmantesting.TrustedRootCert), "", func() string {
 			// 	return elementUnderTest.AddTrustedRootCertificate(wsmantesting.TrustedRootCert)
@@ -200,11 +199,11 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 			expectedResponse interface{}
 		}{
 			{
-				"should create an invalid AMT_PublicKeyManagementService Pull wsman message", 
-				AMT_PublicKeyManagementService, 
-				wsmantesting.PULL, 
-				wsmantesting.PULL_BODY, 
-				"", 
+				"should create an invalid AMT_PublicKeyManagementService Pull wsman message",
+				AMT_PublicKeyManagementService,
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				"",
 				func() (Response, error) {
 					currentMessage = "Error"
 					response, err := elementUnderTest.Pull("")

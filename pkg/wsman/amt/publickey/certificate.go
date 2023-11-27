@@ -27,13 +27,13 @@ type (
 		KeyCert KeyCert  `xml:"AMT_PublicKeyCertificate"`
 
 		EnumerateResponse common.EnumerateResponse
-		PullResponseCert  PullResponseCert	`xml:"PullResponse"`
+		PullResponseCert  PullResponseCert `xml:"PullResponse"`
 	}
 	KeyCert struct {
 		ElementName            string
 		InstanceID             string
 		X509Certificate        string
-		ReadOnlyCertificate	   bool 
+		ReadOnlyCertificate    bool
 		TrustedRootCertificate bool
 		Issuer                 string
 		Subject                string

@@ -31,9 +31,8 @@ type (
 		AddKey_OUTPUT                    AddKey_OUTPUT                `xml:"AddKey_OUTPUT,omitempty"`
 		KeyManagement                    KeyManagement                `xml:"AMT_PublicKeyManagementService"`
 
-		EnumerateResponse 				common.EnumerateResponse
-		PullResponseManagement	  		PullResponseManagement		  `xml:"PullResponse"`
-		
+		EnumerateResponse      common.EnumerateResponse
+		PullResponseManagement PullResponseManagement `xml:"PullResponse"`
 	}
 
 	KeyManagement struct {
