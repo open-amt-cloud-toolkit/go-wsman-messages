@@ -31,7 +31,8 @@ type (
 		AddKey_OUTPUT                    AddKey_OUTPUT                `xml:"AddKey_OUTPUT,omitempty"`
 		KeyManagement                    KeyManagement                `xml:"AMT_PublicKeyManagementService"`
 
-		EnumerateResponse common.EnumerateResponse
+		EnumerateResponse      common.EnumerateResponse
+		PullResponseManagement PullResponseManagement `xml:"PullResponse"`
 	}
 
 	KeyManagement struct {
@@ -43,6 +44,12 @@ type (
 		RequestedState          int
 		SystemCreationClassName string
 		SystemName              string
+	}
+	PullResponseManagement struct {
+		Items []ItemManagement
+	}
+	ItemManagement struct {
+		KeyManagement KeyManagement `xml:"AMT_PublicKeyManagementService"`
 	}
 )
 type AddTrustedCertificate_OUTPUT struct {
@@ -172,9 +179,26 @@ func (PublicKeyManagementService ManagementService) Enumerate() (response Respon
 }
 
 // Pulls instances of this class, following an Enumerate operation
-// func (PublicKeyManagementService ManagementService) Pull(enumerationContext string) string {
-// 	return PublicKeyManagementService.base.Pull(enumerationContext)
-// }
+func (PublicKeyManagementService ManagementService) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: PublicKeyManagementService.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = PublicKeyManagementService.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 // // Delete removes a the specified instance
 // func (PublicKeyManagementService ManagementService) Delete(instanceID string) string {

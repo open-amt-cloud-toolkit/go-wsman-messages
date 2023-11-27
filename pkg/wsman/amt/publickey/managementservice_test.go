@@ -54,6 +54,7 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	client := MockClientService{}
 	elementUnderTest := NewPublicKeyManagementServiceWithClient(wsmanMessageCreator, &client)
+	elementUnderTest1 := NewPublicKeyManagementService(wsmanMessageCreator)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -98,6 +99,9 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 				"",
 				func() (Response, error) {
 					currentMessage = "Enumerate"
+					if elementUnderTest1.base.WSManMessageCreator == nil {
+						print("Error")
+					}
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -108,7 +112,36 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 				},
 			},
 			//PULLS
-			//{"should create a valid AMT_PublicKeyManagementService Pull wsman message", "AMT_PublicKeyManagementService", wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{
+				"should create a valid AMT_PublicKeyManagementService Pull wsman message",
+				"AMT_PublicKeyManagementService",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				"",
+				func() (Response, error) {
+					currentMessage = "Pull"
+					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponseManagement: PullResponseManagement{
+						Items: []ItemManagement{
+							{
+								KeyManagement: KeyManagement{
+									CreationClassName:       "AMT_PublicKeyManagementService",
+									ElementName:             "Intel(r) AMT Certificate Store Service",
+									EnabledDefault:          5,
+									EnabledState:            5,
+									Name:                    "Intel(r) AMT Public Key Management Service",
+									RequestedState:          12,
+									SystemCreationClassName: "CIM_ComputerSystem",
+									SystemName:              "Intel(r) AMT",
+								},
+							},
+						},
+					},
+				},
+			},
 
 			// // PUBLIC KEY MANAGEMENT SERVICE
 			// {"should return a valid amt_PublicKeyManagementService AddTrustedRootCertificate wsman message", "AMT_PublicKeyManagementService", `http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/AddTrustedRootCertificate`, fmt.Sprintf(`<h:AddTrustedRootCertificate_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService"><h:CertificateBlob>%s</h:CertificateBlob></h:AddTrustedRootCertificate_INPUT>`, wsmantesting.TrustedRootCert), "", func() string {
@@ -151,6 +184,61 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.Body)
+			})
+		}
+	})
+
+	t.Run("amt_* Tests", func(t *testing.T) {
+		tests := []struct {
+			name             string
+			method           string
+			action           string
+			body             string
+			extraHeader      string
+			responseFunc     func() (Response, error)
+			expectedResponse interface{}
+		}{
+			{
+				"should create an invalid AMT_PublicKeyManagementService Pull wsman message",
+				AMT_PublicKeyManagementService,
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				"",
+				func() (Response, error) {
+					currentMessage = "Error"
+					response, err := elementUnderTest.Pull("")
+					return response, err
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponseManagement: PullResponseManagement{
+						Items: []ItemManagement{
+							{
+								KeyManagement: KeyManagement{
+									CreationClassName:       "AMT_PublicKeyManagementService",
+									ElementName:             "Intel(r) AMT Certificate Store Service",
+									EnabledDefault:          5,
+									EnabledState:            5,
+									Name:                    "Intel(r) AMT Public Key Management Service",
+									RequestedState:          12,
+									SystemCreationClassName: "CIM_ComputerSystem",
+									SystemName:              "Intel(r) AMT",
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+
+		for _, test := range tests {
+			t.Run(test.name, func(t *testing.T) {
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				messageID++
+				response, err := test.responseFunc()
+				assert.Error(t, err)
+				assert.NotEqual(t, expectedXMLInput, response.XMLInput)
+				assert.NotEqual(t, test.expectedResponse, response.Body)
 			})
 		}
 	})

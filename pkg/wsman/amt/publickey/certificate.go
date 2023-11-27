@@ -27,14 +27,22 @@ type (
 		KeyCert KeyCert  `xml:"AMT_PublicKeyCertificate"`
 
 		EnumerateResponse common.EnumerateResponse
+		PullResponseCert  PullResponseCert `xml:"PullResponse"`
 	}
 	KeyCert struct {
-		ElementName           string
-		InstanceID            string
-		X509Certificate       string
-		TrustedRootCertficate bool
-		Issuer                string
-		Subject               string
+		ElementName            string
+		InstanceID             string
+		X509Certificate        string
+		ReadOnlyCertificate    bool
+		TrustedRootCertificate bool
+		Issuer                 string
+		Subject                string
+	}
+	PullResponseCert struct {
+		Items []Item
+	}
+	Item struct {
+		KeyCert KeyCert `xml:"AMT_PublicKeyCertificate"`
 	}
 )
 type PullResponseEnvelope struct {
@@ -128,9 +136,26 @@ func (PublicKeyCertificate Certificate) Enumerate() (response ResponseCert, err 
 }
 
 // Pulls instances of this class, following an Enumerate operation
-// func (PublicKeyCertificate Certificate) Pull(enumerationContext string) string {
-// 	return PublicKeyCertificate.base.Pull(enumerationContext)
-// }
+func (PublicKeyCertificate Certificate) Pull(enumerationContext string) (response ResponseCert, err error) {
+	response = ResponseCert{
+		Message: &client.Message{
+			XMLInput: PublicKeyCertificate.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = PublicKeyCertificate.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 // Put will change properties of the selected instance
 // func (PublicKeyCertificate Certificate) Put(publicKeyCertificate PublicKeyCertificate) string {
