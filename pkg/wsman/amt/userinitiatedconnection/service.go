@@ -30,6 +30,7 @@ type (
 		User    User     `xml:"AMT_UserInitiatedConnectionService"`
 
 		EnumerateResponse common.EnumerateResponse
+		PullResponse      PullResponse
 	}
 	User struct {
 		CreationClassName       string
@@ -38,6 +39,12 @@ type (
 		Name                    string
 		SystemCreationClassName string
 		SystemName              string
+	}
+	PullResponse struct {
+		Items []Item
+	}
+	Item struct {
+		User User `xml:"AMT_UserInitiatedConnectionService"`
 	}
 )
 
@@ -121,9 +128,26 @@ func (UserInitiatedConnectionService Service) Enumerate() (response Response, er
 }
 
 // Pulls instances of this class, following an Enumerate operation
-// func (UserInitiatedConnectionService Service) Pull(enumerationContext string) string {
-// 	return UserInitiatedConnectionService.base.Pull(enumerationContext)
-// }
+func (UserInitiatedConnectionService Service) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: UserInitiatedConnectionService.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = UserInitiatedConnectionService.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 // // RequestStateChange requests that the state of the element be changed to the value specified in the RequestedState parameter . . .
 // func (UserInitiatedConnectionService Service) RequestStateChange(requestedState RequestedState) string {
