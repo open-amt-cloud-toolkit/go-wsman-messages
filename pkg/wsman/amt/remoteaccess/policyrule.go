@@ -28,6 +28,7 @@ type (
 		RemotePolicyRule RemotePolicyRule `xml:"AMT_RemoteAccessPolicyRule"`
 
 		EnumerateResponse common.EnumerateResponse
+		PullResponseRule  PullResponseRule `xml:"PullResponse"`
 	}
 	RemotePolicyRule struct {
 		CreationClassName       string
@@ -38,6 +39,12 @@ type (
 		SystemName              string
 		Trigger                 int
 		TunnelLifeTime          int
+	}
+	PullResponseRule struct {
+		Items []ItemRule
+	}
+	ItemRule struct {
+		RemotePolicyRule RemotePolicyRule `xml:"AMT_RemoteAccessPolicyRule"`
 	}
 )
 
@@ -126,9 +133,26 @@ func (RemoteAccessPolicyRule PolicyRule) Enumerate() (response ResponseRule, err
 }
 
 // Pulls instances of this class, following an Enumerate operation
-// func (RemoteAccessPolicyRule PolicyRule) Pull(enumerationContext string) string {
-// 	return RemoteAccessPolicyRule.base.Pull(enumerationContext)
-// }
+func (RemoteAccessPolicyRule PolicyRule) Pull(enumerationContext string) (response ResponseRule, err error) {
+	response = ResponseRule{
+		Message: &client.Message{
+			XMLInput: RemoteAccessPolicyRule.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = RemoteAccessPolicyRule.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 // // Put will change properties of the selected instance
 // func (RemoteAccessPolicyRule PolicyRule) Put(remoteAccessPolicyRule RemoteAccessPolicyRule) string {

@@ -28,13 +28,20 @@ type (
 		XMLName       xml.Name      `xml:"Body"`
 		PolicyApplies PolicyApplies `xml:"AMT_RemoteAccessPolicyAppliesToMPS"`
 
-		EnumerateResponse common.EnumerateResponse
+		EnumerateResponse   common.EnumerateResponse
+		PullResponseApplies PullResponseApplies `xml:"PullResponse"`
 	}
 	PolicyApplies struct {
 		CreationClassName       string
 		Name                    string
 		SystemCreationClassName string
 		SystemName              string
+	}
+	PullResponseApplies struct {
+		Items []ItemApplies
+	}
+	ItemApplies struct {
+		PolicyApplies PolicyApplies `xml:"AMT_PublicKeyCertificate"`
 	}
 )
 type RemoteAccessPolicyAppliesToMPS struct {
@@ -151,9 +158,26 @@ func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Enumerate() (response R
 }
 
 // Pulls instances of this class, following an Enumerate operation
-// func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Pull(enumerationContext string) string {
-// 	return RemoteAccessPolicyAppliesToMPS.base.Pull(enumerationContext)
-// }
+func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Pull(enumerationContext string) (response ResponseApplies, err error) {
+	response = ResponseApplies{
+		Message: &client.Message{
+			XMLInput: RemoteAccessPolicyAppliesToMPS.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = RemoteAccessPolicyAppliesToMPS.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 // // Put will change properties of the selected instance
 // func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Put(remoteAccessPolicyAppliesToMPS *RemoteAccessPolicyAppliesToMPS) string {
