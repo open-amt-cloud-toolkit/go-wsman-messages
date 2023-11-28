@@ -41,12 +41,11 @@ type (
 		TunnelLifeTime          int
 	}
 	PullResponseRule struct {
-		Items []ItemRule 
+		Items []ItemRule
 	}
 	ItemRule struct {
 		RemotePolicyRule RemotePolicyRule `xml:"AMT_RemoteAccessPolicyRule"`
 	}
-
 )
 
 type RemoteAccessPolicyRule struct {
@@ -154,6 +153,7 @@ func (RemoteAccessPolicyRule PolicyRule) Pull(enumerationContext string) (respon
 
 	return
 }
+
 // // Put will change properties of the selected instance
 // func (RemoteAccessPolicyRule PolicyRule) Put(remoteAccessPolicyRule RemoteAccessPolicyRule) string {
 // 	return RemoteAccessPolicyRule.base.Put(remoteAccessPolicyRule, false, nil)

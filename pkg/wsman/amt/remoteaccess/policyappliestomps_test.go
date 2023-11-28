@@ -109,11 +109,11 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 			},
 			//PULLS
 			{
-				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Pull wsman message", 
-				"AMT_RemoteAccessPolicyAppliesToMPS", 
-				wsmantesting.PULL, 
-				wsmantesting.PULL_BODY, 
-				"", 
+				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Pull wsman message",
+				"AMT_RemoteAccessPolicyAppliesToMPS",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				"",
 				func() (ResponseApplies, error) {
 					currentMessage = "Pull"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
@@ -191,11 +191,11 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 			expectedResponse interface{}
 		}{
 			{
-				"should create a invalid AMT_RemoteAccessPolicyAppliesToMPS Pull wsman message", 
-				"AMT_RemoteAccessPolicyAppliesToMPS", 
-				wsmantesting.PULL, 
-				wsmantesting.PULL_BODY, 
-				"", 
+				"should create a invalid AMT_RemoteAccessPolicyAppliesToMPS Pull wsman message",
+				"AMT_RemoteAccessPolicyAppliesToMPS",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				"",
 				func() (ResponseApplies, error) {
 					currentMessage = "Error"
 					response, err := elementUnderTest.Pull("")

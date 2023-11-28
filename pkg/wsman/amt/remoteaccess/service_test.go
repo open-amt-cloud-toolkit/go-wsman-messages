@@ -110,10 +110,10 @@ func TestAMT_RemoteAccessService(t *testing.T) {
 			},
 			//PULLS
 			{
-				"should create a valid AMT_RemoteAccessService Pull wsman message", 
-				"AMT_RemoteAccessService", 
-				wsmantesting.PULL, 
-				wsmantesting.PULL_BODY, 
+				"should create a valid AMT_RemoteAccessService Pull wsman message",
+				"AMT_RemoteAccessService",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
 				func() (Response, error) {
 					currentMessage = "Pull"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
@@ -184,10 +184,10 @@ func TestAMT_RemoteAccessService(t *testing.T) {
 			expectedResponse interface{}
 		}{
 			{
-				"should create a invalid AMT_RemoteAccessService Pull wsman message", 
-				"AMT_RemoteAccessService", 
-				wsmantesting.PULL, 
-				wsmantesting.PULL_BODY, 
+				"should create a invalid AMT_RemoteAccessService Pull wsman message",
+				"AMT_RemoteAccessService",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
 				"",
 				func() (Response, error) {
 					currentMessage = "Error"

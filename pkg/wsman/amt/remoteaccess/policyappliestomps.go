@@ -28,7 +28,7 @@ type (
 		XMLName       xml.Name      `xml:"Body"`
 		PolicyApplies PolicyApplies `xml:"AMT_RemoteAccessPolicyAppliesToMPS"`
 
-		EnumerateResponse common.EnumerateResponse
+		EnumerateResponse   common.EnumerateResponse
 		PullResponseApplies PullResponseApplies `xml:"PullResponse"`
 	}
 	PolicyApplies struct {
@@ -178,7 +178,6 @@ func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Pull(enumerationContext
 
 	return
 }
-
 
 // // Put will change properties of the selected instance
 // func (RemoteAccessPolicyAppliesToMPS PolicyAppliesToMPS) Put(remoteAccessPolicyAppliesToMPS *RemoteAccessPolicyAppliesToMPS) string {

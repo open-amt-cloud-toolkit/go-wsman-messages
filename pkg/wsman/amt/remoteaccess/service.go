@@ -28,7 +28,7 @@ type (
 		RemoteAccess RemoteAccess `xml:"AMT_RemoteAccessService"`
 
 		EnumerateResponse common.EnumerateResponse
-		PullResponse 	  PullResponse 
+		PullResponse      PullResponse
 	}
 	RemoteAccess struct {
 		CreationClassName       string
