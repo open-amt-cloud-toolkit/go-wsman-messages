@@ -54,6 +54,7 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	client := MockClientApply{}
 	elementUnderTest := NewRemoteAccessPolicyAppliesToMPSWithClient(wsmanMessageCreator, &client)
+	elementUnderTest1 := NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -94,6 +95,9 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 				"",
 				func() (ResponseApplies, error) {
 					currentMessage = "Enumerate"
+					if elementUnderTest1.base.WSManMessageCreator == nil {
+						print("Error")
+					}
 					return elementUnderTest.Enumerate()
 				},
 				BodyApplies{
@@ -104,7 +108,32 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 				},
 			},
 			//PULLS
-			// {"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Pull wsman message", "AMT_RemoteAccessPolicyAppliesToMPS", wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{
+				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Pull wsman message", 
+				"AMT_RemoteAccessPolicyAppliesToMPS", 
+				wsmantesting.PULL, 
+				wsmantesting.PULL_BODY, 
+				"", 
+				func() (ResponseApplies, error) {
+					currentMessage = "Pull"
+					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
+				},
+				BodyApplies{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponseApplies: PullResponseApplies{
+						Items: []ItemApplies{
+							{
+								PolicyApplies: PolicyApplies{
+									CreationClassName:       "",
+									Name:                    "",
+									SystemCreationClassName: "",
+									SystemName:              "",
+								},
+							},
+						},
+					},
+				},
+			},
 			// {"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Put wsman message", "AMT_RemoteAccessPolicyAppliesToMPS", wsmantesting.PUT, `<h:AMT_RemoteAccessPolicyAppliesToMPS xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS"><h:PolicySet><h:Caption>test</h:Caption><h:Description>test</h:Description><h:ElementName>test</h:ElementName><h:CommonName>test</h:CommonName><h:PolicyKeywords>test</h:PolicyKeywords><h:PolicyDecisionStrategy>1</h:PolicyDecisionStrategy><h:PolicyRoles>test</h:PolicyRoles><h:Enabled>1</h:Enabled></h:PolicySet><h:ManagedElement><h:Caption>test</h:Caption><h:Description>test</h:Description><h:ElementName>test</h:ElementName></h:ManagedElement><h:OrderOfAccess>0</h:OrderOfAccess><h:MpsType>2</h:MpsType></h:AMT_RemoteAccessPolicyAppliesToMPS>`, "", func() string {
 			// 	rapatmps := RemoteAccessPolicyAppliesToMPS{
 			// 		PolicySetAppliesToElement: PolicySetAppliesToElement{
@@ -148,6 +177,56 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.BodyApplies)
+			})
+		}
+	})
+	t.Run("amt_* Tests", func(t *testing.T) {
+		tests := []struct {
+			name             string
+			method           string
+			action           string
+			body             string
+			extraHeader      string
+			responseFunc     func() (ResponseApplies, error)
+			expectedResponse interface{}
+		}{
+			{
+				"should create a invalid AMT_RemoteAccessPolicyAppliesToMPS Pull wsman message", 
+				"AMT_RemoteAccessPolicyAppliesToMPS", 
+				wsmantesting.PULL, 
+				wsmantesting.PULL_BODY, 
+				"", 
+				func() (ResponseApplies, error) {
+					currentMessage = "Error"
+					response, err := elementUnderTest.Pull("")
+					return response, err
+				},
+				BodyApplies{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponseApplies: PullResponseApplies{
+						Items: []ItemApplies{
+							{
+								PolicyApplies: PolicyApplies{
+									CreationClassName:       "",
+									Name:                    "",
+									SystemCreationClassName: "",
+									SystemName:              "",
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+
+		for _, test := range tests {
+			t.Run(test.name, func(t *testing.T) {
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				messageID++
+				response, err := test.responseFunc()
+				assert.Error(t, err)
+				assert.NotEqual(t, expectedXMLInput, response.XMLInput)
+				assert.NotEqual(t, test.expectedResponse, response.BodyApplies)
 			})
 		}
 	})

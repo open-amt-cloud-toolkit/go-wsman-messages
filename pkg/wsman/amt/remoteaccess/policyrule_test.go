@@ -54,7 +54,7 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	clientPolicy := MockClientPolicy{}
 	elementUnderTest := NewPolicyRuleWithClient(wsmanMessageCreator, &clientPolicy)
-
+	elementUnderTest1 := NewRemoteAccessPolicyRule(wsmanMessageCreator)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -99,6 +99,9 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 				"",
 				func() (ResponseRule, error) {
 					currentMessage = "Enumerate"
+					if elementUnderTest1.base.WSManMessageCreator == nil {
+						print("Error")
+					}
 					return elementUnderTest.Enumerate()
 				},
 				BodyRule{
@@ -109,7 +112,37 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 				},
 			},
 			//PULLS
-			//{"should create a valid AMT_RemoteAccessPolicyRule Pull wsman message", "AMT_RemoteAccessPolicyRule", wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{
+				"should create a valid AMT_RemoteAccessPolicyRule Pull wsman message", 
+				"AMT_RemoteAccessPolicyRule", 
+				wsmantesting.PULL, 
+				wsmantesting.PULL_BODY, 
+				"", 
+				func() (ResponseRule, error) {
+					currentMessage = "Pull"
+					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
+				},
+				BodyRule{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponseRule: PullResponseRule{
+						Items: []ItemRule{
+							{
+								RemotePolicyRule: RemotePolicyRule{
+									CreationClassName:       "AMT_RemoteAccessPolicyRule",
+									ElementName:             "Inte(r) AMT:Remote Access Policy",
+									ExtendedData:            "AAAAAAAAABk=",
+									PolicyRuleName:          "Periodic",
+									SystemCreationClassName: "CIM_ComputerSystem",
+									SystemName:              "Intel(r) AMT",
+									Trigger:                 2,
+									TunnelLifeTime:          0,
+								},
+							},
+						},
+					},
+				},
+			},
+
 			//DELETE
 			//{"should create a valid AMT_RemoteAccessPolicyRule Delete wsman message", "AMT_RemoteAccessPolicyRule", wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"PolicyRuleName\">Instance</w:Selector></w:SelectorSet>", func() string {
 			//return elementUnderTest.Delete("Instance")
@@ -124,6 +157,60 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.BodyRule)
+			})
+		}
+	})
+	t.Run("amt_* Tests", func(t *testing.T) {
+		tests := []struct {
+			name             string
+			method           string
+			action           string
+			body             string
+			extraHeader      string
+			responseFunc     func() (ResponseRule, error)
+			expectedResponse interface{}
+		}{
+			{
+				"should create a invalid AMT_RemoteAccessPolicyRule Pull wsman message", 
+				"AMT_RemoteAccessPolicyRule", 
+				wsmantesting.PULL, 
+				wsmantesting.PULL_BODY, 
+				"", 
+				func() (ResponseRule, error) {
+					currentMessage = "Error"
+					response, err := elementUnderTest.Pull("")
+					return response, err
+				},
+				BodyRule{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponseRule: PullResponseRule{
+						Items: []ItemRule{
+							{
+								RemotePolicyRule: RemotePolicyRule{
+									CreationClassName:       "AMT_RemoteAccessPolicyRule",
+									ElementName:             "Inte(r) AMT:Remote Access Policy",
+									ExtendedData:            "AAAAAAAAABk=",
+									PolicyRuleName:          "Periodic",
+									SystemCreationClassName: "CIM_ComputerSystem",
+									SystemName:              "Intel(r) AMT",
+									Trigger:                 2,
+									TunnelLifeTime:          0,
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+
+		for _, test := range tests {
+			t.Run(test.name, func(t *testing.T) {
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				messageID++
+				response, err := test.responseFunc()
+				assert.Error(t, err)
+				assert.NotEqual(t, expectedXMLInput, response.XMLInput)
+				assert.NotEqual(t, test.expectedResponse, response.BodyRule)
 			})
 		}
 	})

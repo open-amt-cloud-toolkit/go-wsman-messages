@@ -28,6 +28,7 @@ type (
 		RemoteAccess RemoteAccess `xml:"AMT_RemoteAccessService"`
 
 		EnumerateResponse common.EnumerateResponse
+		PullResponse 	  PullResponse 
 	}
 	RemoteAccess struct {
 		CreationClassName       string
@@ -35,6 +36,12 @@ type (
 		Name                    string
 		SystemCreationClassName string
 		SystemName              string
+	}
+	PullResponse struct {
+		Items []Item
+	}
+	Item struct {
+		RemoteAccess RemoteAccess `xml:"AMT_RemoteAccessService"`
 	}
 )
 type Service struct {
@@ -131,9 +138,26 @@ func (RemoteAccessService Service) Enumerate() (response Response, err error) {
 }
 
 // Pulls instances of this class, following an Enumerate operation
-// func (RemoteAccessService Service) Pull(enumerationContext string) string {
-// 	return RemoteAccessService.base.Pull(enumerationContext)
-// }
+func (RemoteAccessService Service) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: RemoteAccessService.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = RemoteAccessService.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 /*func (r Service) AddMPS(mpServer MPServer) string {
 	header := r.base.WSManMessageCreator.CreateHeader(string(actions.AddMps), AMT_RemoteAccessService, nil, "", "")
