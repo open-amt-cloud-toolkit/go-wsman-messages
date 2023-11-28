@@ -56,7 +56,6 @@ func TestAMT_SetupAndConfigurationService(t *testing.T) {
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	client := MockClient{}
 	elementUnderTest := NewSetupAndConfigurationServiceWithClient(wsmanMessageCreator, &client)
-	elementUnderTest1 := NewSetupAndConfigurationService(wsmanMessageCreator)
 
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
@@ -102,7 +101,7 @@ func TestAMT_SetupAndConfigurationService(t *testing.T) {
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
 					currentMessage = "Enumerate"
-					if elementUnderTest1.base.WSManMessageCreator == nil {
+					if elementUnderTest.base.WSManMessageCreator == nil {
 						print("Error")
 					}
 					return elementUnderTest.Enumerate()
@@ -148,6 +147,26 @@ func TestAMT_SetupAndConfigurationService(t *testing.T) {
 					},
 				},
 			},
+			//GetUuid
+			{
+				"should return a valid AMT_GetUuid response",
+				"AMT_SetupAndConfigurationService",
+				wsmantesting.GetUuid,
+				wsmantesting.GetUuid_INPUT,
+				func() (Response, error) {
+					currentMessage = "getuuid"
+					if elementUnderTest.base.WSManMessageCreator == nil {
+						print("Error")
+					}
+					return elementUnderTest.GetUuid()
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					GetUuid_OUTPUT: GetUuid_OUTPUT{
+						UUID: "E67jVdK/u2EXoIiu3XA36g==",
+					},
+				},
+			},
 		}
 		// {"should create a valid AMT_SetupAndConfigurationService CommitChanges wsman message", "AMT_SetupAndConfigurationService", string(actions.CommitChanges), `<h:CommitChanges_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"></h:CommitChanges_INPUT>`, elementUnderTest.CommitChanges},
 		// {"should create a valid AMT_SetupAndConfigurationService GetUuid wsman message", "AMT_SetupAndConfigurationService", string(actions.GetUuid), `<h:GetUuid_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"></h:GetUuid_INPUT>`, elementUnderTest.GetUuid},
@@ -166,7 +185,7 @@ func TestAMT_SetupAndConfigurationService(t *testing.T) {
 		}
 	})
 
-	t.Run("amt_* Tests", func(t *testing.T) {
+	t.Run("amt_* Negative Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
 			method           string
@@ -221,6 +240,55 @@ func TestAMT_SetupAndConfigurationService(t *testing.T) {
 				assert.Error(t, err)
 				assert.NotEqual(t, expectedXMLInput, response.XMLInput)
 				assert.NotEqual(t, test.expectedResponse, response.Body)
+			})
+		}
+	})
+	t.Run("decodeUuid Tests", func(t *testing.T) {
+		tests := []struct {
+			name             string
+			responseFunc     func() (string, error, error)
+			expectedResponse string
+		}{{
+			"should properly decode AMT GetUuid Response to a UUID string",
+			func() (string, error, error) {
+				currentMessage = "getuuid"
+				response, err1 := elementUnderTest.GetUuid()
+				uuid, err2 := response.DecodeUUID()
+				return uuid, err1, err2
+			},
+			"55e3ae13-bfd2-61bb-17a0-88aedd7037ea",
+		},
+		}
+		for _, test := range tests {
+			t.Run(test.name, func(t *testing.T) {
+				response, err1, err2 := test.responseFunc()
+				assert.NoError(t, err1)
+				assert.NoError(t, err2)
+				assert.Equal(t, test.expectedResponse, response)
+			})
+		}
+	})
+	t.Run("decodeUuid Negative tests", func(t *testing.T) {
+		tests := []struct {
+			name             string
+			responseFunc     func() (string, error)
+			expectedResponse string
+		}{{
+			"should return error due to bad UUID returned",
+			func() (string, error) {
+				currentMessage = "getuuid-bad"
+				response, _ := elementUnderTest.GetUuid()
+				uuid, err := response.DecodeUUID()
+				return uuid, err
+			},
+			"55e3ae13-bfd2-61bb-17a0-88aedd7037ea",
+		},
+		}
+		for _, test := range tests {
+			t.Run(test.name, func(t *testing.T) {
+				response, err := test.responseFunc()
+				assert.Error(t, err)
+				assert.NotEqual(t, test.expectedResponse, response)
 			})
 		}
 	})
