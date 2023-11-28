@@ -57,6 +57,7 @@ func TestAMT_RemoteAccessService(t *testing.T) {
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	client := MockClient{}
 	elementUnderTest := NewRemoteAccessServiceWithClient(wsmanMessageCreator, &client)
+	elementUnderTest1 := NewRemoteAccessService(wsmanMessageCreator)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -95,6 +96,9 @@ func TestAMT_RemoteAccessService(t *testing.T) {
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
 					currentMessage = "Enumerate"
+					if elementUnderTest1.base.WSManMessageCreator == nil {
+						print("Error")
+					}
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -105,7 +109,32 @@ func TestAMT_RemoteAccessService(t *testing.T) {
 				},
 			},
 			//PULLS
-			// 	{"should create a valid AMT_RemoteAccessService Pull wsman message", "AMT_RemoteAccessService", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{
+				"should create a valid AMT_RemoteAccessService Pull wsman message",
+				"AMT_RemoteAccessService",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				func() (Response, error) {
+					currentMessage = "Pull"
+					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponse: PullResponse{
+						Items: []Item{
+							{
+								RemoteAccess: RemoteAccess{
+									CreationClassName:       "AMT_RemoteAccessService",
+									ElementName:             "Intel(r) AMT Remote Access Service",
+									Name:                    "Intel(r) AMT Remote Access Service",
+									SystemCreationClassName: "CIM_ComputerSystem",
+									SystemName:              "Intel(r) AMT",
+								},
+							},
+						},
+					},
+				},
+			},
 			// 	{"should create a valid AMT_RemoteAccessService AddMPS wsman message", "AMT_RemoteAccessService", string(actions.AddMps), fmt.Sprintf(`<h:AddMpServer_INPUT xmlns:h="%s%s"><h:AccessInfo>%s</h:AccessInfo><h:InfoFormat>%d</h:InfoFormat><h:Port>%d</h:Port><h:AuthMethod>%d</h:AuthMethod><h:Username>%s</h:Username><h:Password>%s</h:Password><h:CN>%s</h:CN></h:AddMpServer_INPUT>`, resourceUriBase, AMT_RemoteAccessService, "AccessInfo", 1, 2, 3, "Username", "Password", "CommonName"), func() string {
 			// 		mpsServer := MPServer{
 			// 			AccessInfo: "AccessInfo",
@@ -137,9 +166,61 @@ func TestAMT_RemoteAccessService(t *testing.T) {
 				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
+				println(response.XMLOutput)
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.Body)
+			})
+		}
+	})
+	t.Run("amt_* Tests", func(t *testing.T) {
+		tests := []struct {
+			name             string
+			method           string
+			action           string
+			body             string
+			extraHeader      string
+			responseFunc     func() (Response, error)
+			expectedResponse interface{}
+		}{
+			{
+				"should create a invalid AMT_RemoteAccessService Pull wsman message",
+				"AMT_RemoteAccessService",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				"",
+				func() (Response, error) {
+					currentMessage = "Error"
+					response, err := elementUnderTest.Pull("")
+					return response, err
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					PullResponse: PullResponse{
+						Items: []Item{
+							{
+								RemoteAccess: RemoteAccess{
+									CreationClassName:       "AMT_RemoteAccessService",
+									ElementName:             "Intel(r) AMT Remote Access Service",
+									Name:                    "Intel(r) AMT Remote Access Service",
+									SystemCreationClassName: "CIM_ComputerSystem",
+									SystemName:              "Intel(r) AMT",
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+
+		for _, test := range tests {
+			t.Run(test.name, func(t *testing.T) {
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				messageID++
+				response, err := test.responseFunc()
+				assert.Error(t, err)
+				assert.NotEqual(t, expectedXMLInput, response.XMLInput)
+				assert.NotEqual(t, test.expectedResponse, response.Body)
 			})
 		}
 	})
