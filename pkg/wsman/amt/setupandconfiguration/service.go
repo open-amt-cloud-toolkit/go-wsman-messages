@@ -6,10 +6,13 @@
 package setupandconfiguration
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"encoding/xml"
 
+	"github.com/google/uuid"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/actions"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
@@ -25,11 +28,11 @@ type (
 		Body    Body           `xml:"Body"`
 	}
 	Body struct {
-		XMLName xml.Name `xml:"Body"`
-		Setup   Setup    `xml:"AMT_SetupAndConfigurationService"`
-
+		XMLName           xml.Name `xml:"Body"`
+		Setup             Setup    `xml:"AMT_SetupAndConfigurationService"`
 		EnumerateResponse common.EnumerateResponse
 		PullResponse      PullResponse
+		GetUuid_OUTPUT    GetUuid_OUTPUT `xml:"GetUuid_OUTPUT"`
 	}
 
 	Setup struct {
@@ -52,6 +55,10 @@ type (
 	Item struct {
 		Setup Setup `xml:"AMT_SetupAndConfigurationService"`
 	}
+
+	GetUuid_OUTPUT struct {
+		UUID string `xml:"UUID"`
+	}
 )
 type UnprovisionResponse struct {
 	XMLName xml.Name        `xml:"Envelope"`
@@ -68,6 +75,7 @@ type Unprovision_OUTPUT struct {
 	XMLName     xml.Name `xml:"Unprovision_OUTPUT"`
 	ReturnValue int
 }
+
 type SetupAndConfigurationService struct {
 	models.CredentialManagementService
 	AMT_SetupAndConfigurationService struct {
@@ -92,6 +100,27 @@ func (w *Response) JSON() string {
 		return ""
 	}
 	return string(jsonOutput)
+}
+
+func (w *Response) DecodeUUID() (amtUuid string, err error) {
+	decodedBytes, err := base64.StdEncoding.DecodeString(w.Body.GetUuid_OUTPUT.UUID)
+	if err != nil {
+		return
+	}
+	rearrangeBytes := []byte{
+		decodedBytes[3], decodedBytes[2], decodedBytes[1], decodedBytes[0],
+		decodedBytes[5], decodedBytes[4],
+		decodedBytes[7], decodedBytes[6],
+		decodedBytes[8], decodedBytes[9],
+		decodedBytes[10], decodedBytes[11], decodedBytes[12], decodedBytes[13], decodedBytes[14], decodedBytes[15],
+	}
+
+	uuidSlice, err := uuid.FromBytes(rearrangeBytes)
+	if err != nil {
+		return
+	}
+	amtUuid = uuidSlice.String()
+	return
 }
 
 type Service struct {
@@ -188,11 +217,29 @@ func (s Service) Pull(enumerationContext string) (response Response, err error) 
 // 	return s.base.WSManMessageCreator.CreateXML(header, body)
 // }
 
-// func (s Service) GetUuid() string {
-// 	header := s.base.WSManMessageCreator.CreateHeader(string(actions.GetUuid), AMT_SetupAndConfigurationService, nil, "", "")
-// 	body := s.base.WSManMessageCreator.CreateBody("GetUuid_INPUT", AMT_SetupAndConfigurationService, nil)
-// 	return s.base.WSManMessageCreator.CreateXML(header, body)
-// }
+// Gets the AMT UUID from the device
+func (s Service) GetUuid() (response Response, err error) {
+	header := s.base.WSManMessageCreator.CreateHeader(string(actions.GetUuid), AMT_SetupAndConfigurationService, nil, "", "")
+	body := s.base.WSManMessageCreator.CreateBody("GetUuid_INPUT", AMT_SetupAndConfigurationService, nil)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: s.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+	// send the message to AMT
+	err = s.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 // func (s Service) SetMEBXPassword(password string) string {
 // 	header := s.base.WSManMessageCreator.CreateHeader(string(actions.SetMEBxPassword), AMT_SetupAndConfigurationService, nil, "", "")
