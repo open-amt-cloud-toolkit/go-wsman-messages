@@ -10,10 +10,8 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/actions"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/methods"
 )
-
-const AMT_AuditLog = "AMT_AuditLog"
 
 type AuditLog struct {
 	base message.Base
@@ -51,8 +49,8 @@ func (a AuditLog) ReadRecords(startIndex int) string {
 	if startIndex < 1 {
 		startIndex = 0
 	}
-	header := a.base.WSManMessageCreator.CreateHeader(string(actions.ReadRecords), AMT_AuditLog, nil, "", "")
-	body := a.base.WSManMessageCreator.CreateBody("ReadRecords_INPUT", AMT_AuditLog, &readRecords_INPUT{StartIndex: startIndex})
+	header := a.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuditLog, ReadRecords), AMT_AuditLog, nil, "", "")
+	body := a.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(ReadRecords), AMT_AuditLog, &readRecords_INPUT{StartIndex: startIndex})
 
 	return a.base.WSManMessageCreator.CreateXML(header, body)
 }

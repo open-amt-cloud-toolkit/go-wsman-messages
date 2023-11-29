@@ -69,7 +69,7 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 			//GETS
 			{
 				"should create a valid AMT_EthernetPortSettings Get wsman message",
-				"AMT_EthernetPortSettings",
+				AMT_EthernetPortSettings,
 				wsmantesting.GET,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"test\">test</w:Selector></w:SelectorSet>",
@@ -114,7 +114,7 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 			//ENUMERATES
 			{
 				"should create a valid AMT_EthernetPortSettings Enumerate wsman message",
-				"AMT_EthernetPortSettings",
+				AMT_EthernetPortSettings,
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				"",
@@ -135,7 +135,7 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 			//PULLS
 			{
 				"should create a valid AMT_EthernetPortSettings Pull wsman message",
-				"AMT_EthernetPortSettings",
+				AMT_EthernetPortSettings,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
@@ -203,7 +203,7 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 		}{
 			{
 				"should create an invalid AMT_EthernetPortSettings Pull wsman message",
-				"AMT_EthernetPortSettings",
+				AMT_EthernetPortSettings,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",

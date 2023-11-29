@@ -10,10 +10,8 @@ import (
 	"fmt"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/actions"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/methods"
 )
-
-const AMT_MessageLog = "AMT_MessageLog"
 
 type MessageLog struct {
 	base message.Base
@@ -50,8 +48,8 @@ func (MessageLog MessageLog) GetRecords(identifier int) string {
 		identifier = 1
 	}
 
-	header := MessageLog.base.WSManMessageCreator.CreateHeader(string(actions.GetRecords), AMT_MessageLog, nil, "", "")
-	body := MessageLog.base.WSManMessageCreator.CreateBody("GetRecords_INPUT", AMT_MessageLog, &GetRecords_INPUT{
+	header := MessageLog.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_MessageLog, GetRecords), AMT_MessageLog, nil, "", "")
+	body := MessageLog.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetRecords), AMT_MessageLog, &GetRecords_INPUT{
 		IterationIdentifier: identifier,
 		MaxReadRecords:      390,
 	})
@@ -60,7 +58,7 @@ func (MessageLog MessageLog) GetRecords(identifier int) string {
 }
 
 func (MessageLog MessageLog) PositionToFirstRecord() string {
-	header := MessageLog.base.WSManMessageCreator.CreateHeader(string(actions.PositionToFirstRecord), AMT_MessageLog, nil, "", "")
+	header := MessageLog.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_MessageLog, PositionToFirstRecord), AMT_MessageLog, nil, "", "")
 	body := fmt.Sprintf(`<Body><h:PositionToFirstRecord_INPUT xmlns:h="%s%s" /></Body>`, MessageLog.base.WSManMessageCreator.ResourceURIBase, AMT_MessageLog)
 
 	return MessageLog.base.WSManMessageCreator.CreateXML(header, body)

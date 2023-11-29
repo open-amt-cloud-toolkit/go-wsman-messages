@@ -14,8 +14,6 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
-const AMT_PublicKeyManagementService = "AMT_PublicKeyManagementService"
-
 type (
 	Response struct {
 		*client.Message
@@ -206,31 +204,31 @@ func (PublicKeyManagementService ManagementService) Pull(enumerationContext stri
 // 	return PublicKeyManagementService.base.Delete(selector)
 // }
 // func (p ManagementService) AddCertificate(certificateBlob string) string {
-// 	header := p.base.WSManMessageCreator.CreateHeader(string(actions.AddCertificate), AMT_PublicKeyManagementService, nil, "", "")
+// 	header := p.base.WSManMessageCreator.CreateHeader(AddCertificate_ACTION, AMT_PublicKeyManagementService, nil, "", "")
 // 	certificate := AddCertificate_INPUT{CertificateBlob: certificateBlob}
-// 	body := p.base.WSManMessageCreator.CreateBody("AddCertificate_INPUT", AMT_PublicKeyManagementService, &certificate)
+// 	body := p.base.WSManMessageCreator.CreateBody(AddCertificate_METHOD, AMT_PublicKeyManagementService, &certificate)
 
 // 	return p.base.WSManMessageCreator.CreateXML(header, body)
 // }
 
 // func (p ManagementService) AddTrustedRootCertificate(certificateBlob string) string {
-// 	header := p.base.WSManMessageCreator.CreateHeader(string(actions.AddTrustedRootCertificate), AMT_PublicKeyManagementService, nil, "", "")
+// 	header := p.base.WSManMessageCreator.CreateHeader(AddTrustedRootCertificate_ACTION, AMT_PublicKeyManagementService, nil, "", "")
 // 	trustedRootCert := AddTrustedRootCertificate_INPUT{CertificateBlob: certificateBlob}
-// 	body := p.base.WSManMessageCreator.CreateBody("AddTrustedRootCertificate_INPUT", AMT_PublicKeyManagementService, &trustedRootCert)
+// 	body := p.base.WSManMessageCreator.CreateBody(AddTrustedRootCertificate_METHOD, AMT_PublicKeyManagementService, &trustedRootCert)
 
 // 	return p.base.WSManMessageCreator.CreateXML(header, body)
 // }
 
 // func (p ManagementService) GenerateKeyPair(keyPairParameters GenerateKeyPair_INPUT) string {
-// 	header := p.base.WSManMessageCreator.CreateHeader(string(actions.GenerateKeyPair), AMT_PublicKeyManagementService, nil, "", "")
-// 	body := p.base.WSManMessageCreator.CreateBody("GenerateKeyPair_INPUT", AMT_PublicKeyManagementService, &keyPairParameters)
+// 	header := p.base.WSManMessageCreator.CreateHeader(GenerateKeyPair_ACTION, AMT_PublicKeyManagementService, nil, "", "")
+// 	body := p.base.WSManMessageCreator.CreateBody(GenerateKeyPair_METHOD, AMT_PublicKeyManagementService, &keyPairParameters)
 
 // 	return p.base.WSManMessageCreator.CreateXML(header, body)
 // }
 
 // func (p ManagementService) GeneratePKCS10RequestEx(pkcs10Request PKCS10Request) string {
-// 	header := p.base.WSManMessageCreator.CreateHeader(string(actions.GeneratePKCS10RequestEx), AMT_PublicKeyManagementService, nil, "", "")
-// 	body := p.base.WSManMessageCreator.CreateBody("GeneratePKCS10RequestEx_INPUT", AMT_PublicKeyManagementService, &pkcs10Request)
+// 	header := p.base.WSManMessageCreator.CreateHeader(GeneratePKCS10RequestEx_ACTION, AMT_PublicKeyManagementService, nil, "", "")
+// 	body := p.base.WSManMessageCreator.CreateBody(GeneratePKCS10RequestEx_METHOD, AMT_PublicKeyManagementService, &pkcs10Request)
 
 // 	return p.base.WSManMessageCreator.CreateXML(header, body)
 // }
@@ -241,11 +239,11 @@ func (PublicKeyManagementService ManagementService) Pull(enumerationContext stri
 // Possible return values are: PT_STATUS_SUCCESS(0), PT_STATUS_INTERNAL_ERROR(1), PT_STATUS_MAX_LIMIT_REACHED(23),
 // PT_STATUS_FLASH_WRITE_LIMIT_EXCEEDED(38), PT_STATUS_DUPLICATE(2068), PT_STATUS_INVALID_KEY(2062).
 // func (p ManagementService) AddKey(keyBlob []byte) string {
-// 	header := p.base.WSManMessageCreator.CreateHeader(string(actions.AddKey), AMT_PublicKeyManagementService, nil, "", "")
+// 	header := p.base.WSManMessageCreator.CreateHeader(AddKey_ACTION, AMT_PublicKeyManagementService, nil, "", "")
 // 	params := &AddKey_INPUT{
 // 		KeyBlob: keyBlob,
 // 	}
-// 	body := p.base.WSManMessageCreator.CreateBody("AddKey_INPUT", AMT_PublicKeyManagementService, params)
+// 	body := p.base.WSManMessageCreator.CreateBody(AddKey_METHOD, AMT_PublicKeyManagementService, params)
 
 // 	return p.base.WSManMessageCreator.CreateXML(header, body)
 // }

@@ -9,10 +9,8 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/actions"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/methods"
 )
-
-const AMT_KerberosSettingData = "AMT_KerberosSettingData"
 
 type KerberosSettingData struct {
 	base message.Base
@@ -44,15 +42,15 @@ func (KerberosSettingData KerberosSettingData) Pull(enumerationContext string) s
 	return KerberosSettingData.base.Pull(enumerationContext)
 }
 func (k KerberosSettingData) GetCredentialCacheState() string {
-	header := k.base.WSManMessageCreator.CreateHeader(string(actions.GetCredentialCacheState), AMT_KerberosSettingData, nil, "", "")
-	body := k.base.WSManMessageCreator.CreateBody("GetCredentialCacheState_INPUT", AMT_KerberosSettingData, nil)
+	header := k.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_KerberosSettingData, GetCredentialCacheState), AMT_KerberosSettingData, nil, "", "")
+	body := k.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetCredentialCacheState), AMT_KerberosSettingData, nil)
 
 	return k.base.WSManMessageCreator.CreateXML(header, body)
 }
 
 // func (k KerberosSettingData) SetCredentialCacheState(enabled bool) string {
-// 	header := k.base.WSManMessageCreator.CreateHeader(string(actions.SetCredentialCacheState), AMT_KerberosSettingData, nil, "", "")
-// 	body := k.base.WSManMessageCreator.CreateBody("SetCredentialCacheState_INPUT", AMT_KerberosSettingData, SetCredentialCacheState_INPUT{Enabled: enabled})
+// 	header := k.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_KerberosSettingData, SetCredentialCacheState), AMT_KerberosSettingData, nil, "", "")
+// 	body := k.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetCredentialCacheState), AMT_KerberosSettingData, SetCredentialCacheState_INPUT{Enabled: enabled})
 
 // 	return k.base.WSManMessageCreator.CreateXML(header, body)
 // }

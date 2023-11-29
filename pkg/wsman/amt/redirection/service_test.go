@@ -69,7 +69,7 @@ func TestAMT_RedirectionService(t *testing.T) {
 			//GETS
 			{
 				"should create a valid AMT_RedirectionService Get wsman message",
-				"AMT_RedirectionService",
+				AMT_RedirectionService,
 				wsmantesting.GET,
 				"",
 				func() (Response, error) {
@@ -79,7 +79,7 @@ func TestAMT_RedirectionService(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					Redirection: Redirection{
-						CreationClassName:       "AMT_RedirectionService",
+						CreationClassName:       AMT_RedirectionService,
 						ElementName:             "Intel(r) AMT Redirection Service",
 						EnabledState:            32771,
 						ListenerEnabled:         true,
@@ -92,7 +92,7 @@ func TestAMT_RedirectionService(t *testing.T) {
 			//ENUMERATES
 			{
 				"should create a valid AMT_RedirectionService Enumerate wsman message",
-				"AMT_RedirectionService",
+				AMT_RedirectionService,
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
@@ -112,7 +112,7 @@ func TestAMT_RedirectionService(t *testing.T) {
 			//PULLS
 			{
 				"should create a valid AMT_RedirectionService Pull wsman message",
-				"AMT_RedirectionService",
+				AMT_RedirectionService,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				func() (Response, error) {
@@ -125,7 +125,7 @@ func TestAMT_RedirectionService(t *testing.T) {
 						Items: []Item{
 							{
 								Redirection: Redirection{
-									CreationClassName:       "AMT_RedirectionService",
+									CreationClassName:       AMT_RedirectionService,
 									ElementName:             "Intel(r) AMT Redirection Service",
 									EnabledState:            32771,
 									ListenerEnabled:         true,
@@ -180,7 +180,7 @@ func TestAMT_RedirectionService(t *testing.T) {
 						Items: []Item{
 							{
 								Redirection: Redirection{
-									CreationClassName:       "AMT_RedirectionService",
+									CreationClassName:       AMT_RedirectionService,
 									ElementName:             "Intel(r) AMT Redirection Service",
 									EnabledState:            32771,
 									ListenerEnabled:         true,

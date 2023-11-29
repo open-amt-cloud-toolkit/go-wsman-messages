@@ -69,7 +69,7 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 			//GETS
 			{
 				"should create a valid AMT_ManagementPresenceRemoteSAP Get wsman message",
-				"AMT_ManagementPresenceRemoteSAP",
+				AMT_ManagementPresenceRemoteSAP,
 				wsmantesting.GET,
 				"",
 				"",
@@ -82,7 +82,7 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 					ManagementRemote: ManagementRemote{
 						AccessInfo:              "192.168.0.208",
 						CN:                      "192.168.0.208",
-						CreationClassName:       "AMT_ManagementPresenceRemoteSAP",
+						CreationClassName:       AMT_ManagementPresenceRemoteSAP,
 						ElementName:             "Intel(r) AMT:Management Presence Server",
 						InfoFormat:              3,
 						Name:                    "Intel(r) AMT:Management Presence Server 0",
@@ -95,7 +95,7 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 			//ENUMERATES
 			{
 				"should create a valid AMT_ManagementPresenceRemoteSAP Enumerate wsman message",
-				"AMT_ManagementPresenceRemoteSAP",
+				AMT_ManagementPresenceRemoteSAP,
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				"",
@@ -116,7 +116,7 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 			//PULLS
 			{
 				"should create a valid AMT_ManagementPresenceRemoteSAP Pull wsman message",
-				"AMT_ManagementPresenceRemoteSAP",
+				AMT_ManagementPresenceRemoteSAP,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
@@ -132,7 +132,7 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 								ManagementRemote: ManagementRemote{
 									AccessInfo:              "192.168.10.196",
 									CN:                      "192.168.10.196",
-									CreationClassName:       "AMT_ManagementPresenceRemoteSAP",
+									CreationClassName:       AMT_ManagementPresenceRemoteSAP,
 									ElementName:             "Intel(r) AMT:Management Presence Server",
 									InfoFormat:              3,
 									Name:                    "Intel(r) AMT:Management Presence Server 0",
@@ -146,7 +146,7 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 				},
 			},
 			//DELETE
-			// {"should create a valid AMT_ManagementPresenceRemoteSAP Delete wsman message", "AMT_ManagementPresenceRemoteSAP", wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"Name\">instanceID123</w:Selector></w:SelectorSet>", func() string { return elementUnderTest.Delete("instanceID123") }},
+			// {"should create a valid AMT_ManagementPresenceRemoteSAP Delete wsman message", AMT_ManagementPresenceRemoteSAP, wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"Name\">instanceID123</w:Selector></w:SelectorSet>", func() string { return elementUnderTest.Delete("instanceID123") }},
 		}
 
 		for _, test := range tests {
@@ -172,7 +172,7 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 		}{
 			{
 				"should create an invalid AMT_ManagementPresenceRemoteSAP Pull wsman message",
-				"AMT_ManagementPresenceRemoteSAP",
+				AMT_ManagementPresenceRemoteSAP,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
@@ -189,7 +189,7 @@ func TestAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 								ManagementRemote: ManagementRemote{
 									AccessInfo:              "192.168.10.196",
 									CN:                      "192.168.10.196",
-									CreationClassName:       "AMT_ManagementPresenceRemoteSAP",
+									CreationClassName:       AMT_ManagementPresenceRemoteSAP,
 									ElementName:             "Intel(r) AMT:Management Presence Server",
 									InfoFormat:              3,
 									Name:                    "Intel(r) AMT:Management Presence Server 0",

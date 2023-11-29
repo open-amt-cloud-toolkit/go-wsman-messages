@@ -107,8 +107,6 @@ type Selector message.Selector
 
 type LinkPolicyValues int
 
-const AMT_EthernetPortSettings = "AMT_EthernetPortSettings"
-
 const (
 	S0AC LinkPolicyValues = 1
 	SxAC LinkPolicyValues = 14

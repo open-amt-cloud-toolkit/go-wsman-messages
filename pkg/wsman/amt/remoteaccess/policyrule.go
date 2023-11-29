@@ -14,8 +14,6 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
-const AMT_RemoteAccessPolicyRule = "AMT_RemoteAccessPolicyRule"
-
 type (
 	ResponseRule struct {
 		*client.Message

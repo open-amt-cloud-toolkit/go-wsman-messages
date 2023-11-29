@@ -10,8 +10,6 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
 )
 
-const AMT_BootSettingData = "AMT_BootSettingData"
-
 type BootSettingData struct {
 	models.BootSettingData
 	InstanceID               string

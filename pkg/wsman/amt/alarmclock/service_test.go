@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/actions"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/methods"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
@@ -72,7 +72,7 @@ func TestAMT_AlarmClockService(t *testing.T) {
 		}{
 			//GETS
 			{"should create a valid AMT_AlarmClockService Get wsman message",
-				"AMT_AlarmClockService",
+				AMT_AlarmClockService,
 				wsmantesting.GET,
 				"",
 				func() (Response, error) {
@@ -82,7 +82,7 @@ func TestAMT_AlarmClockService(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					AlarmClockService: AlarmClockService{
-						CreationClassName:       "AMT_AlarmClockService",
+						CreationClassName:       AMT_AlarmClockService,
 						ElementName:             "Intel(r) AMT Alarm Clock Service",
 						Name:                    "Intel(r) AMT Alarm Clock Service",
 						SystemCreationClassName: "CIM_ComputerSystem",
@@ -92,7 +92,7 @@ func TestAMT_AlarmClockService(t *testing.T) {
 			},
 			//ENUMERATES
 			{"should create a valid AMT_AlarmClockService Enumerate wsman message",
-				"AMT_AlarmClockService",
+				AMT_AlarmClockService,
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
@@ -108,7 +108,7 @@ func TestAMT_AlarmClockService(t *testing.T) {
 			},
 			//PULLS
 			{"should create a valid AMT_AlarmClockService Pull wsman message",
-				"AMT_AlarmClockService",
+				AMT_AlarmClockService,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				func() (Response, error) {
@@ -122,7 +122,7 @@ func TestAMT_AlarmClockService(t *testing.T) {
 							{
 								AlarmClockService: AlarmClockService{
 									Name:                    "Intel(r) AMT Alarm Clock Service",
-									CreationClassName:       "AMT_AlarmClockService",
+									CreationClassName:       AMT_AlarmClockService,
 									SystemName:              "ManagedSystem",
 									SystemCreationClassName: "CIM_ComputerSystem",
 									ElementName:             "Intel(r) AMT Alarm Clock Service",
@@ -134,8 +134,8 @@ func TestAMT_AlarmClockService(t *testing.T) {
 			},
 			//AddAlarm
 			{"should create a valid AMT_AlarmClockService AddAlarm wsman message",
-				"AMT_AlarmClockService",
-				string(actions.AddAlarm),
+				AMT_AlarmClockService,
+				methods.GenerateAction(AMT_AlarmClockService, AddAlarm),
 				`<p:AddAlarm_INPUT xmlns:p="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AlarmClockService"><p:AlarmTemplate><s:InstanceID xmlns:s="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence">Instance</s:InstanceID><s:ElementName xmlns:s="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence">Alarm instance name</s:ElementName><s:StartTime xmlns:s="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence"><p:Datetime xmlns:p="http://schemas.dmtf.org/wbem/wscim/1/common">2022-12-31T23:59:00Z</p:Datetime></s:StartTime><s:Interval xmlns:s="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence"><p:Interval xmlns:p="http://schemas.dmtf.org/wbem/wscim/1/common">P1DT23H59M</p:Interval></s:Interval><s:DeleteOnCompletion xmlns:s="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence">true</s:DeleteOnCompletion></p:AlarmTemplate></p:AddAlarm_INPUT>`,
 				func() (Response, error) {
 					currentMessage = "AddAlarm"

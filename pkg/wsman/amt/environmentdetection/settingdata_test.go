@@ -69,7 +69,7 @@ func TestAMT_EnvironmentDetectionSettingData(t *testing.T) {
 			//GETS
 			{
 				"should create a valid AMT_EnvironmentDetectionSettingData Get wsman message",
-				"AMT_EnvironmentDetectionSettingData",
+				AMT_EnvironmentDetectionSettingData,
 				wsmantesting.GET,
 				"",
 				func() (Response, error) {
@@ -88,7 +88,7 @@ func TestAMT_EnvironmentDetectionSettingData(t *testing.T) {
 			//ENUMERATES
 			{
 				"should create a valid AMT_EnvironmentDetectionSettingData Enumerate wsman message",
-				"AMT_EnvironmentDetectionSettingData",
+				AMT_EnvironmentDetectionSettingData,
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
@@ -108,7 +108,7 @@ func TestAMT_EnvironmentDetectionSettingData(t *testing.T) {
 			//PULLS
 			{
 				"should create a valid AMT_EnvironmentDetectionSettingData Pull wsman message",
-				"AMT_EnvironmentDetectionSettingData",
+				AMT_EnvironmentDetectionSettingData,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				func() (Response, error) {
@@ -156,7 +156,7 @@ func TestAMT_EnvironmentDetectionSettingData(t *testing.T) {
 		}{
 			{
 				"should create an invalid AMT_EnvironmentDetectionSettingData Pull wsman message",
-				"AMT_EnvironmentDetectionSettingData",
+				AMT_EnvironmentDetectionSettingData,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",

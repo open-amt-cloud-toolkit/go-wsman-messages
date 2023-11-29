@@ -29,11 +29,11 @@ func TestAMT_BootSettingData(t *testing.T) {
 			responseFunc func() string
 		}{
 			//GETS
-			{"should create a valid AMT_BootSettingData Get wsman message", "AMT_BootSettingData", wsmantesting.GET, "", elementUnderTest.Get},
+			{"should create a valid AMT_BootSettingData Get wsman message", AMT_BootSettingData, wsmantesting.GET, "", elementUnderTest.Get},
 			//ENUMERATES
-			{"should create a valid AMT_BootSettingData Enumerate wsman message", "AMT_BootSettingData", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
+			{"should create a valid AMT_BootSettingData Enumerate wsman message", AMT_BootSettingData, wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
 			//PULLS
-			{"should create a valid AMT_BootSettingData Pull wsman message", "AMT_BootSettingData", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{"should create a valid AMT_BootSettingData Pull wsman message", AMT_BootSettingData, wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 		}
 
 		for _, test := range tests {

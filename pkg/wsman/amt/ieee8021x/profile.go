@@ -30,8 +30,6 @@ type IEEE8021xProfile struct {
 
 type AuthenticationProtocol int
 
-const AMT_IEEE8021xProfile = "AMT_8021XProfile"
-
 const (
 	TLS AuthenticationProtocol = iota
 	TTLS_MSCHAPv2

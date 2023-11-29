@@ -61,8 +61,6 @@ type RedirectionService struct {
 
 type EnabledState int
 
-const AMT_RedirectionService = "AMT_RedirectionService"
-
 const (
 	Unknown EnabledState = iota
 	Other
