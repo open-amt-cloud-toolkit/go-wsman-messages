@@ -44,8 +44,6 @@ type (
 	}
 )
 
-const AMT_TLSSettingData = "AMT_TLSSettingData"
-
 type TLSSettingData struct {
 	models.SettingData
 	MutualAuthentication          bool

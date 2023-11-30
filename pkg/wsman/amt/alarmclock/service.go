@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/actions"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/methods"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
@@ -93,8 +93,6 @@ func (w *Response) JSON() string {
 	}
 	return string(jsonOutput)
 }
-
-const AMT_AlarmClockService = "AMT_AlarmClockService"
 
 type Service struct {
 	base   message.Base
@@ -184,7 +182,7 @@ func (acs Service) Pull(enumerationContext string) (response Response, err error
 
 // AddAlarm creates an alarm that would wake the system at a given time.The method receives as input an embedded instance of type IPS_AlarmClockOccurrence, with the following fields set: StartTime, Interval, InstanceID, DeleteOnCompletion. Upon success, the method creates an instance of IPS_AlarmClockOccurrence which is associated with AlarmClockService.The method would fail if 5 instances or more of IPS_AlarmClockOccurrence already exist in the system.
 func (acs Service) AddAlarm(alarmClockOccurrence AlarmClockOccurrence) (response Response, err error) {
-	header := acs.base.WSManMessageCreator.CreateHeader(string(actions.AddAlarm), string(AMT_AlarmClockService), nil, "", "")
+	header := acs.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AlarmClockService, AddAlarm), AMT_AlarmClockService, nil, "", "")
 	startTime := alarmClockOccurrence.StartTime.UTC().Format(time.RFC3339Nano)
 	startTime = strings.Split(startTime, ".")[0]
 

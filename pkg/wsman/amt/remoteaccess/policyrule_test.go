@@ -68,7 +68,7 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 			//GETS
 			{
 				"should create a valid AMT_RemoteAccessPolicyRule Get wsman message",
-				"AMT_RemoteAccessPolicyRule",
+				AMT_RemoteAccessPolicyRule,
 				wsmantesting.GET,
 				"",
 				"",
@@ -79,7 +79,7 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 				BodyRule{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					RemotePolicyRule: RemotePolicyRule{
-						CreationClassName:       "AMT_RemoteAccessPolicyRule",
+						CreationClassName:       AMT_RemoteAccessPolicyRule,
 						ElementName:             "Inte(r) AMT:Remote Access Policy",
 						ExtendedData:            "AAAAAAAAABk=",
 						PolicyRuleName:          "Periodic",
@@ -93,7 +93,7 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 			//ENUMERATES
 			{
 				"should create a valid AMT_RemoteAccessPolicyRule Enumerate wsman message",
-				"AMT_RemoteAccessPolicyRule",
+				AMT_RemoteAccessPolicyRule,
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				"",
@@ -114,7 +114,7 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 			//PULLS
 			{
 				"should create a valid AMT_RemoteAccessPolicyRule Pull wsman message",
-				"AMT_RemoteAccessPolicyRule",
+				AMT_RemoteAccessPolicyRule,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
@@ -128,7 +128,7 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 						Items: []ItemRule{
 							{
 								RemotePolicyRule: RemotePolicyRule{
-									CreationClassName:       "AMT_RemoteAccessPolicyRule",
+									CreationClassName:       AMT_RemoteAccessPolicyRule,
 									ElementName:             "Inte(r) AMT:Remote Access Policy",
 									ExtendedData:            "AAAAAAAAABk=",
 									PolicyRuleName:          "Periodic",
@@ -144,7 +144,7 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 			},
 
 			//DELETE
-			//{"should create a valid AMT_RemoteAccessPolicyRule Delete wsman message", "AMT_RemoteAccessPolicyRule", wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"PolicyRuleName\">Instance</w:Selector></w:SelectorSet>", func() string {
+			//{"should create a valid AMT_RemoteAccessPolicyRule Delete wsman message", AMT_RemoteAccessPolicyRule, wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"PolicyRuleName\">Instance</w:Selector></w:SelectorSet>", func() string {
 			//return elementUnderTest.Delete("Instance")
 			//}},
 		}
@@ -172,7 +172,7 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 		}{
 			{
 				"should create a invalid AMT_RemoteAccessPolicyRule Pull wsman message",
-				"AMT_RemoteAccessPolicyRule",
+				AMT_RemoteAccessPolicyRule,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
@@ -187,7 +187,7 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 						Items: []ItemRule{
 							{
 								RemotePolicyRule: RemotePolicyRule{
-									CreationClassName:       "AMT_RemoteAccessPolicyRule",
+									CreationClassName:       AMT_RemoteAccessPolicyRule,
 									ElementName:             "Inte(r) AMT:Remote Access Policy",
 									ExtendedData:            "AAAAAAAAABk=",
 									PolicyRuleName:          "Periodic",

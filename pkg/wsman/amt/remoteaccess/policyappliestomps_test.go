@@ -68,7 +68,7 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 			//GETS
 			{
 				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Get wsman message",
-				"AMT_RemoteAccessPolicyAppliesToMPS",
+				AMT_RemoteAccessPolicyAppliesToMPS,
 				wsmantesting.GET,
 				"",
 				"",
@@ -89,7 +89,7 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 			//ENUMERATES
 			{
 				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Enumerate wsman message",
-				"AMT_RemoteAccessPolicyAppliesToMPS",
+				AMT_RemoteAccessPolicyAppliesToMPS,
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				"",
@@ -110,7 +110,7 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 			//PULLS
 			{
 				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Pull wsman message",
-				"AMT_RemoteAccessPolicyAppliesToMPS",
+				AMT_RemoteAccessPolicyAppliesToMPS,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
@@ -134,7 +134,7 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 					},
 				},
 			},
-			// {"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Put wsman message", "AMT_RemoteAccessPolicyAppliesToMPS", wsmantesting.PUT, `<h:AMT_RemoteAccessPolicyAppliesToMPS xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS"><h:PolicySet><h:Caption>test</h:Caption><h:Description>test</h:Description><h:ElementName>test</h:ElementName><h:CommonName>test</h:CommonName><h:PolicyKeywords>test</h:PolicyKeywords><h:PolicyDecisionStrategy>1</h:PolicyDecisionStrategy><h:PolicyRoles>test</h:PolicyRoles><h:Enabled>1</h:Enabled></h:PolicySet><h:ManagedElement><h:Caption>test</h:Caption><h:Description>test</h:Description><h:ElementName>test</h:ElementName></h:ManagedElement><h:OrderOfAccess>0</h:OrderOfAccess><h:MpsType>2</h:MpsType></h:AMT_RemoteAccessPolicyAppliesToMPS>`, "", func() string {
+			// {"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Put wsman message", AMT_RemoteAccessPolicyAppliesToMPS, wsmantesting.PUT, `<h:AMT_RemoteAccessPolicyAppliesToMPS xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS"><h:PolicySet><h:Caption>test</h:Caption><h:Description>test</h:Description><h:ElementName>test</h:ElementName><h:CommonName>test</h:CommonName><h:PolicyKeywords>test</h:PolicyKeywords><h:PolicyDecisionStrategy>1</h:PolicyDecisionStrategy><h:PolicyRoles>test</h:PolicyRoles><h:Enabled>1</h:Enabled></h:PolicySet><h:ManagedElement><h:Caption>test</h:Caption><h:Description>test</h:Description><h:ElementName>test</h:ElementName></h:ManagedElement><h:OrderOfAccess>0</h:OrderOfAccess><h:MpsType>2</h:MpsType></h:AMT_RemoteAccessPolicyAppliesToMPS>`, "", func() string {
 			// 	rapatmps := RemoteAccessPolicyAppliesToMPS{
 			// 		PolicySetAppliesToElement: PolicySetAppliesToElement{
 			// 			ManagedElement: models.ManagedElement{
@@ -163,8 +163,8 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 
 			// 	return elementUnderTest.Put(&rapatmps)
 			// }},
-			// //{"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Create wsman message", "AMT_RemoteAccessPolicyAppliesToMPS", wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
-			// {"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Delete wsman message", "AMT_RemoteAccessPolicyAppliesToMPS", wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"Name\">Instance</w:Selector></w:SelectorSet>", func() string {
+			// //{"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Create wsman message", AMT_RemoteAccessPolicyAppliesToMPS, wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			// {"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Delete wsman message", AMT_RemoteAccessPolicyAppliesToMPS, wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"Name\">Instance</w:Selector></w:SelectorSet>", func() string {
 			// 	return elementUnderTest.Delete("Instance")
 			// }},
 		}
@@ -192,7 +192,7 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 		}{
 			{
 				"should create a invalid AMT_RemoteAccessPolicyAppliesToMPS Pull wsman message",
-				"AMT_RemoteAccessPolicyAppliesToMPS",
+				AMT_RemoteAccessPolicyAppliesToMPS,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",

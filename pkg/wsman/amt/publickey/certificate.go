@@ -13,8 +13,6 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
-const AMT_PublicKeyCertificate = "AMT_PublicKeyCertificate"
-
 type (
 	ResponseCert struct {
 		*client.Message

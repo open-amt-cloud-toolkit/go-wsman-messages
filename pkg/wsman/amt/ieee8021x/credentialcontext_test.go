@@ -29,11 +29,11 @@ func TestAMT_8021xCredentialContext(t *testing.T) {
 			responseFunc func() string
 		}{
 			//GETS
-			{"should create a valid AMT_8021xCredentialContext Get wsman message", "AMT_8021xCredentialContext", wsmantesting.GET, "", elementUnderTest.Get},
+			{"should create a valid AMT_8021xCredentialContext Get wsman message", AMT_IEEE8021xCredentialContext, wsmantesting.GET, "", elementUnderTest.Get},
 			//ENUMERATES
-			{"should create a valid AMT_8021xCredentialContext Enumerate wsman message", "AMT_8021xCredentialContext", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
+			{"should create a valid AMT_8021xCredentialContext Enumerate wsman message", AMT_IEEE8021xCredentialContext, wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
 			//PULLS
-			{"should create a valid AMT_8021xCredentialContext Pull wsman message", "AMT_8021xCredentialContext", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{"should create a valid AMT_8021xCredentialContext Pull wsman message", AMT_IEEE8021xCredentialContext, wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 		}
 
 		for _, test := range tests {

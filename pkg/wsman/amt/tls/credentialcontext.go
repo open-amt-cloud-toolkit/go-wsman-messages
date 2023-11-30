@@ -11,8 +11,6 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 )
 
-const AMT_TLSCredentialContext = "AMT_TLSCredentialContext"
-
 type CredentialContext struct {
 	base message.Base
 }

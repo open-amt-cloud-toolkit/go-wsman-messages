@@ -10,7 +10,6 @@ import (
 	"strconv"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/actions"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/methods"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/wifi"
@@ -26,8 +25,6 @@ type Body struct {
 	XMLName                      xml.Name `xml:"Body"`
 	WiFiPortConfigurationService WiFiPortConfigurationService
 }
-
-const AMT_WiFiPortConfigurationService = "AMT_WiFiPortConfigurationService"
 
 type WiFiPortConfigurationService struct {
 	XMLName                            xml.Name `xml:"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService AMT_WiFiPortConfigurationService"`
@@ -186,7 +183,7 @@ func (s Service) Put(wiFiPortConfigurationService WiFiPortConfigurationService) 
 
 // AddWiFiSettings atomically creates instances and associates them based on the input parameters.
 func (s Service) AddWiFiSettings(wifiEndpointSettings models.WiFiEndpointSettings, ieee8021xSettingsInput *models.IEEE8021xSettings, wifiEndpoint, clientCredential, caCredential string) string {
-	header := s.base.WSManMessageCreator.CreateHeader(string(actions.AddWiFiSettings), AMT_WiFiPortConfigurationService, nil, "", "")
+	header := s.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_WiFiPortConfigurationService, AddWiFiSettings), AMT_WiFiPortConfigurationService, nil, "", "")
 
 	input := AddWiFiSettings_INPUT{
 		WifiEndpoint: WiFiEndpoint{
@@ -241,7 +238,7 @@ func (s Service) AddWiFiSettings(wifiEndpointSettings models.WiFiEndpointSetting
 		}
 	}
 
-	body := s.base.WSManMessageCreator.CreateBody(string(methods.AddWiFiSettings)+"_INPUT", AMT_WiFiPortConfigurationService, &input)
+	body := s.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(AddWiFiSettings), AMT_WiFiPortConfigurationService, &input)
 	return s.base.WSManMessageCreator.CreateXML(header, body)
 }
 

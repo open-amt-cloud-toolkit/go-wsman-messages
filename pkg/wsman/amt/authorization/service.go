@@ -76,8 +76,6 @@ const (
 
 type RealmValues int
 
-const AMT_AuthorizationService = "AMT_AuthorizationService"
-
 const (
 	RedirectionRealm                RealmValues = 2
 	PTAdministrationRealm           RealmValues = 3
@@ -229,56 +227,56 @@ func (as AuthorizationService) Pull(enumerationContext string) (response Respons
 // 	if startIndex == 0 {
 // 		startIndex = 1
 // 	}
-// 	header := as.base.WSManMessageCreator.CreateHeader(string(actions.EnumerateUserAclEntries), AMT_AuthorizationService, nil, "", "")
-// 	body := as.base.WSManMessageCreator.CreateBody("EnumerateUserAclEntries_INPUT", AMT_AuthorizationService, &EnumerateUserAclEntries_INPUT{StartIndex: startIndex})
+// 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, EnumerateUserAclEntries), AMT_AuthorizationService, nil, "", "")
+// 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(EnumerateUserAclEntries), AMT_AuthorizationService, &EnumerateUserAclEntries_INPUT{StartIndex: startIndex})
 // 	return as.base.WSManMessageCreator.CreateXML(header, body)
 // }
 
 // func (as AuthorizationService) GetAclEnabledState(handle int) string {
-// 	header := as.base.WSManMessageCreator.CreateHeader(string(actions.GetAclEnabledState), AMT_AuthorizationService, nil, "", "")
-// 	body := as.base.WSManMessageCreator.CreateBody("GetAclEnabledState_INPUT", AMT_AuthorizationService, &GetAclEnabledState_INPUT{Handle: handle})
+// 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, GetAclEnabledState), AMT_AuthorizationService, nil, "", "")
+// 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetAclEnabledState), AMT_AuthorizationService, &GetAclEnabledState_INPUT{Handle: handle})
 // 	return as.base.WSManMessageCreator.CreateXML(header, body)
 // }
 
 // func (as AuthorizationService) GetAdminAclEntry() string {
-// 	header := as.base.WSManMessageCreator.CreateHeader(string(actions.GetAdminAclEntry), AMT_AuthorizationService, nil, "", "")
-// 	body := as.base.WSManMessageCreator.CreateBody("GetAdminAclEntry_INPUT", AMT_AuthorizationService, nil)
+// 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, GetAdminAclEntry), AMT_AuthorizationService, nil, "", "")
+// 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetAdminAclEntry), AMT_AuthorizationService, nil)
 // 	return as.base.WSManMessageCreator.CreateXML(header, body)
 // }
 
 // func (as AuthorizationService) GetAdminAclEntryStatus() string {
-// 	header := as.base.WSManMessageCreator.CreateHeader(string(actions.GetAdminAclEntryStatus), AMT_AuthorizationService, nil, "", "")
-// 	body := as.base.WSManMessageCreator.CreateBody("GetAdminAclEntryStatus_INPUT", AMT_AuthorizationService, nil)
+// 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, GetAdminAclEntryStatus), AMT_AuthorizationService, nil, "", "")
+// 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetAdminAclEntryStatus), AMT_AuthorizationService, nil)
 // 	return as.base.WSManMessageCreator.CreateXML(header, body)
 // }
 
 // func (as AuthorizationService) GetAdminNetAclEntryStatus() string {
-// 	header := as.base.WSManMessageCreator.CreateHeader(string(actions.GetAdminNetAclEntryStatus), AMT_AuthorizationService, nil, "", "")
-// 	body := as.base.WSManMessageCreator.CreateBody("GetAdminNetAclEntryStatus_INPUT", AMT_AuthorizationService, nil)
+// 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, GetAdminNetAclEntryStatus), AMT_AuthorizationService, nil, "", "")
+// 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetAdminNetAclEntryStatus), AMT_AuthorizationService, nil)
 // 	return as.base.WSManMessageCreator.CreateXML(header, body)
 // }
 
 // // GetUserAclEntryEx reads a user entry from the Intel(R) AMT device.
 // func (as AuthorizationService) GetUserAclEntryEx(handle int) string {
-// 	header := as.base.WSManMessageCreator.CreateHeader(string(actions.GetUserAclEntryEx), AMT_AuthorizationService, nil, "", "")
-// 	body := as.base.WSManMessageCreator.CreateBody("GetUserAclEntryEx_INPUT", AMT_AuthorizationService, &GetUserAclEntryEx_INPUT{Handle: handle})
+// 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, GetUserAclEntryEx), AMT_AuthorizationService, nil, "", "")
+// 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetUserAclEntryEx), AMT_AuthorizationService, &GetUserAclEntryEx_INPUT{Handle: handle})
 // 	return as.base.WSManMessageCreator.CreateXML(header, body)
 // }
 
 // func (as AuthorizationService) RemoveUserAclEntry(handle int) string {
-// 	header := as.base.WSManMessageCreator.CreateHeader(string(actions.RemoveUserAclEntry), AMT_AuthorizationService, nil, "", "")
-// 	body := as.base.WSManMessageCreator.CreateBody("RemoveUserAclEntry_INPUT", AMT_AuthorizationService, &RemoveUserAclEntry_INPUT{Handle: handle})
+// 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, RemoveUserAclEntry), AMT_AuthorizationService, nil, "", "")
+// 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(RemoveUserAclEntry), AMT_AuthorizationService, &RemoveUserAclEntry_INPUT{Handle: handle})
 // 	return as.base.WSManMessageCreator.CreateXML(header, body)
 // }
 
 // func (as AuthorizationService) SetAclEnabledState(handle int, enabled bool) string {
-// 	header := as.base.WSManMessageCreator.CreateHeader(string(actions.SetAclEnabledState), AMT_AuthorizationService, nil, "", "")
-// 	body := as.base.WSManMessageCreator.CreateBody("SetAclEnabledState_INPUT", AMT_AuthorizationService, &SetAclEnabledState_INPUT{Handle: handle, Enabled: enabled})
+// 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, SetAclEnabledState), AMT_AuthorizationService, nil, "", "")
+// 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetAclEnabledState), AMT_AuthorizationService, &SetAclEnabledState_INPUT{Handle: handle, Enabled: enabled})
 // 	return as.base.WSManMessageCreator.CreateXML(header, body)
 // }
 
 // func (as AuthorizationService) SetAdminACLEntryEx(username, digestPassword string) string {
-// 	header := as.base.WSManMessageCreator.CreateHeader(string(actions.SetAdminAclEntryEx), AMT_AuthorizationService, nil, "", "")
-// 	body := as.base.WSManMessageCreator.CreateBody("SetAdminAclEntryEx_INPUT", AMT_AuthorizationService, &SetAdminACLEntryEx_INPUT{Username: username, DigestPassword: digestPassword})
+// 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, SetAdminAclEntryEx), AMT_AuthorizationService, nil, "", "")
+// 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetAdminAclEntryEx), AMT_AuthorizationService, &SetAdminACLEntryEx_INPUT{Username: username, DigestPassword: digestPassword})
 // 	return as.base.WSManMessageCreator.CreateXML(header, body)
 // }

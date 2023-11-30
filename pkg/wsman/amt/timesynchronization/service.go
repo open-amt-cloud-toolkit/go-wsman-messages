@@ -9,10 +9,8 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/actions"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/methods"
 )
-
-const AMT_TimeSynchronizationService = "AMT_TimeSynchronizationService"
 
 type Service struct {
 	base message.Base
@@ -46,8 +44,8 @@ func (TimeSynchronizationService Service) Pull(enumerationContext string) string
 	return TimeSynchronizationService.base.Pull(enumerationContext)
 }
 func (TLSCredentialContext Service) SetHighAccuracyTimeSynch(ta0, tm1, tm2 int64) string {
-	header := TLSCredentialContext.base.WSManMessageCreator.CreateHeader(string(actions.SetHighAccuracyTimeSynch), AMT_TimeSynchronizationService, nil, "", "")
-	body := TLSCredentialContext.base.WSManMessageCreator.CreateBody("SetHighAccuracyTimeSynch_INPUT", AMT_TimeSynchronizationService, &SetHighAccuracyTimeSynch_INPUT{
+	header := TLSCredentialContext.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_TimeSynchronizationService, SetHighAccuracyTimeSynch), AMT_TimeSynchronizationService, nil, "", "")
+	body := TLSCredentialContext.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetHighAccuracyTimeSynch), AMT_TimeSynchronizationService, &SetHighAccuracyTimeSynch_INPUT{
 		Ta0: ta0,
 		Tm1: tm1,
 		Tm2: tm2,
@@ -56,7 +54,7 @@ func (TLSCredentialContext Service) SetHighAccuracyTimeSynch(ta0, tm1, tm2 int64
 }
 
 func (TLSCredentialContext Service) GetLowAccuracyTimeSynch() string {
-	header := TLSCredentialContext.base.WSManMessageCreator.CreateHeader(string(actions.GetLowAccuracyTimeSynch), AMT_TimeSynchronizationService, nil, "", "")
-	body := TLSCredentialContext.base.WSManMessageCreator.CreateBody("GetLowAccuracyTimeSynch_INPUT", AMT_TimeSynchronizationService, nil)
+	header := TLSCredentialContext.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_TimeSynchronizationService, GetLowAccuracyTimeSynch), AMT_TimeSynchronizationService, nil, "", "")
+	body := TLSCredentialContext.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetLowAccuracyTimeSynch), AMT_TimeSynchronizationService, nil)
 	return TLSCredentialContext.base.WSManMessageCreator.CreateXML(header, body)
 }

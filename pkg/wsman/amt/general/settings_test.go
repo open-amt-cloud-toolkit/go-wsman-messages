@@ -69,7 +69,7 @@ func TestAMT_GeneralSettings(t *testing.T) {
 			//GETS
 			{
 				"should create a valid AMT_GeneralSettings Get wsman message",
-				"AMT_GeneralSettings",
+				AMT_GeneralSettings,
 				wsmantesting.GET,
 				"",
 				func() (Response, error) {
@@ -79,7 +79,7 @@ func TestAMT_GeneralSettings(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					AMTGeneralSettings: GeneralSettings{
-						XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings", Local: "AMT_GeneralSettings"},
+						XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings", Local: AMT_GeneralSettings},
 						SettingData:                   models.SettingData{InstanceID: "Intel(r) AMT: General Settings", ManagedElement: models.ManagedElement{ElementName: ""}},
 						AMTNetworkEnabled:             1,
 						DDNSPeriodicUpdateInterval:    1440,
@@ -109,7 +109,7 @@ func TestAMT_GeneralSettings(t *testing.T) {
 			//ENUMERATES
 			{
 				"should create a valid AMT_GeneralSettings Enumerate wsman message",
-				"AMT_GeneralSettings",
+				AMT_GeneralSettings,
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
@@ -126,7 +126,7 @@ func TestAMT_GeneralSettings(t *testing.T) {
 			//PULLS
 			{
 				"should create a valid AMT_GeneralSettings Pull wsman message",
-				"AMT_GeneralSettings",
+				AMT_GeneralSettings,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				func() (Response, error) {
@@ -141,7 +141,7 @@ func TestAMT_GeneralSettings(t *testing.T) {
 						Items: []Item{
 							{
 								AMTGeneralSettings: GeneralSettings{
-									XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings", Local: "AMT_GeneralSettings"},
+									XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings", Local: AMT_GeneralSettings},
 									SettingData:                   models.SettingData{InstanceID: "Intel(r) AMT: General Settings", ManagedElement: models.ManagedElement{ElementName: ""}},
 									AMTNetworkEnabled:             1,
 									DDNSPeriodicUpdateInterval:    1440,

@@ -29,11 +29,11 @@ func TestAMT_MPSUsernamePassword(t *testing.T) {
 			responseFunc func() string
 		}{
 			//GETS
-			{"should create a valid AMT_MPSUsernamePassword Get wsman message", "AMT_MPSUsernamePassword", wsmantesting.GET, "", elementUnderTest.Get},
+			{"should create a valid AMT_MPSUsernamePassword Get wsman message", AMT_MPSUsernamePassword, wsmantesting.GET, "", elementUnderTest.Get},
 			//ENUMERATES
-			{"should create a valid AMT_MPSUsernamePassword Enumerate wsman message", "AMT_MPSUsernamePassword", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
+			{"should create a valid AMT_MPSUsernamePassword Enumerate wsman message", AMT_MPSUsernamePassword, wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
 			//PULLS
-			{"should create a valid AMT_MPSUsernamePassword Pull wsman message", "AMT_MPSUsernamePassword", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{"should create a valid AMT_MPSUsernamePassword Pull wsman message", AMT_MPSUsernamePassword, wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 		}
 
 		for _, test := range tests {

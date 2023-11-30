@@ -69,7 +69,7 @@ func TestAMT_UserInitiatedConnectionService(t *testing.T) {
 			//GETS
 			{
 				"should create a valid AMT_UserInitiatedConnectionService Get wsman message",
-				"AMT_UserInitiatedConnectionService",
+				AMT_UserInitiatedConnectionService,
 				wsmantesting.GET,
 				"",
 				func() (Response, error) {
@@ -79,7 +79,7 @@ func TestAMT_UserInitiatedConnectionService(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					User: User{
-						CreationClassName:       "AMT_UserInitiatedConnectionService",
+						CreationClassName:       AMT_UserInitiatedConnectionService,
 						ElementName:             "Intel(r) AMT User Initiated Connection Service",
 						EnabledState:            32771,
 						Name:                    "Intel(r) AMT User Initiated Connection Service",
@@ -91,7 +91,7 @@ func TestAMT_UserInitiatedConnectionService(t *testing.T) {
 			//ENUMERATES
 			{
 				"should create a valid AMT_UserInitiatedConnectionService Enumerate wsman message",
-				"AMT_UserInitiatedConnectionService",
+				AMT_UserInitiatedConnectionService,
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
@@ -111,7 +111,7 @@ func TestAMT_UserInitiatedConnectionService(t *testing.T) {
 			//PULLS
 			{
 				"should create a valid AMT_UserInitiatedConnectionService Pull wsman message",
-				"AMT_UserInitiatedConnectionService",
+				AMT_UserInitiatedConnectionService,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				func() (Response, error) {
@@ -124,7 +124,7 @@ func TestAMT_UserInitiatedConnectionService(t *testing.T) {
 						Items: []Item{
 							{
 								User: User{
-									CreationClassName:       "AMT_UserInitiatedConnectionService",
+									CreationClassName:       AMT_UserInitiatedConnectionService,
 									ElementName:             "Intel(r) AMT User Initiated Connection Service",
 									EnabledState:            32771,
 									Name:                    "Intel(r) AMT User Initiated Connection Service",
@@ -161,7 +161,7 @@ func TestAMT_UserInitiatedConnectionService(t *testing.T) {
 		}{
 			{
 				"should create an invalid AMT_UserInitiatedConnectionService Pull wsman message",
-				"AMT_UserInitiatedConnectionService",
+				AMT_UserInitiatedConnectionService,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
@@ -176,7 +176,7 @@ func TestAMT_UserInitiatedConnectionService(t *testing.T) {
 						Items: []Item{
 							{
 								User: User{
-									CreationClassName:       "AMT_UserInitiatedConnectionService",
+									CreationClassName:       AMT_UserInitiatedConnectionService,
 									ElementName:             "Intel(r) AMT User Initiated Connection Service",
 									EnabledState:            32771,
 									Name:                    "Intel(r) AMT User Initiated Connection Service",

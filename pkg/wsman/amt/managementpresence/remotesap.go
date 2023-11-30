@@ -13,8 +13,6 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
-const AMT_ManagementPresenceRemoteSAP = "AMT_ManagementPresenceRemoteSAP"
-
 type (
 	Response struct {
 		*client.Message

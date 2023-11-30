@@ -29,11 +29,11 @@ func TestAMT_8021XProfile(t *testing.T) {
 			responseFunc func() string
 		}{
 			//GETS
-			{"should create a valid AMT_8021XProfile Get wsman message", "AMT_8021XProfile", wsmantesting.GET, "", elementUnderTest.Get},
+			{"should create a valid AMT_8021XProfile Get wsman message", AMT_IEEE8021xProfile, wsmantesting.GET, "", elementUnderTest.Get},
 			//ENUMERATES
-			{"should create a valid AMT_8021XProfile Enumerate wsman message", "AMT_8021XProfile", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
+			{"should create a valid AMT_8021XProfile Enumerate wsman message", AMT_IEEE8021xProfile, wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, elementUnderTest.Enumerate},
 			//PULLS
-			{"should create a valid AMT_8021XProfile Pull wsman message", "AMT_8021XProfile", wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{"should create a valid AMT_8021XProfile Pull wsman message", AMT_IEEE8021xProfile, wsmantesting.PULL, wsmantesting.PULL_BODY, func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 		}
 
 		for _, test := range tests {

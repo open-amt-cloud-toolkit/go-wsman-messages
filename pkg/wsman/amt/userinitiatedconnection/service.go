@@ -16,8 +16,6 @@ import (
 
 type RequestedState int
 
-const AMT_UserInitiatedConnectionService = "AMT_UserInitiatedConnectionService"
-
 type (
 	Response struct {
 		*client.Message
@@ -151,6 +149,6 @@ func (UserInitiatedConnectionService Service) Pull(enumerationContext string) (r
 
 // // RequestStateChange requests that the state of the element be changed to the value specified in the RequestedState parameter . . .
 // func (UserInitiatedConnectionService Service) RequestStateChange(requestedState RequestedState) string {
-// 	return UserInitiatedConnectionService.base.RequestStateChange(actions.RequestStateChange(redirection.AMT_RedirectionService), int(requestedState))
+// 	return UserInitiatedConnectionService.base.RequestStateChange(methods.RequestStateChange(redirection.AMT_RedirectionService), int(requestedState))
 
 // }

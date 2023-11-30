@@ -15,8 +15,6 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
-const AMT_GeneralSettings = "AMT_GeneralSettings"
-
 // OUTPUTS
 type (
 	Response struct {

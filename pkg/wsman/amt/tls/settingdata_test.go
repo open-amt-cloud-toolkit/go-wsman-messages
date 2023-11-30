@@ -69,7 +69,7 @@ func TestAMT_TLSSettingData(t *testing.T) {
 			//GETS
 			{
 				"should create a valid AMT_TLSSettingData Get wsman message",
-				"AMT_TLSSettingData",
+				AMT_TLSSettingData,
 				wsmantesting.GET,
 				"",
 				func() (Response, error) {
@@ -90,7 +90,7 @@ func TestAMT_TLSSettingData(t *testing.T) {
 
 			//ENUMERATES
 			{"should create a valid AMT_TLSSettingData Enumerate wsman message",
-				"AMT_TLSSettingData",
+				AMT_TLSSettingData,
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
@@ -110,7 +110,7 @@ func TestAMT_TLSSettingData(t *testing.T) {
 			//PULLS
 			{
 				"should create a valid AMT_TLSSettingData Pull wsman message",
-				"AMT_TLSSettingData",
+				AMT_TLSSettingData,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				func() (Response, error) {
@@ -160,7 +160,7 @@ func TestAMT_TLSSettingData(t *testing.T) {
 		}{
 			{
 				"should create an invalid AMT_TLSSettingData Pull wsman message",
-				"AMT_TLSSettingData",
+				AMT_TLSSettingData,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",

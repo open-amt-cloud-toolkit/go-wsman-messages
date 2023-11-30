@@ -12,13 +12,11 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/actions"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/methods"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
-
-const AMT_SetupAndConfigurationService = "AMT_SetupAndConfigurationService"
 
 type (
 	Response struct {
@@ -219,8 +217,8 @@ func (s Service) Pull(enumerationContext string) (response Response, err error) 
 
 // Gets the AMT UUID from the device
 func (s Service) GetUuid() (response Response, err error) {
-	header := s.base.WSManMessageCreator.CreateHeader(string(actions.GetUuid), AMT_SetupAndConfigurationService, nil, "", "")
-	body := s.base.WSManMessageCreator.CreateBody("GetUuid_INPUT", AMT_SetupAndConfigurationService, nil)
+	header := s.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_SetupAndConfigurationService, GetUuid), AMT_SetupAndConfigurationService, nil, "", "")
+	body := s.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetUuid), AMT_SetupAndConfigurationService, nil)
 	response = Response{
 		Message: &client.Message{
 			XMLInput: s.base.WSManMessageCreator.CreateXML(header, body),
