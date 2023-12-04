@@ -16,5 +16,5 @@ const (
 	SetBootConfigRole       Methods = "SetBootConfigRole"
 	ChangeBootOrder         Methods = "ChangeBootOrder"
 	RequestPowerStateChange Methods = "RequestPowerStateChange"
-	RequestStateChange      Methods = "RequestStateChange"
+	// RequestStateChange      Methods = "RequestStateChange"
 )

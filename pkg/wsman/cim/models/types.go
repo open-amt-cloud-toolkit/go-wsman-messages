@@ -225,9 +225,6 @@ const (
 	EnabledEnabledForDebug Enabled = 3
 )
 
-type PowerActionResponse struct {
-	RequestPowerStateChange_OUTPUT message.ReturnValue
-}
 type PhysicalFrame struct {
 	PhysicalPackage
 	VendorCompatibilityStrings []string
