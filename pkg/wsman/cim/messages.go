@@ -71,7 +71,7 @@ func NewMessages(client client.WSMan) Messages {
 	m.MediaAccessDevice = mediaaccess.NewMediaAccessDevice(wsmanMessageCreator)
 	m.PhysicalMemory = physical.NewPhysicalMemory(wsmanMessageCreator)
 	m.PhysicalPackage = physical.NewPhysicalPackage(wsmanMessageCreator)
-	m.PowerManagementService = power.NewPowerManagementService(wsmanMessageCreator)
+	m.PowerManagementService = power.NewPowerManagementServiceWithClient(wsmanMessageCreator, client)
 	m.Processor = physical.NewProcessor(wsmanMessageCreator)
 	m.ServiceAvailableToElement = service.NewServiceAvailableToElement(wsmanMessageCreator)
 	m.SoftwareIdentity = software.NewSoftwareIdentity(wsmanMessageCreator)
