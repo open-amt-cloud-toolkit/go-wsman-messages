@@ -57,9 +57,9 @@ func NewMessages(client client.WSMan) Messages {
 		wsmanMessageCreator: wsmanMessageCreator,
 	}
 	m.BIOSElement = bios.NewBIOSElement(wsmanMessageCreator)
-	m.BootConfigSetting = boot.NewBootConfigSetting(wsmanMessageCreator)
-	m.BootService = boot.NewBootService(wsmanMessageCreator)
-	m.BootSourceSetting = boot.NewBootSourceSetting(wsmanMessageCreator)
+	m.BootConfigSetting = boot.NewBootConfigSettingWithClient(wsmanMessageCreator, client)
+	m.BootService = boot.NewBootServiceWithClient(wsmanMessageCreator, client)
+	m.BootSourceSetting = boot.NewBootSourceSettingWithClient(wsmanMessageCreator, client)
 	m.Card = physical.NewCard(wsmanMessageCreator)
 	m.Chassis = physical.NewChassis(wsmanMessageCreator)
 	m.Chip = physical.NewChip(wsmanMessageCreator)

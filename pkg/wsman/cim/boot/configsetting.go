@@ -6,42 +6,100 @@
 package boot
 
 import (
+	"encoding/xml"
 	"fmt"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/actions"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/methods"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-const CIM_BootConfigSetting = "CIM_BootConfigSetting"
-
 type ConfigSetting struct {
-	base message.Base
+	base   message.Base
+	client client.WSMan
 }
 
-// NewBootConfigSetting returns a new instance of the BootConfigSetting struct.
-func NewBootConfigSetting(wsmanMessageCreator *message.WSManMessageCreator) ConfigSetting {
+func NewBootConfigSettingWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) ConfigSetting {
 	return ConfigSetting{
-		base: message.NewBase(wsmanMessageCreator, string(CIM_BootConfigSetting)),
+		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_BootConfigSetting, client),
+		client: client,
 	}
 }
 
 // Get retrieves the representation of the instance
-func (b ConfigSetting) Get() string {
-	return b.base.Get(nil)
+func (ConfigSetting ConfigSetting) Get() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: ConfigSetting.base.Get(nil),
+		},
+	}
+
+	err = ConfigSetting.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Enumerates the instances of this class
-func (b ConfigSetting) Enumerate() string {
-	return b.base.Enumerate()
+func (ConfigSetting ConfigSetting) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: ConfigSetting.base.Enumerate(),
+		},
+	}
+
+	err = ConfigSetting.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (b ConfigSetting) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
+func (ConfigSetting ConfigSetting) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: ConfigSetting.base.Pull(enumerationContext),
+		},
+	}
+	err = ConfigSetting.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
-func (b ConfigSetting) ChangeBootOrder(source string) string {
-	header := b.base.WSManMessageCreator.CreateHeader(string(actions.ChangeBootOrder), string(CIM_BootConfigSetting), nil, "", "")
+func (ConfigSetting ConfigSetting) ChangeBootOrder(source Source) (response Response, err error) {
+	header := ConfigSetting.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(CIM_BootConfigSetting, ChangeBootOrder), CIM_BootConfigSetting, nil, "", "")
 	body := fmt.Sprintf(`<Body><h:ChangeBootOrder_INPUT xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting"><h:Source><Address xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing"><ResourceURI xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting</ResourceURI><SelectorSet xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><Selector Name="InstanceID">%s</Selector></SelectorSet></ReferenceParameters></h:Source></h:ChangeBootOrder_INPUT></Body>`, source)
-	return b.base.WSManMessageCreator.CreateXML(header, body)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: ConfigSetting.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+	err = ConfigSetting.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
