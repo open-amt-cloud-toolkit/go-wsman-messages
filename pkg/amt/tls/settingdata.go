@@ -6,11 +6,37 @@
 package tls
 
 import (
+	"encoding/xml"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 
 const AMT_TLSSettingData = "AMT_TLSSettingData"
+
+type PullResponseEnvelope struct {
+	XMLName xml.Name `xml:"Envelope"`
+	Header  message.Header
+	Body    PullResponseBody
+}
+
+type PullResponseBody struct {
+	PullResponse PullResponse
+}
+
+type PullResponse struct {
+	Items         []TLSSettingData `xml:"Items>AMT_TLSSettingData"`
+	EndOfSequence string
+}
+
+type PutResponseEnvelope struct {
+	XMLName xml.Name `xml:"Envelope"`
+	Header  message.Header
+	Body    PutResponseBody
+}
+
+type PutResponseBody struct {
+	TLSSettingData TLSSettingData
+}
 
 type TLSSettingData struct {
 	models.SettingData
