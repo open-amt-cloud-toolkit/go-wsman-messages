@@ -135,7 +135,6 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 								RequestedState:          12,
 								SystemCreationClassName: "CIM_ComputerSystem",
 								SystemName:              "Intel(r) AMT",
-							
 							},
 						},
 					},

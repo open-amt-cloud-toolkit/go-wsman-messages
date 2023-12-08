@@ -4,7 +4,6 @@
  **********************************************************************/
 package publickey
 
-
 import (
 	"encoding/json"
 	"encoding/xml"
@@ -27,16 +26,16 @@ const (
 type (
 	Response struct {
 		*client.Message
-		XMLName  xml.Name       `xml:"Envelope"`
-		Header   message.Header `xml:"Header"`
-		Body 	 Body		    `xml:"Body"`
+		XMLName xml.Name       `xml:"Envelope"`
+		Header  message.Header `xml:"Header"`
+		Body    Body           `xml:"Body"`
 	}
 	Body struct {
-		XMLName 			xml.Name					`xml:"Body"`
-		CertGetResponse 	PublicKeyCertificate 		`xml:"AMT_PublicKeyCertificate"`
-		ManagementResponse  PublicKeyManagementService	`xml:"AMT_PublicKeyManagementService"`
-		EnumerateResponse 	common.EnumerateResponse
-		PullResponse  	  	PullResponse 				`xml:"PullResponse"`
+		XMLName            xml.Name                   `xml:"Body"`
+		CertGetResponse    PublicKeyCertificate       `xml:"AMT_PublicKeyCertificate"`
+		ManagementResponse PublicKeyManagementService `xml:"AMT_PublicKeyManagementService"`
+		EnumerateResponse  common.EnumerateResponse
+		PullResponse       PullResponse `xml:"PullResponse"`
 	}
 	PublicKeyCertificate struct {
 		ElementName            string
@@ -49,16 +48,16 @@ type (
 	}
 	PublicKeyManagementService struct {
 		CreationClassName       string
- 		ElementName             string
- 		EnabledDefault          int
+		ElementName             string
+		EnabledDefault          int
 		EnabledState            int
- 		Name                    string
- 		RequestedState          int
- 		SystemCreationClassName string
- 		SystemName              string
+		Name                    string
+		RequestedState          int
+		SystemCreationClassName string
+		SystemName              string
 	}
 	PullResponse struct {
-		PublicKeyCertificateItems []PublicKeyCertificate `xml:"Items>AMT_PublicKeyCertificate"`
+		PublicKeyCertificateItems       []PublicKeyCertificate       `xml:"Items>AMT_PublicKeyCertificate"`
 		PublicKeyManagementServiceItems []PublicKeyManagementService `xml:"Items>AMT_PublicKeyManagementService"`
 	}
 )
