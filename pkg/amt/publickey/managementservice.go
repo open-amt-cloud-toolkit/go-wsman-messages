@@ -24,6 +24,7 @@ type Body struct {
 	AddTrustedRootCertificate_OUTPUT AddTrustedCertificate_OUTPUT `xml:"AddTrustedRootCertificate_OUTPUT,omitempty"`
 	AddTrustedCertificate_OUTPUT     AddTrustedCertificate_OUTPUT `xml:"AddCertificate_OUTPUT,omitempty"`
 	AddKey_OUTPUT                    AddKey_OUTPUT                `xml:"AddKey_OUTPUT,omitempty"`
+	GeneratedKeyPair_OUTPUT          GenerateKeyPair_OUTPUT       `xml:"GenerateKeyPair_OUTPUT,omitempty"`
 }
 type AddTrustedCertificate_OUTPUT struct {
 	CreatedCertificate CreatedCertificate `xml:"CreatedCertificate"`
@@ -53,11 +54,17 @@ type AddKey_INPUT struct {
 	H       string   `xml:"xmlns:h,attr"`
 	KeyBlob []byte   `xml:"h:KeyBlob"`
 }
+
 type GenerateKeyPair_INPUT struct {
 	XMLName      xml.Name     `xml:"h:GenerateKeyPair_INPUT"`
 	H            string       `xml:"xmlns:h,attr"`
 	KeyAlgorithm KeyAlgorithm `xml:"h:KeyAlgorithm"`
 	KeyLength    KeyLength    `xml:"h:KeyLength"`
+}
+
+type GenerateKeyPair_OUTPUT struct {
+	KeyPair     CreatedCertificate `xml:"KeyPair"`
+	ReturnValue int
 }
 
 type KeyAlgorithm int
