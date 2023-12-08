@@ -126,7 +126,7 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 								CreationClassName:       "",
 								Name:                    "",
 								SystemCreationClassName: "",
-								SystemName:              "",	
+								SystemName:              "",
 							},
 						},
 					},
@@ -208,7 +208,6 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 								Name:                    "",
 								SystemCreationClassName: "",
 								SystemName:              "",
-							
 							},
 						},
 					},

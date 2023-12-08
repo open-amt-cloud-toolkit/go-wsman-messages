@@ -12,6 +12,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
+
 type Service struct {
 	base   message.Base
 	client client.WSMan

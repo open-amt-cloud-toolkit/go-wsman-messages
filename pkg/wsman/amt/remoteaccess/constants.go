@@ -5,8 +5,8 @@
 package remoteaccess
 
 import (
-	"encoding/xml"
 	"encoding/json"
+	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
@@ -29,12 +29,12 @@ type (
 		Body    Body           `xml:"Body"`
 	}
 	Body struct {
-		XMLName      	   			  xml.Name     						`xml:"Body"`
-		ServiceGetResponse 			  RemoteAccessService				`xml:"AMT_RemoteAccessService"`
-		PolicyAppliesToMPSGetResponse RemoteAccessPolicyAppliesToMPS	`xml:"AMT_RemoteAccessPolicyAppliesToMPS"`
-		PolicyRuleGetResponse		  RemoteAccessPolicyRule			`xml:"AMT_RemoteAccessPolicyRule"`
-		EnumerateResponse 			  common.EnumerateResponse
-		PullResponse      			  PullResponse						`xml:"PullResponse"`
+		XMLName                       xml.Name                       `xml:"Body"`
+		ServiceGetResponse            RemoteAccessService            `xml:"AMT_RemoteAccessService"`
+		PolicyAppliesToMPSGetResponse RemoteAccessPolicyAppliesToMPS `xml:"AMT_RemoteAccessPolicyAppliesToMPS"`
+		PolicyRuleGetResponse         RemoteAccessPolicyRule         `xml:"AMT_RemoteAccessPolicyRule"`
+		EnumerateResponse             common.EnumerateResponse
+		PullResponse                  PullResponse `xml:"PullResponse"`
 	}
 	RemoteAccessService struct {
 		CreationClassName       string
@@ -45,9 +45,9 @@ type (
 	}
 	RemoteAccessPolicyAppliesToMPS struct {
 		CreationClassName       string
- 		Name                    string
+		Name                    string
 		SystemCreationClassName string
- 		SystemName              string
+		SystemName              string
 	}
 	RemoteAccessPolicyRule struct {
 		CreationClassName       string
@@ -60,12 +60,11 @@ type (
 		TunnelLifeTime          int
 	}
 	PullResponse struct {
-		RemoteAccessServiceItems			[]RemoteAccessService			 `xml:"Items>AMT_RemoteAccessService"`
+		RemoteAccessServiceItems            []RemoteAccessService            `xml:"Items>AMT_RemoteAccessService"`
 		RemoteAccessPolicyAppliesToMPSItems []RemoteAccessPolicyAppliesToMPS `xml:"Items>AMT_RemoteAccessPolicyAppliesToMPS"`
-		RemoteAccessPolicyRuleItems			[]RemoteAccessPolicyRule		 `xml:"Items>AMT_RemoteAccessPolicyRule"`
+		RemoteAccessPolicyRuleItems         []RemoteAccessPolicyRule         `xml:"Items>AMT_RemoteAccessPolicyRule"`
 	}
 )
-
 
 func (w *Response) JSON() string {
 	jsonOutput, err := json.Marshal(w.Body)
