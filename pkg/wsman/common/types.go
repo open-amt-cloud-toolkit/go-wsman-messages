@@ -1,3 +1,8 @@
+/*********************************************************************
+ * Copyright (c) Intel Corporation 2023
+ * SPDX-License-Identifier: Apache-2.0
+ **********************************************************************/
+
 package common
 
 // The following values can be returned by Intel AMT as status codes. Methods in the Intel proprietary classes list the codes applicable to the method.
