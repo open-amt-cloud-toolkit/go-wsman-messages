@@ -8,7 +8,6 @@ package tls
 import (
 	"encoding/xml"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/cim/models"
 )
 
 const AMT_TLSSettingData = "AMT_TLSSettingData"
@@ -39,7 +38,8 @@ type PutResponseBody struct {
 }
 
 type TLSSettingData struct {
-	models.SettingData
+	ElementName                   string
+	InstanceID                    string
 	MutualAuthentication          bool
 	Enabled                       bool
 	TrustedCN                     string
