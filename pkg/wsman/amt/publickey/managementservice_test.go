@@ -78,7 +78,7 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					KeyManagement: KeyManagement{
+					ManagementResponse: PublicKeyManagementService{
 						CreationClassName:       AMT_PublicKeyManagementService,
 						ElementName:             "Intel(r) AMT Certificate Store Service",
 						EnabledDefault:          5,
@@ -124,19 +124,18 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					PullResponseManagement: PullResponseManagement{
-						Items: []ItemManagement{
+					PullResponse: PullResponse{
+						PublicKeyManagementServiceItems: []PublicKeyManagementService{
 							{
-								KeyManagement: KeyManagement{
-									CreationClassName:       AMT_PublicKeyManagementService,
-									ElementName:             "Intel(r) AMT Certificate Store Service",
-									EnabledDefault:          5,
-									EnabledState:            5,
-									Name:                    "Intel(r) AMT Public Key Management Service",
-									RequestedState:          12,
-									SystemCreationClassName: "CIM_ComputerSystem",
-									SystemName:              "Intel(r) AMT",
-								},
+								CreationClassName:       AMT_PublicKeyManagementService,
+								ElementName:             "Intel(r) AMT Certificate Store Service",
+								EnabledDefault:          5,
+								EnabledState:            5,
+								Name:                    "Intel(r) AMT Public Key Management Service",
+								RequestedState:          12,
+								SystemCreationClassName: "CIM_ComputerSystem",
+								SystemName:              "Intel(r) AMT",
+							
 							},
 						},
 					},
@@ -211,19 +210,17 @@ func TestAMT_PublicKeyManagementService(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					PullResponseManagement: PullResponseManagement{
-						Items: []ItemManagement{
+					PullResponse: PullResponse{
+						PublicKeyManagementServiceItems: []PublicKeyManagementService{
 							{
-								KeyManagement: KeyManagement{
-									CreationClassName:       AMT_PublicKeyManagementService,
-									ElementName:             "Intel(r) AMT Certificate Store Service",
-									EnabledDefault:          5,
-									EnabledState:            5,
-									Name:                    "Intel(r) AMT Public Key Management Service",
-									RequestedState:          12,
-									SystemCreationClassName: "CIM_ComputerSystem",
-									SystemName:              "Intel(r) AMT",
-								},
+								CreationClassName:       AMT_PublicKeyManagementService,
+								ElementName:             "Intel(r) AMT Certificate Store Service",
+								EnabledDefault:          5,
+								EnabledState:            5,
+								Name:                    "Intel(r) AMT Public Key Management Service",
+								RequestedState:          12,
+								SystemCreationClassName: "CIM_ComputerSystem",
+								SystemName:              "Intel(r) AMT",
 							},
 						},
 					},

@@ -64,7 +64,7 @@ func TestAMT_PublicKeyCertificate(t *testing.T) {
 			action           string
 			body             string
 			extraHeader      string
-			responseFunc     func() (ResponseCert, error)
+			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
 			//GETS
@@ -74,13 +74,13 @@ func TestAMT_PublicKeyCertificate(t *testing.T) {
 				wsmantesting.GET,
 				"",
 				"",
-				func() (ResponseCert, error) {
+				func() (Response, error) {
 					currentMessage = "Get"
 					return elementUnderTest.Get()
 				},
-				BodyCert{
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					KeyCert: KeyCert{
+					CertGetResponse: PublicKeyCertificate{
 						ElementName:            "Intel(r) AMT Certificate",
 						InstanceID:             "Intel(r) AMT Certificate: Handle: 0",
 						Issuer:                 "C=unknown,O=unknown,CN=MPSRoot-0af1d5",
@@ -97,14 +97,14 @@ func TestAMT_PublicKeyCertificate(t *testing.T) {
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				"",
-				func() (ResponseCert, error) {
+				func() (Response, error) {
 					currentMessage = "Enumerate"
 					if elementUnderTest1.base.WSManMessageCreator == nil {
 						print("Error")
 					}
 					return elementUnderTest.Enumerate()
 				},
-				BodyCert{
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "CB000000-0000-0000-0000-000000000000",
@@ -118,24 +118,23 @@ func TestAMT_PublicKeyCertificate(t *testing.T) {
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
-				func() (ResponseCert, error) {
+				func() (Response, error) {
 					currentMessage = "Pull"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
-				BodyCert{
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					PullResponseCert: PullResponseCert{
-						Items: []Item{
+					PullResponse: PullResponse{
+						PublicKeyCertificateItems: []PublicKeyCertificate{
 							{
-								KeyCert: KeyCert{
-									ElementName:            "Intel(r) AMT Certificate",
-									InstanceID:             "Intel(r) AMT Certificate: Handle: 0",
-									Issuer:                 "C=unknown,O=unknown,CN=MPSRoot-3d3ad6",
-									ReadOnlyCertificate:    false,
-									Subject:                "C=unknown,O=unknown,CN=MPSRoot-3d3ad6",
-									TrustedRootCertificate: false,
-									X509Certificate:        "MIIEOzCCAqOgAwIBAgIDCHA0MA0GCSqGSIb3DQEBDAUAMD0xFzAVBgNVBAMTDk1QU1Jvb3QtM2QzYWQ2MRAwDgYDVQQKEwd1bmtub3duMRAwDgYDVQQGEwd1bmtub3duMCAXDTIyMDkyMDIzMzM1OVoYDzIwNTMwOTIwMjMzMzU5WjA9MRcwFQYDVQQDEw5NUFNSb290LTNkM2FkNjEQMA4GA1UEChMHdW5rbm93bjEQMA4GA1UEBhMHdW5rbm93bjCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBAOV+1w3YX6LHdGmdjEMdrP2uIvDmMd7cKnZbxacar2vHCG62JhLNsPPxe5eXCkc7qF0Pl9ALl3Hhpuxic92TT7gBcn8LsoCK8O3zES5C5d9RSgOvVBwfAnvqQLi9X2nGH8pUiCH4ifUsfbgg8uY35f8tk2nnDA9yuXLkTIUJES5JdOVU8IQAUPB7g8NEmou0KjIgVKLuo1YRTsgajkHh7XVFqeA08BZLgy1puiGTQpgfOa6wWtG53+BemLtvlKCqgqjt3x01AJG5ZtNkDJgDGW4cEemVnelKcxE3N1TkvwMRs9vsQXhFr0HAWnURii87UZrILaUVBnnz7jcBNwtScLBchWtBvtjx4hbX9cFHqXQ27Lsbmtuxzob7QGYveIP0pq1A3ZcUtPUik+kemHvsfrn8COTTwUsOeM4R/HPD8WIPG5Irva0lHfBj8dXRF6p5saQXj0H8G1RRBQQtfRcSDM7Oht6yu4KJI8PjZ3nvoEpj3/C6xQ+4FTlnqW2chzIFsQIDAQABo0IwQDAMBgNVHRMEBTADAQH/MBEGCWCGSAGG+EIBAQQEAwIABzAdBgNVHQ4EFgQUPTrWXOAXxcWFksBgT6HqM6hhr3cwDQYJKoZIhvcNAQEMBQADggGBAAGy311BlLC35PG6b6oMXvjJc7chfCo1mDeYtGgU44mbBxcejDXv2ZHMAI3Kf2qv3GeqPZzcVd5LdwldtMiNXUUfqDoy9YLol9tmbT89RjXekhfWBtzhEKN3s/rUuSWnx3a1wkgcJqRS8OK55rQJpOk83iPWMraBMQ5Otwxnypn2vM99pc3AUa47rhaumvCfyJ/jsRca7WmFzfhOSxAeIKxCDDv/4xBbv10YApRCCPLh3BXOlSvW1AnnE9ym4EvdRyMXOgliqe56QebjxcempNaL7e/bYr012xM0l+Tan1nwkotdJ73vUnimbtZx6V1GZaRVKwoJtfNut6zMRehSC7aDXc8MtEPLMtQGGrBR2zjM7cIGi76iMqnStGbKTpdsMg1HcwPoaSVDVRrxzyWd33ZtDRDHLigrYPD3EEF4ieY4h4rBnZmAhXeIuigWHL46dUaRyjWYTpx8ga+CVbXFJ0z5T5BqELbOahojvxCjA2h9cp6g/k7sVoY6VAE5h9vqIQ==",
-								},
+								ElementName:            "Intel(r) AMT Certificate",
+								InstanceID:             "Intel(r) AMT Certificate: Handle: 0",
+								Issuer:                 "C=unknown,O=unknown,CN=MPSRoot-3d3ad6",
+								ReadOnlyCertificate:    false,
+								Subject:                "C=unknown,O=unknown,CN=MPSRoot-3d3ad6",
+								TrustedRootCertificate: false,
+								X509Certificate:        "MIIEOzCCAqOgAwIBAgIDCHA0MA0GCSqGSIb3DQEBDAUAMD0xFzAVBgNVBAMTDk1QU1Jvb3QtM2QzYWQ2MRAwDgYDVQQKEwd1bmtub3duMRAwDgYDVQQGEwd1bmtub3duMCAXDTIyMDkyMDIzMzM1OVoYDzIwNTMwOTIwMjMzMzU5WjA9MRcwFQYDVQQDEw5NUFNSb290LTNkM2FkNjEQMA4GA1UEChMHdW5rbm93bjEQMA4GA1UEBhMHdW5rbm93bjCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBAOV+1w3YX6LHdGmdjEMdrP2uIvDmMd7cKnZbxacar2vHCG62JhLNsPPxe5eXCkc7qF0Pl9ALl3Hhpuxic92TT7gBcn8LsoCK8O3zES5C5d9RSgOvVBwfAnvqQLi9X2nGH8pUiCH4ifUsfbgg8uY35f8tk2nnDA9yuXLkTIUJES5JdOVU8IQAUPB7g8NEmou0KjIgVKLuo1YRTsgajkHh7XVFqeA08BZLgy1puiGTQpgfOa6wWtG53+BemLtvlKCqgqjt3x01AJG5ZtNkDJgDGW4cEemVnelKcxE3N1TkvwMRs9vsQXhFr0HAWnURii87UZrILaUVBnnz7jcBNwtScLBchWtBvtjx4hbX9cFHqXQ27Lsbmtuxzob7QGYveIP0pq1A3ZcUtPUik+kemHvsfrn8COTTwUsOeM4R/HPD8WIPG5Irva0lHfBj8dXRF6p5saQXj0H8G1RRBQQtfRcSDM7Oht6yu4KJI8PjZ3nvoEpj3/C6xQ+4FTlnqW2chzIFsQIDAQABo0IwQDAMBgNVHRMEBTADAQH/MBEGCWCGSAGG+EIBAQQEAwIABzAdBgNVHQ4EFgQUPTrWXOAXxcWFksBgT6HqM6hhr3cwDQYJKoZIhvcNAQEMBQADggGBAAGy311BlLC35PG6b6oMXvjJc7chfCo1mDeYtGgU44mbBxcejDXv2ZHMAI3Kf2qv3GeqPZzcVd5LdwldtMiNXUUfqDoy9YLol9tmbT89RjXekhfWBtzhEKN3s/rUuSWnx3a1wkgcJqRS8OK55rQJpOk83iPWMraBMQ5Otwxnypn2vM99pc3AUa47rhaumvCfyJ/jsRca7WmFzfhOSxAeIKxCDDv/4xBbv10YApRCCPLh3BXOlSvW1AnnE9ym4EvdRyMXOgliqe56QebjxcempNaL7e/bYr012xM0l+Tan1nwkotdJ73vUnimbtZx6V1GZaRVKwoJtfNut6zMRehSC7aDXc8MtEPLMtQGGrBR2zjM7cIGi76iMqnStGbKTpdsMg1HcwPoaSVDVRrxzyWd33ZtDRDHLigrYPD3EEF4ieY4h4rBnZmAhXeIuigWHL46dUaRyjWYTpx8ga+CVbXFJ0z5T5BqELbOahojvxCjA2h9cp6g/k7sVoY6VAE5h9vqIQ==",
+							
 							},
 						},
 					},
@@ -155,7 +154,7 @@ func TestAMT_PublicKeyCertificate(t *testing.T) {
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
-				assert.Equal(t, test.expectedResponse, response.BodyCert)
+				assert.Equal(t, test.expectedResponse, response.Body)
 			})
 		}
 	})
@@ -167,7 +166,7 @@ func TestAMT_PublicKeyCertificate(t *testing.T) {
 			action           string
 			body             string
 			extraHeader      string
-			responseFunc     func() (ResponseCert, error)
+			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
 			{
@@ -176,25 +175,24 @@ func TestAMT_PublicKeyCertificate(t *testing.T) {
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
-				func() (ResponseCert, error) {
+				func() (Response, error) {
 					currentMessage = "Error"
 					response, err := elementUnderTest.Pull("")
 					return response, err
 				},
-				BodyCert{
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					PullResponseCert: PullResponseCert{
-						Items: []Item{
+					PullResponse: PullResponse{
+						PublicKeyCertificateItems: []PublicKeyCertificate{
 							{
-								KeyCert: KeyCert{
-									ElementName:            "Intel(r) AMT Certificate",
-									InstanceID:             "Intel(r) AMT Certificate: Handle: 0",
-									Issuer:                 "C=unknown,O=unknown,CN=MPSRoot-3d3ad6",
-									ReadOnlyCertificate:    false,
-									Subject:                "C=unknown,O=unknown,CN=MPSRoot-3d3ad6",
-									TrustedRootCertificate: false,
-									X509Certificate:        "MIIEOzCCAqOgAwIBAgIDCHA0MA0GCSqGSIb3DQEBDAUAMD0xFzAVBgNVBAMTDk1QU1Jvb3QtM2QzYWQ2MRAwDgYDVQQKEwd1bmtub3duMRAwDgYDVQQGEwd1bmtub3duMCAXDTIyMDkyMDIzMzM1OVoYDzIwNTMwOTIwMjMzMzU5WjA9MRcwFQYDVQQDEw5NUFNSb290LTNkM2FkNjEQMA4GA1UEChMHdW5rbm93bjEQMA4GA1UEBhMHdW5rbm93bjCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBAOV+1w3YX6LHdGmdjEMdrP2uIvDmMd7cKnZbxacar2vHCG62JhLNsPPxe5eXCkc7qF0Pl9ALl3Hhpuxic92TT7gBcn8LsoCK8O3zES5C5d9RSgOvVBwfAnvqQLi9X2nGH8pUiCH4ifUsfbgg8uY35f8tk2nnDA9yuXLkTIUJES5JdOVU8IQAUPB7g8NEmou0KjIgVKLuo1YRTsgajkHh7XVFqeA08BZLgy1puiGTQpgfOa6wWtG53+BemLtvlKCqgqjt3x01AJG5ZtNkDJgDGW4cEemVnelKcxE3N1TkvwMRs9vsQXhFr0HAWnURii87UZrILaUVBnnz7jcBNwtScLBchWtBvtjx4hbX9cFHqXQ27Lsbmtuxzob7QGYveIP0pq1A3ZcUtPUik+kemHvsfrn8COTTwUsOeM4R/HPD8WIPG5Irva0lHfBj8dXRF6p5saQXj0H8G1RRBQQtfRcSDM7Oht6yu4KJI8PjZ3nvoEpj3/C6xQ+4FTlnqW2chzIFsQIDAQABo0IwQDAMBgNVHRMEBTADAQH/MBEGCWCGSAGG+EIBAQQEAwIABzAdBgNVHQ4EFgQUPTrWXOAXxcWFksBgT6HqM6hhr3cwDQYJKoZIhvcNAQEMBQADggGBAAGy311BlLC35PG6b6oMXvjJc7chfCo1mDeYtGgU44mbBxcejDXv2ZHMAI3Kf2qv3GeqPZzcVd5LdwldtMiNXUUfqDoy9YLol9tmbT89RjXekhfWBtzhEKN3s/rUuSWnx3a1wkgcJqRS8OK55rQJpOk83iPWMraBMQ5Otwxnypn2vM99pc3AUa47rhaumvCfyJ/jsRca7WmFzfhOSxAeIKxCDDv/4xBbv10YApRCCPLh3BXOlSvW1AnnE9ym4EvdRyMXOgliqe56QebjxcempNaL7e/bYr012xM0l+Tan1nwkotdJ73vUnimbtZx6V1GZaRVKwoJtfNut6zMRehSC7aDXc8MtEPLMtQGGrBR2zjM7cIGi76iMqnStGbKTpdsMg1HcwPoaSVDVRrxzyWd33ZtDRDHLigrYPD3EEF4ieY4h4rBnZmAhXeIuigWHL46dUaRyjWYTpx8ga+CVbXFJ0z5T5BqELbOahojvxCjA2h9cp6g/k7sVoY6VAE5h9vqIQ==",
-								},
+								ElementName:            "Intel(r) AMT Certificate",
+								InstanceID:             "Intel(r) AMT Certificate: Handle: 0",
+								Issuer:                 "C=unknown,O=unknown,CN=MPSRoot-3d3ad6",
+								ReadOnlyCertificate:    false,
+								Subject:                "C=unknown,O=unknown,CN=MPSRoot-3d3ad6",
+								TrustedRootCertificate: false,
+								X509Certificate:        "MIIEOzCCAqOgAwIBAgIDCHA0MA0GCSqGSIb3DQEBDAUAMD0xFzAVBgNVBAMTDk1QU1Jvb3QtM2QzYWQ2MRAwDgYDVQQKEwd1bmtub3duMRAwDgYDVQQGEwd1bmtub3duMCAXDTIyMDkyMDIzMzM1OVoYDzIwNTMwOTIwMjMzMzU5WjA9MRcwFQYDVQQDEw5NUFNSb290LTNkM2FkNjEQMA4GA1UEChMHdW5rbm93bjEQMA4GA1UEBhMHdW5rbm93bjCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBAOV+1w3YX6LHdGmdjEMdrP2uIvDmMd7cKnZbxacar2vHCG62JhLNsPPxe5eXCkc7qF0Pl9ALl3Hhpuxic92TT7gBcn8LsoCK8O3zES5C5d9RSgOvVBwfAnvqQLi9X2nGH8pUiCH4ifUsfbgg8uY35f8tk2nnDA9yuXLkTIUJES5JdOVU8IQAUPB7g8NEmou0KjIgVKLuo1YRTsgajkHh7XVFqeA08BZLgy1puiGTQpgfOa6wWtG53+BemLtvlKCqgqjt3x01AJG5ZtNkDJgDGW4cEemVnelKcxE3N1TkvwMRs9vsQXhFr0HAWnURii87UZrILaUVBnnz7jcBNwtScLBchWtBvtjx4hbX9cFHqXQ27Lsbmtuxzob7QGYveIP0pq1A3ZcUtPUik+kemHvsfrn8COTTwUsOeM4R/HPD8WIPG5Irva0lHfBj8dXRF6p5saQXj0H8G1RRBQQtfRcSDM7Oht6yu4KJI8PjZ3nvoEpj3/C6xQ+4FTlnqW2chzIFsQIDAQABo0IwQDAMBgNVHRMEBTADAQH/MBEGCWCGSAGG+EIBAQQEAwIABzAdBgNVHQ4EFgQUPTrWXOAXxcWFksBgT6HqM6hhr3cwDQYJKoZIhvcNAQEMBQADggGBAAGy311BlLC35PG6b6oMXvjJc7chfCo1mDeYtGgU44mbBxcejDXv2ZHMAI3Kf2qv3GeqPZzcVd5LdwldtMiNXUUfqDoy9YLol9tmbT89RjXekhfWBtzhEKN3s/rUuSWnx3a1wkgcJqRS8OK55rQJpOk83iPWMraBMQ5Otwxnypn2vM99pc3AUa47rhaumvCfyJ/jsRca7WmFzfhOSxAeIKxCDDv/4xBbv10YApRCCPLh3BXOlSvW1AnnE9ym4EvdRyMXOgliqe56QebjxcempNaL7e/bYr012xM0l+Tan1nwkotdJ73vUnimbtZx6V1GZaRVKwoJtfNut6zMRehSC7aDXc8MtEPLMtQGGrBR2zjM7cIGi76iMqnStGbKTpdsMg1HcwPoaSVDVRrxzyWd33ZtDRDHLigrYPD3EEF4ieY4h4rBnZmAhXeIuigWHL46dUaRyjWYTpx8ga+CVbXFJ0z5T5BqELbOahojvxCjA2h9cp6g/k7sVoY6VAE5h9vqIQ==",
+
 							},
 						},
 					},
@@ -209,7 +207,7 @@ func TestAMT_PublicKeyCertificate(t *testing.T) {
 				response, err := test.responseFunc()
 				assert.Error(t, err)
 				assert.NotEqual(t, expectedXMLInput, response.XMLInput)
-				assert.NotEqual(t, test.expectedResponse, response.BodyCert)
+				assert.NotEqual(t, test.expectedResponse, response.Body)
 			})
 		}
 	})

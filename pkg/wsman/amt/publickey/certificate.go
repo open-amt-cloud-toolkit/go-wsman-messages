@@ -10,64 +10,7 @@ import (
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
-
-type (
-	ResponseCert struct {
-		*client.Message
-		XMLName  xml.Name       `xml:"Envelope"`
-		Header   message.Header `xml:"Header"`
-		BodyCert BodyCert       `xml:"Body"`
-	}
-	BodyCert struct {
-		XMLName xml.Name `xml:"Body"`
-		KeyCert KeyCert  `xml:"AMT_PublicKeyCertificate"`
-
-		EnumerateResponse common.EnumerateResponse
-		PullResponseCert  PullResponseCert `xml:"PullResponse"`
-	}
-	KeyCert struct {
-		ElementName            string
-		InstanceID             string
-		X509Certificate        string
-		ReadOnlyCertificate    bool
-		TrustedRootCertificate bool
-		Issuer                 string
-		Subject                string
-	}
-	PullResponseCert struct {
-		Items []Item
-	}
-	Item struct {
-		KeyCert KeyCert `xml:"AMT_PublicKeyCertificate"`
-	}
-)
-type PullResponseEnvelope struct {
-	XMLName xml.Name `xml:"Envelope"`
-	Header  message.Header
-	Body    PullResponseBody
-}
-
-type PullResponseBody struct {
-	PullResponse PullResponse
-}
-
-type PullResponse struct {
-	Items         []PublicKeyCertificate `xml:"Items>AMT_PublicKeyCertificate"`
-	EndOfSequence string
-}
-
-type PublicKeyCertificate struct {
-	ElementName           string // A user-friendly name for the object . . .
-	InstanceID            string // Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class.
-	X509Certificate       string // uint8[4100] // The X.509 Certificate blob.
-	TrustedRootCertficate bool   // For root certificate [that were added by AMT_PublicKeyManagementService.AddTrustedRootCertificate()]this property will be true.
-	Issuer                string // The Issuer field of this certificate.
-	Subject               string // The Subject field of this certificate.
-	ReadOnlyCertificate   bool   // Indicates whether the certificate is an Intel AMT self-signed certificate. If True, the certificate cannot be deleted.
-}
-
 type Certificate struct {
 	base   message.Base
 	client client.WSMan
@@ -87,9 +30,9 @@ func NewPublicKeyCertificate(wsmanMessageCreator *message.WSManMessageCreator) C
 }
 
 // Get retrieves the representation of the instance
-func (PublicKeyCertificate Certificate) Get() (response ResponseCert, err error) {
+func (PublicKeyCertificate Certificate) Get() (response Response, err error) {
 
-	response = ResponseCert{
+	response = Response{
 		Message: &client.Message{
 			XMLInput: PublicKeyCertificate.base.Get(nil),
 		},
@@ -111,9 +54,9 @@ func (PublicKeyCertificate Certificate) Get() (response ResponseCert, err error)
 }
 
 // Enumerates the instances of this class
-func (PublicKeyCertificate Certificate) Enumerate() (response ResponseCert, err error) {
+func (PublicKeyCertificate Certificate) Enumerate() (response Response, err error) {
 
-	response = ResponseCert{
+	response = Response{
 		Message: &client.Message{
 			XMLInput: PublicKeyCertificate.base.Enumerate(),
 		},
@@ -134,8 +77,8 @@ func (PublicKeyCertificate Certificate) Enumerate() (response ResponseCert, err 
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (PublicKeyCertificate Certificate) Pull(enumerationContext string) (response ResponseCert, err error) {
-	response = ResponseCert{
+func (PublicKeyCertificate Certificate) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
 		Message: &client.Message{
 			XMLInput: PublicKeyCertificate.base.Pull(enumerationContext),
 		},

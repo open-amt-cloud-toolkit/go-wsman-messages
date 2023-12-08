@@ -11,45 +11,8 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
-type (
-	Response struct {
-		*client.Message
-		XMLName xml.Name       `xml:"Envelope"`
-		Header  message.Header `xml:"Header"`
-		Body    Body           `xml:"Body"`
-	}
-
-	Body struct {
-		XMLName                          xml.Name                     `xml:"Body"`
-		AddTrustedRootCertificate_OUTPUT AddTrustedCertificate_OUTPUT `xml:"AddTrustedRootCertificate_OUTPUT,omitempty"`
-		AddTrustedCertificate_OUTPUT     AddTrustedCertificate_OUTPUT `xml:"AddCertificate_OUTPUT,omitempty"`
-		AddKey_OUTPUT                    AddKey_OUTPUT                `xml:"AddKey_OUTPUT,omitempty"`
-		KeyManagement                    KeyManagement                `xml:"AMT_PublicKeyManagementService"`
-
-		EnumerateResponse      common.EnumerateResponse
-		PullResponseManagement PullResponseManagement `xml:"PullResponse"`
-	}
-
-	KeyManagement struct {
-		CreationClassName       string
-		ElementName             string
-		EnabledDefault          int
-		EnabledState            int
-		Name                    string
-		RequestedState          int
-		SystemCreationClassName string
-		SystemName              string
-	}
-	PullResponseManagement struct {
-		Items []ItemManagement
-	}
-	ItemManagement struct {
-		KeyManagement KeyManagement `xml:"AMT_PublicKeyManagementService"`
-	}
-)
 type AddTrustedCertificate_OUTPUT struct {
 	CreatedCertificate CreatedCertificate `xml:"CreatedCertificate"`
 	ReturnValue        int
