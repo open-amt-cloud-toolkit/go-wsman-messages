@@ -49,19 +49,19 @@ func (c *MockClient) Post(msg string) ([]byte, error) {
 	// Simulate a successful response for testing.
 	return []byte(xmlData), nil
 }
-func TestAMT_TLSSettingData(t *testing.T) {
+func TestPositiveAMT_TLSSettingData(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	client := MockClient{}
 	elementUnderTest := NewTLSSettingDataWithClient(wsmanMessageCreator, &client)
-	elementUnderTest1 := NewTLSSettingData(wsmanMessageCreator)
 
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
 			method           string
 			action           string
+			extraHeader      string
 			body             string
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
@@ -71,10 +71,11 @@ func TestAMT_TLSSettingData(t *testing.T) {
 				"should create a valid AMT_TLSSettingData Get wsman message",
 				AMT_TLSSettingData,
 				wsmantesting.GET,
+				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT 802.3 TLS Settings</w:Selector></w:SelectorSet>",
 				"",
 				func() (Response, error) {
 					currentMessage = "Get"
-					return elementUnderTest.Get()
+					return elementUnderTest.Get("Intel(r) AMT 802.3 TLS Settings")
 				},
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
@@ -92,12 +93,10 @@ func TestAMT_TLSSettingData(t *testing.T) {
 			{"should create a valid AMT_TLSSettingData Enumerate wsman message",
 				AMT_TLSSettingData,
 				wsmantesting.ENUMERATE,
+				"",
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
 					currentMessage = "Enumerate"
-					if elementUnderTest1.base.WSManMessageCreator == nil {
-						print("Error")
-					}
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -112,6 +111,7 @@ func TestAMT_TLSSettingData(t *testing.T) {
 				"should create a valid AMT_TLSSettingData Pull wsman message",
 				AMT_TLSSettingData,
 				wsmantesting.PULL,
+				"",
 				wsmantesting.PULL_BODY,
 				func() (Response, error) {
 					currentMessage = "Pull"
@@ -120,15 +120,20 @@ func TestAMT_TLSSettingData(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					PullResponse: PullResponse{
-						Items: []Item{
+						TlsSettingItems: []TlsSetting{
 							{
-								TlsSetting: TlsSetting{
-									AcceptNonSecureConnections: true,
-									ElementName:                "Intel(r) AMT LMS TLS Settings",
-									Enabled:                    false,
-									InstanceID:                 "Intel(r) AMT LMS TLS Settings",
-									MutualAuthentication:       false,
-								},
+								AcceptNonSecureConnections: false,
+								ElementName:                "Intel(r) AMT 802.3 TLS Settings",
+								Enabled:                    false,
+								InstanceID:                 "Intel(r) AMT 802.3 TLS Settings",
+								MutualAuthentication:       false,
+							},
+							{
+								AcceptNonSecureConnections: true,
+								ElementName:                "Intel(r) AMT LMS TLS Settings",
+								Enabled:                    false,
+								InstanceID:                 "Intel(r) AMT LMS TLS Settings",
+								MutualAuthentication:       false,
 							},
 						},
 					},
@@ -138,7 +143,7 @@ func TestAMT_TLSSettingData(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -147,7 +152,13 @@ func TestAMT_TLSSettingData(t *testing.T) {
 			})
 		}
 	})
-
+}
+func TestNegativeAMT_TLSSettingData(t *testing.T) {
+	messageID := 0
+	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	client := MockClient{}
+	elementUnderTest := NewTLSSettingDataWithClient(wsmanMessageCreator, &client)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -172,15 +183,20 @@ func TestAMT_TLSSettingData(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					PullResponse: PullResponse{
-						Items: []Item{
+						TlsSettingItems: []TlsSetting{
 							{
-								TlsSetting: TlsSetting{
-									AcceptNonSecureConnections: true,
-									ElementName:                "Intel(r) AMT LMS TLS Settings",
-									Enabled:                    false,
-									InstanceID:                 "Intel(r) AMT LMS TLS Settings",
-									MutualAuthentication:       false,
-								},
+								AcceptNonSecureConnections: false,
+								ElementName:                "Intel(r) AMT 802.3 TLS Settings",
+								Enabled:                    false,
+								InstanceID:                 "Intel(r) AMT 802.3 TLS Settings",
+								MutualAuthentication:       false,
+							},
+							{
+								AcceptNonSecureConnections: true,
+								ElementName:                "Intel(r) AMT LMS TLS Settings",
+								Enabled:                    false,
+								InstanceID:                 "Intel(r) AMT LMS TLS Settings",
+								MutualAuthentication:       false,
 							},
 						},
 					},
