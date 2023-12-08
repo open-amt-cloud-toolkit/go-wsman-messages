@@ -79,7 +79,7 @@ func TestAMT_RemoteAccessService(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					RemoteAccess: RemoteAccess{
+					ServiceGetResponse: RemoteAccessService{
 						CreationClassName:       "AMT_RemoteAccessService",
 						ElementName:             "Intel(r) AMT Remote Access Service",
 						Name:                    "Intel(r) AMT Remote Access Service",
@@ -121,15 +121,13 @@ func TestAMT_RemoteAccessService(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					PullResponse: PullResponse{
-						Items: []Item{
+						RemoteAccessServiceItems: []RemoteAccessService{
 							{
-								RemoteAccess: RemoteAccess{
-									CreationClassName:       "AMT_RemoteAccessService",
-									ElementName:             "Intel(r) AMT Remote Access Service",
-									Name:                    "Intel(r) AMT Remote Access Service",
-									SystemCreationClassName: "CIM_ComputerSystem",
-									SystemName:              "Intel(r) AMT",
-								},
+								CreationClassName:       "AMT_RemoteAccessService",
+								ElementName:             "Intel(r) AMT Remote Access Service",
+								Name:                    "Intel(r) AMT Remote Access Service",
+								SystemCreationClassName: "CIM_ComputerSystem",
+								SystemName:              "Intel(r) AMT",
 							},
 						},
 					},
@@ -197,15 +195,13 @@ func TestAMT_RemoteAccessService(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					PullResponse: PullResponse{
-						Items: []Item{
+						RemoteAccessServiceItems: []RemoteAccessService{
 							{
-								RemoteAccess: RemoteAccess{
-									CreationClassName:       "AMT_RemoteAccessService",
-									ElementName:             "Intel(r) AMT Remote Access Service",
-									Name:                    "Intel(r) AMT Remote Access Service",
-									SystemCreationClassName: "CIM_ComputerSystem",
-									SystemName:              "Intel(r) AMT",
-								},
+								CreationClassName:       "AMT_RemoteAccessService",
+								ElementName:             "Intel(r) AMT Remote Access Service",
+								Name:                    "Intel(r) AMT Remote Access Service",
+								SystemCreationClassName: "CIM_ComputerSystem",
+								SystemName:              "Intel(r) AMT",
 							},
 						},
 					},

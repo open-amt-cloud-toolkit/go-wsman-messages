@@ -62,7 +62,7 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 			action           string
 			body             string
 			extraHeader      string
-			responseFunc     func() (ResponseApplies, error)
+			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
 			//GETS
@@ -72,13 +72,13 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 				wsmantesting.GET,
 				"",
 				"",
-				func() (ResponseApplies, error) {
+				func() (Response, error) {
 					currentMessage = "Get"
 					return elementUnderTest.Get()
 				},
-				BodyApplies{
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					PolicyApplies: PolicyApplies{
+					PolicyAppliesToMPSGetResponse: RemoteAccessPolicyAppliesToMPS{
 						CreationClassName:       "",
 						Name:                    "",
 						SystemCreationClassName: "",
@@ -93,14 +93,14 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				"",
-				func() (ResponseApplies, error) {
+				func() (Response, error) {
 					currentMessage = "Enumerate"
 					if elementUnderTest1.base.WSManMessageCreator == nil {
 						print("Error")
 					}
 					return elementUnderTest.Enumerate()
 				},
-				BodyApplies{
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "CE000000-0000-0000-0000-000000000000",
@@ -114,21 +114,19 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
-				func() (ResponseApplies, error) {
+				func() (Response, error) {
 					currentMessage = "Pull"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
-				BodyApplies{
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					PullResponseApplies: PullResponseApplies{
-						Items: []ItemApplies{
+					PullResponse: PullResponse{
+						RemoteAccessPolicyAppliesToMPSItems: []RemoteAccessPolicyAppliesToMPS{
 							{
-								PolicyApplies: PolicyApplies{
-									CreationClassName:       "",
-									Name:                    "",
-									SystemCreationClassName: "",
-									SystemName:              "",
-								},
+								CreationClassName:       "",
+								Name:                    "",
+								SystemCreationClassName: "",
+								SystemName:              "",	
 							},
 						},
 					},
@@ -176,7 +174,7 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
-				assert.Equal(t, test.expectedResponse, response.BodyApplies)
+				assert.Equal(t, test.expectedResponse, response.Body)
 			})
 		}
 	})
@@ -187,7 +185,7 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 			action           string
 			body             string
 			extraHeader      string
-			responseFunc     func() (ResponseApplies, error)
+			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
 			{
@@ -196,22 +194,21 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
-				func() (ResponseApplies, error) {
+				func() (Response, error) {
 					currentMessage = "Error"
 					response, err := elementUnderTest.Pull("")
 					return response, err
 				},
-				BodyApplies{
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					PullResponseApplies: PullResponseApplies{
-						Items: []ItemApplies{
+					PullResponse: PullResponse{
+						RemoteAccessPolicyAppliesToMPSItems: []RemoteAccessPolicyAppliesToMPS{
 							{
-								PolicyApplies: PolicyApplies{
-									CreationClassName:       "",
-									Name:                    "",
-									SystemCreationClassName: "",
-									SystemName:              "",
-								},
+								CreationClassName:       "",
+								Name:                    "",
+								SystemCreationClassName: "",
+								SystemName:              "",
+							
 							},
 						},
 					},
@@ -226,7 +223,7 @@ func TestAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 				response, err := test.responseFunc()
 				assert.Error(t, err)
 				assert.NotEqual(t, expectedXMLInput, response.XMLInput)
-				assert.NotEqual(t, test.expectedResponse, response.BodyApplies)
+				assert.NotEqual(t, test.expectedResponse, response.Body)
 			})
 		}
 	})

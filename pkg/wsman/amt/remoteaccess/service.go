@@ -11,36 +11,6 @@ import (
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
-)
-
-type (
-	Response struct {
-		*client.Message
-		XMLName xml.Name       `xml:"Envelope"`
-		Header  message.Header `xml:"Header"`
-		Body    Body           `xml:"Body"`
-	}
-	Body struct {
-		XMLName      xml.Name     `xml:"Body"`
-		RemoteAccess RemoteAccess `xml:"AMT_RemoteAccessService"`
-
-		EnumerateResponse common.EnumerateResponse
-		PullResponse      PullResponse
-	}
-	RemoteAccess struct {
-		CreationClassName       string
-		ElementName             string
-		Name                    string
-		SystemCreationClassName string
-		SystemName              string
-	}
-	PullResponse struct {
-		Items []Item
-	}
-	Item struct {
-		RemoteAccess RemoteAccess `xml:"AMT_RemoteAccessService"`
-	}
 )
 type Service struct {
 	base   message.Base

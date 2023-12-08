@@ -62,7 +62,7 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 			action           string
 			body             string
 			extraHeader      string
-			responseFunc     func() (ResponseRule, error)
+			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
 			//GETS
@@ -72,13 +72,13 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 				wsmantesting.GET,
 				"",
 				"",
-				func() (ResponseRule, error) {
+				func() (Response, error) {
 					currentMessage = "Get"
 					return elementUnderTest.Get()
 				},
-				BodyRule{
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					RemotePolicyRule: RemotePolicyRule{
+					PolicyRuleGetResponse: RemoteAccessPolicyRule{
 						CreationClassName:       AMT_RemoteAccessPolicyRule,
 						ElementName:             "Inte(r) AMT:Remote Access Policy",
 						ExtendedData:            "AAAAAAAAABk=",
@@ -97,14 +97,14 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				"",
-				func() (ResponseRule, error) {
+				func() (Response, error) {
 					currentMessage = "Enumerate"
 					if elementUnderTest1.base.WSManMessageCreator == nil {
 						print("Error")
 					}
 					return elementUnderTest.Enumerate()
 				},
-				BodyRule{
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "D3000000-0000-0000-0000-000000000000",
@@ -118,25 +118,23 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
-				func() (ResponseRule, error) {
+				func() (Response, error) {
 					currentMessage = "Pull"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
-				BodyRule{
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					PullResponseRule: PullResponseRule{
-						Items: []ItemRule{
+					PullResponse: PullResponse{
+						RemoteAccessPolicyRuleItems: []RemoteAccessPolicyRule{
 							{
-								RemotePolicyRule: RemotePolicyRule{
-									CreationClassName:       AMT_RemoteAccessPolicyRule,
-									ElementName:             "Inte(r) AMT:Remote Access Policy",
-									ExtendedData:            "AAAAAAAAABk=",
-									PolicyRuleName:          "Periodic",
-									SystemCreationClassName: "CIM_ComputerSystem",
-									SystemName:              "Intel(r) AMT",
-									Trigger:                 2,
-									TunnelLifeTime:          0,
-								},
+								CreationClassName:       AMT_RemoteAccessPolicyRule,
+								ElementName:             "Inte(r) AMT:Remote Access Policy",
+								ExtendedData:            "AAAAAAAAABk=",
+								PolicyRuleName:          "Periodic",
+								SystemCreationClassName: "CIM_ComputerSystem",
+								SystemName:              "Intel(r) AMT",
+								Trigger:                 2,
+								TunnelLifeTime:          0,
 							},
 						},
 					},
@@ -156,7 +154,7 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
-				assert.Equal(t, test.expectedResponse, response.BodyRule)
+				assert.Equal(t, test.expectedResponse, response.Body)
 			})
 		}
 	})
@@ -167,7 +165,7 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 			action           string
 			body             string
 			extraHeader      string
-			responseFunc     func() (ResponseRule, error)
+			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
 			{
@@ -176,26 +174,24 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
-				func() (ResponseRule, error) {
+				func() (Response, error) {
 					currentMessage = "Error"
 					response, err := elementUnderTest.Pull("")
 					return response, err
 				},
-				BodyRule{
+				Body{
 					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					PullResponseRule: PullResponseRule{
-						Items: []ItemRule{
+					PullResponse: PullResponse{
+						RemoteAccessPolicyRuleItems: []RemoteAccessPolicyRule{
 							{
-								RemotePolicyRule: RemotePolicyRule{
-									CreationClassName:       AMT_RemoteAccessPolicyRule,
-									ElementName:             "Inte(r) AMT:Remote Access Policy",
-									ExtendedData:            "AAAAAAAAABk=",
-									PolicyRuleName:          "Periodic",
-									SystemCreationClassName: "CIM_ComputerSystem",
-									SystemName:              "Intel(r) AMT",
-									Trigger:                 2,
-									TunnelLifeTime:          0,
-								},
+								CreationClassName:       AMT_RemoteAccessPolicyRule,
+								ElementName:             "Inte(r) AMT:Remote Access Policy",
+								ExtendedData:            "AAAAAAAAABk=",
+								PolicyRuleName:          "Periodic",
+								SystemCreationClassName: "CIM_ComputerSystem",
+								SystemName:              "Intel(r) AMT",
+								Trigger:                 2,
+								TunnelLifeTime:          0,
 							},
 						},
 					},
@@ -210,7 +206,7 @@ func TestAMT_RemoteAccessPolicyRule(t *testing.T) {
 				response, err := test.responseFunc()
 				assert.Error(t, err)
 				assert.NotEqual(t, expectedXMLInput, response.XMLInput)
-				assert.NotEqual(t, test.expectedResponse, response.BodyRule)
+				assert.NotEqual(t, test.expectedResponse, response.Body)
 			})
 		}
 	})
