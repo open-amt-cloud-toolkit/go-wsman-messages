@@ -37,10 +37,7 @@ type (
 		MutualAuthentication       bool
 	}
 	PullResponse struct {
-		Items []Item
-	}
-	Item struct {
-		TlsSetting TlsSetting `xml:"AMT_TLSSettingData"`
+		TlsSettingItems []TlsSetting `xml:"Items>AMT_TLSSettingData"`
 	}
 )
 
@@ -73,17 +70,15 @@ func NewTLSSettingDataWithClient(wsmanMessageCreator *message.WSManMessageCreato
 	}
 }
 
-func NewTLSSettingData(wsmanMessageCreator *message.WSManMessageCreator) SettingData {
-	return SettingData{
-		base: message.NewBase(wsmanMessageCreator, AMT_TLSSettingData),
-	}
-}
-
 // Get retrieves the representation of the instance
-func (TLSSettingData SettingData) Get() (response Response, err error) {
+func (TLSSettingData SettingData) Get(instanceID string) (response Response, err error) {
+	selector := message.Selector{
+		Name:  "InstanceID",
+		Value: instanceID,
+	}
 	response = Response{
 		Message: &client.Message{
-			XMLInput: TLSSettingData.base.Get(nil),
+			XMLInput: TLSSettingData.base.Get(&selector),
 		},
 	}
 
