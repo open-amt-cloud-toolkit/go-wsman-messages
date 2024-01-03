@@ -247,3 +247,39 @@ func TestClient_PostInvalidResponse(t *testing.T) {
 		t.Error("Expected error during POST with invalid response, but got nil")
 	}
 }
+
+func TestClient_PostWithDigestBlankRealm(t *testing.T) {
+	ts := httptest.NewServer(newMockDigestAuthHandler("user", "password", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authHeader := r.Header.Get("Authorization")
+		if strings.HasPrefix(authHeader, "Digest ") {
+			//Simulate internal server error
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			// Simulate a server requesting digest authentication with required fields
+			w.Header().Set("WWW-Authenticate", `Digest realm="example.com", nonce="mock-nonce", qop="auth", opaque="opaque-data", algorithm=MD5`)
+			w.WriteHeader(http.StatusUnauthorized)
+		}
+	})))
+	defer ts.Close()
+
+	target := ts.URL
+	username := "user"
+	password := "password"
+	useDigest := true
+	useTLS := false
+	selfSignedAllowed := false
+
+	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client.challenge.Realm = ""
+	msg := "<SampleRequest>Request</SampleRequest>"
+
+	client.endpoint = ts.URL
+	_, err := client.Post(msg)
+	if err == nil {
+		t.Error("Expected error during POST with wrong digest auth credentials, but got nil")
+	}
+	if !strings.Contains(err.Error(), "500 Internal Server Error") {
+		t.Error("Wsman client should not send digest on initial challenges")
+	}
+
+}
