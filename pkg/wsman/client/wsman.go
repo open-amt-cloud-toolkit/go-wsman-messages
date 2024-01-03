@@ -83,7 +83,9 @@ func (c *Target) Post(msg string) (response []byte, err error) {
 			if err != nil {
 				return nil, fmt.Errorf("failed digest auth %v", err)
 			}
-			req.Header.Set("Authorization", auth)
+			if c.challenge.Realm != "" {
+				req.Header.Set("Authorization", auth)
+			}
 		} else {
 			req.SetBasicAuth(c.username, c.password)
 		}
