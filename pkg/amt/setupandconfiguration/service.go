@@ -16,6 +16,18 @@ import (
 
 const AMT_SetupAndConfigurationService = "AMT_SetupAndConfigurationService"
 
+type (
+	Response struct {
+		XMLName xml.Name `xml:"Envelope"`
+		Header  message.Header
+		Body    Body
+	}
+	Body struct {
+		CommitChanges_OUTPUT message.ReturnValue
+		Unprovision_OUTPUT   message.ReturnValue
+	}
+)
+
 type UnprovisionResponse struct {
 	XMLName xml.Name        `xml:"Envelope"`
 	Header  message.Header  `xml:"Header"`
