@@ -283,3 +283,56 @@ func TestClient_PostWithDigestBlankRealm(t *testing.T) {
 	}
 
 }
+
+func TestClient_ProxyUrlTransport(t *testing.T) {
+	target := "example.com"
+	username := "user"
+	password := "password"
+	useDigest := true
+	useTLS := false
+	selfSignedAllowed := false
+
+	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	err := client.ProxyUrl("http://localhost:3128")
+	if err != nil {
+		t.Error("Failed to set proxy on proper Transport")
+	}
+}
+
+func TestClient_InvalidProxyUrlGoodTransport(t *testing.T) {
+	target := "example.com"
+	username := "user"
+	password := "password"
+	useDigest := true
+	useTLS := false
+	selfSignedAllowed := false
+
+	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	err := client.ProxyUrl("localhost")
+	if err == nil {
+		t.Error("Failed to detect invalid proxy url")
+	}
+}
+
+// inline struct for mock roundtripper
+type rt struct{}
+
+func (*rt) RoundTrip(r *http.Request) (*http.Response, error) {
+	return nil, nil
+}
+
+func TestClient_SimpleRountripper(t *testing.T) {
+	target := "example.com"
+	username := "user"
+	password := "password"
+	useDigest := true
+	useTLS := false
+	selfSignedAllowed := false
+	mockrt := rt{}
+	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client.Transport = &mockrt
+	err := client.ProxyUrl("http://localhost:3128")
+	if err == nil {
+		t.Error("Failed to detect proper transport")
+	}
+}

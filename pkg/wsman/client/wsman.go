@@ -7,9 +7,11 @@ package client
 import (
 	"bytes"
 	"crypto/tls"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -130,4 +132,24 @@ func (c *Target) Post(msg string) (response []byte, err error) {
 	}
 
 	return response, nil
+}
+
+// ProxyUrl sets proxy address for the underlying Transport if supported
+func (c *Target) ProxyUrl(proxy_str string) (err error) {
+	//check if c.Transport is *http.Transport, otherwise currently it is not supported
+	_, ok := c.Transport.(*http.Transport)
+	if !ok {
+		return errors.New("Transport does not support proxy")
+	}
+	// check if proxy parsing failed
+	proxyUrl, err := url.Parse(proxy_str)
+	if err != nil {
+		return err
+	}
+	// check if scheme is not nil
+	if proxyUrl.Scheme == "" {
+		return errors.New("Unknown URL Scheme")
+	}
+	c.Transport.(*http.Transport).Proxy = http.ProxyURL(proxyUrl)
+	return nil
 }
