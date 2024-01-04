@@ -141,13 +141,9 @@ func (c *Target) ProxyUrl(proxy_str string) (err error) {
 	if !ok {
 		return errors.New("Transport does not support proxy")
 	}
-	// check if proxy parsing failed
+	// check if proxy parsing failed or check if scheme is not nil
 	proxyUrl, err := url.Parse(proxy_str)
-	if err != nil {
-		return err
-	}
-	// check if scheme is not nil
-	if proxyUrl.Scheme == "" {
+	if err != nil || (proxyUrl != nil && proxyUrl.Scheme == "") {
 		return errors.New("Unknown URL Scheme")
 	}
 	c.Transport.(*http.Transport).Proxy = http.ProxyURL(proxyUrl)
