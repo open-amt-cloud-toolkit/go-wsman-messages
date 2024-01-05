@@ -16,12 +16,13 @@ const AMT_TimeSynchronizationService = "AMT_TimeSynchronizationService"
 
 type (
 	Response struct {
-		XMLName xml.Name `xml:"Envelope"`
-		Header  message.Header
-		Body
+		XMLName xml.Name       `xml:"Envelope"`
+		Header  message.Header `xml:"Header"`
+		Body    Body           `xml:"Body"`
 	}
 	Body struct {
-		GetLowAccuracyTimeSynch_OUTPUT
+		XMLName                         xml.Name `xml:"Body"`
+		GetLowAccuracyTimeSynch_OUTPUT  GetLowAccuracyTimeSynch_OUTPUT
 		SetHighAccuracyTimeSynch_OUTPUT message.ReturnValue
 	}
 	GetLowAccuracyTimeSynch_OUTPUT struct {
