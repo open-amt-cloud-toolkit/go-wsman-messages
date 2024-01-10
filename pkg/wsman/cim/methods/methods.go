@@ -5,7 +5,9 @@
 
 package methods
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func RequestStateChange(className string) string {
 	return fmt.Sprintf("http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/%s/RequestStateChange", className)

@@ -9,54 +9,55 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
-
-type DependencyPullResponseEnvelope struct {
-	XMLName xml.Name `xml:"Envelope"`
-	Header  message.Header
-	Body    DependencyPullResponseBody
-}
-
-type DependencyPullResponseBody struct {
-	PullResponse DependencyResponse
-}
-
-type DependencyResponse struct {
-	EnumerationContext string
-	Items              []Relationship `xml:"Items>CIM_ConcreteDependency"`
-}
-
-type Relationship struct {
-	Antecedent models.AssociationReference
-	Dependent  models.AssociationReference
-}
-
-type Dependency struct {
-	base message.Base
-}
-
-const ClassName = "CIM_ConcreteDependency"
 
 // NewDependency returns a new instance of the NewDependency struct.
 // should be NewDependency() because concrete is scoped already as package name.
-func NewDependency(wsmanMessageCreator *message.WSManMessageCreator) Dependency {
+func NewDependencyWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Dependency {
 	return Dependency{
-		base: message.NewBase(wsmanMessageCreator, ClassName),
+		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_ConcreteDependency, client),
+		client: client,
 	}
 }
 
-// Get the representation of the instance
-func (b Dependency) Get() string {
-	return b.base.Get(nil)
-}
+// TODO: Figure out how to call GET requiring resourceURIs and Selectors
 
 // Enumerate the instances of this class
-func (b Dependency) Enumerate() string {
-	return b.base.Enumerate()
+func (dependency Dependency) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: dependency.base.Enumerate(),
+		},
+	}
+
+	err = dependency.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+
 }
 
 // Pull instances of this class, following an Enumerate operation
-func (b Dependency) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
+func (dependency Dependency) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: dependency.base.Pull(enumerationContext),
+		},
+	}
+	err = dependency.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

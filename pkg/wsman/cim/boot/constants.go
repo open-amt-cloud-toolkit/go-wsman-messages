@@ -5,25 +5,12 @@
 
 package boot
 
-import (
-	"encoding/json"
-	"encoding/xml"
-
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
-)
-
 const (
 	CIM_BootConfigSetting string = "CIM_BootConfigSetting"
 	CIM_BootSourceSetting string = "CIM_BootSourceSetting"
 	CIM_BootService       string = "CIM_BootService"
 	ChangeBootOrder       string = "ChangeBootOrder"
 )
-
-var currentMessage string
-
-type Source string
 
 const (
 	HardDrive             Source = "CIM:Hard-Disk:1"
@@ -41,68 +28,3 @@ const (
 	OCR_UEFI_BootOption9  Source = "Intel(r)AMT:OCR-UEFI-Boot-Option:9"
 	OCR_UEFI_BootOption10 Source = "Intel(r)AMT:OCR-UEFI-Boot-Option:10"
 )
-
-type (
-	Response struct {
-		*client.Message
-		XMLName xml.Name       `xml:"Envelope"`
-		Header  message.Header `xml:"Header"`
-		Body    Body           `xml:"Body"`
-	}
-
-	Body struct {
-		XMLName                  xml.Name          `xml:"Body"`
-		ConfigSettingGetResponse BootConfigSetting `xml:"CIM_BootConfigSetting"`
-		SourceSettingGetResponse BootSourceSetting `xml:"CIM_BootSourceSetting"`
-		ServiceGetResponse       BootService       `xml:"CIM_BootService"`
-		EnumerateResponse        common.EnumerateResponse
-		PullResponse             PullResponse           `xml:"PullResponse"`
-		ChangeBootOrder_OUTPUT   ChangeBootOrder_OUTPUT `xml:"ChangeBootOrder_OUTPUT"`
-	}
-
-	BootConfigSetting struct {
-		XMLName     xml.Name `xml:"CIM_BootConfigSetting"`
-		InstanceID  string   `xml:"InstanceID"`
-		ElementName string   `xml:"ElementName"`
-	}
-
-	BootSourceSetting struct {
-		XMLName              xml.Name `xml:"CIM_BootSourceSetting"`
-		ElementName          string   `xml:"ElementName"`
-		InstanceID           string   `xml:"InstanceID"`
-		StructuredBootString string   `xml:"StructuredBootString"`
-		BIOSBootString       string   `xml:"BIOSBootString"`
-		BootString           string   `xml:"BootString"`
-		FailThroughSupported int      `xml:"FailThroughSupported"`
-	}
-
-	BootService struct {
-		XMLName                 xml.Name `xml:"CIM_BootService"`
-		Name                    string   `xml:"Name"`
-		CreationClassName       string   `xml:"CreationClassName"`
-		SystemName              string   `xml:"SystemName"`
-		SystemCreationClassName string   `xml:"SystemCreationClassName"`
-		ElementName             string   `xml:"ElementName"`
-		OperationalStatus       []int    `xml:"OperationalStatus"`
-		EnabledState            int      `xml:"EnabledState"`
-		RequestedState          int      `xml:"RequestedState"`
-	}
-
-	PullResponse struct {
-		BootSourceSettingItems []BootSourceSetting `xml:"Items>CIM_BootSourceSetting"`
-		BootConfigSettingItems []BootConfigSetting `xml:"Items>CIM_BootConfigSetting"`
-		BootServiceItems       []BootService       `xml:"Items>CIM_BootService"`
-	}
-
-	ChangeBootOrder_OUTPUT struct {
-		message.ReturnValue
-	}
-)
-
-func (w *Response) JSON() string {
-	jsonOutput, err := json.Marshal(w.Body)
-	if err != nil {
-		return ""
-	}
-	return string(jsonOutput)
-}

@@ -9,64 +9,75 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type EndpointSettings struct {
-	base message.Base
-}
-
-type PullResponseEnvelope struct {
-	XMLName xml.Name `xml:"Envelope"`
-	Header  message.Header
-	Body    PullResponseBody
-}
-
-type PullResponseBody struct {
-	PullResponse PullResponse
-}
-
-type PullResponse struct {
-	Items         []CIMWiFiEndpointSettings `xml:"Items>CIM_WiFiEndpointSettings"`
-	EndOfSequence string                    `xml:"EndOfSequence"`
-}
-
-type CIMWiFiEndpointSettings struct {
-	AuthenticationMethod int
-	BSSType              int
-	ElementName          string
-	EncryptionMethod     int
-	InstanceID           string
-	Priority             int
-	SSID                 string
-}
-
-const CIM_WiFiEndpoint = "CIM_WiFiEndpoint"
-const CIM_WiFiEndpointSettings = "CIM_WiFiEndpointSettings"
-
 // NewWiFiEndpointSettings returns a new instance of the WiFiEndpointSettings struct.
-func NewWiFiEndpointSettings(wsmanMessageCreator *message.WSManMessageCreator) EndpointSettings {
+func NewWiFiEndpointSettingsWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) EndpointSettings {
 	return EndpointSettings{
-		base: message.NewBase(wsmanMessageCreator, string(CIM_WiFiEndpointSettings)),
+		base: message.NewBaseWithClient(wsmanMessageCreator, CIM_WiFiEndpointSettings, client),
 	}
 }
 
+// TODO: Figure out how to call GET requiring resourceURIs and Selectors
 // Get retrieves the representation of the instance
-func (b EndpointSettings) Get() string {
-	return b.base.Get(nil)
-}
 
 // Enumerates the instances of this class
-func (b EndpointSettings) Enumerate() string {
-	return b.base.Enumerate()
+func (endpointSettings EndpointSettings) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: endpointSettings.base.Enumerate(),
+		},
+	}
+
+	err = endpointSettings.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (b EndpointSettings) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
+func (endpointSettings EndpointSettings) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: endpointSettings.base.Pull(enumerationContext),
+		},
+	}
+	err = endpointSettings.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Delete removes a the specified instance
-func (b EndpointSettings) Delete(handle string) string {
+func (endpointSettings EndpointSettings) Delete(handle string) (response Response, err error) {
 	selector := message.Selector{Name: "InstanceID", Value: handle}
-	return b.base.Delete(selector)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: endpointSettings.base.Delete(selector),
+		},
+	}
+
+	err = endpointSettings.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

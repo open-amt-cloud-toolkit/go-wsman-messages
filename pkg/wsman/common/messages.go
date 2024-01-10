@@ -22,5 +22,5 @@ type EnumerationBody struct {
 }
 
 type EnumerateResponse struct {
-	EnumerationContext string
+	EnumerationContext string `xml:"EnumerationContext,omitempty"`
 }

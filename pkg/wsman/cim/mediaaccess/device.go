@@ -5,32 +5,59 @@
 
 package mediaaccess
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+import (
+	"encoding/xml"
 
-const CIM_MediaAccessDevice = "CIM_MediaAccessDevice"
-
-type Device struct {
-	base message.Base
-}
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+)
 
 // NewMediaAccessDevice returns a new instance of the MediaAccessDevice struct.
-func NewMediaAccessDevice(wsmanMessageCreator *message.WSManMessageCreator) Device {
+func NewMediaAccessDeviceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Device {
 	return Device{
-		base: message.NewBase(wsmanMessageCreator, string(CIM_MediaAccessDevice)),
+		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_MediaAccessDevice, client),
+		client: client,
 	}
 }
 
+// TODO: Figure out how to call GET requiring resourceURIs and Selectors
 // Get retrieves the representation of the instance
-func (b Device) Get() string {
-	return b.base.Get(nil)
-}
 
 // Enumerates the instances of this class
-func (b Device) Enumerate() string {
-	return b.base.Enumerate()
+func (device Device) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: device.base.Enumerate(),
+		},
+	}
+
+	err = device.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (b Device) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
+func (device Device) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: device.base.Pull(enumerationContext),
+		},
+	}
+	err = device.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

@@ -6,33 +6,58 @@
 package physical
 
 import (
+	"encoding/xml"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type Memory struct {
-	base message.Base
-}
-
-const CIM_PhysicalMemory = "CIM_PhysicalMemory"
-
 // NewPhysicalMemory returns a new instance of the PhysicalMemory struct.
-func NewPhysicalMemory(wsmanMessageCreator *message.WSManMessageCreator) Memory {
+func NewPhysicalMemoryWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Memory {
 	return Memory{
-		base: message.NewBase(wsmanMessageCreator, string(CIM_PhysicalMemory)),
+		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_PhysicalMemory, client),
+		client: client,
 	}
 }
 
+// TODO: Figure out how to call GET requiring resourceURIs and Selectors
 // Get retrieves the representation of the instance
-func (b Memory) Get() string {
-	return b.base.Get(nil)
-}
 
 // Enumerates the instances of this class
-func (b Memory) Enumerate() string {
-	return b.base.Enumerate()
+func (memory Memory) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: memory.base.Enumerate(),
+		},
+	}
+
+	err = memory.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (b Memory) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
+func (memory Memory) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: memory.base.Pull(enumerationContext),
+		},
+	}
+	err = memory.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

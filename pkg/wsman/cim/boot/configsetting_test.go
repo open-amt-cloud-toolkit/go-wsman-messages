@@ -7,10 +7,6 @@ package boot
 
 import (
 	"encoding/xml"
-	"fmt"
-	"io"
-	"os"
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -21,34 +17,13 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
 )
 
-type ConfigSettingMockClient struct{}
-
-func (c *ConfigSettingMockClient) Post(msg string) ([]byte, error) {
-	// read an xml file from disk:
-	xmlFile, err := os.Open("../../wsmantesting/responses/cim/boot/configsetting/" + strings.ToLower(currentMessage) + ".xml")
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return nil, err
-	}
-	defer xmlFile.Close()
-	// read file into string
-	xmlData, err := io.ReadAll(xmlFile)
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-		return nil, err
-	}
-	// strip carriage returns and new line characters
-	xmlData = []byte(strings.ReplaceAll(string(xmlData), "\r\n", ""))
-
-	// Simulate a successful response for testing.
-	return []byte(xmlData), nil
-}
-
 func TestPositiveConfigSetting(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := ConfigSettingMockClient{}
+	client := wsmantesting.MockClient{
+		PackageUnderTest: "cim/boot/configsetting",
+	}
 	elementUnderTest := NewBootConfigSettingWithClient(wsmanMessageCreator, &client)
 
 	t.Run("cim_* Tests", func(t *testing.T) {
@@ -67,11 +42,11 @@ func TestPositiveConfigSetting(t *testing.T) {
 				wsmantesting.GET,
 				"",
 				func() (Response, error) {
-					currentMessage = "Get"
+					client.CurrentMessage = "Get"
 					return elementUnderTest.Get()
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					ConfigSettingGetResponse: BootConfigSetting{
 						XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting", Local: CIM_BootConfigSetting},
 						InstanceID:  "Intel(r) AMT: Boot Configuration 0",
@@ -86,11 +61,11 @@ func TestPositiveConfigSetting(t *testing.T) {
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
-					currentMessage = "Enumerate"
+					client.CurrentMessage = "Enumerate"
 					return elementUnderTest.Enumerate()
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "14000000-0000-0000-0000-000000000000",
 					},
@@ -103,11 +78,11 @@ func TestPositiveConfigSetting(t *testing.T) {
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				func() (Response, error) {
-					currentMessage = "Pull"
+					client.CurrentMessage = "Pull"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
 						BootConfigSettingItems: []BootConfigSetting{
 							{
@@ -126,13 +101,13 @@ func TestPositiveConfigSetting(t *testing.T) {
 				methods.GenerateAction(CIM_BootConfigSetting, ChangeBootOrder),
 				"<h:ChangeBootOrder_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting\"><h:Source><Address xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\"><ResourceURI xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting</ResourceURI><SelectorSet xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\"><Selector Name=\"InstanceID\">CIM:Hard-Disk:1</Selector></SelectorSet></ReferenceParameters></h:Source></h:ChangeBootOrder_INPUT>",
 				func() (Response, error) {
-					currentMessage = "ChangeBootOrder"
+					client.CurrentMessage = "ChangeBootOrder"
 					return elementUnderTest.ChangeBootOrder(HardDrive)
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					ChangeBootOrder_OUTPUT: ChangeBootOrder_OUTPUT{
-						ReturnValue: message.ReturnValue{ReturnValue: 0},
+						ReturnValue: 0,
 					},
 				},
 			},
@@ -155,7 +130,9 @@ func TestNegativeConfigSetting(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := ConfigSettingMockClient{}
+	client := wsmantesting.MockClient{
+		PackageUnderTest: "cim/boot/configsetting",
+	}
 	elementUnderTest := NewBootConfigSettingWithClient(wsmanMessageCreator, &client)
 
 	t.Run("cim_* Tests", func(t *testing.T) {
@@ -174,11 +151,11 @@ func TestNegativeConfigSetting(t *testing.T) {
 				wsmantesting.GET,
 				"",
 				func() (Response, error) {
-					currentMessage = "Error"
+					client.CurrentMessage = "Error"
 					return elementUnderTest.Get()
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					ConfigSettingGetResponse: BootConfigSetting{
 						XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting", Local: CIM_BootConfigSetting},
 						InstanceID:  "Intel(r) AMT: Boot Configuration 0",
@@ -193,11 +170,11 @@ func TestNegativeConfigSetting(t *testing.T) {
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
-					currentMessage = "Error"
+					client.CurrentMessage = "Error"
 					return elementUnderTest.Enumerate()
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "14000000-0000-0000-0000-000000000000",
 					},
@@ -210,11 +187,11 @@ func TestNegativeConfigSetting(t *testing.T) {
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				func() (Response, error) {
-					currentMessage = "Error"
+					client.CurrentMessage = "Error"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
 						BootConfigSettingItems: []BootConfigSetting{
 							{
@@ -233,13 +210,13 @@ func TestNegativeConfigSetting(t *testing.T) {
 				methods.GenerateAction(CIM_BootConfigSetting, ChangeBootOrder),
 				"<h:ChangeBootOrder_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting\"><h:Source><Address xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\"><ResourceURI xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting</ResourceURI><SelectorSet xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\"><Selector Name=\"InstanceID\">CIM:Hard-Disk:1</Selector></SelectorSet></ReferenceParameters></h:Source></h:ChangeBootOrder_INPUT>",
 				func() (Response, error) {
-					currentMessage = "Error"
+					client.CurrentMessage = "Error"
 					return elementUnderTest.ChangeBootOrder(HardDrive)
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					ChangeBootOrder_OUTPUT: ChangeBootOrder_OUTPUT{
-						ReturnValue: message.ReturnValue{ReturnValue: 0},
+						ReturnValue: 0,
 					},
 				},
 			},
