@@ -6,6 +6,7 @@
 package tls
 
 const (
-	AMT_TLSCredentialContext string = "AMT_TLSCredentialContext"
-	AMT_TLSSettingData       string = "AMT_TLSSettingData"
+	AMT_TLSCredentialContext          string = "AMT_TLSCredentialContext"
+	AMT_TLSSettingData                string = "AMT_TLSSettingData"
+	AMT_TLSProtocolEndpointCollection string = "AMT_TLSProtocolEndpointCollection"
 )

@@ -7,10 +7,6 @@ package authorization
 
 import (
 	"encoding/xml"
-	"fmt"
-	"io"
-	"os"
-	"strings"
 	"testing"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
@@ -19,44 +15,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type MockClient struct {
-}
-
-const (
-	EnvelopeResponse = `<a:Envelope xmlns:a="http://www.w3.org/2003/05/soap-envelope" x-mlns:b="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd" xmlns:d="http://schemas.xmlsoap.org/ws/2005/02/trust" xmlns:e="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:f="http://schemas.dmtf.org/wbem/wsman/1/cimbinding.xsd" xmlns:g="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService" xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><a:Header><b:To>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:To><b:RelatesTo>0</b:RelatesTo><b:Action a:mustUnderstand="true">`
-	GetBody          = `<g:AMT_AuthorizationService><g:CreationClassName>AMT_AuthorizationService</g:CreationClassName><g:ElementName>Intel(r) AMT Authorization Service</g:ElementName><g:Name>Intel(r) AMT Alarm Clock Service</g:Name><g:SystemCreationClassName>CIM_ComputerSystem</g:SystemCreationClassName><g:SystemName>ManagedSystem</g:SystemName></g:AMT_AuthorizationService>`
-)
-
-var currentMessage = ""
-
-func (c *MockClient) Post(msg string) ([]byte, error) {
-	// read an xml file from disk:
-	xmlFile, err := os.Open("../../wsmantesting/responses/amt/authorization/" + strings.ToLower(currentMessage) + ".xml")
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return nil, err
-	}
-	defer xmlFile.Close()
-	// read file into string
-	xmlData, err := io.ReadAll(xmlFile)
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-		return nil, err
-	}
-	// strip carriage returns and new line characters
-	xmlData = []byte(strings.ReplaceAll(string(xmlData), "\r\n", ""))
-
-	// Simulate a successful response for testing.
-	return []byte(xmlData), nil
-}
-func TestAMT_AuthorizationService(t *testing.T) {
+func TestPositiveAMT_AuthorizationService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := MockClient{}
+	client := wsmantesting.MockClient{
+		PackageUnderTest: "amt/authorization",
+	}
 	elementUnderTest := NewServiceWithClient(wsmanMessageCreator, &client)
-	elementUnderTest1 := NewAuthorizationService(wsmanMessageCreator)
-	t.Run("amt_* Tests", func(t *testing.T) {
+	t.Run("amt_AuthorizationService Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
 			method           string
@@ -71,12 +38,13 @@ func TestAMT_AuthorizationService(t *testing.T) {
 				wsmantesting.GET,
 				"",
 				func() (Response, error) {
-					currentMessage = "Get"
+					client.CurrentMessage = "Get"
 					return elementUnderTest.Get()
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					AuthorizationOccurrence: AuthorizationOccurrence{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					GetResponse: AuthorizationOccurrence{
+						XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService", Local: "AMT_AuthorizationService"},
 						AllowHttpQopAuthOnly:    1,
 						CreationClassName:       AMT_AuthorizationService,
 						ElementName:             "Intel(r) AMT Authorization Service",
@@ -94,14 +62,11 @@ func TestAMT_AuthorizationService(t *testing.T) {
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
-					currentMessage = "Enumerate"
-					if elementUnderTest1.base.WSManMessageCreator == nil {
-						print("Error")
-					}
+					client.CurrentMessage = "Enumerate"
 					return elementUnderTest.Enumerate()
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "5C000000-0000-0000-0000-000000000000",
 					},
@@ -114,24 +79,24 @@ func TestAMT_AuthorizationService(t *testing.T) {
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				func() (Response, error) {
-					currentMessage = "Pull"
+					client.CurrentMessage = "Pull"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
-						Items: []Item{
+						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
+						AuthorizationOccurrenceItems: []AuthorizationOccurrence{
 							{
-								AuthorizationOccurrence: AuthorizationOccurrence{
-									AllowHttpQopAuthOnly:    1,
-									CreationClassName:       AMT_AuthorizationService,
-									ElementName:             "Intel(r) AMT Authorization Service",
-									EnabledState:            5,
-									Name:                    "Intel(r) AMT Authorization Service",
-									RequestedState:          12,
-									SystemCreationClassName: "CIM_ComputerSystem",
-									SystemName:              "Intel(r) AMT",
-								},
+								XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService", Local: "AMT_AuthorizationService"},
+								AllowHttpQopAuthOnly:    1,
+								CreationClassName:       AMT_AuthorizationService,
+								ElementName:             "Intel(r) AMT Authorization Service",
+								EnabledState:            5,
+								Name:                    "Intel(r) AMT Authorization Service",
+								RequestedState:          12,
+								SystemCreationClassName: "CIM_ComputerSystem",
+								SystemName:              "Intel(r) AMT",
 							},
 						},
 					},
@@ -214,9 +179,11 @@ func TestNegativeAMT_AuthorizationService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := MockClient{}
+	client := wsmantesting.MockClient{
+		PackageUnderTest: "amt/authorization",
+	}
 	elementUnderTest := NewServiceWithClient(wsmanMessageCreator, &client)
-	t.Run("amt_* Tests", func(t *testing.T) {
+	t.Run("amt_AuthorizationService Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
 			method           string
@@ -227,31 +194,55 @@ func TestNegativeAMT_AuthorizationService(t *testing.T) {
 			expectedResponse interface{}
 		}{
 			{
+				"should create an invalid AMT_EthernetPortSettings Get wsman message",
+				"AMT_EthernetPortSettings",
+				wsmantesting.GET,
+				"",
+				"",
+				func() (Response, error) {
+					client.CurrentMessage = "Error"
+					return elementUnderTest.Get()
+				},
+				Body{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					GetResponse: AuthorizationOccurrence{
+						XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService", Local: "AMT_AuthorizationService"},
+						AllowHttpQopAuthOnly:    1,
+						CreationClassName:       AMT_AuthorizationService,
+						ElementName:             "Intel(r) AMT Authorization Service",
+						EnabledState:            5,
+						Name:                    "Intel(r) AMT Authorization Service",
+						RequestedState:          12,
+						SystemCreationClassName: "CIM_ComputerSystem",
+						SystemName:              "Intel(r) AMT",
+					},
+				},
+			},
+			{
 				"should create an invalid AMT_EthernetPortSettings Pull wsman message",
 				"AMT_EthernetPortSettings",
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
 				func() (Response, error) {
-					currentMessage = "Error"
-					response, err := elementUnderTest.Pull("")
-					return response, err
+					client.CurrentMessage = "Error"
+					return elementUnderTest.Pull("")
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
-						Items: []Item{
+						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
+						AuthorizationOccurrenceItems: []AuthorizationOccurrence{
 							{
-								AuthorizationOccurrence: AuthorizationOccurrence{
-									AllowHttpQopAuthOnly:    1,
-									CreationClassName:       AMT_AuthorizationService,
-									ElementName:             "Intel(r) AMT Authorization Service",
-									EnabledState:            5,
-									Name:                    "Intel(r) AMT Authorization Service",
-									RequestedState:          12,
-									SystemCreationClassName: "CIM_ComputerSystem",
-									SystemName:              "Intel(r) AMT",
-								},
+								XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService", Local: "AMT_AuthorizationService"},
+								AllowHttpQopAuthOnly:    1,
+								CreationClassName:       AMT_AuthorizationService,
+								ElementName:             "Intel(r) AMT Authorization Service",
+								EnabledState:            5,
+								Name:                    "Intel(r) AMT Authorization Service",
+								RequestedState:          12,
+								SystemCreationClassName: "CIM_ComputerSystem",
+								SystemName:              "Intel(r) AMT",
 							},
 						},
 					},

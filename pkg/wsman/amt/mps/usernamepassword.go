@@ -6,39 +6,96 @@
 package mps
 
 import (
+	"encoding/xml"
+	"fmt"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type MPSUsernamePassword struct {
-	models.SharedCredential
-}
-type UsernamePassword struct {
-	base message.Base
-}
-
-func NewMPSUsernamePassword(wsmanMessageCreator *message.WSManMessageCreator) UsernamePassword {
+func NewMPSUsernamePasswordWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) UsernamePassword {
 	return UsernamePassword{
-		base: message.NewBase(wsmanMessageCreator, AMT_MPSUsernamePassword),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_MPSUsernamePassword, client),
 	}
 }
 
 // Get retrieves the representation of the instance
-func (MPSUsernamePassword UsernamePassword) Get() string {
-	return MPSUsernamePassword.base.Get(nil)
+func (usernamePassword UsernamePassword) Get() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: usernamePassword.base.Get(nil),
+		},
+	}
+	// send the message to AMT
+	err = usernamePassword.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Enumerates the instances of this class
-func (MPSUsernamePassword UsernamePassword) Enumerate() string {
-	return MPSUsernamePassword.base.Enumerate()
+func (usernamePassword UsernamePassword) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: usernamePassword.base.Enumerate(),
+		},
+	}
+	// send the message to AMT
+	err = usernamePassword.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (MPSUsernamePassword UsernamePassword) Pull(enumerationContext string) string {
-	return MPSUsernamePassword.base.Pull(enumerationContext)
+func (usernamePassword UsernamePassword) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: usernamePassword.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = usernamePassword.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Put will change properties of the selected instance
-func (MPSUsernamePassword UsernamePassword) Put(mpsUsernamePassword MPSUsernamePassword) string {
-	return MPSUsernamePassword.base.Put(mpsUsernamePassword, false, nil)
+func (usernamePassword UsernamePassword) Put(mpsUsernamePassword MPSUsernamePasswordRequest) (response Response, err error) {
+	mpsUsernamePassword.H = fmt.Sprintf("%s%s", message.AMTSchema, AMT_MPSUsernamePassword)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: usernamePassword.base.Put(mpsUsernamePassword, false, nil),
+		},
+	}
+	// send the message to AMT
+	err = usernamePassword.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

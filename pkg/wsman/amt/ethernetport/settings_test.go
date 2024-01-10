@@ -7,10 +7,6 @@ package ethernetport
 
 import (
 	"encoding/xml"
-	"fmt"
-	"io"
-	"os"
-	"strings"
 	"testing"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
@@ -19,44 +15,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type MockClient struct {
-}
-
-const (
-	EnvelopeResponse = `<a:Envelope xmlns:a="http://www.w3.org/2003/05/soap-envelope" x-mlns:b="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd" xmlns:d="http://schemas.xmlsoap.org/ws/2005/02/trust" xmlns:e="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:f="http://schemas.dmtf.org/wbem/wsman/1/cimbinding.xsd" xmlns:g="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings" xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><a:Header><b:To>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:To><b:RelatesTo>0</b:RelatesTo><b:Action a:mustUnderstand="true">`
-	GetBody          = `<g:AMT_EthernetPortSettings><g:CreationClassName>AMT_EthernetPortSettings</g:CreationClassName><g:ElementName>Intel(r) AMT Ethernet Port Settings</g:ElementName><g:Name>Intel(r) AMT Ethernet Port Settings</g:Name><g:SystemCreationClassName>CIM_ComputerSystem</g:SystemCreationClassName><g:SystemName>ManagedSystem</g:SystemName></g:AMT_EthernetPortSettings>`
-)
-
-var currentMessage = ""
-
-func (c *MockClient) Post(msg string) ([]byte, error) {
-	// read an xml file from disk:
-	xmlFile, err := os.Open("../../wsmantesting/responses/amt/ethernetport/" + strings.ToLower(currentMessage) + ".xml")
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return nil, err
-	}
-	defer xmlFile.Close()
-	// read file into string
-	xmlData, err := io.ReadAll(xmlFile)
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-		return nil, err
-	}
-	// strip carriage returns and new line characters
-	xmlData = []byte(strings.ReplaceAll(string(xmlData), "\r\n", ""))
-
-	// Simulate a successful response for testing.
-	return []byte(xmlData), nil
-}
-func TestAMT_EthernetPortSettings(t *testing.T) {
+func TestPositiveAMT_EthernetPortSettings(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := MockClient{}
+	client := wsmantesting.MockClient{
+		PackageUnderTest: "amt/ethernetport",
+	}
 	elementUnderTest := NewEthernetPortSettingsWithClient(wsmanMessageCreator, &client)
-	elementUnderTest1 := NewEthernetPortSettings(wsmanMessageCreator)
-	t.Run("amt_* Tests", func(t *testing.T) {
+	t.Run("amt_EthernetPortSettings Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
 			method           string
@@ -72,41 +39,30 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 				AMT_EthernetPortSettings,
 				wsmantesting.GET,
 				"",
-				"<w:SelectorSet><w:Selector Name=\"test\">test</w:Selector></w:SelectorSet>",
+				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Ethernet Port Settings 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					currentMessage = "Get"
-					selector := Selector{
-						Name:  "test",
-						Value: "test",
-					}
-
-					return elementUnderTest.Get(selector)
+					client.CurrentMessage = "Get"
+					return elementUnderTest.Get(0)
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					EthernetPort: EthernetPort{
-						ElementName:                  "Intel(r) AMT Ethernet Port Settings",
-						InstanceID:                   "Intel(r) AMT Ethernet Port Settings 0",
-						VLANTag:                      0,
-						SharedMAC:                    true,
-						MACAddress:                   "c8-d9-d2-7a-1e-33",
-						LinkIsUp:                     true,
-						LinkPolicy:                   []int{14},
-						LinkPreference:               0,
-						LinkControl:                  0,
-						SharedStaticIp:               false,
-						SharedDynamicIP:              true,
-						IpSyncEnabled:                true,
-						DHCPEnabled:                  true,
-						IPAddress:                    "",
-						SubnetMask:                   "255.255.255.0",
-						DefaultGateway:               "192.168.0.1",
-						PrimaryDNS:                   "68.105.28.11",
-						SecondaryDNS:                 "68.105.29.11",
-						ConsoleTcpMaxRetransmissions: 0,
-						WLANLinkProtectionLevel:      0,
-						PhysicalConnectionType:       0,
-						PhysicalNicMedium:            0,
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					GetAndPutResponse: SettingsResponse{
+						XMLName:                xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings", Local: "AMT_EthernetPortSettings"},
+						ElementName:            "Intel(r) AMT Ethernet Port Settings",
+						InstanceID:             "Intel(r) AMT Ethernet Port Settings 0",
+						SharedMAC:              true,
+						MACAddress:             "c8-d9-d2-7a-1e-33",
+						LinkIsUp:               true,
+						LinkPolicy:             []int{1, 14},
+						SharedStaticIp:         false,
+						SharedDynamicIP:        true,
+						IpSyncEnabled:          true,
+						DHCPEnabled:            true,
+						SubnetMask:             "255.255.255.0",
+						DefaultGateway:         "192.168.0.1",
+						PrimaryDNS:             "68.105.28.11",
+						SecondaryDNS:           "68.105.29.11",
+						PhysicalConnectionType: 0,
 					},
 				},
 			},
@@ -119,14 +75,11 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 				wsmantesting.ENUMERATE_BODY,
 				"",
 				func() (Response, error) {
-					currentMessage = "Enumerate"
-					if elementUnderTest1.base.WSManMessageCreator == nil {
-						print("Error")
-					}
+					client.CurrentMessage = "Enumerate"
 					return elementUnderTest.Enumerate()
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "7700000-0000-0000-0000-000000000000",
 					},
@@ -140,40 +93,90 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 				wsmantesting.PULL_BODY,
 				"",
 				func() (Response, error) {
-					currentMessage = "Pull"
+					client.CurrentMessage = "Pull"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
-						Items: []Item{
+						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
+						EthernetPortItems: []SettingsResponse{
 							{
-								EthernetPort: EthernetPort{
-									ElementName:                  "Intel(r) AMT Ethernet Port Settings",
-									InstanceID:                   "Intel(r) AMT Ethernet Port Settings 1",
-									VLANTag:                      0,
-									SharedMAC:                    true,
-									MACAddress:                   "00-00-00-00-00-00",
-									LinkIsUp:                     false,
-									LinkPolicy:                   []int{1, 14},
-									LinkPreference:               2,
-									LinkControl:                  2,
-									SharedStaticIp:               false,
-									SharedDynamicIP:              true,
-									IpSyncEnabled:                true,
-									DHCPEnabled:                  true,
-									IPAddress:                    "",
-									SubnetMask:                   "255.255.255.0",
-									DefaultGateway:               "192.168.6.1",
-									PrimaryDNS:                   "192.168.6.1",
-									SecondaryDNS:                 "",
-									ConsoleTcpMaxRetransmissions: 5,
-									WLANLinkProtectionLevel:      1,
-									PhysicalConnectionType:       3,
-									PhysicalNicMedium:            0,
-								},
+								XMLName:                xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings", Local: "AMT_EthernetPortSettings"},
+								ElementName:            "Intel(r) AMT Ethernet Port Settings",
+								InstanceID:             "Intel(r) AMT Ethernet Port Settings 0",
+								VLANTag:                0,
+								SharedMAC:              true,
+								MACAddress:             "00-be-43-d8-22-a4",
+								LinkIsUp:               true,
+								LinkPolicy:             []int{1, 14},
+								SharedStaticIp:         false,
+								SharedDynamicIP:        true,
+								IpSyncEnabled:          true,
+								DHCPEnabled:            true,
+								SubnetMask:             "255.255.255.0",
+								DefaultGateway:         "192.168.6.1",
+								PrimaryDNS:             "192.168.6.1",
+								PhysicalConnectionType: 0,
+							},
+							{
+								XMLName:                      xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings", Local: "AMT_EthernetPortSettings"},
+								ElementName:                  "Intel(r) AMT Ethernet Port Settings",
+								InstanceID:                   "Intel(r) AMT Ethernet Port Settings 1",
+								SharedMAC:                    true,
+								MACAddress:                   "00-00-00-00-00-00",
+								LinkIsUp:                     false,
+								LinkPreference:               2,
+								LinkControl:                  2,
+								DHCPEnabled:                  true,
+								ConsoleTcpMaxRetransmissions: 5,
+								WLANLinkProtectionLevel:      1,
+								PhysicalConnectionType:       3,
 							},
 						},
+					},
+				},
+			},
+			//PUTS
+			{
+				"should create a valid AMT_EthernetPortSettings Put wsman message",
+				AMT_EthernetPortSettings,
+				wsmantesting.PUT,
+				"<h:AMT_EthernetPortSettings xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings\"><h:ElementName>Intel(r) AMT Ethernet Port Settings</h:ElementName><h:InstanceID>Intel(r) AMT Ethernet Port Settings 0</h:InstanceID><h:SharedMAC>true</h:SharedMAC><h:LinkIsUp>false</h:LinkIsUp><h:SharedStaticIp>true</h:SharedStaticIp><h:IpSyncEnabled>true</h:IpSyncEnabled><h:DHCPEnabled>true</h:DHCPEnabled></h:AMT_EthernetPortSettings>",
+				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Ethernet Port Settings 0</w:Selector></w:SelectorSet>",
+				func() (Response, error) {
+					ethernetPortSettings := SettingsRequest{
+						H:              "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings",
+						DHCPEnabled:    true,
+						ElementName:    "Intel(r) AMT Ethernet Port Settings",
+						InstanceID:     "Intel(r) AMT Ethernet Port Settings 0",
+						IpSyncEnabled:  true,
+						SharedMAC:      true,
+						SharedStaticIp: true,
+					}
+					client.CurrentMessage = "Put"
+					return elementUnderTest.Put(ethernetPortSettings, 0)
+				},
+				Body{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					GetAndPutResponse: SettingsResponse{
+						XMLName:                xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings", Local: "AMT_EthernetPortSettings"},
+						DHCPEnabled:            true,
+						DefaultGateway:         "192.168.0.1",
+						ElementName:            "Intel(r) AMT Ethernet Port Settings",
+						IPAddress:              "192.168.0.24",
+						InstanceID:             "Intel(r) AMT Ethernet Port Settings 0",
+						IpSyncEnabled:          true,
+						LinkIsUp:               true,
+						LinkPolicy:             []int{1, 14, 16},
+						MACAddress:             "a4-ae-11-1e-46-53",
+						PhysicalConnectionType: 0,
+						PrimaryDNS:             "68.105.28.11",
+						SecondaryDNS:           "68.105.29.11",
+						SharedDynamicIP:        true,
+						SharedMAC:              true,
+						SharedStaticIp:         true,
+						SubnetMask:             "255.255.255.0",
 					},
 				},
 			},
@@ -190,8 +193,17 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 			})
 		}
 	})
+}
 
-	t.Run("amt_* Tests", func(t *testing.T) {
+func TestNegativeAMT_EthernetPortSettings(t *testing.T) {
+	messageID := 0
+	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	client := wsmantesting.MockClient{
+		PackageUnderTest: "amt/ethernetport",
+	}
+	elementUnderTest := NewEthernetPortSettingsWithClient(wsmanMessageCreator, &client)
+	t.Run("amt_EthernetPortSettings Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
 			method           string
@@ -201,48 +213,150 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
+			//GETS
 			{
-				"should create an invalid AMT_EthernetPortSettings Pull wsman message",
+				"should create a valid AMT_EthernetPortSettings Get wsman message",
+				AMT_EthernetPortSettings,
+				wsmantesting.GET,
+				"",
+				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Ethernet Port Settings 0</w:Selector></w:SelectorSet>",
+				func() (Response, error) {
+					client.CurrentMessage = "Error"
+					return elementUnderTest.Get(0)
+				},
+				Body{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					GetAndPutResponse: SettingsResponse{
+						XMLName:                xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings", Local: "AMT_EthernetPortSettings"},
+						ElementName:            "Intel(r) AMT Ethernet Port Settings",
+						InstanceID:             "Intel(r) AMT Ethernet Port Settings 0",
+						SharedMAC:              true,
+						MACAddress:             "c8-d9-d2-7a-1e-33",
+						LinkIsUp:               true,
+						LinkPolicy:             []int{1, 14},
+						SharedStaticIp:         false,
+						SharedDynamicIP:        true,
+						IpSyncEnabled:          true,
+						DHCPEnabled:            true,
+						SubnetMask:             "255.255.255.0",
+						DefaultGateway:         "192.168.0.1",
+						PrimaryDNS:             "68.105.28.11",
+						SecondaryDNS:           "68.105.29.11",
+						PhysicalConnectionType: 0,
+					},
+				},
+			},
+
+			//ENUMERATES
+			{
+				"should create a valid AMT_EthernetPortSettings Enumerate wsman message",
+				AMT_EthernetPortSettings,
+				wsmantesting.ENUMERATE,
+				wsmantesting.ENUMERATE_BODY,
+				"",
+				func() (Response, error) {
+					client.CurrentMessage = "Error"
+					return elementUnderTest.Enumerate()
+				},
+				Body{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					EnumerateResponse: common.EnumerateResponse{
+						EnumerationContext: "7700000-0000-0000-0000-000000000000",
+					},
+				},
+			},
+			//PULLS
+			{
+				"should create a valid AMT_EthernetPortSettings Pull wsman message",
 				AMT_EthernetPortSettings,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				"",
 				func() (Response, error) {
-					currentMessage = "Error"
-					response, err := elementUnderTest.Pull("")
-					return response, err
+					client.CurrentMessage = "Error"
+					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
-						Items: []Item{
+						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
+						EthernetPortItems: []SettingsResponse{
 							{
-								EthernetPort: EthernetPort{
-									ElementName:                  "Intel(r) AMT Ethernet Port Settings",
-									InstanceID:                   "Intel(r) AMT Ethernet Port Settings 1",
-									VLANTag:                      0,
-									SharedMAC:                    true,
-									MACAddress:                   "00-00-00-00-00-00",
-									LinkIsUp:                     false,
-									LinkPolicy:                   []int{1, 14},
-									LinkPreference:               2,
-									LinkControl:                  2,
-									SharedStaticIp:               false,
-									SharedDynamicIP:              true,
-									IpSyncEnabled:                true,
-									DHCPEnabled:                  true,
-									IPAddress:                    "",
-									SubnetMask:                   "255.255.255.0",
-									DefaultGateway:               "192.168.6.1",
-									PrimaryDNS:                   "192.168.6.1",
-									SecondaryDNS:                 "",
-									ConsoleTcpMaxRetransmissions: 5,
-									WLANLinkProtectionLevel:      1,
-									PhysicalConnectionType:       3,
-									PhysicalNicMedium:            0,
-								},
+								XMLName:                xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings", Local: "AMT_EthernetPortSettings"},
+								ElementName:            "Intel(r) AMT Ethernet Port Settings",
+								InstanceID:             "Intel(r) AMT Ethernet Port Settings 0",
+								VLANTag:                0,
+								SharedMAC:              true,
+								MACAddress:             "00-be-43-d8-22-a4",
+								LinkIsUp:               true,
+								LinkPolicy:             []int{1, 14},
+								SharedStaticIp:         false,
+								SharedDynamicIP:        true,
+								IpSyncEnabled:          true,
+								DHCPEnabled:            true,
+								SubnetMask:             "255.255.255.0",
+								DefaultGateway:         "192.168.6.1",
+								PrimaryDNS:             "192.168.6.1",
+								PhysicalConnectionType: 0,
+							},
+							{
+								XMLName:                      xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings", Local: "AMT_EthernetPortSettings"},
+								ElementName:                  "Intel(r) AMT Ethernet Port Settings",
+								InstanceID:                   "Intel(r) AMT Ethernet Port Settings 1",
+								SharedMAC:                    true,
+								MACAddress:                   "00-00-00-00-00-00",
+								LinkIsUp:                     false,
+								LinkPreference:               2,
+								LinkControl:                  2,
+								DHCPEnabled:                  true,
+								ConsoleTcpMaxRetransmissions: 5,
+								WLANLinkProtectionLevel:      1,
+								PhysicalConnectionType:       3,
 							},
 						},
+					},
+				},
+			},
+			//PUTS
+			{
+				"should create a valid AMT_EthernetPortSettings Put wsman message",
+				AMT_EthernetPortSettings,
+				wsmantesting.PUT,
+				"<h:AMT_EthernetPortSettings xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings\"><h:ElementName>Intel(r) AMT Ethernet Port Settings</h:ElementName><h:InstanceID>Intel(r) AMT Ethernet Port Settings 0</h:InstanceID><h:SharedMAC>true</h:SharedMAC><h:LinkIsUp>false</h:LinkIsUp><h:SharedStaticIp>true</h:SharedStaticIp><h:IpSyncEnabled>true</h:IpSyncEnabled><h:DHCPEnabled>true</h:DHCPEnabled></h:AMT_EthernetPortSettings>",
+				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Ethernet Port Settings 0</w:Selector></w:SelectorSet>",
+				func() (Response, error) {
+					ethernetPortSettings := SettingsRequest{
+						H:              "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings",
+						DHCPEnabled:    true,
+						ElementName:    "Intel(r) AMT Ethernet Port Settings",
+						InstanceID:     "Intel(r) AMT Ethernet Port Settings 0",
+						IpSyncEnabled:  true,
+						SharedMAC:      true,
+						SharedStaticIp: true,
+					}
+					client.CurrentMessage = "Error"
+					return elementUnderTest.Put(ethernetPortSettings, 0)
+				},
+				Body{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					GetAndPutResponse: SettingsResponse{
+						XMLName:                xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings", Local: "AMT_EthernetPortSettings"},
+						DHCPEnabled:            true,
+						DefaultGateway:         "192.168.0.1",
+						ElementName:            "Intel(r) AMT Ethernet Port Settings",
+						IPAddress:              "192.168.0.24",
+						InstanceID:             "Intel(r) AMT Ethernet Port Settings 0",
+						IpSyncEnabled:          true,
+						LinkIsUp:               true,
+						LinkPolicy:             []int{1, 14, 16},
+						MACAddress:             "a4-ae-11-1e-46-53",
+						PhysicalConnectionType: 0,
+						PrimaryDNS:             "68.105.28.11",
+						SecondaryDNS:           "68.105.29.11",
+						SharedDynamicIP:        true,
+						SharedMAC:              true,
+						SharedStaticIp:         true,
+						SubnetMask:             "255.255.255.0",
 					},
 				},
 			},
@@ -254,7 +368,7 @@ func TestAMT_EthernetPortSettings(t *testing.T) {
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)
-				assert.NotEqual(t, expectedXMLInput, response.XMLInput)
+				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.NotEqual(t, test.expectedResponse, response.Body)
 			})
 		}

@@ -6,92 +6,96 @@
 package boot
 
 import (
+	"encoding/xml"
+	"fmt"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type BootSettingData struct {
-	models.BootSettingData
-	InstanceID               string
-	ElementName              string
-	UseSOL                   bool
-	UseSafeMode              bool
-	ReflashBIOS              bool
-	BIOSSetup                bool
-	BIOSPause                bool
-	LockPowerButton          bool
-	LockResetButton          bool
-	LockKeyboard             bool
-	LockSleepButton          bool
-	UserPasswordBypass       bool
-	ForcedProgressEvents     bool
-	FirmwareVerbosity        FirmwareVerbosity
-	ConfigurationDataReset   bool
-	IDERBootDevice           IDERBootDevice
-	UseIDER                  bool
-	EnforceSecureBoot        bool
-	BootMediaIndex           int
-	SecureErase              bool
-	RSEPassword              string
-	WinREBootEnabled         bool  //readonly
-	UEFILocalPBABootEnabled  bool  //readonly
-	UEFIHTTPSBootEnabled     bool  //readonly
-	SecureBootControlEnabled bool  //readonly
-	BootguardStatus          bool  //readonly
-	OptionsCleared           bool  //readonly
-	BIOSLastStatus           []int //readonly
-	UEFIBootParametersArray  []int
-	UEFIBootNumberOfParams   []int
-	RPEEnabled               bool
-	PlatformErase            bool
-}
-
-type FirmwareVerbosity uint8
-
-const (
-	SystemDefault FirmwareVerbosity = iota
-	QuietMinimal
-	VerboseAll
-	ScreenBlank
-)
-
-type IDERBootDevice uint8
-
-const (
-	FloppyBoot IDERBootDevice = iota
-	CDBoot
-)
-
-type BootSettingDataResponse struct {
-	AMT_BootSettingData BootSettingData
-}
-
-type SettingData struct {
-	base message.Base
-}
-
-func NewBootSettingData(wsmanMessageCreator *message.WSManMessageCreator) SettingData {
+func NewBootSettingDataWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) SettingData {
 	return SettingData{
-		base: message.NewBase(wsmanMessageCreator, AMT_BootSettingData),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_BootSettingData, client),
 	}
 }
 
 // Get retrieves the representation of the instance
-func (BootSettingData SettingData) Get() string {
-	return BootSettingData.base.Get(nil)
+func (settingData SettingData) Get() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: settingData.base.Get(nil),
+		},
+	}
+	// send the message to AMT
+	err = settingData.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Enumerates the instances of this class
-func (BootSettingData SettingData) Enumerate() string {
-	return BootSettingData.base.Enumerate()
+func (settingData SettingData) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: settingData.base.Enumerate(),
+		},
+	}
+	// send the message to AMT
+	err = settingData.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (BootSettingData SettingData) Pull(enumerationContext string) string {
-	return BootSettingData.base.Pull(enumerationContext)
+func (settingData SettingData) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: settingData.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = settingData.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Put will change properties of the selected instance
-func (BootSettingData SettingData) Put(bootSettingData BootSettingData) string {
-	return BootSettingData.base.Put(bootSettingData, false, nil)
+func (settingData SettingData) Put(bootSettingData BootSettingDataRequest) (response Response, err error) {
+	bootSettingData.H = fmt.Sprintf("%s%s", message.AMTSchema, AMT_BootSettingData)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: settingData.base.Put(bootSettingData, false, nil),
+		},
+	}
+	// send the message to AMT
+	err = settingData.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

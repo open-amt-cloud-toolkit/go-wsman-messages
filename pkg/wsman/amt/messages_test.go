@@ -34,7 +34,7 @@ import (
 )
 
 func TestNewMessages(t *testing.T) {
-	mock := wsmantesting.ClientMock{}
+	mock := wsmantesting.MockClient{}
 	m := NewMessages(&mock)
 
 	if m.wsmanMessageCreator == nil {
@@ -43,13 +43,13 @@ func TestNewMessages(t *testing.T) {
 	if reflect.DeepEqual(m.AlarmClockService, alarmclock.Service{}) {
 		t.Error("AlarmClockService is not initialized")
 	}
-	if reflect.DeepEqual(m.AuditLog, auditlog.AuditLog{}) {
+	if reflect.DeepEqual(m.AuditLog, auditlog.Service{}) {
 		t.Error("AuditLog is not initialized")
 	}
 	if reflect.DeepEqual(m.AuthorizationService, authorization.AuthorizationService{}) {
 		t.Error("AuthorizationService is not initialized")
 	}
-	if reflect.DeepEqual(m.BootCapabilities, boot.BootCapabilities{}) {
+	if reflect.DeepEqual(m.BootCapabilities, boot.Capabilities{}) {
 		t.Error("BootCapabilities is not initialized")
 	}
 	if reflect.DeepEqual(m.BootSettingData, boot.SettingData{}) {
@@ -70,7 +70,7 @@ func TestNewMessages(t *testing.T) {
 	if reflect.DeepEqual(m.IEEE8021xProfile, ieee8021x.Profile{}) {
 		t.Error("IEEE8021xProfile is not initialized")
 	}
-	if reflect.DeepEqual(m.KerberosSettingData, kerberos.KerberosSettingData{}) {
+	if reflect.DeepEqual(m.KerberosSettingData, kerberos.SettingData{}) {
 		t.Error("KerberosSettingData is not initialized")
 	}
 	if reflect.DeepEqual(m.ManagementPresenceRemoteSAP, managementpresence.RemoteSAP{}) {
@@ -111,6 +111,9 @@ func TestNewMessages(t *testing.T) {
 	}
 	if reflect.DeepEqual(m.TLSCredentialContext, tls.CredentialContext{}) {
 		t.Error("TLSCredentialContext is not initialized")
+	}
+	if reflect.DeepEqual(m.TLSProtocolEndpointCollection, tls.Collection{}) {
+		t.Error("TLSProtocolEndpointCollection is not initialized")
 	}
 	if reflect.DeepEqual(m.TLSSettingData, tls.SettingData{}) {
 		t.Error("TLSSettingData is not initialized")

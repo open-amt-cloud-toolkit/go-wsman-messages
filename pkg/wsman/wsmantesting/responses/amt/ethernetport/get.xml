@@ -22,6 +22,7 @@
             <g:InstanceID>Intel(r) AMT Ethernet Port Settings 0</g:InstanceID>
             <g:IpSyncEnabled>true</g:IpSyncEnabled>
             <g:LinkIsUp>true</g:LinkIsUp>
+            <g:LinkPolicy>1</g:LinkPolicy>
             <g:LinkPolicy>14</g:LinkPolicy>
             <g:MACAddress>c8-d9-d2-7a-1e-33</g:MACAddress>
             <g:PhysicalConnectionType>0</g:PhysicalConnectionType>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<a:Envelope xmlns:a="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:b="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+    xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"
+    xmlns:d="http://schemas.xmlsoap.org/ws/2005/02/trust"
+    xmlns:e="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+    xmlns:f="http://schemas.dmtf.org/wbem/wsman/1/cimbinding.xsd"
+    xmlns:g="http://schemas.xmlsoap.org/ws/2004/09/enumeration"
+    xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicPrivateKeyPair"
+    xmlns:i="http://schemas.dmtf.org/wbem/wscim/1/common"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <a:Header>
+        <b:To>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:To>
+        <b:RelatesTo>8</b:RelatesTo>
+        <b:Action a:mustUnderstand="true">http://schemas.xmlsoap.org/ws/2004/09/enumeration/PullResponse</b:Action>
+        <b:MessageID>uuid:00000000-8086-8086-8086-00000000289D</b:MessageID>
+        <c:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicPrivateKeyPair</c:ResourceURI>
+    </a:Header>
+    <a:Body>
+        <g:PullResponse>
+            <g:Items>
+                <h:AMT_PublicPrivateKeyPair>
+                    <h:DERKey>MIIBCgKCAQEA4y00wezZ1XwsSITMvqeYf61tgfVhlGbBVwq9Au0BaEgofPFCLuWMnKaTnMhUlJEGaeB2y6F8qjId0xMwLtNY6XWhmMoCP0R+ymgClT0treqtYp2zL1QPK1R04KTgF0KZh247oQpPGnB2nIe7PKCjPaY8BfOyBC6eNLeWUVIOA5TLL0gSTuk8y3iaadKo+LoWBaH/WDrIJ21Dzn6yU3zGueA8tphPH7yXaOJuNiijOUYZjVT7J0Ia8qMxUv1CrbfL2+N0lrcCG/E4f0QF1XgoCJnwIHdYaNhWzKVhfh2TTZIxJo8bXngckNOLzdYM35hUq98CxPiMSO8+G7J8RZaobQIDAQAB</h:DERKey>
+                    <h:ElementName>Intel(r) AMT Key</h:ElementName>
+                    <h:InstanceID>Intel(r) AMT Key: Handle: 0</h:InstanceID>
+                </h:AMT_PublicPrivateKeyPair>
+                <h:AMT_PublicPrivateKeyPair>
+                    <h:DERKey>MIIBCgKCAQEAvMgYL2FyGuHOVvwYgjABqRlJ8j8LhMo2OCU1HU2WvDN3NoLmjAh2XmBS6ic5IjIc4VtjL7S8ImKP8+PSye9nxf+lv33AqcGsvQFcUuJ5gLTnYzrmqVk6XTcHf1qtvHEmVoykTV6bN7BQx0eTejTjhw3Ro6HZBMyStaTGIKjC9HLQySV6SnFGbrjdNZZoCYsaT8dVetn23npeses9f6dZT5K3IgpA13NcdJioS71uppjIcg8dXpcxA4QKgHLmmELPN9JLbywMvcCuU+xMDceWQlFld9ohmr8NiwgebLyVCh/Q+O+jkQT43snNolyTGLRWQFR4M6DT5fdgXivoFhzMcwIDAQAB</h:DERKey>
+                    <h:ElementName>Intel(r) AMT Key</h:ElementName>
+                    <h:InstanceID>Intel(r) AMT Key: Handle: 1</h:InstanceID>
+                </h:AMT_PublicPrivateKeyPair>
+            </g:Items>
+            <g:EndOfSequence></g:EndOfSequence>
+        </g:PullResponse>
+    </a:Body>
+</a:Envelope>
