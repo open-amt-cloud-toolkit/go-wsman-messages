@@ -8,7 +8,7 @@ package methods
 import "fmt"
 
 func RequestStateChange(className string) string {
-	return fmt.Sprintf("http://schemas.dmtf.org/wbem/wscim/1/amt-schema/2/%s/RequestStateChange", className)
+	return fmt.Sprintf("http://intel.com/wbem/wscim/1/amt-schema/1/%s/RequestStateChange", className)
 }
 
 func GenerateAction(className string, methodName string) string {

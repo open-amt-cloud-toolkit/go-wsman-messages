@@ -6,39 +6,82 @@
 package kvm
 
 import (
+	"encoding/xml"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/actions"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/methods"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-const CIM_KVMRedirectionSAP = "CIM_KVMRedirectionSAP"
-
-type RedirectionSAP struct {
-	base message.Base
-}
-
 // NewKVMRedirectionSAP returns a new instance of the KVMRedirectionSAP struct.
-func NewKVMRedirectionSAP(wsmanMessageCreator *message.WSManMessageCreator) RedirectionSAP {
+func NewKVMRedirectionSAPWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) RedirectionSAP {
 	return RedirectionSAP{
-		base: message.NewBase(wsmanMessageCreator, string(CIM_KVMRedirectionSAP)),
+		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_KVMRedirectionSAP, client),
+		client: client,
 	}
 }
 
 // RequestStateChange requests that the state of the element be changed to the value specified in the RequestedState parameter . . .
-func (k RedirectionSAP) RequestStateChange(requestedState int) string {
-	return k.base.RequestStateChange(actions.RequestStateChange(string(CIM_KVMRedirectionSAP)), requestedState)
+func (redirectionSAP RedirectionSAP) RequestStateChange(requestedState KVMRedirectionSAPRequestedStateInputs) string {
+	return redirectionSAP.base.RequestStateChange(methods.RequestStateChange(CIM_KVMRedirectionSAP), int(requestedState))
 }
 
 // Get retrieves the representation of the instance
-func (b RedirectionSAP) Get() string {
-	return b.base.Get(nil)
+func (redirectionSAP RedirectionSAP) Get() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: redirectionSAP.base.Get(nil),
+		},
+	}
+
+	err = redirectionSAP.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+
 }
 
 // Enumerates the instances of this class
-func (b RedirectionSAP) Enumerate() string {
-	return b.base.Enumerate()
+func (redirectionSAP RedirectionSAP) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: redirectionSAP.base.Enumerate(),
+		},
+	}
+
+	err = redirectionSAP.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (b RedirectionSAP) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
+func (redirectionSAP RedirectionSAP) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: redirectionSAP.base.Pull(enumerationContext),
+		},
+	}
+	err = redirectionSAP.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

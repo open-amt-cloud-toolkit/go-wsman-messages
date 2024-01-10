@@ -11,3 +11,38 @@ const (
 	AddMps                             string = "AddMpServer"
 	AddRemoteAccessPolicyRule          string = "AddRemoteAccessPolicyRule"
 )
+
+const (
+	IPv4Address MPServerInfoFormat = 3
+	IPv6Address MPServerInfoFormat = 4
+	FQDN        MPServerInfoFormat = 201
+)
+
+const (
+	MutualAuthentication           MPServerAuthMethod = 1
+	UsernamePasswordAuthentication MPServerAuthMethod = 2
+)
+
+const (
+	UserInitiated Trigger = iota
+	Alert
+	Periodic
+	HomeProvisioning
+)
+
+const (
+	PolicyDecisionStrategyFirstMatching PolicyDecisionStrategy = 1
+	PolicyDecisionStrategyAll           PolicyDecisionStrategy = 2
+)
+
+const (
+	ExternalMPS MPSType = iota
+	InternalMPS
+	BothMPS
+)
+
+const (
+	EnabledEnabled         Enabled = 1
+	EnabledDisabled        Enabled = 2
+	EnabledEnabledForDebug Enabled = 3
+)

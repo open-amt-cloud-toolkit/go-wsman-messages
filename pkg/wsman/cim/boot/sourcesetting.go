@@ -12,11 +12,6 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type SourceSetting struct {
-	base   message.Base
-	client client.WSMan
-}
-
 // NewBootSourceSetting returns a new instance of the BootSourceSetting struct.
 func NewBootSourceSettingWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) SourceSetting {
 	return SourceSetting{
@@ -26,18 +21,18 @@ func NewBootSourceSettingWithClient(wsmanMessageCreator *message.WSManMessageCre
 }
 
 // Get retrieves the representation of the instance
-func (SourceSetting SourceSetting) Get(instanceID string) (response Response, err error) {
+func (sourceSetting SourceSetting) Get(instanceID string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
 		Value: instanceID,
 	}
 	response = Response{
 		Message: &client.Message{
-			XMLInput: SourceSetting.base.Get(&selector),
+			XMLInput: sourceSetting.base.Get(&selector),
 		},
 	}
 
-	err = SourceSetting.base.Execute(response.Message)
+	err = sourceSetting.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
@@ -50,14 +45,14 @@ func (SourceSetting SourceSetting) Get(instanceID string) (response Response, er
 }
 
 // Enumerates the instances of this class
-func (SourceSetting SourceSetting) Enumerate() (response Response, err error) {
+func (sourceSetting SourceSetting) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
-			XMLInput: SourceSetting.base.Enumerate(),
+			XMLInput: sourceSetting.base.Enumerate(),
 		},
 	}
 
-	err = SourceSetting.base.Execute(response.Message)
+	err = sourceSetting.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
@@ -70,13 +65,13 @@ func (SourceSetting SourceSetting) Enumerate() (response Response, err error) {
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (SourceSetting SourceSetting) Pull(enumerationContext string) (response Response, err error) {
+func (sourceSetting SourceSetting) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
-			XMLInput: SourceSetting.base.Pull(enumerationContext),
+			XMLInput: sourceSetting.base.Pull(enumerationContext),
 		},
 	}
-	err = SourceSetting.base.Execute(response.Message)
+	err = sourceSetting.base.Execute(response.Message)
 	if err != nil {
 		return
 	}

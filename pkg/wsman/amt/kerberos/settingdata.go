@@ -7,50 +7,123 @@ package kerberos
 
 import (
 	"encoding/xml"
+	"fmt"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/methods"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type KerberosSettingData struct {
-	base message.Base
-}
-type SetCredentialCacheState_INPUT struct {
-	XMLName xml.Name `xml:"h:SetCredentialCacheState_INPUT"`
-	H       string   `xml:"xmlns:h,attr"`
-	Enabled bool     `xml:"h:Enabled"`
-}
-
-func NewKerberosSettingData(wsmanMessageCreator *message.WSManMessageCreator) KerberosSettingData {
-	return KerberosSettingData{
-		base: message.NewBase(wsmanMessageCreator, AMT_KerberosSettingData),
+func NewKerberosSettingDataWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) SettingData {
+	return SettingData{
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_KerberosSettingData, client),
 	}
 }
 
 // Get retrieves the representation of the instance
-func (KerberosSettingData KerberosSettingData) Get() string {
-	return KerberosSettingData.base.Get(nil)
+func (settingData SettingData) Get() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: settingData.base.Get(nil),
+		},
+	}
+	// send the message to AMT
+	err = settingData.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Enumerates the instances of this class
-func (KerberosSettingData KerberosSettingData) Enumerate() string {
-	return KerberosSettingData.base.Enumerate()
+func (settingData SettingData) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: settingData.base.Enumerate(),
+		},
+	}
+	// send the message to AMT
+	err = settingData.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (KerberosSettingData KerberosSettingData) Pull(enumerationContext string) string {
-	return KerberosSettingData.base.Pull(enumerationContext)
+func (settingData SettingData) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: settingData.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = settingData.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
-func (k KerberosSettingData) GetCredentialCacheState() string {
-	header := k.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_KerberosSettingData, GetCredentialCacheState), AMT_KerberosSettingData, nil, "", "")
-	body := k.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetCredentialCacheState), AMT_KerberosSettingData, nil)
+func (settingData SettingData) GetCredentialCacheState() (response Response, err error) {
+	header := settingData.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_KerberosSettingData, GetCredentialCacheState), AMT_KerberosSettingData, nil, "", "")
+	body := settingData.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetCredentialCacheState), AMT_KerberosSettingData, nil)
 
-	return k.base.WSManMessageCreator.CreateXML(header, body)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: settingData.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+	// send the message to AMT
+	err = settingData.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
-// func (k KerberosSettingData) SetCredentialCacheState(enabled bool) string {
-// 	header := k.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_KerberosSettingData, SetCredentialCacheState), AMT_KerberosSettingData, nil, "", "")
-// 	body := k.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetCredentialCacheState), AMT_KerberosSettingData, SetCredentialCacheState_INPUT{Enabled: enabled})
+// TODO: Current gets SOAP schema violation from AMT
+func (settingData SettingData) SetCredentialCacheState(enabled bool) (response Response, err error) {
+	credentialCasheState := SetCredentialCacheState_INPUT{
+		H:       fmt.Sprintf("%s%s", message.AMTSchema, AMT_KerberosSettingData),
+		Enabled: enabled,
+	}
+	header := settingData.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_KerberosSettingData, SetCredentialCacheState), AMT_KerberosSettingData, nil, "", "")
+	body := settingData.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetCredentialCacheState), AMT_KerberosSettingData, credentialCasheState)
 
-// 	return k.base.WSManMessageCreator.CreateXML(header, body)
-// }
+	response = Response{
+		Message: &client.Message{
+			XMLInput: settingData.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+	// send the message to AMT
+	err = settingData.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+}

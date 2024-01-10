@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<a:Envelope xmlns:a="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:b="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+    xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"
+    xmlns:d="http://schemas.xmlsoap.org/ws/2005/02/trust"
+    xmlns:e="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+    xmlns:f="http://schemas.dmtf.org/wbem/wsman/1/cimbinding.xsd"
+    xmlns:g="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Chassis"
+    xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/common"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <a:Header>
+        <b:To>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:To>
+        <b:RelatesTo>0</b:RelatesTo>
+        <b:Action a:mustUnderstand="true">http://schemas.xmlsoap.org/ws/2004/09/transfer/GetResponse</b:Action>
+        <b:MessageID>uuid:00000000-8086-8086-8086-000000000E78</b:MessageID>
+        <c:ResourceURI>http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Chassis</c:ResourceURI>
+    </a:Header>
+    <a:Body>
+        <g:CIM_Chassis>
+            <g:ChassisPackageType>0</g:ChassisPackageType>
+            <g:CreationClassName>CIM_Chassis</g:CreationClassName>
+            <g:ElementName>Managed System Chassis</g:ElementName>
+            <g:Manufacturer>Intel(R) Client Systems</g:Manufacturer>
+            <g:Model>NUC9V7QNX</g:Model>
+            <g:OperationalStatus>0</g:OperationalStatus>
+            <g:PackageType>3</g:PackageType>
+            <g:SerialNumber>JRQN0243007J</g:SerialNumber>
+            <g:Tag>CIM_Chassis</g:Tag>
+            <g:Version>K47174-402</g:Version>
+        </g:CIM_Chassis>
+    </a:Body>
+</a:Envelope>

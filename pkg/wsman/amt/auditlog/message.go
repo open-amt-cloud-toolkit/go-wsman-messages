@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
-// Represents an Audit Log in the Intel AMT subsystem.
 package auditlog
 
 import (
@@ -11,46 +10,93 @@ import (
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/methods"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type AuditLog struct {
-	base message.Base
-}
-
-type readRecords_INPUT struct {
-	XMLName    xml.Name `xml:"h:ReadRecords_INPUT"`
-	H          string   `xml:"xmlns:h,attr"`
-	StartIndex int      `xml:"h:StartIndex" json:"StartIndex"`
-}
-
-func NewAuditLog(wsmanMessageCreator *message.WSManMessageCreator) AuditLog {
-	return AuditLog{base: message.NewBase(wsmanMessageCreator, AMT_AuditLog)}
+func NewAuditLogWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
+	return Service{
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_AuditLog, client),
+	}
 }
 
 // Get retrieves the representation of the instance
-func (AuditLog AuditLog) Get() string {
-	return AuditLog.base.Get(nil)
+func (service Service) Get() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.Get(nil),
+		},
+	}
+
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Enumerates the instances of this class
-func (AuditLog AuditLog) Enumerate() string {
-	return AuditLog.base.Enumerate()
+func (service Service) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.Enumerate(),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (AuditLog AuditLog) Pull(enumerationContext string) string {
-	return AuditLog.base.Pull(enumerationContext)
+func (service Service) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.Pull(enumerationContext),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // ReadRecords returns a list of consecutive audit log records in chronological order:
 // The first record in the returned array is the oldest record stored in the log.
 // startIndex Identifies the position of the first record to retrieve. An index of 1 indicates the first record in the log.
-func (a AuditLog) ReadRecords(startIndex int) string {
+func (service Service) ReadRecords(startIndex int) (response Response, err error) {
 	if startIndex < 1 {
 		startIndex = 0
 	}
-	header := a.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuditLog, ReadRecords), AMT_AuditLog, nil, "", "")
-	body := a.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(ReadRecords), AMT_AuditLog, &readRecords_INPUT{StartIndex: startIndex})
-
-	return a.base.WSManMessageCreator.CreateXML(header, body)
+	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuditLog, ReadRecords), AMT_AuditLog, nil, "", "")
+	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(ReadRecords), AMT_AuditLog, &readRecords_INPUT{StartIndex: startIndex})
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

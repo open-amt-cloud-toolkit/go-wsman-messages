@@ -6,119 +6,15 @@
 package general
 
 import (
-	"encoding/json"
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
-
-// OUTPUTS
-type (
-	Response struct {
-		*client.Message
-		XMLName xml.Name       `xml:"Envelope"`
-		Header  message.Header `xml:"Header"`
-		Body    Body           `xml:"Body"`
-	}
-	Body struct {
-		XMLName            xml.Name        `xml:"Body"`
-		AMTGeneralSettings GeneralSettings `xml:"AMT_GeneralSettings"`
-
-		EnumerateResponse common.EnumerateResponse
-		PullResponse      PullResponse
-	}
-	GeneralSettings struct {
-		models.SettingData
-		XMLName                       xml.Name `xml:"AMT_GeneralSettings"`
-		NetworkInterfaceEnabled       bool
-		DigestRealm                   string
-		IdleWakeTimeout               int
-		HostName                      string
-		DomainName                    string
-		PingResponseEnabled           bool
-		WsmanOnlyMode                 bool
-		PreferredAddressFamily        PreferredAddressFamily
-		DHCPv6ConfigurationTimeout    int
-		DDNSUpdateEnabled             bool
-		DDNSUpdateByDHCPServerEnabled bool
-		SharedFQDN                    bool
-		HostOSFQDN                    string
-		DDNSTTL                       int
-		AMTNetworkEnabled             AMTNetworkEnabled
-		RmcpPingResponseEnabled       bool
-		DDNSPeriodicUpdateInterval    int
-		PresenceNotificationInterval  int
-		PrivacyLevel                  PrivacyLevel
-		PowerSource                   PowerSource
-		ThunderboltDockEnabled        ThunderboltDockEnabled
-		OemID                         int
-		DHCPSyncRequiresHostname      int
-	}
-	PullResponse struct {
-		Items []Item
-	}
-	Item struct {
-		AMTGeneralSettings GeneralSettings `xml:"AMT_GeneralSettings"`
-	}
-)
-
-type PreferredAddressFamily int
-
-const (
-	IPv4 PreferredAddressFamily = iota
-	IPv6
-)
-
-type PrivacyLevel int
-
-const (
-	PrivacyLevelDefault PrivacyLevel = iota
-	PrivacyLevelEnhanced
-	PrivacyLevelExtreme
-)
-
-type PowerSource int
-
-const (
-	AC PowerSource = iota
-	DC
-)
-
-type AMTNetworkEnabled FeatureEnabled
-type ThunderboltDockEnabled FeatureEnabled
-type FeatureEnabled int
-
-const (
-	Disabled FeatureEnabled = iota
-	Enabled
-)
-
-func (w *Response) JSON() string {
-	jsonOutput, err := json.Marshal(w.Body)
-	if err != nil {
-		return ""
-	}
-	return string(jsonOutput)
-}
-
-type Settings struct {
-	base   message.Base
-	client client.WSMan
-}
 
 func NewGeneralSettingsWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Settings {
 	return Settings{
-		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_GeneralSettings, client),
-		client: client,
-	}
-}
-
-func NewGeneralSettings(wsmanMessageCreator *message.WSManMessageCreator) Settings {
-	return Settings{
-		base: message.NewBase(wsmanMessageCreator, AMT_GeneralSettings),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_GeneralSettings, client),
 	}
 }
 
@@ -187,7 +83,22 @@ func (GeneralSettings Settings) Pull(enumerationContext string) (response Respon
 	return
 }
 
-// // Put will change properties of the selected instance
-// func (GeneralSettings Settings) Put(generalSettings GeneralSettings) string {
-// 	return GeneralSettings.base.Put(generalSettings, false, nil)
-// }
+// Put will change properties of the selected instance
+func (GeneralSettings Settings) Put(generalSettings GeneralSettingsResponse) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: GeneralSettings.base.Put(generalSettings, false, nil),
+		},
+	}
+	// send the message to AMT
+	err = GeneralSettings.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+}

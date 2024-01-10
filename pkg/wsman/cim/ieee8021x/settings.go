@@ -5,32 +5,58 @@
 
 package ieee8021x
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+import (
+	"encoding/xml"
 
-const CIM_IEEE8021xSettings = "CIM_IEEE8021xSettings"
-
-type Settings struct {
-	base message.Base
-}
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+)
 
 // NewIEEE8021xSettings returns a new instance of the IEEE8021xSettings struct.
-func NewIEEE8021xSettings(wsmanMessageCreator *message.WSManMessageCreator) Settings {
+func NewIEEE8021xSettingsWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Settings {
 	return Settings{
-		base: message.NewBase(wsmanMessageCreator, string(CIM_IEEE8021xSettings)),
+		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_IEEE8021xSettings, client),
+		client: client,
 	}
 }
 
-// Get retrieves the representation of the instance
-func (b Settings) Get() string {
-	return b.base.Get(nil)
-}
+// TODO: Figure out how to call GET requiring resourceURIs and Selectors
 
 // Enumerates the instances of this class
-func (b Settings) Enumerate() string {
-	return b.base.Enumerate()
+func (settings Settings) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: settings.base.Enumerate(),
+		},
+	}
+
+	err = settings.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (b Settings) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
+func (settings Settings) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: settings.base.Pull(enumerationContext),
+		},
+	}
+	err = settings.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

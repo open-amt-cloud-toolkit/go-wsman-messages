@@ -5,8 +5,6 @@
 
 package actions
 
-import "fmt"
-
 type Actions string
 
 const (
@@ -15,11 +13,8 @@ const (
 	Get                     Actions = "http://schemas.xmlsoap.org/ws/2004/09/transfer/Get"
 	Put                     Actions = "http://schemas.xmlsoap.org/ws/2004/09/transfer/Put"
 	Delete                  Actions = "http://schemas.xmlsoap.org/ws/2004/09/transfer/Delete"
+	Create                  Actions = "http://schemas.xmlsoap.org/ws/2004/09/transfer/Create"
 	SetBootConfigRole       Actions = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService/SetBootConfigRole"
 	ChangeBootOrder         Actions = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting/ChangeBootOrder"
 	RequestPowerStateChange Actions = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_PowerManagementService/RequestPowerStateChange"
 )
-
-func RequestStateChange(className string) string {
-	return fmt.Sprintf("http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/%s/RequestStateChange", className)
-}

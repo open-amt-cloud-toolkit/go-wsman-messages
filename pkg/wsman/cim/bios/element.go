@@ -5,32 +5,73 @@
 
 package bios
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+import (
+	"encoding/xml"
 
-type Element struct {
-	base message.Base
-}
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+)
 
-const CIM_BiosElement = "CIM_BIOSElement"
-
-// NewBIOSElement returns a new instance of the BIOSElement struct.
-func NewBIOSElement(wsmanMessageCreator *message.WSManMessageCreator) Element {
+func NewBIOSElementWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Element {
 	return Element{
-		base: message.NewBase(wsmanMessageCreator, string(CIM_BiosElement)),
+		base: message.NewBaseWithClient(wsmanMessageCreator, CIM_BIOSElement, client),
 	}
 }
 
 // Get retrieves the representation of the instance
-func (b Element) Get() string {
-	return b.base.Get(nil)
+func (element Element) Get() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: element.base.Get(nil),
+		},
+	}
+
+	err = element.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Enumerates the instances of this class
-func (b Element) Enumerate() string {
-	return b.base.Enumerate()
+func (element Element) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: element.base.Enumerate(),
+		},
+	}
+
+	err = element.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (b Element) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
+func (element Element) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: element.base.Pull(enumerationContext),
+		},
+	}
+	err = element.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

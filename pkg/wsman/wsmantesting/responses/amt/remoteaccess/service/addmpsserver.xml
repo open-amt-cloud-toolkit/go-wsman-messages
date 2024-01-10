@@ -1,0 +1,34 @@
+<?xml version= "1.0" encoding= "UTF-8"?>
+<a:Envelope xmlns:a= "http://www.w3.org/2003/05/soap-envelope"
+    xmlns:b= "http://schemas.xmlsoap.org/ws/2004/08/addressing"
+    xmlns:c= "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"
+    xmlns:d= "http://schemas.xmlsoap.org/ws/2005/02/trust"
+    xmlns:e= "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+    xmlns:f= "http://schemas.dmtf.org/wbem/wsman/1/cimbinding.xsd"
+    xmlns:g= "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService"
+    xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance">
+    <a:Header>
+        <b:To>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:To>
+        <b:RelatesTo>23</b:RelatesTo>
+        <b:Action a:mustUnderstand= "true">http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService/AddMpServerResponse</b:Action>
+        <b:MessageID>uuid:00000000-8086-8086-8086-000000000303</b:MessageID>
+        <c:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService</c:ResourceURI>
+    </a:Header>
+    <a:Body>
+        <g:AddMpServer_OUTPUT>
+            <g:MpServer>
+                <b:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:Address>
+                <b:ReferenceParameters>
+                    <c:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_ManagementPresenceRemoteSAP</c:ResourceURI>
+                    <c:SelectorSet>
+                        <c:Selector Name= "CreationClassName">AMT_ManagementPresenceRemoteSAP</c:Selector>
+                        <c:Selector Name= "Name">Intel(r) AMT:Management Presence Server 0</c:Selector>
+                        <c:Selector Name= "SystemCreationClassName">CIM_ComputerSystem</c:Selector>
+                        <c:Selector Name= "SystemName">Intel(r) AMT</c:Selector>
+                    </c:SelectorSet>
+                </b:ReferenceParameters>
+            </g:MpServer>
+            <g:ReturnValue>0</g:ReturnValue>
+        </g:AddMpServer_OUTPUT>
+    </a:Body>
+</a:Envelope>

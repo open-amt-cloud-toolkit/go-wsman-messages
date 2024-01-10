@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<a:Envelope xmlns:a="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:b="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+    xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"
+    xmlns:d="http://schemas.xmlsoap.org/ws/2005/02/trust"
+    xmlns:e="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+    xmlns:f="http://schemas.dmtf.org/wbem/wsman/1/cimbinding.xsd"
+    xmlns:g="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate"
+    xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/common"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <a:Header>
+        <b:To>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:To>
+        <b:RelatesTo>5</b:RelatesTo>
+        <b:Action a:mustUnderstand="true">http://schemas.xmlsoap.org/ws/2004/09/transfer/PutResponse</b:Action>
+        <b:MessageID>uuid:00000000-8086-8086-8086-000000002865</b:MessageID>
+        <c:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate</c:ResourceURI>
+    </a:Header>
+    <a:Body>
+        <g:AMT_PublicKeyCertificate>
+            <g:ElementName>Intel(r) AMT Certificate</g:ElementName>
+            <g:InstanceID>Intel(r) AMT Certificate: Handle: 0</g:InstanceID>
+            <g:Issuer>C=unknown,O=unknown,CN=MPSRoot-0af1d5</g:Issuer>
+            <g:Subject>C=unknown,O=unknown,CN=MPSRoot-0af1d5</g:Subject>
+            <g:TrustedRootCertficate>true</g:TrustedRootCertficate>
+            <g:X509Certificate>MIIEOzCCAqOgAwIBAgIDAZMjMA0GCSqGSIb3DQEBDAUAMD0xFzAVBgNVBAMTDk1QU1Jvb3QtMGFmMWQ1MRAwDgYDVQQKEwd1bmtub3duMRAwDgYDVQQGEwd1bmtub3duMCAXDTIyMDkyNDEwNDUwOFoYDzIwNTMwOTI0MTA0NTA4WjA9MRcwFQYDVQQDEw5NUFNSb290LTBhZjFkNTEQMA4GA1UEChMHdW5rbm93bjEQMA4GA1UEBhMHdW5rbm93bjCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBALz/oJNyWXlClSlteAieC8Uyd4A+tbn8b45k6LKiImhDmdz/xFo9xe0C9GNf7b42KVpg5WoH/sPhoClR9Tv5i1LnilT1SUir42fcm2NEV9dRcLsPd/RAQfz8u0D4zb3blnxE8isqzriNpG7kac35UidSr5ym8TZ3IwXx6JJuncGgfB0DFZADC/+dA74n3coykvWBYqLr6RI5pkAxvulkRlCsatJTJrvMUYJ51GI28jV56mIAc89sLrHqiSKCZBH9AcUrnZ/cB6ST/IikXpxy5wXBIvWT3VKVq75T/uIoCBEp5TLEn1EOYGqBBOCSQgmtmX7eVaB0s1+ppPW9w9a2zS45cHAtQ7tYvkkPv2dRhSzZdlk6HRXDP5wsF0aiflZCgbrjkq0SFC4e3Lo7XQX3FTNb0SOTZVTydupoMKkgJQTNlcosdu1ZzaIBl3eSkKkJZz2rUTssZC5tn9vcDd5vy3BzcGh5pvkgfAgN1sydqG7Ke1qCkNEzm11B/BsevatjjwIDAQABo0IwQDAMBgNVHRMEBTADAQH/MBEGCWCGSAGG+EIBAQQEAwIABzAdBgNVHQ4EFgQUCvHVQqerCid99eLApuLky9x6H5owDQYJKoZIhvcNAQEMBQADggGBAIzOyGV0hzsmH2biJlzwTZaHMxqS7boTFMkHw+KvzsI201tHqVmCoiQ8EHErBGLSoDOTDRgOUGOCA5XU5ie9OWupAGqKBSwIyAhmJMOzrzC4Gwpu8K1msoFJH30kx/V9purpbS3BRj0xfYXLa6IczbTg3E5IfTnZRJ9YuUtKQfI0P9c5U9CoKtddKn4+lRvOjFDoYfQGCJ7go3xjNCcGCVCjfkUhAVdbQ21DCRr6/YCZDWmjzZpL0p7UKF8roTiNuL/Z7gIXxch5HOmEWHY9uQ6K2MntuxAu0aK/mSD2kwmt/ECongdEGfUvhULLoPRQlQ2LnzcUQEgMECGQR5Yfy9jT0E8zdWDpc2tgVioNu6rEYKgp/GhG+sv7jv58pW82FRAV9xXtftW9+XDugC8tBJ6JHn0Q2v0QAflD2CEQVhWAY8bAqrbfTGUsaLfGL6kxV/qqssoMgLR8WhQ96T5le/4XGhQpbCHWIlctD6MwbrsunIAeQKp1Sc3DosY7DLq1MQ==</g:X509Certificate>
+        </g:AMT_PublicKeyCertificate>
+    </a:Body>
+</a:Envelope>

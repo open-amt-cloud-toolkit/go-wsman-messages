@@ -9,53 +9,54 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type ContextPullResponseEnvelope struct {
-	XMLName xml.Name `xml:"Envelope"`
-	Header  message.Header
-	Body    ContextPullResponseBody
-}
-
-type ContextPullResponseBody struct {
-	PullResponse ContextResponse
-}
-
-type ContextResponse struct {
-	EnumerationContext string
-	Items              []Relationship `xml:"Items>CIM_CredentialContext"`
-}
-
-type Relationship struct {
-	ElementInContext        models.AssociationReference
-	ElementProvidingContext models.AssociationReference
-}
-
-type Context struct {
-	base message.Base
-}
-
-const ClassName = "CIM_CredentialContext"
-
 // NewContext returns a new instance of the NewContext struct.
-func NewContext(wsmanMessageCreator *message.WSManMessageCreator) Context {
+func NewContextWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Context {
 	return Context{
-		base: message.NewBase(wsmanMessageCreator, ClassName),
+		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_CredentialContext, client),
+		client: client,
 	}
 }
 
-// Get the representation of the instance
-func (b Context) Get() string {
-	return b.base.Get(nil)
-}
+// TODO: Figure out how to call GET requiring resourceURIs and Selectors
 
 // Enumerate the instances of this class
-func (b Context) Enumerate() string {
-	return b.base.Enumerate()
+func (context Context) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: context.base.Enumerate(),
+		},
+	}
+
+	err = context.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+
 }
 
 // Pull instances of this class, following an Enumerate operation
-func (b Context) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
+func (context Context) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: context.base.Pull(enumerationContext),
+		},
+	}
+	err = context.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

@@ -16,8 +16,7 @@
             <g:DDNSUpdateByDHCPServerEnabled>true</g:DDNSUpdateByDHCPServerEnabled>
             <g:DDNSUpdateEnabled>false</g:DDNSUpdateEnabled>
             <g:DHCPSyncRequiresHostname>1</g:DHCPSyncRequiresHostname>
-            <g:DHCPv6ConfigurationTimeout>0
-            </g:DHCPv6ConfigurationTimeout>
+            <g:DHCPv6ConfigurationTimeout>0</g:DHCPv6ConfigurationTimeout>
             <g:DigestRealm>Digest:F3EB554784E729164447A89F60B641C5</g:DigestRealm>
             <g:DomainName>Test Domain Name</g:DomainName>
             <g:ElementName>Intel(r) AMT: General Settings</g:ElementName>
