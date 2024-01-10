@@ -15,8 +15,7 @@
                     <h:DHCPEnabled>true</h:DHCPEnabled>
                     <h:DefaultGateway>192.168.6.1</h:DefaultGateway>
                     <h:ElementName>Intel(r) AMT Ethernet Port Settings</h:ElementName>
-                    <h:InstanceID>Intel(r) AMT Ethernet Port Settings 0
-                    </h:InstanceID>
+                    <h:InstanceID>Intel(r) AMT Ethernet Port Settings 0</h:InstanceID>
                     <h:IpSyncEnabled>true</h:IpSyncEnabled>
                     <h:LinkIsUp>true</h:LinkIsUp>
                     <h:LinkPolicy>1</h:LinkPolicy>

@@ -7,10 +7,6 @@ package setupandconfiguration
 
 import (
 	"encoding/xml"
-	"fmt"
-	"io"
-	"os"
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -21,45 +17,18 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
 )
 
-type MockClient struct {
-}
+const GetUuid_BODY = "<h:GetUuid_INPUT xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService\"></h:GetUuid_INPUT>"
 
-const (
-	EnvelopeResponse = `<a:Envelope xmlns:a="http://www.w3.org/2003/05/soap-envelope" x-mlns:b="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd" xmlns:d="http://schemas.xmlsoap.org/ws/2005/02/trust" xmlns:e="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:f="http://schemas.dmtf.org/wbem/wsman/1/cimbinding.xsd" xmlns:g="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RedirectionService" xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><a:Header><b:To>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:To><b:RelatesTo>0</b:RelatesTo><b:Action a:mustUnderstand="true">`
-	GetBody          = `<g:AMT_RedirectionService><g:CreationClassName>AMT_RedirectionService</g:CreationClassName><g:ElementName>Intel(r) AMT Redirection Service</g:ElementName><g:Name>Intel(r) AMT Redirection Service</g:Name><g:SystemCreationClassName>CIM_ComputerSystem</g:SystemCreationClassName><g:SystemName>ManagedSystem</g:SystemName></g:AMT_RedirectionService`
-	GetUuid_BODY     = "<h:GetUuid_INPUT xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService\"></h:GetUuid_INPUT>"
-)
-
-var currentMessage = ""
-
-func (c *MockClient) Post(msg string) ([]byte, error) {
-	// read an xml file from disk:
-	xmlFile, err := os.Open("../../wsmantesting/responses/amt/setupandconfiguration/" + strings.ToLower(currentMessage) + ".xml")
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return nil, err
-	}
-	defer xmlFile.Close()
-	// read file into string
-	xmlData, err := io.ReadAll(xmlFile)
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-		return nil, err
-	}
-	// strip carriage returns and new line characters
-	xmlData = []byte(strings.ReplaceAll(string(xmlData), "\r\n", ""))
-
-	// Simulate a successful response for testing.
-	return []byte(xmlData), nil
-}
-func TestAMT_SetupAndConfigurationService(t *testing.T) {
+func TestPositiveAMT_SetupAndConfigurationService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := MockClient{}
+	client := wsmantesting.MockClient{
+		PackageUnderTest: "amt/setupandconfiguration",
+	}
 	elementUnderTest := NewSetupAndConfigurationServiceWithClient(wsmanMessageCreator, &client)
 
-	t.Run("amt_* Tests", func(t *testing.T) {
+	t.Run("amt_SetupAndConfiguration Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
 			method           string
@@ -74,12 +43,13 @@ func TestAMT_SetupAndConfigurationService(t *testing.T) {
 				AMT_SetupAndConfigurationService,
 				wsmantesting.GET, "",
 				func() (Response, error) {
-					currentMessage = "Get"
+					client.CurrentMessage = "Get"
 					return elementUnderTest.Get()
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
-					Setup: Setup{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					GetResponse: SetupAndConfigurationServiceResponse{
+						XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService", Local: "AMT_SetupAndConfigurationService"},
 						CreationClassName:             AMT_SetupAndConfigurationService,
 						ElementName:                   "Intel(r) AMT Setup and Configuration Service",
 						EnabledState:                  5,
@@ -102,14 +72,11 @@ func TestAMT_SetupAndConfigurationService(t *testing.T) {
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
-					currentMessage = "Enumerate"
-					if elementUnderTest.base.WSManMessageCreator == nil {
-						print("Error")
-					}
+					client.CurrentMessage = "Enumerate"
 					return elementUnderTest.Enumerate()
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "D3000000-0000-0000-0000-000000000000",
 					},
@@ -122,28 +89,28 @@ func TestAMT_SetupAndConfigurationService(t *testing.T) {
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
 				func() (Response, error) {
-					currentMessage = "Pull"
+					client.CurrentMessage = "Pull"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
-						Items: []Item{
+						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
+						SetupAndConfigurationServiceItems: []SetupAndConfigurationServiceResponse{
 							{
-								Setup: Setup{
-									CreationClassName:             AMT_SetupAndConfigurationService,
-									ElementName:                   "Intel(r) AMT Setup and Configuration Service",
-									EnabledState:                  5,
-									Name:                          "Intel(r) AMT Setup and Configuration Service",
-									PasswordModel:                 1,
-									ProvisioningMode:              1,
-									ProvisioningServerOTP:         "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
-									ProvisioningState:             2,
-									RequestedState:                12,
-									SystemCreationClassName:       "CIM_ComputerSystem",
-									SystemName:                    "Intel(r) AMT",
-									ZeroTouchConfigurationEnabled: true,
-								},
+								XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService", Local: "AMT_SetupAndConfigurationService"},
+								CreationClassName:             AMT_SetupAndConfigurationService,
+								ElementName:                   "Intel(r) AMT Setup and Configuration Service",
+								EnabledState:                  5,
+								Name:                          "Intel(r) AMT Setup and Configuration Service",
+								PasswordModel:                 1,
+								ProvisioningMode:              1,
+								ProvisioningServerOTP:         "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+								ProvisioningState:             2,
+								RequestedState:                12,
+								SystemCreationClassName:       "CIM_ComputerSystem",
+								SystemName:                    "Intel(r) AMT",
+								ZeroTouchConfigurationEnabled: true,
 							},
 						},
 					},
@@ -156,23 +123,72 @@ func TestAMT_SetupAndConfigurationService(t *testing.T) {
 				methods.GenerateAction(AMT_SetupAndConfigurationService, GetUuid),
 				GetUuid_BODY,
 				func() (Response, error) {
-					currentMessage = "getuuid"
-					if elementUnderTest.base.WSManMessageCreator == nil {
-						print("Error")
-					}
+					client.CurrentMessage = "getuuid"
 					return elementUnderTest.GetUuid()
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetUuid_OUTPUT: GetUuid_OUTPUT{
-						UUID: "E67jVdK/u2EXoIiu3XA36g==",
+						XMLName: xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService", Local: "GetUuid_OUTPUT"},
+						UUID:    "E67jVdK/u2EXoIiu3XA36g==",
+					},
+				},
+			},
+			//CommitChanges
+			{
+				"should create a valid AMT_SetupAndConfigurationService CommitChanges wsman message",
+				AMT_SetupAndConfigurationService,
+				methods.GenerateAction(AMT_SetupAndConfigurationService, CommitChanges),
+				`<h:CommitChanges_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"></h:CommitChanges_INPUT>`,
+				func() (Response, error) {
+					client.CurrentMessage = "CommitChanges"
+					return elementUnderTest.CommitChanges()
+				},
+				Body{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					CommitChanges_OUTPUT: CommitChanges_OUTPUT{
+						XMLName:     xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService", Local: "CommitChanges_OUTPUT"},
+						ReturnValue: 0,
+					},
+				},
+			},
+			//SetMEBxPassword
+			{
+				"should create a valid AMT_SetupAndConfigurationService SetMEBxPassword wsman message",
+				AMT_SetupAndConfigurationService,
+				methods.GenerateAction(AMT_SetupAndConfigurationService, SetMEBxPassword),
+				`<h:SetMEBxPassword_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"><h:Password>P@ssw0rd</h:Password></h:SetMEBxPassword_INPUT>`,
+				func() (Response, error) {
+					client.CurrentMessage = "SetMEBxPassword"
+					return elementUnderTest.SetMEBXPassword("P@ssw0rd")
+				},
+				Body{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					SetMEBxPassword_OUTPUT: SetMEBxPassword_OUTPUT{
+						XMLName:     xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService", Local: "SetMEBxPassword_OUTPUT"},
+						ReturnValue: 0,
+					},
+				},
+			},
+			//Unprovision
+			{
+				"should create a valid AMT_SetupAndConfigurationService Unprovision wsman message",
+				AMT_SetupAndConfigurationService,
+				methods.GenerateAction(AMT_SetupAndConfigurationService, Unprovision),
+				`<h:Unprovision_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"><h:ProvisioningMode>1</h:ProvisioningMode></h:Unprovision_INPUT>`,
+				func() (Response, error) {
+					client.CurrentMessage = "Unprovision"
+					return elementUnderTest.Unprovision(1)
+				},
+				Body{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					Unprovision_OUTPUT: Unprovision_OUTPUT{
+						XMLName:     xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService", Local: "Unprovision_OUTPUT"},
+						ReturnValue: 0,
 					},
 				},
 			},
 		}
-		// {"should create a valid AMT_SetupAndConfigurationService CommitChanges wsman message", AMT_SetupAndConfigurationService, string(actions.CommitChanges), `<h:CommitChanges_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"></h:CommitChanges_INPUT>`, elementUnderTest.CommitChanges},
-		// {"should create a valid AMT_SetupAndConfigurationService SetMEBxPassword wsman message", AMT_SetupAndConfigurationService, string(actions.SetMEBxPassword), `<h:SetMEBxPassword_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"><h:Password>P@ssw0rd</h:Password></h:SetMEBxPassword_INPUT>`, func() string { return elementUnderTest.SetMEBXPassword("P@ssw0rd") }},
-		// {"should create a valid AMT_SetupAndConfigurationService Unprovision wsman message", AMT_SetupAndConfigurationService, string(actions.Unprovision), `<h:Unprovision_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"><h:ProvisioningMode>1</h:ProvisioningMode></h:Unprovision_INPUT>`, func() string { return elementUnderTest.Unprovision(1) }},
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
@@ -194,7 +210,7 @@ func TestAMT_SetupAndConfigurationService(t *testing.T) {
 		}{{
 			"should properly decode AMT GetUuid Response to a UUID string",
 			func() (string, error, error) {
-				currentMessage = "getuuid"
+				client.CurrentMessage = "getuuid"
 				response, err1 := elementUnderTest.GetUuid()
 				uuid, err2 := response.DecodeUUID()
 				return uuid, err1, err2
@@ -218,7 +234,9 @@ func TestNegativeAMT_SetupAndConfigurationService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := MockClient{}
+	client := wsmantesting.MockClient{
+		PackageUnderTest: "amt/setupandconfiguration",
+	}
 	elementUnderTest := NewSetupAndConfigurationServiceWithClient(wsmanMessageCreator, &client)
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
@@ -237,29 +255,29 @@ func TestNegativeAMT_SetupAndConfigurationService(t *testing.T) {
 				wsmantesting.PULL_BODY,
 				"",
 				func() (Response, error) {
-					currentMessage = "Error"
+					client.CurrentMessage = "Error"
 					response, err := elementUnderTest.Pull("")
 					return response, err
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
-						Items: []Item{
+						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
+						SetupAndConfigurationServiceItems: []SetupAndConfigurationServiceResponse{
 							{
-								Setup: Setup{
-									CreationClassName:             AMT_SetupAndConfigurationService,
-									ElementName:                   "Intel(r) AMT Setup and Configuration Service",
-									EnabledState:                  5,
-									Name:                          "Intel(r) AMT Setup and Configuration Service",
-									PasswordModel:                 1,
-									ProvisioningMode:              1,
-									ProvisioningServerOTP:         "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
-									ProvisioningState:             2,
-									RequestedState:                12,
-									SystemCreationClassName:       "CIM_ComputerSystem",
-									SystemName:                    "Intel(r) AMT",
-									ZeroTouchConfigurationEnabled: true,
-								},
+								XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService", Local: "AMT_SetupAndConfigurationService"},
+								CreationClassName:             AMT_SetupAndConfigurationService,
+								ElementName:                   "Intel(r) AMT Setup and Configuration Service",
+								EnabledState:                  5,
+								Name:                          "Intel(r) AMT Setup and Configuration Service",
+								PasswordModel:                 1,
+								ProvisioningMode:              1,
+								ProvisioningServerOTP:         "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+								ProvisioningState:             2,
+								RequestedState:                12,
+								SystemCreationClassName:       "CIM_ComputerSystem",
+								SystemName:                    "Intel(r) AMT",
+								ZeroTouchConfigurationEnabled: true,
 							},
 						},
 					},
@@ -286,7 +304,7 @@ func TestNegativeAMT_SetupAndConfigurationService(t *testing.T) {
 		}{{
 			"should return error due to bad UUID returned",
 			func() (string, error) {
-				currentMessage = "getuuid-bad"
+				client.CurrentMessage = "getuuid-bad"
 				response, _ := elementUnderTest.GetUuid()
 				uuid, err := response.DecodeUUID()
 				return uuid, err

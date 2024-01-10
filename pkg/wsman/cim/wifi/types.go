@@ -20,8 +20,7 @@ type Port struct {
 }
 
 type EndpointSettings struct {
-	base   message.Base
-	client client.WSMan
+	base message.Base
 }
 
 // OUTPUT

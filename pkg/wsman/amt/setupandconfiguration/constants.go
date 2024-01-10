@@ -12,3 +12,40 @@ const (
 	SetMEBxPassword                  string = "SetMEBxPassword"
 	GetUuid                          string = "GetUuid"
 )
+
+const (
+	RequestedStateEnabled RequestedState = iota + 2
+	RequestedStateDisabled
+	RequestedStateShutDown
+	RequestedStateNoChange
+	RequestedStateOffline
+	RequestedStateTest
+	RequestedStateDeferred
+	RequestedStateQuiesce
+	RequestedStateReboot
+	RequestedStateReset
+	RequestedStateNotApplicable
+	RequestedStateUnknown RequestedState = 0
+)
+
+const (
+	EnabledStateUnknown EnabledState = iota
+	EnabledStateOther
+	EnabledStateEnabled
+	EnabledStateDisabled
+	EnabledStateShuttingDown
+	EnabledStateNotApplicable
+	EnabledStateEnabledbutOffline
+	EnabledStateInTest
+	EnabledStateDeferred
+	EnabledStateQuiesce
+	EnabledStateStarting
+)
+
+const (
+	AdminControlMode  ProvisioningModeValue  = 1
+	ClientControlMode ProvisioningModeValue  = 4
+	PreProvisioning   ProvisioningStateValue = 0
+	InProvisioning    ProvisioningStateValue = 1
+	PostProvisioning  ProvisioningStateValue = 2
+)

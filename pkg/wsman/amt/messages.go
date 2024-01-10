@@ -34,16 +34,16 @@ import (
 type Messages struct {
 	wsmanMessageCreator             *message.WSManMessageCreator
 	AlarmClockService               alarmclock.Service
-	AuditLog                        auditlog.AuditLog
+	AuditLog                        auditlog.Service
 	AuthorizationService            authorization.AuthorizationService
-	BootCapabilities                boot.BootCapabilities
+	BootCapabilities                boot.Capabilities
 	BootSettingData                 boot.SettingData
 	EnvironmentDetectionSettingData environmentdetection.SettingData
 	EthernetPortSettings            ethernetport.Settings
 	GeneralSettings                 general.Settings
 	IEEE8021xCredentialContext      ieee8021x.CredentialContext
 	IEEE8021xProfile                ieee8021x.Profile
-	KerberosSettingData             kerberos.KerberosSettingData
+	KerberosSettingData             kerberos.SettingData
 	ManagementPresenceRemoteSAP     managementpresence.RemoteSAP
 	MessageLog                      messagelog.MessageLog
 	MPSUsernamePassword             mps.UsernamePassword
@@ -57,6 +57,7 @@ type Messages struct {
 	SetupAndConfigurationService    setupandconfiguration.Service
 	TimeSynchronizationService      timesynchronization.Service
 	TLSCredentialContext            tls.CredentialContext
+	TLSProtocolEndpointCollection   tls.Collection
 	TLSSettingData                  tls.SettingData
 	UserInitiatedConnectionService  userinitiatedconnection.Service
 	WiFiPortConfigurationService    wifiportconfiguration.Service
@@ -68,32 +69,33 @@ func NewMessages(client client.WSMan) Messages {
 	m := Messages{
 		wsmanMessageCreator: wsmanMessageCreator,
 	}
-	m.AlarmClockService = alarmclock.NewService(wsmanMessageCreator)
-	m.AuditLog = auditlog.NewAuditLog(wsmanMessageCreator)
+	m.AlarmClockService = alarmclock.NewServiceWithClient(wsmanMessageCreator, client)
+	m.AuditLog = auditlog.NewAuditLogWithClient(wsmanMessageCreator, client)
 	m.AuthorizationService = authorization.NewServiceWithClient(wsmanMessageCreator, client)
-	m.BootCapabilities = boot.NewBootCapabilities(wsmanMessageCreator)
-	m.BootSettingData = boot.NewBootSettingData(wsmanMessageCreator)
+	m.BootCapabilities = boot.NewBootCapabilitiesWithClient(wsmanMessageCreator, client)
+	m.BootSettingData = boot.NewBootSettingDataWithClient(wsmanMessageCreator, client)
 	m.EnvironmentDetectionSettingData = environmentdetection.NewEnvironmentDetectionSettingDataWithClient(wsmanMessageCreator, client)
 	m.EthernetPortSettings = ethernetport.NewEthernetPortSettingsWithClient(wsmanMessageCreator, client)
 	m.GeneralSettings = general.NewGeneralSettingsWithClient(wsmanMessageCreator, client)
-	m.IEEE8021xCredentialContext = ieee8021x.NewIEEE8021xCredentialContext(wsmanMessageCreator)
-	m.IEEE8021xProfile = ieee8021x.NewIEEE8021xProfile(wsmanMessageCreator)
-	m.KerberosSettingData = kerberos.NewKerberosSettingData(wsmanMessageCreator)
+	m.IEEE8021xCredentialContext = ieee8021x.NewIEEE8021xCredentialContextWithClient(wsmanMessageCreator, client)
+	m.IEEE8021xProfile = ieee8021x.NewIEEE8021xProfileWithClient(wsmanMessageCreator, client)
+	m.KerberosSettingData = kerberos.NewKerberosSettingDataWithClient(wsmanMessageCreator, client)
 	m.ManagementPresenceRemoteSAP = managementpresence.NewManagementPresenceRemoteSAPWithClient(wsmanMessageCreator, client)
-	m.MessageLog = messagelog.NewMessageLog(wsmanMessageCreator)
-	m.MPSUsernamePassword = mps.NewMPSUsernamePassword(wsmanMessageCreator)
+	m.MessageLog = messagelog.NewMessageLogWithClient(wsmanMessageCreator, client)
+	m.MPSUsernamePassword = mps.NewMPSUsernamePasswordWithClient(wsmanMessageCreator, client)
 	m.PublicKeyCertificate = publickey.NewPublicKeyCertificateWithClient(wsmanMessageCreator, client)
 	m.PublicKeyManagementService = publickey.NewPublicKeyManagementServiceWithClient(wsmanMessageCreator, client)
-	m.PublicPrivateKeyPair = publicprivate.NewPublicPrivateKeyPair(wsmanMessageCreator)
+	m.PublicPrivateKeyPair = publicprivate.NewPublicPrivateKeyPairWithClient(wsmanMessageCreator, client)
 	m.RedirectionService = redirection.NewRedirectionServiceWithClient(wsmanMessageCreator, client)
 	m.RemoteAccessPolicyAppliesToMPS = remoteaccess.NewRemoteAccessPolicyAppliesToMPSWithClient(wsmanMessageCreator, client)
 	m.RemoteAccessPolicyRule = remoteaccess.NewPolicyRuleWithClient(wsmanMessageCreator, client)
 	m.RemoteAccessService = remoteaccess.NewRemoteAccessServiceWithClient(wsmanMessageCreator, client)
 	m.SetupAndConfigurationService = setupandconfiguration.NewSetupAndConfigurationServiceWithClient(wsmanMessageCreator, client)
-	m.TimeSynchronizationService = timesynchronization.NewTimeSynchronizationService(wsmanMessageCreator)
-	m.TLSCredentialContext = tls.NewTLSCredentialContext(wsmanMessageCreator)
+	m.TimeSynchronizationService = timesynchronization.NewTimeSynchronizationServiceWithClient(wsmanMessageCreator, client)
+	m.TLSCredentialContext = tls.NewTLSCredentialContextWithClient(wsmanMessageCreator, client)
+	m.TLSProtocolEndpointCollection = tls.NewTLSProtocolEndpointCollectionWithClient(wsmanMessageCreator, client)
 	m.TLSSettingData = tls.NewTLSSettingDataWithClient(wsmanMessageCreator, client)
 	m.UserInitiatedConnectionService = userinitiatedconnection.NewUserInitiatedConnectionServiceWithClient(wsmanMessageCreator, client)
-	m.WiFiPortConfigurationService = wifiportconfiguration.NewWiFiPortConfigurationService(wsmanMessageCreator)
+	m.WiFiPortConfigurationService = wifiportconfiguration.NewWiFiPortConfigurationServiceWithClient(wsmanMessageCreator, client)
 	return m
 }
