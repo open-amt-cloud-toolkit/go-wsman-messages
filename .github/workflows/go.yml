@@ -59,7 +59,7 @@ jobs:
       - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # v3.1.4
         name: Upload Coverage Results
       - name: GitHub Upload Release Artifacts
-        uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
+        uses: actions/upload-artifact@1eb3cb2b3e0f29609092a73eb033bb759a334595 # v4.1.0
         with:
           name: go-wsman-unit
           path: go-wsman.xml
