@@ -14,41 +14,87 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
 )
 
-func TestIPS_AlarmClockOccurrence(t *testing.T) {
+func TestPositiveIPS_AlarmClockOccurrence(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/ips-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	elementUnderTest := NewAlarmClockOccurrence(wsmanMessageCreator)
+	client := wsmantesting.MockClient{
+		PackageUnderTest: "ips/alarmclock",
+	}
+	elementUnderTest := NewAlarmClockOccurrenceWithClient(wsmanMessageCreator, &client)
 
-	t.Run("amt_* Tests", func(t *testing.T) {
+	t.Run("ips_AlarmClockOccurrence Tests", func(t *testing.T) {
 		tests := []struct {
-			name         string
-			method       string
-			action       string
-			body         string
-			extraHeader  string
-			responseFunc func() string
+			name             string
+			method           string
+			action           string
+			body             string
+			extraHeader      string
+			responseFunc     func() (Response, error)
+			expectedResponse interface{}
 		}{
 			//GETS
-			{"should create a valid ips_AlarmClockOccurrence Get wsman message", "IPS_AlarmClockOccurrence", wsmantesting.GET, "", "", elementUnderTest.Get},
+			{
+				"should create a valid ips_AlarmClockOccurrence Get wsman message",
+				"IPS_AlarmClockOccurrence",
+				wsmantesting.GET,
+				"",
+				"",
+				func() (Response, error) {
+					client.CurrentMessage = "Get"
+					return elementUnderTest.Get()
+				},
+				Body{},
+			},
 			//ENUMERATES
-			{"should create a valid IPS_AlarmClockOccurrence Enumerate wsman message", "IPS_AlarmClockOccurrence", wsmantesting.ENUMERATE, wsmantesting.ENUMERATE_BODY, "", elementUnderTest.Enumerate},
+			{
+				"should create a valid IPS_AlarmClockOccurrence Enumerate wsman message",
+				"IPS_AlarmClockOccurrence",
+				wsmantesting.ENUMERATE,
+				wsmantesting.ENUMERATE_BODY,
+				"",
+				func() (Response, error) {
+					client.CurrentMessage = "Enumerate"
+					return elementUnderTest.Enumerate()
+				},
+				Body{},
+			},
 			//PULLS
-			{"should create a valid IPS_AlarmClockOccurrence Pull wsman message", "IPS_AlarmClockOccurrence", wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			{
+				"should create a valid IPS_AlarmClockOccurrence Pull wsman message",
+				"IPS_AlarmClockOccurrence",
+				wsmantesting.PULL,
+				wsmantesting.PULL_BODY,
+				"",
+				func() (Response, error) {
+					client.CurrentMessage = "Pull"
+					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
+				},
+				Body{},
+			},
 			// DELETE
-			{"should create a valid ips_AlarmClockOccurrence Delete wsman message", "IPS_AlarmClockOccurrence", wsmantesting.DELETE, "", "<w:SelectorSet><w:Selector Name=\"Name\">Instance</w:Selector></w:SelectorSet>", func() string {
-				return elementUnderTest.Delete("Instance")
-			}},
+			{
+				"should create a valid ips_AlarmClockOccurrence Delete wsman message",
+				"IPS_AlarmClockOccurrence",
+				wsmantesting.DELETE,
+				"",
+				"<w:SelectorSet><w:Selector Name=\"Name\">Instance</w:Selector></w:SelectorSet>",
+				func() (Response, error) {
+					client.CurrentMessage = "Delete"
+					return elementUnderTest.Delete("Instance")
+				},
+				Body{},
+			},
 		}
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				correctResponse := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
 				messageID++
-				response := test.responseFunc()
-				if response != correctResponse {
-					assert.Equal(t, correctResponse, response)
-				}
+				response, err := test.responseFunc()
+				assert.NoError(t, err)
+				assert.Equal(t, expectedXMLInput, response.XMLInput)
+				assert.Equal(t, test.expectedResponse, response.Body)
 			})
 		}
 	})

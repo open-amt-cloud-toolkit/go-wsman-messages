@@ -31,10 +31,10 @@ func NewMessages(client client.WSMan) Messages {
 	m := Messages{
 		wsmanMessageCreator: wsmanMessageCreator,
 	}
-	m.OptInService = optin.NewOptInService(wsmanMessageCreator)
-	m.HostBasedSetupService = hostbasedsetup.NewHostBasedSetupService(wsmanMessageCreator)
-	m.AlarmClockOccurrence = alarmclock.NewAlarmClockOccurrence(wsmanMessageCreator)
-	m.IEEE8021xCredentialContext = ieee8021x.NewIEEE8021xCredentialContext(wsmanMessageCreator)
-	m.IEEE8021xSettings = ieee8021x.NewIEEE8021xSettings(wsmanMessageCreator)
+	m.OptInService = optin.NewOptInServiceWithClient(wsmanMessageCreator, client)
+	m.HostBasedSetupService = hostbasedsetup.NewHostBasedSetupServiceWithClient(wsmanMessageCreator, client)
+	m.AlarmClockOccurrence = alarmclock.NewAlarmClockOccurrenceWithClient(wsmanMessageCreator, client)
+	m.IEEE8021xCredentialContext = ieee8021x.NewIEEE8021xCredentialContextWithClient(wsmanMessageCreator, client)
+	m.IEEE8021xSettings = ieee8021x.NewIEEE8021xSettingsWithClient(wsmanMessageCreator, client)
 	return m
 }

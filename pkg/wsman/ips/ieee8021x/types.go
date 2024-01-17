@@ -13,6 +13,17 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
+// Package Types
+type (
+	Settings struct {
+		base message.Base
+	}
+	CredentialContext struct {
+		base message.Base
+	}
+)
+
+// OUTPUT
 // Response Types
 type (
 	Response struct {
@@ -42,40 +53,37 @@ type (
 	}
 )
 
-// IEEE8021xSettings represents the IEEE 802.1x settings for a network interface.
-type IEEE8021xSettings struct {
-	XMLName                         xml.Name                        `xml:"h:IEEE8021xSettingsInput,omitempty"`
-	H                               string                          `xml:"xmlns:q,attr"`
-	ElementName                     string                          `xml:"q:ElementName,omitempty"`
-	InstanceID                      string                          `xml:"q:InstanceID,omitempty"`
-	AuthenticationProtocol          AuthenticationProtocol          `xml:"q:AuthenticationProtocol"`
-	RoamingIdentity                 string                          `xml:"q:RoamingIdentity,omitempty"`
-	ServerCertificateName           string                          `xml:"q:ServerCertificateName,omitempty"`
-	ServerCertificateNameComparison ServerCertificateNameComparison `xml:"q:ServerCertificateNameComparison,omitempty"`
-	Username                        string                          `xml:"q:Username,omitempty"`
-	Password                        string                          `xml:"q:Password,omitempty"`
-	Domain                          string                          `xml:"q:Domain,omitempty"`
-	ProtectedAccessCredential       string                          `xml:"q:ProtectedAccessCredential,omitempty"`
-	PACPassword                     string                          `xml:"q:PACPassword,omitempty"`
-	PSK                             string                          `xml:"q:PSK,omitempty"`
-	Enabled                         IEEE8021xSettingsEnabled        `json:"Enabled,omitempty"`
-	PxeTimeout                      int                             `json:"PxeTimeout,omitempty"`
-	AvailableInS0                   bool                            `json:"AvailableInS0,omitempty"`
-}
-
-type IEEE8021xSettingsEnabled int
-
-type Settings struct {
-	base message.Base
-}
-type Certificate struct {
-	XMLName                 xml.Name `xml:"h:SetCertificates_INPUT"`
-	H                       string   `xml:"xmlns:h,attr"`
-	ServerCertificateIssuer string   `xml:"h:ServerCertificateIssuer"`
-	ClientCertificate       string   `xml:"h:ClientCertificate"`
-}
-
-type AuthenticationProtocol int
+// INPUT
+// Request Types
+type (
+	IEEE8021xSettings struct {
+		XMLName                         xml.Name                        `xml:"h:IEEE8021xSettingsInput,omitempty"`
+		H                               string                          `xml:"xmlns:q,attr"`
+		ElementName                     string                          `xml:"q:ElementName,omitempty"`
+		InstanceID                      string                          `xml:"q:InstanceID,omitempty"`
+		AuthenticationProtocol          AuthenticationProtocol          `xml:"q:AuthenticationProtocol"`
+		RoamingIdentity                 string                          `xml:"q:RoamingIdentity,omitempty"`
+		ServerCertificateName           string                          `xml:"q:ServerCertificateName,omitempty"`
+		ServerCertificateNameComparison ServerCertificateNameComparison `xml:"q:ServerCertificateNameComparison,omitempty"`
+		Username                        string                          `xml:"q:Username,omitempty"`
+		Password                        string                          `xml:"q:Password,omitempty"`
+		Domain                          string                          `xml:"q:Domain,omitempty"`
+		ProtectedAccessCredential       string                          `xml:"q:ProtectedAccessCredential,omitempty"`
+		PACPassword                     string                          `xml:"q:PACPassword,omitempty"`
+		PSK                             string                          `xml:"q:PSK,omitempty"`
+		Enabled                         IEEE8021xSettingsEnabled        `json:"Enabled,omitempty"`
+		PxeTimeout                      int                             `json:"PxeTimeout,omitempty"`
+		AvailableInS0                   bool                            `json:"AvailableInS0,omitempty"`
+	}
+	Certificate struct {
+		XMLName                 xml.Name `xml:"h:SetCertificates_INPUT"`
+		H                       string   `xml:"xmlns:h,attr"`
+		ServerCertificateIssuer string   `xml:"h:ServerCertificateIssuer"`
+		ClientCertificate       string   `xml:"h:ClientCertificate"`
+	}
+)
 
 // ServerCertificateNameComparison represents the ServerCertificateNameComparison type for IEEE8021xProfile.
 type ServerCertificateNameComparison int
+type IEEE8021xSettingsEnabled int
+type AuthenticationProtocol int

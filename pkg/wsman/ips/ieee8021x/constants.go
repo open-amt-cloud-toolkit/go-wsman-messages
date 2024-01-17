@@ -5,7 +5,11 @@
 
 package ieee8021x
 
-const IPS_IEEE8021xSettings = "IPS_IEEE8021xSettings"
+const (
+	IPS_IEEE8021xSettings      string = "IPS_IEEE8021xSettings"
+	IPS_8021xCredentialContext string = "IPS_8021xCredentialContext"
+	SetCertificates            string = "SetCertificates"
+)
 
 const (
 	EnabledWithCertificates    IEEE8021xSettingsEnabled = 2

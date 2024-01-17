@@ -9,63 +9,130 @@ import (
 	"encoding/xml"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/actions"
 )
 
-type Service struct {
-	base message.Base
-}
-
-const IPS_OptInService = "IPS_OptInService"
-
 // NewOptInService returns a new instance of the OptInService struct.
-func NewOptInService(wsmanMessageCreator *message.WSManMessageCreator) Service {
+func NewOptInServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
 	return Service{
-		base: message.NewBase(wsmanMessageCreator, string(IPS_OptInService)),
+		base: message.NewBaseWithClient(wsmanMessageCreator, IPS_OptInService, client),
 	}
 }
 
 // Gets the representation of OptInService.
-func (b Service) Get() string {
-	return b.base.Get(nil)
+func (service Service) Get() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.Get(nil),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Enumerates the instances of this class
-func (b Service) Enumerate() string {
-	return b.base.Enumerate()
+func (service Service) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.Enumerate(),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (b Service) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
-}
-
-type OptInCode struct {
-	XMLName   xml.Name `xml:"h:SendOptInCode_INPUT"`
-	H         string   `xml:"xmlns:h,attr"`
-	OptInCode int      `xml:"h:OptInCode"`
+func (service Service) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.Pull(enumerationContext),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Send the opt-in code to Intel(R) AMT.
-func (b Service) SendOptInCode(optInCode int) string {
-	header := b.base.WSManMessageCreator.CreateHeader(string(actions.SendOptInCode), string(IPS_OptInService), nil, "", "")
-	body := b.base.WSManMessageCreator.CreateBody("SendOptInCode_INPUT", string(IPS_OptInService), OptInCode{
+func (service Service) SendOptInCode(optInCode int) (response Response, err error) {
+	header := service.base.WSManMessageCreator.CreateHeader(string(actions.SendOptInCode), string(IPS_OptInService), nil, "", "")
+	body := service.base.WSManMessageCreator.CreateBody("SendOptInCode_INPUT", string(IPS_OptInService), OptInCode{
 		H:         "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_OptInService",
 		OptInCode: optInCode,
 	})
-	return b.base.WSManMessageCreator.CreateXML(header, body)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Request an opt-in code.
-func (b Service) StartOptIn() string {
-	header := b.base.WSManMessageCreator.CreateHeader(string(actions.StartOptIn), string(IPS_OptInService), nil, "", "")
-	body := b.base.WSManMessageCreator.CreateBody("StartOptIn_INPUT", string(IPS_OptInService), nil)
-	return b.base.WSManMessageCreator.CreateXML(header, body)
+func (service Service) StartOptIn() (response Response, err error) {
+	header := service.base.WSManMessageCreator.CreateHeader(string(actions.StartOptIn), string(IPS_OptInService), nil, "", "")
+	body := service.base.WSManMessageCreator.CreateBody("StartOptIn_INPUT", string(IPS_OptInService), nil)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Cancel a previous opt-in code request.
-func (b Service) CancelOptIn() string {
-	header := b.base.WSManMessageCreator.CreateHeader(string(actions.CancelOptIn), string(IPS_OptInService), nil, "", "")
-	body := b.base.WSManMessageCreator.CreateBody("CancelOptIn_INPUT", string(IPS_OptInService), nil)
-	return b.base.WSManMessageCreator.CreateXML(header, body)
+func (service Service) CancelOptIn() (response Response, err error) {
+	header := service.base.WSManMessageCreator.CreateHeader(string(actions.CancelOptIn), string(IPS_OptInService), nil, "", "")
+	body := service.base.WSManMessageCreator.CreateBody("CancelOptIn_INPUT", string(IPS_OptInService), nil)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
