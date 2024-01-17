@@ -5,32 +5,70 @@
 
 package ieee8021x
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+import (
+	"encoding/xml"
 
-type CredentialContext struct {
-	base message.Base
-}
-
-const IPS_8021xCredentialContext = "IPS_8021xCredentialContext"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+)
 
 // NewIEEE8021xCredentialContext returns a new instance of the IPS_8021xCredentialContext struct.
-func NewIEEE8021xCredentialContext(wsmanMessageCreator *message.WSManMessageCreator) CredentialContext {
+func NewIEEE8021xCredentialContextWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) CredentialContext {
 	return CredentialContext{
-		base: message.NewBase(wsmanMessageCreator, IPS_8021xCredentialContext),
+		base: message.NewBaseWithClient(wsmanMessageCreator, IPS_8021xCredentialContext, client),
 	}
 }
 
 // Get retrieves the representation of the instance
-func (b CredentialContext) Get() string {
-	return b.base.Get(nil)
+func (credentialContext CredentialContext) Get() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: credentialContext.base.Get(nil),
+		},
+	}
+	err = credentialContext.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Enumerates the instances of this class
-func (b CredentialContext) Enumerate() string {
-	return b.base.Enumerate()
+func (credentialContext CredentialContext) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: credentialContext.base.Enumerate(),
+		},
+	}
+	err = credentialContext.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (b CredentialContext) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
+func (credentialContext CredentialContext) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: credentialContext.base.Pull(enumerationContext),
+		},
+	}
+	err = credentialContext.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

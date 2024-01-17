@@ -66,7 +66,7 @@ func TestNewMessages(t *testing.T) {
 	if reflect.DeepEqual(m.CredentialContext, credential.Context{}) {
 		t.Error("Context is not initialized")
 	}
-	if reflect.DeepEqual(m.IEEE8021xSettings, ieee8021x.IEEE8021xSettings{}) {
+	if reflect.DeepEqual(m.IEEE8021xSettings, ieee8021x.IEEE8021xSettingsRequest{}) {
 		t.Error("IEEE8021xSettings is not initialized")
 	}
 	if reflect.DeepEqual(m.KVMRedirectionSAP, kvm.RedirectionSAP{}) {
