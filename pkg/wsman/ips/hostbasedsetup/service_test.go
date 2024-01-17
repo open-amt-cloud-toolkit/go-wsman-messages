@@ -168,7 +168,7 @@ func TestPositiveIPS_HostBasedSetupService(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					UpgradeClientToAdmin_OUTPUT: UpgradeClientToAdmin_OUTPUT{
-						XMLName: xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: "UpgradeClientToAdmin_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: "UpgradeClientToAdmin_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
@@ -358,7 +358,7 @@ func TestNegativeIPS_HostBasedSetupService(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					UpgradeClientToAdmin_OUTPUT: UpgradeClientToAdmin_OUTPUT{
-						XMLName: xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: "UpgradeClientToAdmin_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: "UpgradeClientToAdmin_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
