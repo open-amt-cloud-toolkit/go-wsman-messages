@@ -112,6 +112,10 @@ func (service Service) AddMPS(mpServer AddMpServerRequest) (response Response, e
 	return
 }
 
+// AddRemoteAccessPolicyRule adds a Remote Access policy to the Intel(R) AMT subsystem.
+// The policy defines an event that will trigger an establishment of a tunnel between AMT and a pre-configured MPS.
+// Creates an AMT_RemoteAccessPolicyRule instance and associates it to a given list of AMT_ManagementPresenceRemoteSAP instances with AMT_PolicySetAppliesToElement association instances.
+// Returns an XML string representing the WS-Management message to be sent to the Intel(R) AMT subsystem.
 func (service Service) AddRemoteAccessPolicyRule(remoteAccessPolicyRule RemoteAccessPolicyRuleRequest, name string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "Name",
