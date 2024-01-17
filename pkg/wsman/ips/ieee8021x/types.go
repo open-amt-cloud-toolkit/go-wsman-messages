@@ -34,9 +34,11 @@ type (
 	}
 
 	Body struct {
-		PullResponse      PullResponse
-		EnumerateResponse common.EnumerateResponse
-		IEEE8021xSettings IEEE8021xSettings
+		XMLName                   xml.Name `xml:"Body"`
+		PullResponse              PullResponse
+		EnumerateResponse         common.EnumerateResponse
+		IEEE8021xSettingsResponse IEEE8021xSettingsResponse
+		SetCertificatesResponse   SetCertificates_OUTPUT
 	}
 
 	IEEE8021xSettingsResponse struct {
@@ -49,14 +51,19 @@ type (
 	}
 
 	PullResponse struct {
-		Items []IEEE8021xSettings `xml:"Items>IPS_IEEE8021xSetings"`
+		XMLName                xml.Name                    `xml:"PullResponse"`
+		IEEE8021xSettingsItems []IEEE8021xSettingsResponse `xml:"Items>IPS_IEEE8021xSettings"`
+	}
+	SetCertificates_OUTPUT struct {
+		XMLName     xml.Name `xml:"SetCertificates_OUTPUT"`
+		ReturnValue int
 	}
 )
 
 // INPUT
 // Request Types
 type (
-	IEEE8021xSettings struct {
+	IEEE8021xSettingsRequest struct {
 		XMLName                         xml.Name                        `xml:"h:IEEE8021xSettingsInput,omitempty"`
 		H                               string                          `xml:"xmlns:q,attr"`
 		ElementName                     string                          `xml:"q:ElementName,omitempty"`

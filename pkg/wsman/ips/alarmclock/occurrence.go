@@ -20,10 +20,14 @@ func NewAlarmClockOccurrenceWithClient(wsmanMessageCreator *message.WSManMessage
 }
 
 // Get retrieves the representation of the instance
-func (occurrence Occurrence) Get() (response Response, err error) {
+func (occurrence Occurrence) Get(alarmName string) (response Response, err error) {
+	selector := message.Selector{
+		Name:  "Name",
+		Value: alarmName,
+	}
 	response = Response{
 		Message: &client.Message{
-			XMLInput: occurrence.base.Get(nil),
+			XMLInput: occurrence.base.Get(&selector),
 		},
 	}
 	err = occurrence.base.Execute(response.Message)

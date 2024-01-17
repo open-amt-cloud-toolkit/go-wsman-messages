@@ -28,6 +28,7 @@ type (
 	}
 
 	Body struct {
+		XMLName           xml.Name     `xml:"Body"`
 		PullResponse      PullResponse `xml:"PullResponse"`
 		EnumerateResponse common.EnumerateResponse
 		GetResponse       AlarmClockOccurrence `xml:"IPS_AlarmClockOccurrence"`
@@ -43,6 +44,7 @@ type (
 	}
 
 	PullResponse struct {
-		Items []AlarmClockOccurrence `xml:"Items>IPS_AlarmClockOccurrence"`
+		XMLName xml.Name               `xml:"PullResponse"`
+		Items   []AlarmClockOccurrence `xml:"Items>IPS_AlarmClockOccurrence"`
 	}
 )

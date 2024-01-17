@@ -75,7 +75,7 @@ func (settings Settings) Pull(enumerationContext string) (response Response, err
 }
 
 // Put will change properties of the selected instance
-func (settings Settings) Put(ieee8021xSettings IEEE8021xSettings) (response Response, err error) {
+func (settings Settings) Put(ieee8021xSettings IEEE8021xSettingsRequest) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: settings.base.Put(ieee8021xSettings, false, nil),

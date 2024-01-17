@@ -28,6 +28,7 @@ type (
 	}
 
 	Body struct {
+		XMLName               xml.Name `xml:"Body"`
 		EnumerateResponse     common.EnumerateResponse
 		GetResponse           OptInServiceResponse `xml:"IPS_OptInService"`
 		PullResponse          PullResponse         `xml:"PullResponse"`
@@ -51,7 +52,8 @@ type (
 	}
 
 	PullResponse struct {
-		Items []OptInServiceResponse `xml:"Items>IPS_OptInService"`
+		XMLName           xml.Name               `xml:"PullResponse"`
+		OptInServiceItems []OptInServiceResponse `xml:"Items>IPS_OptInService"`
 	}
 	StartOptIn_OUTPUT struct {
 		XMLName     xml.Name `xml:"StartOptIn_OUTPUT"`
