@@ -10,6 +10,7 @@ import (
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
 type Service struct {
@@ -27,13 +28,19 @@ type (
 	}
 
 	Body struct {
-		XMLName                   xml.Name                  `xml:"Body"`
-		Setup_OUTPUT              Setup_OUTPUT              `xml:"Setup_OUTPUT"`
-		AdminSetup_OUTPUT         AdminSetup_OUTPUT         `xml:"AdminSetup_OUTPUT"`
-		AddNextCertInChain_OUTPUT AddNextCertInChain_OUTPUT `xml:"AddNextCertInChain_OUTPUT"`
-		IPS_HostBasedSetupService HostBasedSetupService     `xml:"IPS_HostBasedSetupService"`
+		XMLName                     xml.Name              `xml:"Body"`
+		GetResponse                 HostBasedSetupService `xml:"IPS_HostBasedSetupService"`
+		EnumerateResponse           common.EnumerateResponse
+		PullResponse                PullResponse
+		Setup_OUTPUT                Setup_OUTPUT                `xml:"Setup_OUTPUT"`
+		AdminSetup_OUTPUT           AdminSetup_OUTPUT           `xml:"AdminSetup_OUTPUT"`
+		AddNextCertInChain_OUTPUT   AddNextCertInChain_OUTPUT   `xml:"AddNextCertInChain_OUTPUT"`
+		UpgradeClientToAdmin_OUTPUT UpgradeClientToAdmin_OUTPUT `xml:"UpgradeClientToAdmin_OUTPUT"`
 	}
-
+	PullResponse struct {
+		XMLName                    xml.Name                `xml:"PullResponse"`
+		HostBasedSetupServiceItems []HostBasedSetupService `xml:"Items>IPS_HostBasedSetupService"`
+	}
 	HostBasedSetupService struct {
 		XMLName                 xml.Name `xml:"IPS_HostBasedSetupService"`
 		ElementName             string
@@ -42,7 +49,7 @@ type (
 		CreationClassName       string
 		Name                    string
 		CurrentControlMode      CurrentControlMode
-		AllowedControlModes     AllowedControlModes
+		AllowedControlModes     []AllowedControlModes
 		ConfigurationNonce      string
 		CertChainStatus         CertChainStatus
 	}
@@ -58,6 +65,10 @@ type (
 
 	Setup_OUTPUT struct {
 		XMLName     xml.Name `xml:"Setup_OUTPUT"`
+		ReturnValue ReturnValue
+	}
+	UpgradeClientToAdmin_OUTPUT struct {
+		XMLName     xml.Name `xml:"UpgradeClientToAdmin_OUTPUT"`
 		ReturnValue ReturnValue
 	}
 )
