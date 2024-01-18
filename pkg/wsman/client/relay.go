@@ -70,12 +70,12 @@ func (t *WsTransport) buildUrl() (url string) {
 	url = t.wsurl + "?p=" + strconv.Itoa(t.protocol) + "&host=" + t.host
 	url += "&user=" + t.username + "&pass=" + t.password
 	url += "&port=" + strconv.Itoa(t.port)
-	if t.tls == true {
+	if t.tls {
 		url += "&tls=1"
 	} else {
 		url += "&tls=0"
 	}
-	if t.tls1only == true {
+	if t.tls1only {
 		url += "&tls1only=1"
 	} else {
 		url += "&tls1only=0"
@@ -142,7 +142,7 @@ func (t *WsTransport) RoundTrip(r *http.Request) (resp *http.Response, err error
 	r.Body = bd2
 	r.Header.Add("Content-Length", strconv.FormatInt(l, 10))
 
-	bytes_to_send, err := httputil.DumpRequest(r, true)
+	bytes_to_send, _ := httputil.DumpRequest(r, true)
 	// write and ignore error status, proper error handling is at read go routine
 	_ = t.conn.WriteMessage(websocket.TextMessage, bytes_to_send)
 

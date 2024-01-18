@@ -49,7 +49,7 @@ var upgrader = websocket.Upgrader{}
 
 func relay_tester(w http.ResponseWriter, r *http.Request) {
 	if strings.HasSuffix(r.RequestURI, "simulate_fail") {
-		w.Write([]byte("Hello"))
+		_, _ = w.Write([]byte("Hello"))
 		return
 	}
 	c, err := upgrader.Upgrade(w, r, nil)
