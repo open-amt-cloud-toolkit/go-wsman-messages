@@ -6,33 +6,58 @@
 package physical
 
 import (
+	"encoding/xml"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type Package struct {
-	base message.Base
-}
-
-const CIM_PhysicalPackage = "CIM_PhysicalPackage"
-
 // NewPhysicalPackage returns a new instance of the PhysicalPackage struct.
-func NewPhysicalPackage(wsmanMessageCreator *message.WSManMessageCreator) Package {
+func NewPhysicalPackageWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Package {
 	return Package{
-		base: message.NewBase(wsmanMessageCreator, string(CIM_PhysicalPackage)),
+		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_PhysicalPackage, client),
+		client: client,
 	}
 }
 
+// TODO: Figure out how to call GET requiring resourceURIs and Selectors
 // Get retrieves the representation of the instance
-func (b Package) Get() string {
-	return b.base.Get(nil)
-}
 
 // Enumerates the instances of this class
-func (b Package) Enumerate() string {
-	return b.base.Enumerate()
+func (physicalPackage Package) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: physicalPackage.base.Enumerate(),
+		},
+	}
+
+	err = physicalPackage.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (b Package) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
+func (physicalPackage Package) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: physicalPackage.base.Pull(enumerationContext),
+		},
+	}
+	err = physicalPackage.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

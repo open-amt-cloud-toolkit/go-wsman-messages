@@ -9,26 +9,29 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/concrete"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/credential"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
-
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/bios"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/boot"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/card"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/chassis"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/chip"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/computer"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/concrete"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/credential"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/kvm"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/mediaaccess"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/physical"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/power"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/processor"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/service"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/software"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/system"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/wifi"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/ieee8021x"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
 )
 
 func TestNewMessages(t *testing.T) {
-	mock := &wsmantesting.ClientMock{}
+	mock := &wsmantesting.MockClient{}
 	m := NewMessages(mock)
 	if m.wsmanMessageCreator == nil {
 		t.Error("wsmanMessageCreator is not initialized")
@@ -45,13 +48,13 @@ func TestNewMessages(t *testing.T) {
 	if reflect.DeepEqual(m.BootSourceSetting, boot.SourceSetting{}) {
 		t.Error("BootSourceSetting is not initialized")
 	}
-	if reflect.DeepEqual(m.Card, physical.Card{}) {
+	if reflect.DeepEqual(m.Card, card.Package{}) {
 		t.Error("Card is not initialized")
 	}
-	if reflect.DeepEqual(m.Chassis, physical.Chassis{}) {
+	if reflect.DeepEqual(m.Chassis, chassis.Package{}) {
 		t.Error("Chassis is not initialized")
 	}
-	if reflect.DeepEqual(m.Chip, physical.Chip{}) {
+	if reflect.DeepEqual(m.Chip, chip.Package{}) {
 		t.Error("Chip is not initialized")
 	}
 	if reflect.DeepEqual(m.ComputerSystemPackage, computer.SystemPackage{}) {
@@ -63,7 +66,7 @@ func TestNewMessages(t *testing.T) {
 	if reflect.DeepEqual(m.CredentialContext, credential.Context{}) {
 		t.Error("Context is not initialized")
 	}
-	if reflect.DeepEqual(m.IEEE8021xSettings, ieee8021x.IEEE8021xSettings{}) {
+	if reflect.DeepEqual(m.IEEE8021xSettings, ieee8021x.IEEE8021xSettingsRequest{}) {
 		t.Error("IEEE8021xSettings is not initialized")
 	}
 	if reflect.DeepEqual(m.KVMRedirectionSAP, kvm.RedirectionSAP{}) {
@@ -81,7 +84,7 @@ func TestNewMessages(t *testing.T) {
 	if reflect.DeepEqual(m.PowerManagementService, power.ManagementService{}) {
 		t.Error("PowerManagementService is not initialized")
 	}
-	if reflect.DeepEqual(m.Processor, physical.Processor{}) {
+	if reflect.DeepEqual(m.Processor, processor.Package{}) {
 		t.Error("Processor is not initialized")
 	}
 	if reflect.DeepEqual(m.ServiceAvailableToElement, service.AvailableToElement{}) {
@@ -90,7 +93,7 @@ func TestNewMessages(t *testing.T) {
 	if reflect.DeepEqual(m.SoftwareIdentity, software.Identity{}) {
 		t.Error("SoftwareIdentity is not initialized")
 	}
-	if reflect.DeepEqual(m.SystemPackaging, system.Packaging{}) {
+	if reflect.DeepEqual(m.SystemPackaging, system.Package{}) {
 		t.Error("SystemPackaging is not initialized")
 	}
 	if reflect.DeepEqual(m.WiFiEndpointSettings, wifi.EndpointSettings{}) {

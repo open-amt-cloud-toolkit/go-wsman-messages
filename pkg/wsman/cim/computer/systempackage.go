@@ -5,32 +5,77 @@
 
 package computer
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+import (
+	"encoding/xml"
 
-const CIM_ComputerSystemPackage = "CIM_ComputerSystemPackage"
-
-type SystemPackage struct {
-	base message.Base
-}
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+)
 
 // NewComputerSystemPackage returns a new instance of the ComputerSystemPackage struct.
-func NewComputerSystemPackage(wsmanMessageCreator *message.WSManMessageCreator) SystemPackage {
+func NewComputerSystemPackageWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) SystemPackage {
 	return SystemPackage{
-		base: message.NewBase(wsmanMessageCreator, string(CIM_ComputerSystemPackage)),
+		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_ComputerSystemPackage, client),
+		client: client,
 	}
 }
 
 // Get retrieves the representation of the instance
-func (b SystemPackage) Get() string {
-	return b.base.Get(nil)
+func (systemPackage SystemPackage) Get() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: systemPackage.base.Get(nil),
+		},
+	}
+
+	err = systemPackage.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+
 }
 
 // Enumerates the instances of this class
-func (b SystemPackage) Enumerate() string {
-	return b.base.Enumerate()
+func (systemPackage SystemPackage) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: systemPackage.base.Enumerate(),
+		},
+	}
+
+	err = systemPackage.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (b SystemPackage) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
+func (systemPackage SystemPackage) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: systemPackage.base.Pull(enumerationContext),
+		},
+	}
+	err = systemPackage.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

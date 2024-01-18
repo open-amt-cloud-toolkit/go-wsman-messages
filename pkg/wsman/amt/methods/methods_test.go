@@ -26,7 +26,7 @@ func TestMethods(t *testing.T) {
 		assert.Equal(t, expectedResult, result)
 	})
 	t.Run("RequestStateChange Test", func(t *testing.T) {
-		expectedResult := "http://schemas.dmtf.org/wbem/wscim/1/amt-schema/2/AMT_Test/RequestStateChange"
+		expectedResult := "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_Test/RequestStateChange"
 		className := "AMT_Test"
 		result := RequestStateChange(className)
 		assert.Equal(t, expectedResult, result)

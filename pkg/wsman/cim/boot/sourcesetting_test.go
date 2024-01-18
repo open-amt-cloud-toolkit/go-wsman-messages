@@ -7,10 +7,6 @@ package boot
 
 import (
 	"encoding/xml"
-	"fmt"
-	"io"
-	"os"
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -20,34 +16,13 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
 )
 
-type SourceSettingMockClient struct{}
-
-func (c *SourceSettingMockClient) Post(msg string) ([]byte, error) {
-	// read an xml file from disk:
-	xmlFile, err := os.Open("../../wsmantesting/responses/cim/boot/sourcesetting/" + strings.ToLower(currentMessage) + ".xml")
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return nil, err
-	}
-	defer xmlFile.Close()
-	// read file into string
-	xmlData, err := io.ReadAll(xmlFile)
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-		return nil, err
-	}
-	// strip carriage returns and new line characters
-	xmlData = []byte(strings.ReplaceAll(string(xmlData), "\r\n", ""))
-
-	// Simulate a successful response for testing.
-	return []byte(xmlData), nil
-}
-
 func TestPositiveSourceSetting(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := SourceSettingMockClient{}
+	client := wsmantesting.MockClient{
+		PackageUnderTest: "cim/boot/sourcesetting",
+	}
 	elementUnderTest := NewBootSourceSettingWithClient(wsmanMessageCreator, &client)
 
 	t.Run("cim_* Tests", func(t *testing.T) {
@@ -68,11 +43,11 @@ func TestPositiveSourceSetting(t *testing.T) {
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT: Force Hard-drive Boot</w:Selector></w:SelectorSet>",
 				"",
 				func() (Response, error) {
-					currentMessage = "Get"
+					client.CurrentMessage = "Get"
 					return elementUnderTest.Get("Intel(r) AMT: Force Hard-drive Boot")
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					SourceSettingGetResponse: BootSourceSetting{
 						XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIM_BootSourceSetting},
 						ElementName:          "Intel(r) AMT: Boot Source",
@@ -90,11 +65,11 @@ func TestPositiveSourceSetting(t *testing.T) {
 				"",
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
-					currentMessage = "Enumerate"
+					client.CurrentMessage = "Enumerate"
 					return elementUnderTest.Enumerate()
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "14000000-0000-0000-0000-000000000000",
 					},
@@ -108,11 +83,11 @@ func TestPositiveSourceSetting(t *testing.T) {
 				"",
 				wsmantesting.PULL_BODY,
 				func() (Response, error) {
-					currentMessage = "Pull"
+					client.CurrentMessage = "Pull"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
 						BootSourceSettingItems: []BootSourceSetting{
 							{
@@ -159,7 +134,9 @@ func TestNegativeSourceSetting(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := SourceSettingMockClient{}
+	client := wsmantesting.MockClient{
+		PackageUnderTest: "cim/boot/sourcesetting",
+	}
 	elementUnderTest := NewBootSourceSettingWithClient(wsmanMessageCreator, &client)
 
 	t.Run("cim_* Tests", func(t *testing.T) {
@@ -180,11 +157,11 @@ func TestNegativeSourceSetting(t *testing.T) {
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT: Force Hard-drive Boot</w:Selector></w:SelectorSet>",
 				"",
 				func() (Response, error) {
-					currentMessage = "Error"
+					client.CurrentMessage = "Error"
 					return elementUnderTest.Get("Intel(r) AMT: Force Hard-drive Boot")
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					SourceSettingGetResponse: BootSourceSetting{
 						XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIM_BootSourceSetting},
 						ElementName:          "Intel(r) AMT: Boot Source",
@@ -202,11 +179,11 @@ func TestNegativeSourceSetting(t *testing.T) {
 				"",
 				wsmantesting.ENUMERATE_BODY,
 				func() (Response, error) {
-					currentMessage = "Error"
+					client.CurrentMessage = "Error"
 					return elementUnderTest.Enumerate()
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "14000000-0000-0000-0000-000000000000",
 					},
@@ -220,11 +197,11 @@ func TestNegativeSourceSetting(t *testing.T) {
 				"",
 				wsmantesting.PULL_BODY,
 				func() (Response, error) {
-					currentMessage = "Error"
+					client.CurrentMessage = "Error"
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
-					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
 						BootSourceSettingItems: []BootSourceSetting{
 							{

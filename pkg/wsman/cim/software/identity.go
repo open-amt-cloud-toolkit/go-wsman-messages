@@ -5,32 +5,77 @@
 
 package software
 
-import "github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+import (
+	"encoding/xml"
 
-type Identity struct {
-	base message.Base
-}
-
-const CIM_SoftwareIdentity = "CIM_SoftwareIdentity"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+)
 
 // NewSoftwareIdentity returns a new instance of the SoftwareIdentity struct.
-func NewSoftwareIdentity(wsmanMessageCreator *message.WSManMessageCreator) Identity {
+func NewSoftwareIdentityWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Identity {
 	return Identity{
-		base: message.NewBase(wsmanMessageCreator, string(CIM_SoftwareIdentity)),
+		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_SoftwareIdentity, client),
+		client: client,
 	}
 }
 
 // Get retrieves the representation of the instance
-func (b Identity) Get() string {
-	return b.base.Get(nil)
+func (identity Identity) Get(selector Selector) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: identity.base.Get((*message.Selector)(&selector)),
+		},
+	}
+
+	err = identity.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+
 }
 
 // Enumerates the instances of this class
-func (b Identity) Enumerate() string {
-	return b.base.Enumerate()
+func (identity Identity) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: identity.base.Enumerate(),
+		},
+	}
+
+	err = identity.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (b Identity) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
+func (identity Identity) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: identity.base.Pull(enumerationContext),
+		},
+	}
+	err = identity.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

@@ -12,123 +12,101 @@ import (
 	"io"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/actions"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/methods"
 )
-
-type Response struct {
-	XMLName xml.Name       `xml:"Envelope"`
-	Header  message.Header `xml:"Header"`
-	Body    Body           `xml:"Body"`
-}
-
-type Body struct {
-	XMLName                   xml.Name                  `xml:"Body"`
-	Setup_OUTPUT              Setup_OUTPUT              `xml:"Setup_OUTPUT"`
-	AdminSetup_OUTPUT         AdminSetup_OUTPUT         `xml:"AdminSetup_OUTPUT"`
-	AddNextCertInChain_OUTPUT AddNextCertInChain_OUTPUT `xml:"AddNextCertInChain_OUTPUT"`
-	IPS_HostBasedSetupService HostBasedSetupService     `xml:"IPS_HostBasedSetupService"`
-}
-
-type HostBasedSetupService struct {
-	XMLName                 xml.Name `xml:"IPS_HostBasedSetupService"`
-	ElementName             string
-	SystemCreationClassName string
-	SystemName              string
-	CreationClassName       string
-	Name                    string
-	CurrentControlMode      int
-	AllowedControlModes     int
-	ConfigurationNonce      string
-	CertChainStatus         int
-}
-
-type AdminPassEncryptionType int
-
-const (
-	AdminPassEncryptionTypeNone AdminPassEncryptionType = iota
-	AdminPassEncryptionTypeOther
-	AdminPassEncryptionTypeHTTPDigestMD5A1
-)
-
-type SigningAlgorithm int
-
-const (
-	SigningAlgorithmNone SigningAlgorithm = iota
-	SigningAlgorithmOther
-	SigningAlgorithmRSASHA2256
-)
-
-type Service struct {
-	base message.Base
-}
-
-const IPS_HostBasedSetupService = "IPS_HostBasedSetupService"
 
 // NewHostBasedSetupService returns a new instance of the HostBasedSetupService struct.
-func NewHostBasedSetupService(wsmanMessageCreator *message.WSManMessageCreator) Service {
+func NewHostBasedSetupServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
 	return Service{
-		base: message.NewBase(wsmanMessageCreator, string(IPS_HostBasedSetupService)),
+		base: message.NewBaseWithClient(wsmanMessageCreator, IPS_HostBasedSetupService, client),
 	}
 }
 
 // Get retrieves the representation of the instance
-func (b Service) Get() string {
-	return b.base.Get(nil)
+func (service Service) Get() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.Get(nil),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Enumerates the instances of this class
-func (b Service) Enumerate() string {
-	return b.base.Enumerate()
+func (service Service) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.Enumerate(),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (b Service) Pull(enumerationContext string) string {
-	return b.base.Pull(enumerationContext)
-}
-
-type AddNextCertInChain struct {
-	XMLName           xml.Name `xml:"h:AddNextCertInChain_INPUT"`
-	H                 string   `xml:"xmlns:h,attr"`
-	NextCertificate   string   `xml:"h:NextCertificate"`
-	IsLeafCertificate bool     `xml:"h:IsLeafCertificate"`
-	IsRootCertificate bool     `xml:"h:IsRootCertificate"`
-}
-
-type AddNextCertInChain_OUTPUT struct {
-	ReturnValue int
+func (service Service) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.Pull(enumerationContext),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Add a certificate to the provisioning certificate chain, to be used by AdminSetup or UpgradeClientToAdmin methods.
-func (b Service) AddNextCertInChain(cert string, isLeaf bool, isRoot bool) string {
-	header := b.base.WSManMessageCreator.CreateHeader(string(actions.AddNextCertInChain), string(IPS_HostBasedSetupService), nil, "", "")
-	body := b.base.WSManMessageCreator.CreateBody("AddNextCertInChain_INPUT", string(IPS_HostBasedSetupService), AddNextCertInChain{
+func (service Service) AddNextCertInChain(cert string, isLeaf bool, isRoot bool) (response Response, err error) {
+	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(IPS_HostBasedSetupService, AddNextCertInChain), IPS_HostBasedSetupService, nil, "", "")
+	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(AddNextCertInChain), IPS_HostBasedSetupService, AddNextCertInChain_INPUT{
 		H:                 "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService",
 		NextCertificate:   cert,
 		IsLeafCertificate: isLeaf,
 		IsRootCertificate: isRoot,
 	})
-	return b.base.WSManMessageCreator.CreateXML(header, body)
-}
-
-type AdminSetup struct {
-	XMLName                    xml.Name `xml:"h:AdminSetup_INPUT"`
-	H                          string   `xml:"xmlns:h,attr"`
-	NetAdminPassEncryptionType int      `xml:"h:NetAdminPassEncryptionType"`
-	NetworkAdminPassword       string   `xml:"h:NetworkAdminPassword"`
-	McNonce                    string   `xml:"h:McNonce"`
-	SigningAlgorithm           int      `xml:"h:SigningAlgorithm"`
-	DigitalSignature           string   `xml:"h:DigitalSignature"`
-}
-
-type AdminSetup_OUTPUT struct {
-	ReturnValue int
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Setup Intel(R) AMT from the local host, resulting in Admin Setup Mode. Requires OS administrator rights, and moves Intel(R) AMT from "Pre Provisioned" state to "Post Provisioned" state. The control mode after this method is run will be "Admin".
-func (b Service) AdminSetup(adminPassEncryptionType AdminPassEncryptionType, digestRealm string, adminPassword string, mcNonce string, signingAlgorithm SigningAlgorithm, digitalSignature string) string {
+func (service Service) AdminSetup(adminPassEncryptionType AdminPassEncryptionType, digestRealm string, adminPassword string, mcNonce string, signingAlgorithm SigningAlgorithm, digitalSignature string) (response Response, err error) {
 	hashInHex := createMD5Hash(adminPassword, digestRealm)
-	header := b.base.WSManMessageCreator.CreateHeader(string(actions.AdminSetup), string(IPS_HostBasedSetupService), nil, "", "")
-	body := b.base.WSManMessageCreator.CreateBody("AdminSetup_INPUT", string(IPS_HostBasedSetupService), AdminSetup{
+	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(IPS_HostBasedSetupService, AdminSetup), IPS_HostBasedSetupService, nil, "", "")
+	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(AdminSetup), IPS_HostBasedSetupService, AdminSetup_INPUT{
 		H:                          "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService",
 		NetAdminPassEncryptionType: int(adminPassEncryptionType),
 		NetworkAdminPassword:       string(hashInHex),
@@ -136,28 +114,44 @@ func (b Service) AdminSetup(adminPassEncryptionType AdminPassEncryptionType, dig
 		SigningAlgorithm:           int(signingAlgorithm),
 		DigitalSignature:           digitalSignature,
 	})
-	return b.base.WSManMessageCreator.CreateXML(header, body)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
-type Setup struct {
-	XMLName                    xml.Name `xml:"h:Setup_INPUT"`
-	H                          string   `xml:"xmlns:h,attr"`
-	NetAdminPassEncryptionType int      `xml:"h:NetAdminPassEncryptionType"`
-	NetworkAdminPassword       string   `xml:"h:NetworkAdminPassword"`
-}
-type Setup_OUTPUT struct {
-	ReturnValue int
-}
-
-func (b Service) Setup(adminPassEncryptionType AdminPassEncryptionType, digestRealm, adminPassword string) string {
+func (service Service) Setup(adminPassEncryptionType AdminPassEncryptionType, digestRealm, adminPassword string) (response Response, err error) {
 	hashInHex := createMD5Hash(adminPassword, digestRealm)
-	header := b.base.WSManMessageCreator.CreateHeader(string(actions.Setup), string(IPS_HostBasedSetupService), nil, "", "")
-	body := b.base.WSManMessageCreator.CreateBody("Setup_INPUT", string(IPS_HostBasedSetupService), Setup{
+	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(IPS_HostBasedSetupService, Setup), IPS_HostBasedSetupService, nil, "", "")
+	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(Setup), IPS_HostBasedSetupService, Setup_INPUT{
 		H:                          "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService",
 		NetAdminPassEncryptionType: int(adminPassEncryptionType),
 		NetworkAdminPassword:       string(hashInHex),
 	})
-	return b.base.WSManMessageCreator.CreateXML(header, body)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 func createMD5Hash(adminPassword string, digestRealm string) string {
@@ -169,22 +163,27 @@ func createMD5Hash(adminPassword string, digestRealm string) string {
 	return hashInHex
 }
 
-type UpgradeClientToAdmin struct {
-	XMLName          xml.Name `xml:"h:UpgradeClientToAdmin_INPUT"`
-	H                string   `xml:"xmlns:h,attr"`
-	McNonce          string   `xml:"h:McNonce"`
-	SigningAlgorithm int      `xml:"h:SigningAlgorithm"`
-	DigitalSignature string   `xml:"h:DigitalSignature"`
-}
-
 // Upgrade Intel(R) AMT from Client to Admin Control Mode.
-func (b Service) UpgradeClientToAdmin(mcNonce string, signingAlgorithm SigningAlgorithm, digitalSignature string) string {
-	header := b.base.WSManMessageCreator.CreateHeader(string(actions.UpgradeClientToAdmin), string(IPS_HostBasedSetupService), nil, "", "")
-	body := b.base.WSManMessageCreator.CreateBody("UpgradeClientToAdmin_INPUT", string(IPS_HostBasedSetupService), UpgradeClientToAdmin{
+func (service Service) UpgradeClientToAdmin(mcNonce string, signingAlgorithm SigningAlgorithm, digitalSignature string) (response Response, err error) {
+	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(IPS_HostBasedSetupService, UpgradeClientToAdmin), IPS_HostBasedSetupService, nil, "", "")
+	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(UpgradeClientToAdmin), IPS_HostBasedSetupService, UpgradeClientToAdmin_INPUT{
 		H:                "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService",
 		McNonce:          mcNonce,
 		SigningAlgorithm: int(signingAlgorithm),
 		DigitalSignature: digitalSignature,
 	})
-	return b.base.WSManMessageCreator.CreateXML(header, body)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

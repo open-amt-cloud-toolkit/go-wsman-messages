@@ -7,57 +7,100 @@ package publicprivate
 
 import (
 	"encoding/xml"
+	"fmt"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type PullResponseEnvelope struct {
-	XMLName xml.Name `xml:"Envelope"`
-	Header  message.Header
-	Body    PullResponseBody
-}
-
-type PullResponseBody struct {
-	PullResponse PullResponse
-}
-
-type PullResponse struct {
-	Items         []PublicPrivateKeyPair `xml:"Items>AMT_PublicPrivateKeyPair"`
-	EndOfSequence string
-}
-
-type PublicPrivateKeyPair struct {
-	ElementName string // A user-friendly name for the object . . .
-	InstanceID  string // Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class.
-	//DERKey      [1210]uint8 // RSA Key encoded as DES PKCS#1.
-	DERKey string
-}
-
-type KeyPair struct {
-	base message.Base
-}
-
-func NewPublicPrivateKeyPair(wsmanMessageCreator *message.WSManMessageCreator) KeyPair {
+func NewPublicPrivateKeyPairWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) KeyPair {
 	return KeyPair{
-		base: message.NewBase(wsmanMessageCreator, AMT_PublicPrivateKeyPair),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_PublicPrivateKeyPair, client),
 	}
 }
 
 // Get retrieves the representation of the instance
-func (PublicPrivateKeyPair KeyPair) Get() string {
-	return PublicPrivateKeyPair.base.Get(nil)
+func (keyPair KeyPair) Get(handle int) (response Response, err error) {
+	selector := message.Selector{
+		Name:  "InstanceID",
+		Value: fmt.Sprintf("Intel(r) AMT Key: Handle: %d", handle),
+	}
+	response = Response{
+		Message: &client.Message{
+			XMLInput: keyPair.base.Get((*message.Selector)(&selector)),
+		},
+	}
+	// send the message to AMT
+	err = keyPair.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Enumerates the instances of this class
-func (PublicPrivateKeyPair KeyPair) Enumerate() string {
-	return PublicPrivateKeyPair.base.Enumerate()
+func (keyPair KeyPair) Enumerate() (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: keyPair.base.Enumerate(),
+		},
+	}
+	// send the message to AMT
+	err = keyPair.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (PublicPrivateKeyPair KeyPair) Pull(enumerationContext string) string {
-	return PublicPrivateKeyPair.base.Pull(enumerationContext)
+func (keyPair KeyPair) Pull(enumerationContext string) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: keyPair.base.Pull(enumerationContext),
+		},
+	}
+	// send the message to AMT
+	err = keyPair.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }
-func (PublicPrivateKeyPair KeyPair) Delete(instanceID string) string {
-	selector := message.Selector{Name: "InstanceID", Value: instanceID}
-	return PublicPrivateKeyPair.base.Delete(selector)
+func (keyPair KeyPair) Delete(handle int) (response Response, err error) {
+	selector := message.Selector{
+		Name:  "InstanceID",
+		Value: fmt.Sprintf("Intel(r) AMT Key: Handle: %d", handle),
+	}
+	response = Response{
+		Message: &client.Message{
+			XMLInput: keyPair.base.Delete(selector),
+		},
+	}
+	// send the message to AMT
+	err = keyPair.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
 }

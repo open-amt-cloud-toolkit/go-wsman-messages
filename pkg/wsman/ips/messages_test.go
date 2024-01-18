@@ -17,7 +17,7 @@ import (
 )
 
 func TestNewMessages(t *testing.T) {
-	mock := wsmantesting.ClientMock{}
+	mock := wsmantesting.MockClient{}
 	m := NewMessages(&mock)
 
 	if m.wsmanMessageCreator == nil {

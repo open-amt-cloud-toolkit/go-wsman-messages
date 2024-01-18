@@ -9,6 +9,9 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/bios"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/boot"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/card"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/chassis"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/chip"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/computer"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/concrete"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/credential"
@@ -17,6 +20,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/mediaaccess"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/physical"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/power"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/processor"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/service"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/software"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/system"
@@ -30,9 +34,9 @@ type Messages struct {
 	BootConfigSetting         boot.ConfigSetting
 	BootService               boot.Service
 	BootSourceSetting         boot.SourceSetting
-	Card                      physical.Card
-	Chassis                   physical.Chassis
-	Chip                      physical.Chip
+	Card                      card.Package
+	Chassis                   chassis.Package
+	Chip                      chip.Package
 	ComputerSystemPackage     computer.SystemPackage
 	ConcreteDependency        concrete.Dependency
 	CredentialContext         credential.Context
@@ -42,10 +46,10 @@ type Messages struct {
 	PhysicalMemory            physical.Memory
 	PhysicalPackage           physical.Package
 	PowerManagementService    power.ManagementService
-	Processor                 physical.Processor
+	Processor                 processor.Package
 	ServiceAvailableToElement service.AvailableToElement
 	SoftwareIdentity          software.Identity
-	SystemPackaging           system.Packaging
+	SystemPackaging           system.Package
 	WiFiEndpointSettings      wifi.EndpointSettings
 	WiFiPort                  wifi.Port
 }
@@ -56,27 +60,27 @@ func NewMessages(client client.WSMan) Messages {
 	m := Messages{
 		wsmanMessageCreator: wsmanMessageCreator,
 	}
-	m.BIOSElement = bios.NewBIOSElement(wsmanMessageCreator)
+	m.BIOSElement = bios.NewBIOSElementWithClient(wsmanMessageCreator, client)
 	m.BootConfigSetting = boot.NewBootConfigSettingWithClient(wsmanMessageCreator, client)
 	m.BootService = boot.NewBootServiceWithClient(wsmanMessageCreator, client)
 	m.BootSourceSetting = boot.NewBootSourceSettingWithClient(wsmanMessageCreator, client)
-	m.Card = physical.NewCard(wsmanMessageCreator)
-	m.Chassis = physical.NewChassis(wsmanMessageCreator)
-	m.Chip = physical.NewChip(wsmanMessageCreator)
-	m.ComputerSystemPackage = computer.NewComputerSystemPackage(wsmanMessageCreator)
-	m.ConcreteDependency = concrete.NewDependency(wsmanMessageCreator)
-	m.CredentialContext = credential.NewContext(wsmanMessageCreator)
-	m.IEEE8021xSettings = ieee8021x.NewIEEE8021xSettings(wsmanMessageCreator)
-	m.KVMRedirectionSAP = kvm.NewKVMRedirectionSAP(wsmanMessageCreator)
-	m.MediaAccessDevice = mediaaccess.NewMediaAccessDevice(wsmanMessageCreator)
-	m.PhysicalMemory = physical.NewPhysicalMemory(wsmanMessageCreator)
-	m.PhysicalPackage = physical.NewPhysicalPackage(wsmanMessageCreator)
+	m.Card = card.NewCardWithClient(wsmanMessageCreator, client)
+	m.Chassis = chassis.NewChassisWithClient(wsmanMessageCreator, client)
+	m.Chip = chip.NewChipWithClient(wsmanMessageCreator, client)
+	m.ComputerSystemPackage = computer.NewComputerSystemPackageWithClient(wsmanMessageCreator, client)
+	m.ConcreteDependency = concrete.NewDependencyWithClient(wsmanMessageCreator, client)
+	m.CredentialContext = credential.NewContextWithClient(wsmanMessageCreator, client)
+	m.IEEE8021xSettings = ieee8021x.NewIEEE8021xSettingsWithClient(wsmanMessageCreator, client)
+	m.KVMRedirectionSAP = kvm.NewKVMRedirectionSAPWithClient(wsmanMessageCreator, client)
+	m.MediaAccessDevice = mediaaccess.NewMediaAccessDeviceWithClient(wsmanMessageCreator, client)
+	m.PhysicalMemory = physical.NewPhysicalMemoryWithClient(wsmanMessageCreator, client)
+	m.PhysicalPackage = physical.NewPhysicalPackageWithClient(wsmanMessageCreator, client)
 	m.PowerManagementService = power.NewPowerManagementServiceWithClient(wsmanMessageCreator, client)
-	m.Processor = physical.NewProcessor(wsmanMessageCreator)
-	m.ServiceAvailableToElement = service.NewServiceAvailableToElement(wsmanMessageCreator)
-	m.SoftwareIdentity = software.NewSoftwareIdentity(wsmanMessageCreator)
-	m.SystemPackaging = system.NewSystemPackaging(wsmanMessageCreator)
-	m.WiFiEndpointSettings = wifi.NewWiFiEndpointSettings(wsmanMessageCreator)
-	m.WiFiPort = wifi.NewWiFiPort(wsmanMessageCreator)
+	m.Processor = processor.NewProcessorWithClient(wsmanMessageCreator, client)
+	m.ServiceAvailableToElement = service.NewServiceAvailableToElementWithClient(wsmanMessageCreator, client)
+	m.SoftwareIdentity = software.NewSoftwareIdentityWithClient(wsmanMessageCreator, client)
+	m.SystemPackaging = system.NewSystemPackageWithClient(wsmanMessageCreator, client)
+	m.WiFiEndpointSettings = wifi.NewWiFiEndpointSettingsWithClient(wsmanMessageCreator, client)
+	m.WiFiPort = wifi.NewWiFiPortWithClient(wsmanMessageCreator, client)
 	return m
 }

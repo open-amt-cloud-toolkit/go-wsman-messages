@@ -10,128 +10,95 @@ import (
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
 )
 
-type (
-	Response struct {
-		*client.Message
-		XMLName xml.Name       `xml:"Envelope"`
-		Header  message.Header `xml:"Header"`
-		Body    Body           `xml:"Body"`
-	}
-	Body struct {
-		XMLName          xml.Name         `xml:"Body"`
-		ManagementRemote ManagementRemote `xml:"AMT_ManagementPresenceRemoteSAP"`
-
-		EnumerateResponse common.EnumerateResponse
-		PullResponse      PullResponse
-	}
-	ManagementRemote struct {
-		AccessInfo              string
-		CN                      string
-		CreationClassName       string
-		ElementName             string
-		InfoFormat              int
-		Name                    string
-		Port                    int
-		SystemCreationClassName string
-		SystemName              string
-	}
-	PullResponse struct {
-		Items []Item
-	}
-	Item struct {
-		ManagementRemote ManagementRemote `xml:"AMT_ManagementPresenceRemoteSAP"`
-	}
-)
 type RemoteSAP struct {
-	base   message.Base
-	client client.WSMan
+	base message.Base
 }
 
 func NewManagementPresenceRemoteSAPWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) RemoteSAP {
 	return RemoteSAP{
-		base:   message.NewBaseWithClient(wsmanMessageCreator, AMT_ManagementPresenceRemoteSAP, client),
-		client: client,
-	}
-}
-
-func NewManagementPresenceRemoteSAP(wsmanMessageCreator *message.WSManMessageCreator) RemoteSAP {
-	return RemoteSAP{
-		base: message.NewBase(wsmanMessageCreator, AMT_ManagementPresenceRemoteSAP),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_ManagementPresenceRemoteSAP, client),
 	}
 }
 
 // Get retrieves the representation of the instance
-func (ManagementPresenceRemoteSAP RemoteSAP) Get() (response Response, err error) {
+func (remoteSAP RemoteSAP) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
-			XMLInput: ManagementPresenceRemoteSAP.base.Get(nil),
+			XMLInput: remoteSAP.base.Get(nil),
 		},
 	}
-
 	// send the message to AMT
-	err = ManagementPresenceRemoteSAP.base.Execute(response.Message)
+	err = remoteSAP.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
-
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
-
 	return
 }
 
 // Enumerates the instances of this class
-func (ManagementPresenceRemoteSAP RemoteSAP) Enumerate() (response Response, err error) {
+func (remoteSAP RemoteSAP) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
-			XMLInput: ManagementPresenceRemoteSAP.base.Enumerate(),
+			XMLInput: remoteSAP.base.Enumerate(),
 		},
 	}
 	// send the message to AMT
-	err = ManagementPresenceRemoteSAP.base.Execute(response.Message)
+	err = remoteSAP.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
-
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
-
 	return
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (ManagementPresenceRemoteSAP RemoteSAP) Pull(enumerationContext string) (response Response, err error) {
+func (remoteSAP RemoteSAP) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
-			XMLInput: ManagementPresenceRemoteSAP.base.Pull(enumerationContext),
+			XMLInput: remoteSAP.base.Pull(enumerationContext),
 		},
 	}
 	// send the message to AMT
-	err = ManagementPresenceRemoteSAP.base.Execute(response.Message)
+	err = remoteSAP.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
-
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
-
 	return
 }
 
-// // Delete removes a the specified instance
-// func (ManagementPresenceRemoteSAP RemoteSAP) Delete(handle string) string {
-// 	selector := message.Selector{Name: "Name", Value: handle}
-// 	return ManagementPresenceRemoteSAP.base.Delete(selector)
-// }
+// Delete removes a the specified instance
+func (remoteSAP RemoteSAP) Delete(handle string) (response Response, err error) {
+	selector := message.Selector{Name: "Name", Value: handle}
+	response = Response{
+		Message: &client.Message{
+			XMLInput: remoteSAP.base.Delete(selector),
+		},
+	}
+	// send the message to AMT
+	err = remoteSAP.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+}

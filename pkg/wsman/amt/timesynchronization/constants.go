@@ -10,3 +10,43 @@ const (
 	GetLowAccuracyTimeSynch        string = "GetLowAccuracyTimeSynch"
 	SetHighAccuracyTimeSynch       string = "SetHighAccuracyTimeSynch"
 )
+
+const (
+	RequestedStateEnabled RequestedState = iota + 2
+	RequestedStateDisabled
+	RequestedStateShutDown
+	RequestedStateNoChange
+	RequestedStateOffline
+	RequestedStateTest
+	RequestedStateDeferred
+	RequestedStateQuiesce
+	RequestedStateReboot
+	RequestedStateReset
+	RequestedStateNotApplicable
+	RequestedStateUnknown RequestedState = 0
+)
+
+const (
+	EnabledStateUnknown EnabledState = iota
+	EnabledStateOther
+	EnabledStateEnabled
+	EnabledStateDisabled
+	EnabledStateShuttingDown
+	EnabledStateNotApplicable
+	EnabledStateEnabledbutOffline
+	EnabledStateInTest
+	EnabledStateDeferred
+	EnabledStateQuiesce
+	EnabledStateStarting
+)
+
+const (
+	LocalTimeSyncEnabledDefaultTrue LocalTimeSyncEnabled = iota
+	LocalTimeSyncEnabledConfiguredTrue
+	LocalTimeSyncEnabledFalse
+)
+
+const (
+	TimeSourceBiosRTC TimeSource = iota
+	TimeSourceConfigured
+)
