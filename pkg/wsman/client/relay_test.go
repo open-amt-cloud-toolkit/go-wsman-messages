@@ -6,8 +6,6 @@ package client
 
 import (
 	"crypto/tls"
-	"fmt"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -259,11 +257,9 @@ func TestNewWsTransportDelay(t *testing.T) {
 		t.Error("NewWSTransporter constructor fails")
 	}
 	req := httptest.NewRequest("POST", "http://localhost", nil)
-	resp, err := trans.RoundTrip(req)
+	_, err := trans.RoundTrip(req)
 	if err != nil {
 		t.Error("Roundtripper should not fail")
 	}
-	bd, _ := io.ReadAll(resp.Body)
-	fmt.Println("Body: ", string(bd))
 	defer trans.disconnectWebsocket()
 }

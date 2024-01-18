@@ -14,6 +14,7 @@ import (
 	"net/http/httputil"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -32,6 +33,7 @@ type WsTransport struct {
 	token     string
 	conn      *websocket.Conn
 	tlsconfig *tls.Config
+	buf_mutex sync.Mutex
 	messages  []byte
 }
 
@@ -48,6 +50,7 @@ func NewWsTransport(wsurl string, protocol int, host, username, password string,
 		tls1only:  tls1only,
 		token:     token,
 		tlsconfig: tlsconfig,
+		buf_mutex: sync.Mutex{},
 	}
 	return t
 }
@@ -55,8 +58,10 @@ func NewWsTransport(wsurl string, protocol int, host, username, password string,
 func (t *WsTransport) timedReadMessage(ms int) (b []byte) {
 	timer := time.NewTimer(time.Duration(ms) * time.Millisecond)
 	<-timer.C
+	t.buf_mutex.Lock()
 	b = append(b, t.messages...)
 	t.messages = []byte{}
+	t.buf_mutex.Unlock()
 	return b
 }
 
@@ -97,10 +102,11 @@ func (t *WsTransport) connectWebsocket() (conn *websocket.Conn, err error) {
 				//Trying to read.
 				_, p, err := t.conn.ReadMessage()
 				if err != nil {
-					t.conn = nil
 					return
 				}
+				t.buf_mutex.Lock()
 				t.messages = append(t.messages, p...)
+				t.buf_mutex.Unlock()
 			}
 		}()
 	}
