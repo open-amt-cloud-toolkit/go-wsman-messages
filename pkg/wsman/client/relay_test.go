@@ -5,6 +5,7 @@
 package client
 
 import (
+	"crypto/tls"
 	"fmt"
 	"io"
 	"net/http"
@@ -16,8 +17,10 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+var tlsconfig = &tls.Config{}
+
 func TestNewWsTransport(t *testing.T) {
-	trans := NewWsTransport("wss://localhost/mps/ws/relay/webrelay.ashx", 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token")
+	trans := NewWsTransport("wss://localhost/mps/ws/relay/webrelay.ashx", 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token", tlsconfig)
 	if trans == nil {
 		t.Error("NewWSTransporter constructor fails")
 	}
@@ -25,7 +28,7 @@ func TestNewWsTransport(t *testing.T) {
 
 func TestNewWsTransportBuildUrl(t *testing.T) {
 	baseurl := "wss://localhost/mps/ws/relay/webrelay.ashx"
-	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token")
+	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token", tlsconfig)
 	if trans == nil {
 		t.Error("NewWSTransporter constructor fails")
 	}
@@ -34,7 +37,7 @@ func TestNewWsTransportBuildUrl(t *testing.T) {
 		t.Error("Failed to build url")
 	}
 	// second path
-	trans = NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, true, true, "token")
+	trans = NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, true, true, "token", tlsconfig)
 	if trans == nil {
 		t.Error("NewWSTransporter constructor fails")
 	}
@@ -119,7 +122,7 @@ func TestNewWsTransportRoundtripBadParam(t *testing.T) {
 	baseurl := "ws" + strings.TrimPrefix(s.URL, "http")
 
 	// Connect to the server
-	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "", 16992, false, false, "token")
+	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "", 16992, false, false, "token", tlsconfig)
 	if trans == nil {
 		t.Error("NewWSTransporter constructor fails")
 	}
@@ -140,7 +143,7 @@ func TestNewWsTransportRoundtripBadUrl(t *testing.T) {
 	baseurl := "ws://localhot/"
 
 	// Connect to the server
-	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token")
+	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token", tlsconfig)
 	if trans == nil {
 		t.Error("NewWSTransporter constructor fails")
 	}
@@ -161,7 +164,7 @@ func TestNewWsTransportRoundtripGet(t *testing.T) {
 	baseurl := "ws" + strings.TrimPrefix(s.URL, "http")
 
 	// Connect to the server
-	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token")
+	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token", tlsconfig)
 	if trans == nil {
 		t.Error("NewWSTransporter constructor fails")
 	}
@@ -185,7 +188,7 @@ func TestNewWsTransportRoundtripPost(t *testing.T) {
 	baseurl := "ws" + strings.TrimPrefix(s.URL, "http")
 
 	// Connect to the server
-	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token")
+	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token", tlsconfig)
 	if trans == nil {
 		t.Error("NewWSTransporter constructor fails")
 	}
@@ -209,7 +212,7 @@ func TestNewWsTransportFailedConnection(t *testing.T) {
 	baseurl := "ws" + strings.TrimPrefix(s.URL, "http") + "/simulate_fail"
 
 	// Connect to the server
-	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token")
+	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token", tlsconfig)
 	if trans == nil {
 		t.Error("NewWSTransporter constructor fails")
 	}
@@ -230,7 +233,7 @@ func TestNewWsTransportCloseConnection(t *testing.T) {
 	baseurl := "ws" + strings.TrimPrefix(s.URL, "http") + "/simulate_close"
 
 	// Connect to the server
-	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token")
+	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token", tlsconfig)
 	if trans == nil {
 		t.Error("NewWSTransporter constructor fails")
 	}
@@ -251,7 +254,7 @@ func TestNewWsTransportDelay(t *testing.T) {
 	baseurl := "ws" + strings.TrimPrefix(s.URL, "http") + "/simulate_delay"
 
 	// Connect to the server
-	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token")
+	trans := NewWsTransport(baseurl, 1, "9b3ee6a0-c1dc-5546-f7f3-54b2039edfb9", "user", "pass", 16992, false, false, "token", tlsconfig)
 	if trans == nil {
 		t.Error("NewWSTransporter constructor fails")
 	}

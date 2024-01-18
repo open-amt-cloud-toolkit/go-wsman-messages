@@ -21,31 +21,33 @@ import (
 
 // WsTransport is an implementation of http.Transport which uses websocket relay
 type WsTransport struct {
-	wsurl    string
-	protocol int
-	host     string
-	username string
-	password string
-	port     int
-	tls      bool
-	tls1only bool
-	token    string
-	conn     *websocket.Conn
-	messages []byte
+	wsurl     string
+	protocol  int
+	host      string
+	username  string
+	password  string
+	port      int
+	tls       bool
+	tls1only  bool
+	token     string
+	conn      *websocket.Conn
+	tlsconfig *tls.Config
+	messages  []byte
 }
 
 // NewTransport creates a new Websocket RoundTripper.
-func NewWsTransport(wsurl string, protocol int, host, username, password string, port int, tls, tls1only bool, token string) *WsTransport {
+func NewWsTransport(wsurl string, protocol int, host, username, password string, port int, tls, tls1only bool, token string, tlsconfig *tls.Config) *WsTransport {
 	t := &WsTransport{
-		wsurl:    wsurl,
-		protocol: protocol,
-		host:     host,
-		username: username,
-		password: password,
-		port:     port,
-		tls:      tls,
-		tls1only: tls1only,
-		token:    token,
+		wsurl:     wsurl,
+		protocol:  protocol,
+		host:      host,
+		username:  username,
+		password:  password,
+		port:      port,
+		tls:       tls,
+		tls1only:  tls1only,
+		token:     token,
+		tlsconfig: tlsconfig,
 	}
 	return t
 }
@@ -84,7 +86,7 @@ func (t *WsTransport) connectWebsocket() (conn *websocket.Conn, err error) {
 		hdr.Set("Sec-Websocket-Protocol", t.token)
 	}
 	wsdialer := websocket.Dialer{}
-	wsdialer.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	wsdialer.TLSClientConfig = t.tlsconfig
 	conn, _, err = wsdialer.Dial(url, hdr)
 	if err != nil {
 		return nil, err
