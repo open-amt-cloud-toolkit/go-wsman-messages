@@ -11,6 +11,8 @@ import (
 	"io"
 	"net/http"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 const ContentType = "application/soap+xml; charset=utf-8"
@@ -34,16 +36,18 @@ type Client struct {
 	username     string
 	password     string
 	useDigest    bool
+	useLogging   bool
 	OptimizeEnum bool
 	challenge    *authChallenge
 }
 
-func NewClient(target, username, password string, useDigest bool) *Client {
+func NewClient(target, username, password string, useDigest, useLogging bool) *Client {
 	res := &Client{
-		endpoint:  target,
-		username:  username,
-		password:  password,
-		useDigest: useDigest,
+		endpoint:   target,
+		username:   username,
+		password:   password,
+		useDigest:  useDigest,
+		useLogging: useLogging,
 	}
 	res.Timeout = 10 * time.Second
 	res.Transport = &http.Transport{
@@ -52,12 +56,17 @@ func NewClient(target, username, password string, useDigest bool) *Client {
 	if res.useDigest {
 		res.challenge = &authChallenge{Username: res.username, Password: res.password}
 	}
+	if res.useLogging {
+		log.SetLevel(log.TraceLevel)
+	} else {
+		log.SetLevel(log.PanicLevel)
+	}
 	return res
 }
 
 // Post overrides http.Client's Post method
 func (c *Client) Post(msg string) (response []byte, err error) {
-
+	log.Trace("REQUEST: " + msg)
 	msgBody := []byte(msg)
 	bodyReader := bytes.NewReader(msgBody)
 	req, err := http.NewRequest("POST", c.endpoint, bodyReader)
@@ -114,6 +123,6 @@ func (c *Client) Post(msg string) (response []byte, err error) {
 	if err != nil {
 		return nil, err
 	}
-
+	log.Trace("RESPONSE: " + string(response))
 	return response, nil
 }
