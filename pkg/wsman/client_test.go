@@ -17,8 +17,9 @@ func TestNewClient(t *testing.T) {
 	username := "user"
 	password := "password"
 	useDigest := false
+	useLogging := false
 
-	client := NewClient(target, username, password, useDigest)
+	client := NewClient(target, username, password, useDigest, useLogging)
 
 	if client.endpoint != target {
 		t.Errorf("Expected endpoint to be %s, but got %s", target, client.endpoint)
@@ -46,8 +47,9 @@ func TestClient_Post(t *testing.T) {
 	username := "user"
 	password := "password"
 	useDigest := false
+	useLogging := false
 
-	client := NewClient(target, username, password, useDigest)
+	client := NewClient(target, username, password, useDigest, useLogging)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	response, err := client.Post(msg)
@@ -91,8 +93,9 @@ func TestClient_PostWithDigestAuth(t *testing.T) {
 	username := "user"
 	password := "password"
 	useDigest := true
+	useLogging := false
 
-	client := NewClient(target, username, password, useDigest)
+	client := NewClient(target, username, password, useDigest, useLogging)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	response, err := client.Post(msg)
@@ -117,8 +120,9 @@ func TestClient_PostWithDigestAuthUnauthorized(t *testing.T) {
 	username := "wronguser"
 	password := "wrongpassword"
 	useDigest := true
+	useLogging := false
 
-	client := NewClient(target, username, password, useDigest)
+	client := NewClient(target, username, password, useDigest, useLogging)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	_, err := client.Post(msg)
@@ -145,8 +149,9 @@ func TestClient_PostWithBasicAuth(t *testing.T) {
 	username := "user"
 	password := "password"
 	useDigest := false
+	useLogging := false
 
-	client := NewClient(target, username, password, useDigest)
+	client := NewClient(target, username, password, useDigest, useLogging)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	response, err := client.Post(msg)
@@ -169,8 +174,9 @@ func TestClient_PostUnauthorized(t *testing.T) {
 	username := "wronguser"
 	password := "wrongpassword"
 	useDigest := false
+	useLogging := false
 
-	client := NewClient(target, username, password, useDigest)
+	client := NewClient(target, username, password, useDigest, useLogging)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	_, err := client.Post(msg)
@@ -191,8 +197,9 @@ func TestClient_PostInvalidResponse(t *testing.T) {
 	username := "user"
 	password := "password"
 	useDigest := false
+	useLogging := false
 
-	client := NewClient(target, username, password, useDigest)
+	client := NewClient(target, username, password, useDigest, useLogging)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	_, err := client.Post(msg)
