@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package ethernetport facilitates communication with Intel® AMT devices to configure all Intel® AMT network specific settings (IP, DHCP, VLAN).
+//
+// Intel® AMT devices support a single wired and a single wireless network adapter.  If an Intel® AMT device has multiple wired or wireless network adapters only one of each will be connected to AMT.
 package ethernetport
 
 import (
@@ -13,6 +16,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// NewEthernetPortSettingsWithClient instantiates a new Ethernet Port Settings service
 func NewEthernetPortSettingsWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Settings {
 	return Settings{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_EthernetPortSettings, client),

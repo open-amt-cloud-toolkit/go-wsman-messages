@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package amt implements AMT classes to support communicating with Intel® AMT Devices
 package amt
 
 import (
@@ -31,6 +32,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// Messages contains the supported AMT classes
 type Messages struct {
 	wsmanMessageCreator             *message.WSManMessageCreator
 	AlarmClockService               alarmclock.Service
@@ -57,12 +59,13 @@ type Messages struct {
 	SetupAndConfigurationService    setupandconfiguration.Service
 	TimeSynchronizationService      timesynchronization.Service
 	TLSCredentialContext            tls.CredentialContext
-	TLSProtocolEndpointCollection   tls.Collection
+	TLSProtocolEndpointCollection   tls.ProtocolEndpointCollection
 	TLSSettingData                  tls.SettingData
 	UserInitiatedConnectionService  userinitiatedconnection.Service
 	WiFiPortConfigurationService    wifiportconfiguration.Service
 }
 
+// NewMessages instantiates a new instance of amt Messages
 func NewMessages(client client.WSMan) Messages {
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)

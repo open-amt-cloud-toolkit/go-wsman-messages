@@ -11,9 +11,10 @@ const (
 )
 
 const (
-	OverwritePolicyUnknown         OverwritePolicy = 0
-	OverwritePolicyWrapsWhenFull   OverwritePolicy = 2
-	OverwritePolicyNeverOverwrites OverwritePolicy = 7
+	OverwritePolicyUnknown                   OverwritePolicy = 0
+	OverwritePolicyWrapsWhenFull             OverwritePolicy = 2
+	OverwritePolicyNeverOverwrites           OverwritePolicy = 7
+	OverwritePolicyPartialRestrictedRollover OverwritePolicy = 32768
 )
 
 const (

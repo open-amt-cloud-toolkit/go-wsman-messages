@@ -13,6 +13,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// NewTLSSettingDataWithClient instantiates a new SettingData
 func NewTLSSettingDataWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) SettingData {
 	return SettingData{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_TLSSettingData, client),
@@ -83,7 +84,16 @@ func (settingData SettingData) Pull(enumerationContext string) (response Respons
 	return
 }
 
-// Changes properties of the selected instance. The following properties must be included in any representation of AMT_TLSSettingData: ElementName(cannot be modified), InstanceID (cannot be modified), Enabled. This method will not modify the flash ("Enabled" property) until "CommitChanges" is issued and performed successfully.
+// Put changes properties of the selected instance.
+// The following properties must be included in any representation of SettingDataRequest:
+//
+// - ElementName(cannot be modified)
+//
+// - InstanceID (cannot be modified)
+//
+// - Enabled.
+//
+// This method will not modify the flash ("Enabled" property) until setupandconfiguration.CommitChanges() is issued and performed successfully.
 func (settingData SettingData) Put(instanceID string, tlsSettingData SettingDataRequest) (response Response, err error) {
 	tlsSettingData.H = fmt.Sprintf("%s%s", message.AMTSchema, AMT_TLSSettingData)
 	selector := message.Selector{

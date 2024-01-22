@@ -74,7 +74,7 @@ func (service Service) Pull(enumerationContext string) (response Response, err e
 	return
 }
 
-// Send the opt-in code to Intel(R) AMT.
+// Send the opt-in code to Intel® AMT.
 func (service Service) SendOptInCode(optInCode int) (response Response, err error) {
 	header := service.base.WSManMessageCreator.CreateHeader(string(actions.SendOptInCode), string(IPS_OptInService), nil, "", "")
 	body := service.base.WSManMessageCreator.CreateBody("SendOptInCode_INPUT", string(IPS_OptInService), OptInCode{

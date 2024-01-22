@@ -102,7 +102,7 @@ func (service Service) AddNextCertInChain(cert string, isLeaf bool, isRoot bool)
 	return
 }
 
-// Setup Intel(R) AMT from the local host, resulting in Admin Setup Mode. Requires OS administrator rights, and moves Intel(R) AMT from "Pre Provisioned" state to "Post Provisioned" state. The control mode after this method is run will be "Admin".
+// Setup Intel® AMT from the local host, resulting in Admin Setup Mode. Requires OS administrator rights, and moves Intel® AMT from "Pre Provisioned" state to "Post Provisioned" state. The control mode after this method is run will be "Admin".
 func (service Service) AdminSetup(adminPassEncryptionType AdminPassEncryptionType, digestRealm string, adminPassword string, mcNonce string, signingAlgorithm SigningAlgorithm, digitalSignature string) (response Response, err error) {
 	hashInHex := createMD5Hash(adminPassword, digestRealm)
 	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(IPS_HostBasedSetupService, AdminSetup), IPS_HostBasedSetupService, nil, "", "")
@@ -163,7 +163,7 @@ func createMD5Hash(adminPassword string, digestRealm string) string {
 	return hashInHex
 }
 
-// Upgrade Intel(R) AMT from Client to Admin Control Mode.
+// Upgrade Intel® AMT from Client to Admin Control Mode.
 func (service Service) UpgradeClientToAdmin(mcNonce string, signingAlgorithm SigningAlgorithm, digitalSignature string) (response Response, err error) {
 	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(IPS_HostBasedSetupService, UpgradeClientToAdmin), IPS_HostBasedSetupService, nil, "", "")
 	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(UpgradeClientToAdmin), IPS_HostBasedSetupService, UpgradeClientToAdmin_INPUT{

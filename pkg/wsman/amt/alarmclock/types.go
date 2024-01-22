@@ -20,19 +20,13 @@ type Service struct {
 }
 
 // INPUTS
-
 // AlarmClockOccurrence represents a single alarm clock setting
 type AlarmClockOccurrence struct {
-	// Elementname is a user-friendly name for the object
-	ElementName string `json:"ElementName"`
-	// InstanceID is the instance key, set by the caller of AMT_AlarmClockService.AddAlarm.
-	InstanceID string `json:"InstanceID"`
-	// StartTime is the next time when the alarm is scheduled to be set.
-	StartTime time.Time `json:"StartTime"`
-	// Interval between occurrences of the alarm (0 if the alarm is scheduled to run once).
-	Interval int `json:"Interval"`
-	// DeleteOnComplete if set to TRUE, the instance will be deleted by the FW when the alarm is completed
-	DeleteOnCompletion bool `json:"DeleteOnCompletion"`
+	ElementName        string    `json:"ElementName"`        // Elementname is a user-friendly name for the object
+	InstanceID         string    `json:"InstanceID"`         // InstanceID is the instance key, set by the caller of AMT_AlarmClockService.AddAlarm.
+	StartTime          time.Time `json:"StartTime"`          // StartTime is the next time when the alarm is scheduled to be set.
+	Interval           int       `json:"Interval"`           // Interval between occurrences of the alarm (0 if the alarm is scheduled to run once).
+	DeleteOnCompletion bool      `json:"DeleteOnCompletion"` // DeleteOnComplete if set to TRUE, the instance will be deleted by the FW when the alarm is completed
 }
 
 // OUTPUTS
@@ -56,28 +50,19 @@ type (
 		AlarmClockServiceItems []AlarmClockService `xml:"Items>AMT_AlarmClockService"`
 	}
 	AlarmClockService struct {
-		XMLName xml.Name `xml:"AMT_AlarmClockService"`
-		// The Name property uniquely identifies the Service and provides an indication of the functionality that is managed . . .
-		Name string
-		// CreationClassName indicates the name of the class or the subclass that is used in the creation of an instance . . .
-		CreationClassName string
-		// The Name of the scoping System.
-		SystemName string
-		// The CreationClassName of the scoping System.
-		SystemCreationClassName string
-		// A user-friendly name for the object . . .
-		ElementName string
-		// Specifies the next AMT alarm time . . .
-		NextAMTAlarmTime string
-		// Specifies the alarm time interval . . .
-		AMTAlarmClockInterval string
+		XMLName                 xml.Name `xml:"AMT_AlarmClockService"`
+		Name                    string   // The Name property uniquely identifies the Service and provides an indication of the functionality that is managed
+		CreationClassName       string   // CreationClassName indicates the name of the class or the subclass that is used in the creation of an instance
+		SystemName              string   // The Name of the scoping System.
+		SystemCreationClassName string   // The CreationClassName of the scoping System.
+		ElementName             string   // A user-friendly name for the object
+		NextAMTAlarmTime        string   // Specifies the next AMT alarm time
+		AMTAlarmClockInterval   string   // Specifies the alarm time interval
 	}
 	AddAlarmOutput struct {
-		XMLName xml.Name `xml:"AddAlarm_OUTPUT"`
-		// A reference to the created instance of IPS_AlarmClockOccurrence.
-		AlarmClock AlarmClock
-		// Return code. 0 indicates success
-		ReturnValue int
+		XMLName     xml.Name   `xml:"AddAlarm_OUTPUT"`
+		AlarmClock  AlarmClock // A reference to the created instance of IPS_AlarmClockOccurrence.
+		ReturnValue int        // Return code. 0 indicates success
 	}
 	AlarmClock struct {
 		// Reference address to the created instance of IPS_AlarmClockOccurrence

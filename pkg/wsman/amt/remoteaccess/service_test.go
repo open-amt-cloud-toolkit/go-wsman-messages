@@ -52,7 +52,7 @@ func TestPositiveAMT_RemoteAccessService(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
-					RemoteAccessGetResponse: RemoteAccessResponse{
+					RemoteAccessServiceGetResponse: RemoteAccessServiceResponse{
 						XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService", Local: "AMT_RemoteAccessService"},
 						CreationClassName:       "AMT_RemoteAccessService",
 						ElementName:             "Intel(r) AMT Remote Access Service",
@@ -96,7 +96,7 @@ func TestPositiveAMT_RemoteAccessService(t *testing.T) {
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
-						RemoteAccessItems: []RemoteAccessResponse{
+						RemoteAccessItems: []RemoteAccessServiceResponse{
 							{
 								XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService", Local: "AMT_RemoteAccessService"},
 								CreationClassName:       "AMT_RemoteAccessService",
@@ -187,7 +187,7 @@ func TestPositiveAMT_RemoteAccessService(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
-					AddRemotePolicyRuleResponse: AddRemotePolicyRuleResponse{
+					AddRemotePolicyRuleResponse: AddRemoteAccessPolicyRuleResponse{
 						XMLName: xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService", Local: "AddRemoteAccessPolicyRule_OUTPUT"},
 						PolicyRuleResponse: PolicyRuleResponse{
 							XMLName: xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService", Local: "PolicyRule"},
@@ -269,7 +269,7 @@ func TestNegativeAMT_RemoteAccessService(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
-					RemoteAccessGetResponse: RemoteAccessResponse{
+					RemoteAccessServiceGetResponse: RemoteAccessServiceResponse{
 						XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService", Local: "AMT_RemoteAccessService"},
 						CreationClassName:       "AMT_RemoteAccessService",
 						ElementName:             "Intel(r) AMT Remote Access Service",
@@ -313,7 +313,7 @@ func TestNegativeAMT_RemoteAccessService(t *testing.T) {
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
-						RemoteAccessItems: []RemoteAccessResponse{
+						RemoteAccessItems: []RemoteAccessServiceResponse{
 							{
 								XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService", Local: "AMT_RemoteAccessService"},
 								CreationClassName:       "AMT_RemoteAccessService",
@@ -404,7 +404,7 @@ func TestNegativeAMT_RemoteAccessService(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
-					AddRemotePolicyRuleResponse: AddRemotePolicyRuleResponse{
+					AddRemotePolicyRuleResponse: AddRemoteAccessPolicyRuleResponse{
 						XMLName: xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService", Local: "AddRemoteAccessPolicyRule_OUTPUT"},
 						PolicyRuleResponse: PolicyRuleResponse{
 							XMLName: xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService", Local: "PolicyRule"},

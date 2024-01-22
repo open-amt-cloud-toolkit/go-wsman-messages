@@ -17,6 +17,7 @@ type Profile struct {
 	base message.Base
 }
 
+// NewIEEE8021xProfileWithClient instantiates a new Profile service
 func NewIEEE8021xProfileWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Profile {
 	return Profile{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_IEEE8021xProfile, client),

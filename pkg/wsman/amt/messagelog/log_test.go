@@ -47,7 +47,7 @@ func TestPositiveAMT_MessageLog(t *testing.T) {
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: MessageLogResponse{
 						XMLName:                xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog", Local: "AMT_MessageLog"},
-						Capabilities:           []int{5, 6, 8, 7},
+						Capabilities:           []Capabilities{5, 6, 8, 7},
 						CharacterSet:           10,
 						CreationClassName:      "AMT_MessageLog",
 						CurrentNumberOfRecords: 390,
@@ -62,7 +62,7 @@ func TestPositiveAMT_MessageLog(t *testing.T) {
 						MaxNumberOfRecords:     390,
 						MaxRecordSize:          21,
 						Name:                   "Intel(r) AMT:MessageLog 1",
-						OperationalStatus:      2,
+						OperationalStatus:      []OperationalStatus{2},
 						OverwritePolicy:        2,
 						PercentageNearFull:     100,
 						RequestedState:         12,
@@ -106,7 +106,7 @@ func TestPositiveAMT_MessageLog(t *testing.T) {
 						MessageLogItems: []MessageLogResponse{
 							{
 								XMLName:                xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog", Local: "AMT_MessageLog"},
-								Capabilities:           []int{5, 6, 8, 7},
+								Capabilities:           []Capabilities{5, 6, 8, 7},
 								CharacterSet:           10,
 								CreationClassName:      "AMT_MessageLog",
 								CurrentNumberOfRecords: 390,
@@ -121,7 +121,7 @@ func TestPositiveAMT_MessageLog(t *testing.T) {
 								MaxNumberOfRecords:     390,
 								MaxRecordSize:          21,
 								Name:                   "Intel(r) AMT:MessageLog 1",
-								OperationalStatus:      2,
+								OperationalStatus:      []OperationalStatus{2},
 								OverwritePolicy:        2,
 								PercentageNearFull:     100,
 								RequestedState:         12,
@@ -218,7 +218,7 @@ func TestNegativeAMT_MessageLog(t *testing.T) {
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: MessageLogResponse{
 						XMLName:                xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog", Local: "AMT_MessageLog"},
-						Capabilities:           []int{5, 6, 8, 7},
+						Capabilities:           []Capabilities{5, 6, 8, 7},
 						CharacterSet:           10,
 						CreationClassName:      "AMT_MessageLog",
 						CurrentNumberOfRecords: 390,
@@ -233,7 +233,7 @@ func TestNegativeAMT_MessageLog(t *testing.T) {
 						MaxNumberOfRecords:     390,
 						MaxRecordSize:          21,
 						Name:                   "Intel(r) AMT:MessageLog 1",
-						OperationalStatus:      2,
+						OperationalStatus:      []OperationalStatus{2},
 						OverwritePolicy:        2,
 						PercentageNearFull:     100,
 						RequestedState:         12,
@@ -277,7 +277,7 @@ func TestNegativeAMT_MessageLog(t *testing.T) {
 						MessageLogItems: []MessageLogResponse{
 							{
 								XMLName:                xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog", Local: "AMT_MessageLog"},
-								Capabilities:           []int{5, 6, 8, 7},
+								Capabilities:           []Capabilities{5, 6, 8, 7},
 								CharacterSet:           10,
 								CreationClassName:      "AMT_MessageLog",
 								CurrentNumberOfRecords: 390,
@@ -292,7 +292,7 @@ func TestNegativeAMT_MessageLog(t *testing.T) {
 								MaxNumberOfRecords:     390,
 								MaxRecordSize:          21,
 								Name:                   "Intel(r) AMT:MessageLog 1",
-								OperationalStatus:      2,
+								OperationalStatus:      []OperationalStatus{2},
 								OverwritePolicy:        2,
 								PercentageNearFull:     100,
 								RequestedState:         12,

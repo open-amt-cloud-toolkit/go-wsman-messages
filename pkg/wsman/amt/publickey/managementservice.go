@@ -14,6 +14,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// NewPublicKeyManagementServiceWithClient instantiates a new ManagementService
 func NewPublicKeyManagementServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) ManagementService {
 	return ManagementService{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_PublicKeyManagementService, client),
@@ -101,7 +102,7 @@ func (managementService ManagementService) Delete(instanceID string) (response R
 	return
 }
 
-// This function adds new certificate to the Intel(R) AMT CertStore. A certificate cannot be removed if it is referenced (for example, used by TLS, 802.1X or EAC).
+// This function adds new certificate to the Intel® AMT CertStore. A certificate cannot be removed if it is referenced (for example, used by TLS, 802.1X or EAC).
 func (managementService ManagementService) AddCertificate(certificateBlob string) (response Response, err error) {
 	header := managementService.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_PublicKeyManagementService, AddCertificate), AMT_PublicKeyManagementService, nil, "", "")
 	certificate := AddCertificate_INPUT{
@@ -127,7 +128,7 @@ func (managementService ManagementService) AddCertificate(certificateBlob string
 	return
 }
 
-// This function adds new root certificate to the Intel(R) AMT CertStore. A certificate cannot be removed if it is referenced (for example, used by TLS, 802.1X or EAC).
+// This function adds new root certificate to the Intel® AMT CertStore. A certificate cannot be removed if it is referenced (for example, used by TLS, 802.1X or EAC).
 func (managementService ManagementService) AddTrustedRootCertificate(certificateBlob string) (response Response, err error) {
 	header := managementService.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_PublicKeyManagementService, AddTrustedRootCertificate), AMT_PublicKeyManagementService, nil, "", "")
 	trustedRootCert := AddTrustedRootCertificate_INPUT{
@@ -209,7 +210,7 @@ func (managementService ManagementService) GeneratePKCS10RequestEx(keyPair, null
 	return
 }
 
-// This function adds new certificate key to the Intel(R) AMT CertStore. A key cannot be removed if its corresponding certificate is referenced (for example, used by TLS, 802.1X or EAC).
+// This function adds new certificate key to the Intel® AMT CertStore. A key cannot be removed if its corresponding certificate is referenced (for example, used by TLS, 802.1X or EAC).
 // After the method succeeds, a new instance of AMT_PublicPrivateKeyPair will be created.
 // Possible return values are: PT_STATUS_SUCCESS(0), PT_STATUS_INTERNAL_ERROR(1), PT_STATUS_MAX_LIMIT_REACHED(23),
 // PT_STATUS_FLASH_WRITE_LIMIT_EXCEEDED(38), PT_STATUS_DUPLICATE(2068), PT_STATUS_INVALID_KEY(2062).

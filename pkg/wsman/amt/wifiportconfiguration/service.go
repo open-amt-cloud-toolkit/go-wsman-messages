@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package wifiportconfiguration facilitiates communication with Intel® AMT devices to provides management of the Wi-Fi network interfaces associated with a Wi-Fi network port.
 package wifiportconfiguration
 
 import (
@@ -13,6 +14,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// NewWiFiPortConfigurationServiceWithClient instantiates a new Service
 func NewWiFiPortConfigurationServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
 	return Service{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_WiFiPortConfigurationService, client),
@@ -101,7 +103,23 @@ func (service Service) Put(wiFiPortConfigurationService WiFiPortConfigurationSer
 	return
 }
 
-// AddWiFiSettings atomically creates instances and associates them based on the input parameters.
+// AddWiFiSettings atomically creates an instance of CIM_WifiEndpointSettings from the embedded instance parameter
+// and optionally an instance of CIM_IEEE8021xSettings from the embedded instance parameter (if provided),
+// associates the CIM_WiFiEndpointSettings instance with the referenced instance of CIM_WiFiEndpoint using
+// an instance of CIM_ElementSettingData optionally associates the newly created or referenced by parameter
+// instance of CIM_IEEE8021xSettings with the instance of CIM_WiFiEndpointSettings using an instance of CIM_ConcreteComponent
+// and optionally associates the referenced instance of AMT_PublicKeyCertificate (if provided) with the instance of
+// CIM_IEEE8021xSettings (if provided) using an instance of CIM_CredentialContext.
+//
+// Additional Notes:
+//
+// 1) 'AddWiFiSettings' in Intel AMT Release 6.0 and later releases is permitted only to 'ADMIN_SECURITY_ADMINISTRATION_REALM' and 'ADMIN_SECURITY_LOCAL_SYSTEM_REALM '
+//
+// 2) When selecting the value EAP-TLS or EAP-FAST/TLS in AuthenticationProtocol property in IEEE8021xSettings - ClientCredential is mandatory.
+//
+// ValueMap={0, 1, 2, 3, 4, .., 32768..65535}
+//
+// Values={Completed with No Error, Not Supported, Failed, Invalid Parameter, Invalid Reference, Method Reserved, Vendor Specific}
 // func (service Service) AddWiFiSettings(wifiEndpointSettings wifi.WiFiEndpointSettings_INPUT, ieee8021xSettingsInput *models.IEEE8021xSettings, wifiEndpoint, clientCredential, caCredential string) (response Response, err error) {
 // 	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_WiFiPortConfigurationService, AddWiFiSettings), AMT_WiFiPortConfigurationService, nil, "", "")
 // 	input := AddWiFiSettings_INPUT{

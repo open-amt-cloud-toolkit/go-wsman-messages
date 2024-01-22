@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package publicprivate facilitiates communication with Intel® AMT devices to manage a public-private key in the Intel® AMT CertStore.
+//
+// Instances of this class can be created using the AMT_PublicKeyManagementService.AddKey method. You can't delete a key instance if it is used by some service (TLS/EAC).
 package publicprivate
 
 import (
@@ -13,6 +16,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// NewPublicPrivateKeyPairWithClient instantiates a new KeyPair
 func NewPublicPrivateKeyPairWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) KeyPair {
 	return KeyPair{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_PublicPrivateKeyPair, client),
@@ -82,6 +86,8 @@ func (keyPair KeyPair) Pull(enumerationContext string) (response Response, err e
 	}
 	return
 }
+
+// Deletes an instance of a key pair
 func (keyPair KeyPair) Delete(handle int) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
