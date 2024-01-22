@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package timesynchronization facilitiates communication with Intel® AMT devices to synchronize the AMT internal clock with an external clock
 package timesynchronization
 
 import (
@@ -13,6 +14,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// NewTimeSynchronizationServiceWithClient instantiates a new Service
 func NewTimeSynchronizationServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
 	return Service{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_TimeSynchronizationService, client),
@@ -78,6 +80,18 @@ func (service Service) Pull(enumerationContext string) (response Response, err e
 	}
 	return
 }
+
+// SetHighAccuracyTimeSynch is used to synchronize the Intel® AMT device's internal clock with an external clock.
+//
+// ta0: The time value received from invoking GetLowAccuracyTimeSynch().
+//
+// tm1: The remote client timestamp after getting a response from GetLowAccuracyTimeSynch().
+//
+// tm2: The remote client timestamp obtained immediately prior to invoking this method.
+//
+// ValueMap={0, 1, 36, 38}
+//
+// Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_INVALID_PARAMETER, PT_STATUS_FLASH_WRITE_LIMIT_EXCEEDED}
 func (service Service) SetHighAccuracyTimeSynch(ta0, tm1, tm2 int64) (response Response, err error) {
 	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_TimeSynchronizationService, SetHighAccuracyTimeSynch), AMT_TimeSynchronizationService, nil, "", "")
 	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetHighAccuracyTimeSynch), AMT_TimeSynchronizationService, &SetHighAccuracyTimeSynch_INPUT{
@@ -104,6 +118,7 @@ func (service Service) SetHighAccuracyTimeSynch(ta0, tm1, tm2 int64) (response R
 	return
 }
 
+// GetLowAccuracyTimeSynch is used for reading the Intel® AMT device's internal clock.
 func (service Service) GetLowAccuracyTimeSynch() (response Response, err error) {
 	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_TimeSynchronizationService, GetLowAccuracyTimeSynch), AMT_TimeSynchronizationService, nil, "", "")
 	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetLowAccuracyTimeSynch), AMT_TimeSynchronizationService, nil)

@@ -3,6 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package publickey facilitiates communication with Intel® AMT devices to access and configure Public Key Certificates and Public Key Management Service classes for AMT
+//
+// Certificate:
+// This class represents a X.509 Certificate in the Intel® AMT CertStore. Instances of this class can be created using the AMT_PublicKeyManagementService.AddCertificate and AMT_PublicKeyManagementService.AddTrustedRootCertificate methods. A certificate cannot be deleted while it is being used by any service (TLS/EAC).
+//
+// Management Service:
+// This service contains the information necessary to represent and manage the functionality provided by the Intel® AMT CertStore.
 package publickey
 
 import (
@@ -13,10 +20,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type Certificate struct {
-	base message.Base
-}
-
+// NewPublicKeyCertificateWithClient instantiates a new Certificate
 func NewPublicKeyCertificateWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Certificate {
 	return Certificate{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_PublicKeyCertificate, client),

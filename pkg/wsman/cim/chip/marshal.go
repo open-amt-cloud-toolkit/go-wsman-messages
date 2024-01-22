@@ -11,6 +11,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// JSON marshals the type into JSON format
 func (r *Response) JSON() string {
 	jsonOutput, err := json.Marshal(r.Body)
 	if err != nil {
@@ -19,6 +20,7 @@ func (r *Response) JSON() string {
 	return string(jsonOutput)
 }
 
+// YAML marshals the type into YAML format
 func (r *Response) YAML() string {
 	yamlOutput, err := yaml.Marshal(r.Body)
 	if err != nil {

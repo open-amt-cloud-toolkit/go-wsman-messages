@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
-// Package wsman facilitates access to AMT, CIM, and IPS classes for communication with Intel® AMT devices.
 package wsman
 
 import (
@@ -13,14 +12,20 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips"
 )
 
-// NewMessages instantiates a new Messages class with client connection parameters
-func NewMessages(cp ClientParameters) Messages {
-	client := client.NewWsman(cp.Target, cp.Username, cp.Password, cp.UseDigest, cp.UseTLS, cp.SelfSignedAllowed)
-	m := Messages{
-		client: client,
-	}
-	m.AMT = amt.NewMessages(client)
-	m.CIM = cim.NewMessages(client)
-	m.IPS = ips.NewMessages(client)
-	return m
+// Messages implements client.WSMan, amt.Messages, cim.Messages, and ips.Messages
+type Messages struct {
+	client client.WSMan
+	AMT    amt.Messages
+	CIM    cim.Messages
+	IPS    ips.Messages
+}
+
+// ClientParameters struct defines the connection settings for wsman client
+type ClientParameters struct {
+	Target            string
+	Username          string
+	Password          string
+	UseDigest         bool
+	UseTLS            bool
+	SelfSignedAllowed bool
 }

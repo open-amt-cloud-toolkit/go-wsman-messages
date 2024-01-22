@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package managementpresence facilitiates communication with Intel® AMT devices to configure Management Presence Remote Service Access Points (or an MPS) to be accessed by the Intel® AMT subsystem from remote.
 package managementpresence
 
 import (
@@ -12,10 +13,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type RemoteSAP struct {
-	base message.Base
-}
-
+// NewManagementPresenceRemoteSAPWithClient instantiates a new RemoteSAP
 func NewManagementPresenceRemoteSAPWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) RemoteSAP {
 	return RemoteSAP{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_ManagementPresenceRemoteSAP, client),

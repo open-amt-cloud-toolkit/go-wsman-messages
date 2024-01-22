@@ -13,6 +13,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// Instantiates a new Boot Setting Data service
 func NewBootSettingDataWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) SettingData {
 	return SettingData{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_BootSettingData, client),

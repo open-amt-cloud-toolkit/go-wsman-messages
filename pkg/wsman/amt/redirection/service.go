@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package redirection facilitiates communication with Intel® AMT devices to configure the IDER and SOL redirection functionalities
 package redirection
 
 import (
@@ -14,6 +15,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// NewRedirectionServiceWithClient instantiates a new Service
 func NewRedirectionServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
 	return Service{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_RedirectionService, client),
@@ -61,6 +63,7 @@ func (service Service) Enumerate() (response Response, err error) {
 	return
 }
 
+// Pulls instances of this class, following an Enumerate operation
 func (service Service) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -80,7 +83,18 @@ func (service Service) Pull(enumerationContext string) (response Response, err e
 	return
 }
 
-// Changes properties of the selected instance.  The following properties must be included in any representation of AMT_RedirectionService: Name(cannot be modified), CreationClassName(cannot be modified), SystemName (cannot be modified), SystemCreationClassName (cannot be modified), ListenerEnabled
+// Put changes properties of the selected instance.
+// The following properties must be included in any representation of AMT_RedirectionService:
+//
+// - Name(cannot be modified)
+//
+// - CreationClassName(cannot be modified)
+//
+// - SystemName (cannot be modified)
+//
+// - SystemCreationClassName (cannot be modified)
+//
+// - ListenerEnabled
 func (service Service) Put(redirectionService RedirectionRequest) (response Response, err error) {
 	redirectionService.H = fmt.Sprintf("%s%s", message.AMTSchema, AMT_RedirectionService)
 	response = Response{
@@ -101,7 +115,12 @@ func (service Service) Put(redirectionService RedirectionRequest) (response Resp
 	return
 }
 
-// Requests that the state of the element be changed to the value specified in the RequestedState parameter. When the requested state change takes place, the EnabledState and RequestedState of the element will be the same. Invoking the RequestStateChange method multiple times could result in earlier requests being overwritten or lost.  If 0 is returned, then the task completed successfully and the use of ConcreteJob was not required. If 4096 (0x1000) is returned, then the task will take some time to complete, ConcreteJob will be created, and its reference returned in the output parameter Job. Any other return code indicates an error condition.
+// RequestStateChange requests that AMT change the state of the element to the value specified in the RequestedState parameter.
+// When the requested state change takes place, the EnabledState and RequestedState of the element will be the same.
+// Invoking the RequestStateChange method multiple times could result in earlier requests being overwritten or lost.
+// If 0 is returned, then the task completed successfully and the use of ConcreteJob was not required.
+// If 4096 (0x1000) is returned, then the task will take some time to complete, ConcreteJob will be created, and its reference returned in the output parameter Job.
+// Any other return code indicates an error condition.
 func (service Service) RequestStateChange(requestedState RequestedState) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{

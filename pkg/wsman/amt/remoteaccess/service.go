@@ -14,10 +14,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type Service struct {
-	base message.Base
-}
-
+// NewRemoteAccessServiceWithClient instantiates a new Service
 func NewRemoteAccessServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
 	return Service{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_RemoteAccessService, client),
@@ -89,6 +86,10 @@ func (service Service) Pull(enumerationContext string) (response Response, err e
 	return
 }
 
+// AddMPS adds a Management Presence Server to the Intel® AMT subsystem.
+// Creates an AMT_ManagementPresenceRemoteSAP instance and an AMT_RemoteAccessCredentialContext association to a credential.
+// This credential may be an existing AMT_PublicKeyCertificate instance (if the created MPS is configured to use mutual authentication).
+// If the created MpServer is configured to use username password authentication, an AMT_MPSUsernamePassword instance is created and used as the associated credential.
 func (service Service) AddMPS(mpServer AddMpServerRequest) (response Response, err error) {
 	mpServer.H = fmt.Sprintf("%s%s", message.AMTSchema, AMT_RemoteAccessService)
 	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_RemoteAccessService, AddMps), AMT_RemoteAccessService, nil, "", "")
@@ -112,10 +113,10 @@ func (service Service) AddMPS(mpServer AddMpServerRequest) (response Response, e
 	return
 }
 
-// AddRemoteAccessPolicyRule adds a Remote Access policy to the Intel(R) AMT subsystem.
+// AddRemoteAccessPolicyRule adds a Remote Access policy to the Intel® AMT subsystem.
 // The policy defines an event that will trigger an establishment of a tunnel between AMT and a pre-configured MPS.
 // Creates an AMT_RemoteAccessPolicyRule instance and associates it to a given list of AMT_ManagementPresenceRemoteSAP instances with AMT_PolicySetAppliesToElement association instances.
-// Returns an XML string representing the WS-Management message to be sent to the Intel(R) AMT subsystem.
+// Returns an XML string representing the WS-Management message to be sent to the Intel® AMT subsystem.
 func (service Service) AddRemoteAccessPolicyRule(remoteAccessPolicyRule RemoteAccessPolicyRuleRequest, name string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "Name",

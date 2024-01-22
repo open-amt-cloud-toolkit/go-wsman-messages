@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
-// AMT Alarm Clock Service derived from Service and provides the ability to set an alarm time to turn the host computer system on. Setting an alarm time is done by calling "AddAlarm" method."NextAMTAlarmTime" and "AMTAlarmClockInterval" properties are deprecated and "AddAlarm" should be used instead.
+// Package alarmclock facilitates communication with Intel® AMT devices to set an alarm time to turn the host computer system on. Setting an alarm time is done by calling "AddAlarm" method.
 package alarmclock
 
 import (
@@ -17,6 +17,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// NewServiceWithClient instantiates a new Alarm Clock service
 func NewServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
 	return Service{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_AlarmClockService, client),
@@ -90,7 +91,7 @@ func (acs Service) Pull(enumerationContext string) (response Response, err error
 	return
 }
 
-// AddAlarm creates an alarm that would wake the system at a given time.The method receives as input an embedded instance of type IPS_AlarmClockOccurrence, with the following fields set: StartTime, Interval, InstanceID, DeleteOnCompletion. Upon success, the method creates an instance of IPS_AlarmClockOccurrence which is associated with AlarmClockService.The method would fail if 5 instances or more of IPS_AlarmClockOccurrence already exist in the system.
+// AddAlarm creates an alarm that would wake the system at a given time. The method receives as input an embedded instance of type IPS_AlarmClockOccurrence, with the following fields set: StartTime, Interval, InstanceID, DeleteOnCompletion. Upon success, the method creates an instance of IPS_AlarmClockOccurrence which is associated with AlarmClockService. The method would fail if 5 instances or more of IPS_AlarmClockOccurrence already exist in the system.
 func (acs Service) AddAlarm(alarmClockOccurrence AlarmClockOccurrence) (response Response, err error) {
 	header := acs.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AlarmClockService, AddAlarm), AMT_AlarmClockService, nil, "", "")
 	startTime := alarmClockOccurrence.StartTime.UTC().Format(time.RFC3339Nano)

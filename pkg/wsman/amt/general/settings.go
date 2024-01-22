@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package general facilitates communication with Intel® AMT to read and configure the device's Intel® AMT general settings.
 package general
 
 import (
@@ -12,6 +13,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// NewGeneralSettingsWithClient instantiates a new General Settings service
 func NewGeneralSettingsWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Settings {
 	return Settings{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_GeneralSettings, client),

@@ -2,6 +2,7 @@
  * Copyright (c) Intel Corporation 2023
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
+
 package remoteaccess
 
 const (
@@ -39,10 +40,4 @@ const (
 	ExternalMPS MPSType = iota
 	InternalMPS
 	BothMPS
-)
-
-const (
-	EnabledEnabled         Enabled = 1
-	EnabledDisabled        Enabled = 2
-	EnabledEnabledForDebug Enabled = 3
 )
