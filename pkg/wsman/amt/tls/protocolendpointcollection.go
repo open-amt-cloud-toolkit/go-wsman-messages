@@ -39,7 +39,7 @@ func (collection ProtocolEndpointCollection) Get() (response Response, err error
 	return
 }
 
-// Enumerates the instances of this class
+// Enumerate returns an enumeration context which is used in a subsequent Pull call
 func (collection ProtocolEndpointCollection) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -59,7 +59,7 @@ func (collection ProtocolEndpointCollection) Enumerate() (response Response, err
 	return
 }
 
-// Pulls instances of this class, following an Enumerate operation
+// Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
 func (collection ProtocolEndpointCollection) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{

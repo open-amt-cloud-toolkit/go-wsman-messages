@@ -44,7 +44,7 @@ func (profile Profile) Get() (response Response, err error) {
 	return
 }
 
-// Enumerates the instances of this class
+// Enumerate returns an enumeration context which is used in a subsequent Pull call
 func (profile Profile) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -64,7 +64,7 @@ func (profile Profile) Enumerate() (response Response, err error) {
 	return
 }
 
-// Pulls instances of this class, following an Enumerate operation
+// Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
 func (profile Profile) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
