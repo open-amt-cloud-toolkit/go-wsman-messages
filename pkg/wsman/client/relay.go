@@ -12,6 +12,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httputil"
+	"net/url"
 	"strconv"
 	"strings"
 	"sync"
@@ -65,22 +66,21 @@ func (t *WsTransport) timedReadMessage(ms int) (b []byte) {
 	return b
 }
 
-func (t *WsTransport) buildUrl() (url string) {
-	// craft websocket url
-	url = t.wsurl + "?p=" + strconv.Itoa(t.protocol) + "&host=" + t.host
-	url += "&user=" + t.username + "&pass=" + t.password
-	url += "&port=" + strconv.Itoa(t.port)
-	if t.tls {
-		url += "&tls=1"
-	} else {
-		url += "&tls=0"
-	}
-	if t.tls1only {
-		url += "&tls1only=1"
-	} else {
-		url += "&tls1only=0"
-	}
-	return url
+func (t *WsTransport) buildUrl() string {
+	// Use net/url to construct the URL
+	u, _ := url.Parse(t.wsurl)
+	// Prepare query parameters
+	q := u.Query()
+	q.Set("p", strconv.Itoa(t.protocol))
+	q.Set("host", t.host)
+	q.Set("user", t.username)
+	q.Set("pass", t.password)
+	q.Set("port", strconv.Itoa(t.port))
+	q.Set("tls", strconv.FormatBool(t.tls))
+	q.Set("tls1only", strconv.FormatBool(t.tls1only))
+	// Set query string to URL
+	u.RawQuery = q.Encode()
+	return u.String()
 }
 
 func (t *WsTransport) connectWebsocket() (conn *websocket.Conn, err error) {
