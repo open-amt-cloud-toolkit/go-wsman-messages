@@ -115,7 +115,7 @@ func TestPositiveAMT_PublicPrivateKeyPair(t *testing.T) {
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Key: Handle: 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
 					client.CurrentMessage = "Delete"
-					return elementUnderTest.Delete(0)
+					return elementUnderTest.Delete("Intel(r) AMT Key: Handle: 0")
 				},
 				Body{XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"}},
 			},
@@ -231,7 +231,7 @@ func TestNegativeAMT_PublicPrivateKeyPair(t *testing.T) {
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Key: Handle: 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
 					client.CurrentMessage = "Error"
-					return elementUnderTest.Delete(0)
+					return elementUnderTest.Delete("Intel(r) AMT Key: Handle: 0")
 				},
 				Body{XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"}},
 			},

@@ -38,16 +38,16 @@ type (
 		WiFiPortGetResponse       WiFiPort
 		EnumerateResponse         common.EnumerateResponse
 		PullResponse              PullResponse
-		RequestStateChange_OUTPUT message.ReturnValue
+		RequestStateChange_OUTPUT common.ReturnValue
 	}
 
 	PullResponse struct {
-		XMLName               xml.Name               `xml:"PullResponse"`
-		EndpointSettingsItems []WiFiEndpointSettings `xml:"Items>CIM_WiFiEndpointSettings"`
-		WiFiPortItems         []WiFiPort             `xml:"Items>CIM_WiFiPort"`
+		XMLName               xml.Name                       `xml:"PullResponse"`
+		EndpointSettingsItems []WiFiEndpointSettingsResponse `xml:"Items>CIM_WiFiEndpointSettings"`
+		WiFiPortItems         []WiFiPort                     `xml:"Items>CIM_WiFiPort"`
 	}
 
-	WiFiEndpointSettings struct {
+	WiFiEndpointSettingsResponse struct {
 		XMLName              xml.Name `xml:"CIM_WiFiEndpointSettings"`
 		AuthenticationMethod AuthenticationMethod
 		BSSType              BSSType
@@ -88,7 +88,7 @@ type (
 		Priority             int
 		SSID                 string
 	}
-	WiFiEndpointSettingsInput struct {
+	WiFiEndpointSettingsRequest struct {
 		XMLName xml.Name `xml:"h:WiFiEndpointSettingsInput"`
 		H       string   `xml:"xmlns:q,attr"`
 		// SettingData
@@ -111,4 +111,5 @@ type (
 	AuthenticationMethod int
 	BSSType              int
 	EncryptionMethod     int
+	ReturnValue          int
 )

@@ -88,10 +88,10 @@ func (keyPair KeyPair) Pull(enumerationContext string) (response Response, err e
 }
 
 // Deletes an instance of a key pair
-func (keyPair KeyPair) Delete(handle int) (response Response, err error) {
+func (keyPair KeyPair) Delete(handle string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
-		Value: fmt.Sprintf("Intel(r) AMT Key: Handle: %d", handle),
+		Value: handle,
 	}
 	response = Response{
 		Message: &client.Message{
