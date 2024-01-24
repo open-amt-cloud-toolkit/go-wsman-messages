@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package kerberos facilitiates communication with Intel® AMT devices to access the configuration-related and operational parameters for the kerberos service in the Intel® AMT.
 package kerberos
 
 import (
@@ -14,6 +15,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// NewKerberosSettingDataWithClient instantiates a new kerberos SettingData
 func NewKerberosSettingDataWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) SettingData {
 	return SettingData{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_KerberosSettingData, client),
@@ -79,6 +81,8 @@ func (settingData SettingData) Pull(enumerationContext string) (response Respons
 	}
 	return
 }
+
+// GetCredentialCacheState gets the current state of the credential caching functionality
 func (settingData SettingData) GetCredentialCacheState() (response Response, err error) {
 	header := settingData.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_KerberosSettingData, GetCredentialCacheState), AMT_KerberosSettingData, nil, "", "")
 	body := settingData.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetCredentialCacheState), AMT_KerberosSettingData, nil)
@@ -101,6 +105,7 @@ func (settingData SettingData) GetCredentialCacheState() (response Response, err
 	return
 }
 
+// SetCredentialCacheState enables/disables the credential caching functionality
 // TODO: Current gets SOAP schema violation from AMT
 func (settingData SettingData) SetCredentialCacheState(enabled bool) (response Response, err error) {
 	credentialCasheState := SetCredentialCacheState_INPUT{

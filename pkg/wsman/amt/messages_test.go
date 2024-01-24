@@ -112,7 +112,7 @@ func TestNewMessages(t *testing.T) {
 	if reflect.DeepEqual(m.TLSCredentialContext, tls.CredentialContext{}) {
 		t.Error("TLSCredentialContext is not initialized")
 	}
-	if reflect.DeepEqual(m.TLSProtocolEndpointCollection, tls.Collection{}) {
+	if reflect.DeepEqual(m.TLSProtocolEndpointCollection, tls.ProtocolEndpointCollection{}) {
 		t.Error("TLSProtocolEndpointCollection is not initialized")
 	}
 	if reflect.DeepEqual(m.TLSSettingData, tls.SettingData{}) {

@@ -12,14 +12,15 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-func NewTLSProtocolEndpointCollectionWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Collection {
-	return Collection{
+// NewTLSProtocolEndpointCollectionWithClient instantiates a new ProtocolEndpointCollection
+func NewTLSProtocolEndpointCollectionWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) ProtocolEndpointCollection {
+	return ProtocolEndpointCollection{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_TLSProtocolEndpointCollection, client),
 	}
 }
 
 // Get retrieves the representation of the instance
-func (collection Collection) Get() (response Response, err error) {
+func (collection ProtocolEndpointCollection) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: collection.base.Get(nil),
@@ -39,7 +40,7 @@ func (collection Collection) Get() (response Response, err error) {
 }
 
 // Enumerates the instances of this class
-func (collection Collection) Enumerate() (response Response, err error) {
+func (collection ProtocolEndpointCollection) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: collection.base.Enumerate(),
@@ -59,7 +60,7 @@ func (collection Collection) Enumerate() (response Response, err error) {
 }
 
 // Pulls instances of this class, following an Enumerate operation
-func (collection Collection) Pull(enumerationContext string) (response Response, err error) {
+func (collection ProtocolEndpointCollection) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: collection.base.Pull(enumerationContext),

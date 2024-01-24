@@ -3,6 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package authorization facilitates communication with Intel® AMT devices to manage access control list (ACL) entries.
+//
+// Additional Notes:
+//
+// 1) Realms 'AuditLogRealm' (20) and 'ACLRealm' (21) are supported only in Intel AMT Release 4.0 and later releases.
+//
+// 2) Realm 'DTRealm' (23) is supported only in 'ME 5.1' and Intel AMT Release 5.1 and later releases.
+//
+// 3) All the methods of 'AMT_AuthorizationService' except for 'Get' are not supported in Remote Connectivity Service provisioning mode
 package authorization
 
 import (
@@ -13,12 +22,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-// Describes the Authorization Service, which is responsible for Access Control management in the Intel(R) AMT subsystem.
-// Additional Notes:
-// 1) Realms 'AuditLogRealm' (20) and 'ACLRealm' (21) are supported only in Intel AMT Release 4.0 and later releases.
-// 2) Realm 'DTRealm' (23) is supported only in 'ME 5.1' and Intel AMT Release 5.1 and later releases.
-// 3) All the methods of 'AMT_AuthorizationService' except for 'Get' are not supported in Remote Connectivity Service provisioning mode
-
+// Instantiates a new Authorization service
 func NewServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) AuthorizationService {
 	return AuthorizationService{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_AuthorizationService, client),
@@ -110,6 +114,7 @@ func (as AuthorizationService) EnumerateUserAclEntries(startIndex int) (response
 	return
 }
 
+// Gets the state of a user ACL entry (enabled/disabled)
 func (as AuthorizationService) GetAclEnabledState(handle int) (response Response, err error) {
 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, GetAclEnabledState), AMT_AuthorizationService, nil, "", "")
 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetAclEnabledState), AMT_AuthorizationService, &GetAclEnabledState_INPUT{Handle: handle})
@@ -131,6 +136,7 @@ func (as AuthorizationService) GetAclEnabledState(handle int) (response Response
 	return
 }
 
+// Returns the username attribute of the Admin ACL
 func (as AuthorizationService) GetAdminAclEntry() (response Response, err error) {
 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, GetAdminAclEntry), AMT_AuthorizationService, nil, "", "")
 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetAdminAclEntry), AMT_AuthorizationService, nil)
@@ -152,6 +158,7 @@ func (as AuthorizationService) GetAdminAclEntry() (response Response, err error)
 	return
 }
 
+// Reads the Admin ACL Entry status from Intel® AMT. The return state changes as a function of the admin password.
 func (as AuthorizationService) GetAdminAclEntryStatus() (response Response, err error) {
 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, GetAdminAclEntryStatus), AMT_AuthorizationService, nil, "", "")
 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetAdminAclEntryStatus), AMT_AuthorizationService, nil)
@@ -173,6 +180,7 @@ func (as AuthorizationService) GetAdminAclEntryStatus() (response Response, err 
 	return
 }
 
+// Reads the remote Admin ACL Entry status from Intel® AMT. The return state changes as a function of the remote admin password.
 func (as AuthorizationService) GetAdminNetAclEntryStatus() (response Response, err error) {
 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, GetAdminNetAclEntryStatus), AMT_AuthorizationService, nil, "", "")
 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetAdminNetAclEntryStatus), AMT_AuthorizationService, nil)
@@ -194,7 +202,7 @@ func (as AuthorizationService) GetAdminNetAclEntryStatus() (response Response, e
 	return
 }
 
-// GetUserAclEntryEx reads a user entry from the Intel(R) AMT device.
+// Reads a user entry from the Intel® AMT device. Note: confidential information, such as password (hash) is omitted or zeroed in the response.
 func (as AuthorizationService) GetUserAclEntryEx(handle int) (response Response, err error) {
 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, GetUserAclEntryEx), AMT_AuthorizationService, nil, "", "")
 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetUserAclEntryEx), AMT_AuthorizationService, &GetUserAclEntryEx_INPUT{Handle: handle})
@@ -216,6 +224,7 @@ func (as AuthorizationService) GetUserAclEntryEx(handle int) (response Response,
 	return
 }
 
+// Removes an entry from the User Access Control List (ACL), given a handle.
 func (as AuthorizationService) RemoveUserAclEntry(handle int) (response Response, err error) {
 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, RemoveUserAclEntry), AMT_AuthorizationService, nil, "", "")
 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(RemoveUserAclEntry), AMT_AuthorizationService, &RemoveUserAclEntry_INPUT{Handle: handle})
@@ -237,6 +246,7 @@ func (as AuthorizationService) RemoveUserAclEntry(handle int) (response Response
 	return
 }
 
+// Enables or disables a user ACL entry. Disabling ACL entries is useful when accounts that cannot be removed (system accounts - starting with $$) are required to be disabled.
 func (as AuthorizationService) SetAclEnabledState(handle int, enabled bool) (response Response, err error) {
 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, SetAclEnabledState), AMT_AuthorizationService, nil, "", "")
 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetAclEnabledState), AMT_AuthorizationService, &SetAclEnabledState_INPUT{Handle: handle, Enabled: enabled})
@@ -258,6 +268,7 @@ func (as AuthorizationService) SetAclEnabledState(handle int, enabled bool) (res
 	return
 }
 
+// Updates an Admin entry in the Intel® AMT device.
 func (as AuthorizationService) SetAdminACLEntryEx(username, digestPassword string) (response Response, err error) {
 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, SetAdminAclEntryEx), AMT_AuthorizationService, nil, "", "")
 	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetAdminAclEntryEx), AMT_AuthorizationService, &SetAdminACLEntryEx_INPUT{Username: username, DigestPassword: digestPassword})

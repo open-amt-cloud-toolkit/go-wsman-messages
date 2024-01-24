@@ -2,6 +2,7 @@
  * Copyright (c) Intel Corporation 2023
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
+
 package messagelog
 
 const (
@@ -63,4 +64,75 @@ const (
 	LogStateNormal        LogState = 2
 	LogStateErasing       LogState = 3
 	LogStateNotApplicable LogState = 4
+)
+
+const (
+	EnabledDefaultEnabled           EnabledDefault = 2
+	EnabledDefaultDisabled          EnabledDefault = 3
+	EnabledDefaultNotApplicable     EnabledDefault = 5
+	EnabledDefaultEnabledbutOffline EnabledDefault = 6
+	EnabledDefaultNoDefault         EnabledDefault = 7
+	EnabledDefaultQuiesce           EnabledDefault = 9
+)
+
+const (
+	EnabledStateUnknown EnabledState = iota
+	EnabledStateOther
+	EnabledStateEnabled
+	EnabledStateDisabled
+	EnabledStateShuttingDown
+	EnabledStateNotApplicable
+	EnabledStateEnabledbutOffline
+	EnabledStateInTest
+	EnabledStateDeferred
+	EnabledStateQuiesce
+	EnabledStateStarting
+)
+
+const (
+	HealthStateUnknown             HealthState = 0
+	HealthStateOK                  HealthState = 5
+	HealthStateDegradedWarning     HealthState = 10
+	HealthStateMinorFailure        HealthState = 15
+	HealthStateMajorFailure        HealthState = 20
+	HealthStateCriticalFailure     HealthState = 25
+	HealthStateNonRecoverableError HealthState = 30
+)
+
+const (
+	OperationalStatusUnknown OperationalStatus = iota
+	OperationalStatusOther
+	OperationalStatusOK
+	OperationalStatusDegraded
+	OperationalStatusStressed
+	OperationalStatusPredictiveFailure
+	OperationalStatusError
+	OperationalStatusNonRecoverableError
+	OperationalStatusStarting
+	OperationalStatusStopping
+	OperationalStatusStopped
+	OperationalStatusInService
+	OperationalStatusNoContact
+	OperationalStatusLostCommunication
+	OperationalStatusAborted
+	OperationalStatusDormant
+	OperationalStatusSupportingEntityinError
+	OperationalStatusCompleted
+	OperationalStatusPowerMode
+	OperationalStatusRelocating
+)
+
+const (
+	RequestedStateEnabled RequestedState = iota + 2
+	RequestedStateDisabled
+	RequestedStateShutDown
+	RequestedStateNoChange
+	RequestedStateOffline
+	RequestedStateTest
+	RequestedStateDeferred
+	RequestedStateQuiesce
+	RequestedStateReboot
+	RequestedStateReset
+	RequestedStateNotApplicable
+	RequestedStateUnknown RequestedState = 0
 )

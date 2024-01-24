@@ -49,3 +49,9 @@ const (
 	InProvisioning    ProvisioningStateValue = 1
 	PostProvisioning  ProvisioningStateValue = 2
 )
+
+const (
+	CoupledPasswordModel PasswordModelValue = iota
+	SeparatePasswordModel
+	SeparateHashPasswordModel
+)

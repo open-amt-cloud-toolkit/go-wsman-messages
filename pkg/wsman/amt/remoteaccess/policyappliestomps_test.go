@@ -29,7 +29,6 @@ func TestPositiveAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 		PackageUnderTest: "amt/remoteaccess/policyappliestomps",
 	}
 	elementUnderTest := NewRemoteAccessPolicyAppliesToMPSWithClient(wsmanMessageCreator, &client)
-	elementUnderTest1 := NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator)
 	t.Run("amt_RemoteAccessPolicyAppliesToMPS Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -53,7 +52,7 @@ func TestPositiveAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
-					PolicyAppliesGetResponse: PolicyAppliesResponse{
+					RemoteAccessPolicyAppliesToMPSGetResponse: RemoteAccessPolicyAppliesToMPSResponse{
 						XMLName: xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS", Local: "AMT_RemoteAccessPolicyAppliesToMPS"},
 						ManagedElement: ManagedElementResponse{
 							XMLName: xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS", Local: "ManagedElement"},
@@ -135,9 +134,6 @@ func TestPositiveAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 				"",
 				func() (Response, error) {
 					client.CurrentMessage = "Enumerate"
-					if elementUnderTest1.base.WSManMessageCreator == nil {
-						print("Error")
-					}
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -162,7 +158,7 @@ func TestPositiveAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
-						PolicyAppliesItems: []PolicyAppliesResponse{
+						PolicyAppliesItems: []RemoteAccessPolicyAppliesToMPSResponse{
 							{
 								XMLName: xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS", Local: "AMT_RemoteAccessPolicyAppliesToMPS"},
 								ManagedElement: ManagedElementResponse{
@@ -348,7 +344,6 @@ func TestNegativeAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 		PackageUnderTest: "amt/remoteaccess/policyappliestomps",
 	}
 	elementUnderTest := NewRemoteAccessPolicyAppliesToMPSWithClient(wsmanMessageCreator, &client)
-	elementUnderTest1 := NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator)
 	t.Run("amt_RemoteAccessPolicyAppliesToMPS Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -372,7 +367,7 @@ func TestNegativeAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
-					PolicyAppliesGetResponse: PolicyAppliesResponse{
+					RemoteAccessPolicyAppliesToMPSGetResponse: RemoteAccessPolicyAppliesToMPSResponse{
 						XMLName: xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS", Local: "AMT_RemoteAccessPolicyAppliesToMPS"},
 						ManagedElement: ManagedElementResponse{
 							XMLName: xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS", Local: "ManagedElement"},
@@ -454,9 +449,6 @@ func TestNegativeAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 				"",
 				func() (Response, error) {
 					client.CurrentMessage = "Error"
-					if elementUnderTest1.base.WSManMessageCreator == nil {
-						print("Error")
-					}
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -481,7 +473,7 @@ func TestNegativeAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
-						PolicyAppliesItems: []PolicyAppliesResponse{
+						PolicyAppliesItems: []RemoteAccessPolicyAppliesToMPSResponse{
 							{
 								XMLName: xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS", Local: "AMT_RemoteAccessPolicyAppliesToMPS"},
 								ManagedElement: ManagedElementResponse{

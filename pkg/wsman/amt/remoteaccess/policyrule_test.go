@@ -52,7 +52,7 @@ func TestPositiveAMT_RemoteAccessPolicyRule(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
-					RemotePolicyRuleGetResponse: RemotePolicyRuleResponse{
+					RemoteAccessPolicyRuleGetResponse: RemoteAccessPolicyRuleResponse{
 						XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyRule", Local: "AMT_RemoteAccessPolicyRule"},
 						CreationClassName:       AMT_RemoteAccessPolicyRule,
 						ElementName:             "Inte(r) AMT:Remote Access Policy",
@@ -98,7 +98,7 @@ func TestPositiveAMT_RemoteAccessPolicyRule(t *testing.T) {
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
-						RemotePolicyRuleItems: []RemotePolicyRuleResponse{
+						RemotePolicyRuleItems: []RemoteAccessPolicyRuleResponse{
 							{
 								XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyRule", Local: "AMT_RemoteAccessPolicyRule"},
 								CreationClassName:       "AMT_RemoteAccessPolicyRule",
@@ -175,7 +175,7 @@ func TestNegativeAMT_RemoteAccessPolicyRule(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
-					RemotePolicyRuleGetResponse: RemotePolicyRuleResponse{
+					RemoteAccessPolicyRuleGetResponse: RemoteAccessPolicyRuleResponse{
 						XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyRule", Local: "AMT_RemoteAccessPolicyRule"},
 						CreationClassName:       AMT_RemoteAccessPolicyRule,
 						ElementName:             "Inte(r) AMT:Remote Access Policy",
@@ -221,7 +221,7 @@ func TestNegativeAMT_RemoteAccessPolicyRule(t *testing.T) {
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
-						RemotePolicyRuleItems: []RemotePolicyRuleResponse{
+						RemotePolicyRuleItems: []RemoteAccessPolicyRuleResponse{
 							{
 								XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyRule", Local: "AMT_RemoteAccessPolicyRule"},
 								CreationClassName:       "AMT_RemoteAccessPolicyRule",

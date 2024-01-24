@@ -13,10 +13,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type PolicyRule struct {
-	base message.Base
-}
-
+// NewPolicyRuleWithClient instantiates a new PolicyRule
 func NewPolicyRuleWithClient(wsmanMessageCreator *message.WSManMessageCreator, clientPolicy client.WSMan) PolicyRule {
 	return PolicyRule{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_RemoteAccessPolicyRule, clientPolicy),

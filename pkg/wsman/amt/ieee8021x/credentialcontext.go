@@ -3,6 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package ieee8021x facilitiates communication with Intel® AMT devices to access the ieee8021x credential context and profile settings
+//
+// CredentialContext gets the association between an instance of AMT_8021XProfile and an instance of AMT_PublicKeyCertificate that it uses.
+//
+// Profile represents a 802.1X profile in the Intel® AMT system.
 package ieee8021x
 
 import (
@@ -16,6 +21,7 @@ type CredentialContext struct {
 	base message.Base
 }
 
+// NewIEEE8021xCredentialContextWithClient instantiates a new CredentialContext service.
 func NewIEEE8021xCredentialContextWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) CredentialContext {
 	return CredentialContext{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_IEEE8021xCredentialContext, client),

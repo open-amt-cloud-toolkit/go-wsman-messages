@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package mps facilitiates communication with Intel® AMT devices to configure the username and password used to access an MPS.
 package mps
 
 import (
@@ -13,6 +14,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// NewMPSUsernamePasswordWithClient instantiates a new UsernamePassword
 func NewMPSUsernamePasswordWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) UsernamePassword {
 	return UsernamePassword{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_MPSUsernamePassword, client),

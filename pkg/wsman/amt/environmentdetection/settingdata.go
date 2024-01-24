@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package environmentdetection facilitates communication with Intel® AMT device configuration-related and operational parameters for the Environment Detection service in Intel® AMT.
 package environmentdetection
 
 import (
@@ -13,6 +14,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// NewEnvironmentDetectionSettingDataWithClient instantiates a new Environment Detection Setting Data service
 func NewEnvironmentDetectionSettingDataWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) SettingData {
 	return SettingData{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_EnvironmentDetectionSettingData, client),

@@ -3,6 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package tls facilitiates communication with Intel® AMT devices to access and configure TLS Credential Context, TLS Protocol Endpoint Collection, and TLS Setting Data features of AMT
+//
+// Credential Context:
+// This class represents the credential of the TLSProtocolEndpointCollection, by connecting a certficate to the service.
+// The connected certificate must be a leaf certificate, and must have a matching private key.
+// You can't enable the TLS service without a credential.
+// When TLS is enabled the certificate can be changed using the Put method.
+//
+// Protocol Endpoint Collection:
+// This class connects the 2 instances of AMT_TLSProtocolEndpoint and can be used in order to enable/disable TLS in the system.
+//
+// Setting Data:
+// This class represents configuration-related and operational parameters for the TLS service in the Intel® AMT.
 package tls
 
 import (
@@ -12,6 +25,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// NewTLSCredentialContextWithClient instantiates a new CredentialContext
 func NewTLSCredentialContextWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) CredentialContext {
 	return CredentialContext{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_TLSCredentialContext, client),

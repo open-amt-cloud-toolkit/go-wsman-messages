@@ -3,6 +3,20 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package remoteaccess facilitiates communication with Intel® AMT devices to access and configure Remote Access Policy Applies to MPS, Remote Access Policy Rules, and Remote Access Service.
+//
+// Remote Access Policy Applies To MPS:
+// This class associates a Management Presence Server with a Remote Access Policy rule.
+// When a Policy Rule is triggered, the Intel® AMT subsystem will attempt to connect to the MpServers associated with the triggered policy in the order by which the associations were created.
+// This order is indicated in the OrderOfAccess field where lower numbers indicate a higher priority.
+//
+// Remote Access Policy Rule:
+// Represents a Remote Access policy.
+// The policy defines a condition that will trigger the establishment of a tunnel between the Intel® AMT subsystem and a remote MpServer.
+// The policy also defines parameters for the connection such as TunnelLifeTime in seconds.
+//
+// Remote Access Service:
+// Represents the Remote Access Service in the Intel® AMT subsystem.
 package remoteaccess
 
 import (
@@ -12,19 +26,10 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
-type PolicyAppliesToMPS struct {
-	base message.Base
-}
-
+// NewRemoteAccessPolicyAppliesToMPSWithClient instantiates a new PolicyAppliesToMPS
 func NewRemoteAccessPolicyAppliesToMPSWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) PolicyAppliesToMPS {
 	return PolicyAppliesToMPS{
 		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_RemoteAccessPolicyAppliesToMPS, client),
-	}
-}
-
-func NewRemoteAccessPolicyAppliesToMPS(wsmanMessageCreator *message.WSManMessageCreator) PolicyAppliesToMPS {
-	return PolicyAppliesToMPS{
-		base: message.NewBase(wsmanMessageCreator, AMT_RemoteAccessPolicyAppliesToMPS),
 	}
 }
 
