@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package actions holds generic action constants for various AMT commands
 package actions
 
 type Actions string
