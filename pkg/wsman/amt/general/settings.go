@@ -41,7 +41,7 @@ func (GeneralSettings Settings) Get() (response Response, err error) {
 	return
 }
 
-// Enumerates the instances of this class
+// Enumerate returns an enumeration context which is used in a subsequent Pull call
 func (GeneralSettings Settings) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -63,7 +63,7 @@ func (GeneralSettings Settings) Enumerate() (response Response, err error) {
 	return
 }
 
-// Pulls instances of this class, following an Enumerate operation
+// Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
 func (GeneralSettings Settings) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
