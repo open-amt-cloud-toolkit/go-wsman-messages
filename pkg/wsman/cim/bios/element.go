@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package bios facilitiates communication with Intel® AMT devices to get information about the device bios element
 package bios
 
 import (
@@ -12,6 +13,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 )
 
+// NewBIOSElementWithClient instantiates a new Element
 func NewBIOSElementWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Element {
 	return Element{
 		base: message.NewBaseWithClient(wsmanMessageCreator, CIM_BIOSElement, client),

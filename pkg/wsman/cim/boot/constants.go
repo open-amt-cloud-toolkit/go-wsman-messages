@@ -28,3 +28,61 @@ const (
 	OCR_UEFI_BootOption9  Source = "Intel(r)AMT:OCR-UEFI-Boot-Option:9"
 	OCR_UEFI_BootOption10 Source = "Intel(r)AMT:OCR-UEFI-Boot-Option:10"
 )
+
+const (
+	FailThroughSupportedUnknown FailThroughSupported = iota
+	IsSupported
+	NotSupported
+)
+
+const (
+	EnabledStateUnknown EnabledState = iota
+	EnabledStateOther
+	EnabledStateEnabled
+	EnabledStateDisabled
+	EnabledStateShuttingDown
+	EnabledStateNotApplicable
+	EnabledStateEnabledbutOffline
+	EnabledStateInTest
+	EnabledStateDeferred
+	EnabledStateQuiesce
+	EnabledStateStarting
+)
+
+const (
+	RequestedStateEnabled RequestedState = iota + 2
+	RequestedStateDisabled
+	RequestedStateShutDown
+	RequestedStateNoChange
+	RequestedStateOffline
+	RequestedStateTest
+	RequestedStateDeferred
+	RequestedStateQuiesce
+	RequestedStateReboot
+	RequestedStateReset
+	RequestedStateNotApplicable
+	RequestedStateUnknown RequestedState = 0
+)
+
+const (
+	OperationalStatusUnknown OperationalStatus = iota
+	OperationalStatusOther
+	OperationalStatusOK
+	OperationalStatusDegraded
+	OperationalStatusStressed
+	OperationalStatusPredictiveFailure
+	OperationalStatusError
+	OperationalStatusNonRecoverableError
+	OperationalStatusStarting
+	OperationalStatusStopping
+	OperationalStatusStopped
+	OperationalStatusInService
+	OperationalStatusNoContact
+	OperationalStatusLostCommunication
+	OperationalStatusAborted
+	OperationalStatusDormant
+	OperationalStatusSupportingEntityinError
+	OperationalStatusCompleted
+	OperationalStatusPowerMode
+	OperationalStatusRelocating
+)
