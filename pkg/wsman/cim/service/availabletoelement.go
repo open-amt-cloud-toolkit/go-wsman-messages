@@ -23,7 +23,7 @@ func NewServiceAvailableToElementWithClient(wsmanMessageCreator *message.WSManMe
 // TODO Figure out how to call GET requiring resourceURIs and Selectors
 // Get retrieves the representation of the instance.  No route
 
-// Enumerates the instances of this class
+// Enumerate returns an enumeration context which is used in a subsequent Pull call
 func (availableToElement AvailableToElement) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -44,7 +44,7 @@ func (availableToElement AvailableToElement) Enumerate() (response Response, err
 
 }
 
-// Pulls instances of this class, following an Enumerate operation
+// Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
 func (availableToElement AvailableToElement) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{

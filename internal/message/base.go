@@ -26,7 +26,7 @@ func NewBaseWithClient(wsmanMessageCreator *WSManMessageCreator, className strin
 	}
 }
 
-// Enumerates the instances of this class
+// Enumerate returns an enumeration context which is used in a subsequent Pull call
 func (b *Base) Enumerate() string {
 	header := b.WSManMessageCreator.CreateHeader(BaseActionsEnumerate, b.className, nil, "", "")
 
@@ -39,7 +39,7 @@ func (b *Base) Get(selector *Selector) string {
 	return b.WSManMessageCreator.CreateXML(header, GetBody)
 }
 
-// Pulls instances of this class, following an Enumerate operation
+// Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
 func (b *Base) Pull(enumerationContext string) string {
 	header := b.WSManMessageCreator.CreateHeader(BaseActionsPull, b.className, nil, "", "")
 	body := createCommonBodyPull(enumerationContext, 0, 0)

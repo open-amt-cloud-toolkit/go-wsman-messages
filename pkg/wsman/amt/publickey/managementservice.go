@@ -41,7 +41,7 @@ func (managementService ManagementService) Get() (response Response, err error) 
 	return
 }
 
-// Enumerates the instances of this class
+// Enumerate returns an enumeration context which is used in a subsequent Pull call
 func (managementService ManagementService) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -61,7 +61,7 @@ func (managementService ManagementService) Enumerate() (response Response, err e
 	return
 }
 
-// Pulls instances of this class, following an Enumerate operation
+// Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
 func (managementService ManagementService) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
