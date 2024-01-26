@@ -1,0 +1,28 @@
+name: Changelog Generator
+
+on:  
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@eb238b55efaa70779f274895e782ed17c84f2895 # v2.6.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with: 
+          fetch-depth: 0
+      - run: docker run -v $PWD:/workdir quay.io/git-chglog/git-chglog:0.15.1 --next-tag vNext --output CHANGELOG-new.md vNext.. 
+      - name: GitHub Upload Release Artifacts
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
+        with:
+          name: CHANGELOG.md
+          path: |
+            ./CHANGELOG.md
