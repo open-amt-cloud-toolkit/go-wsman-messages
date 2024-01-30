@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package chip facilitates communication with Intel® AMT devices to represent any type of integrated circuit hardware, including ASICs, processors, memory chips, etc.
 package chip
 
 import (
