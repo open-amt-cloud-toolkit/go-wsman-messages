@@ -8,7 +8,7 @@ package common
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 )
 
 type EnumerationResponse struct {
