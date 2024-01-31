@@ -15,7 +15,9 @@ import (
 
 // NewMessages instantiates a new Messages class with client connection parameters
 func NewMessages(wsman client.WSMan) Messages {
-	m := Messages{}
+	m := Messages{
+		Client: wsman,
+	}
 
 	m.AMT = amt.NewMessages(m.Client)
 	m.CIM = cim.NewMessages(m.Client)
