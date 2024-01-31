@@ -14,13 +14,11 @@ import (
 )
 
 // NewMessages instantiates a new Messages class with client connection parameters
-func NewMessages(cp ClientParameters) Messages {
-	client := client.NewWsman(cp.Target, cp.Username, cp.Password, cp.UseDigest, cp.UseTLS, cp.SelfSignedAllowed)
-	m := Messages{
-		client: client,
-	}
-	m.AMT = amt.NewMessages(client)
-	m.CIM = cim.NewMessages(client)
-	m.IPS = ips.NewMessages(client)
+func NewMessages(wsman client.WSMan) Messages {
+	m := Messages{}
+
+	m.AMT = amt.NewMessages(m.Client)
+	m.CIM = cim.NewMessages(m.Client)
+	m.IPS = ips.NewMessages(m.Client)
 	return m
 }

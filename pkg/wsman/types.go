@@ -14,7 +14,7 @@ import (
 
 // Messages implements client.WSMan, amt.Messages, cim.Messages, and ips.Messages
 type Messages struct {
-	client client.WSMan
+	Client client.WSMan
 	AMT    amt.Messages
 	CIM    cim.Messages
 	IPS    ips.Messages
