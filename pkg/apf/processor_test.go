@@ -14,7 +14,7 @@ import (
 func TestProcess(t *testing.T) {
 	data := []byte{0x01}
 
-	session := &LMESession{}
+	session := &Session{}
 
 	result := Process(data, session)
 	assert.NotNil(t, result)
@@ -24,7 +24,7 @@ func TestProcessChannelOpenFailure(t *testing.T) {
 	errorChannel := make(chan error)
 	statusChannel := make(chan bool)
 
-	session := &LMESession{
+	session := &Session{
 		ErrorBuffer: errorChannel,
 		Status:      statusChannel,
 	}
@@ -39,12 +39,12 @@ func TestProcessChannelOpenFailure(t *testing.T) {
 }
 func TestProcessChannelWindowAdjust(t *testing.T) {
 	data := []byte{0x01}
-	session := &LMESession{}
+	session := &Session{}
 	ProcessChannelWindowAdjust(data, session)
 }
 func TestProcessChannelClose(t *testing.T) {
 	data := []byte{0x01}
-	session := &LMESession{}
+	session := &Session{}
 	result := ProcessChannelClose(data, session)
 	assert.NotNil(t, result)
 }
@@ -66,7 +66,7 @@ func TestProcessChannelData(t *testing.T) {
 		0x00, 0x00, 0x00, 0x01,
 	}
 	timer := time.NewTimer(time.Duration(2 * time.Second))
-	session := &LMESession{
+	session := &Session{
 		Timer: timer,
 	}
 	go func() {
@@ -99,7 +99,7 @@ func TestProcessServiceRequestWhenPWFD(t *testing.T) {
 func TestProcessChannelOpenConfirmation(t *testing.T) {
 	data := []byte{0x01}
 	statusChannel := make(chan bool)
-	session := &LMESession{
+	session := &Session{
 		Status: statusChannel,
 	}
 	defer close(statusChannel)

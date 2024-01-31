@@ -241,7 +241,7 @@ type APF_CHANNEL_OPEN_MESSAGE struct {
 	OriginatorPort            uint32
 }
 
-type LMESession struct {
+type Session struct {
 	SenderChannel    uint32
 	RecipientChannel uint32
 	TXWindow         uint32

@@ -14,7 +14,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func Process(data []byte, session *LMESession) bytes.Buffer {
+func Process(data []byte, session *Session) bytes.Buffer {
 	var bin_buf bytes.Buffer
 	var dataToSend interface{}
 	switch data[0] {
@@ -57,7 +57,7 @@ func Process(data []byte, session *LMESession) bytes.Buffer {
 	return bin_buf
 }
 
-func ProcessChannelWindowAdjust(data []byte, session *LMESession) {
+func ProcessChannelWindowAdjust(data []byte, session *Session) {
 	adjustMessage := APF_CHANNEL_WINDOW_ADJUST_MESSAGE{}
 	dataBuffer := bytes.NewBuffer(data)
 	err := binary.Read(dataBuffer, binary.BigEndian, &adjustMessage)
@@ -67,7 +67,7 @@ func ProcessChannelWindowAdjust(data []byte, session *LMESession) {
 	session.TXWindow += adjustMessage.BytesToAdd
 	log.Tracef("%+v", adjustMessage)
 }
-func ProcessChannelClose(data []byte, session *LMESession) APF_CHANNEL_CLOSE_MESSAGE {
+func ProcessChannelClose(data []byte, session *Session) APF_CHANNEL_CLOSE_MESSAGE {
 	closeMessage := APF_CHANNEL_CLOSE_MESSAGE{}
 	dataBuffer := bytes.NewBuffer(data)
 	err := binary.Read(dataBuffer, binary.BigEndian, &closeMessage)
@@ -138,7 +138,7 @@ func ProcessGlobalRequest(data []byte) interface{} {
 	}
 	return reply
 }
-func ProcessChannelData(data []byte, session *LMESession) {
+func ProcessChannelData(data []byte, session *Session) {
 	channelData := APF_CHANNEL_DATA_MESSAGE{}
 	buf2 := bytes.NewBuffer(data)
 
@@ -215,7 +215,7 @@ func ProcessServiceRequest(data []byte) APF_SERVICE_ACCEPT_MESSAGE {
 	}
 	return serviceAccept
 }
-func ProcessChannelOpenConfirmation(data []byte, session *LMESession) {
+func ProcessChannelOpenConfirmation(data []byte, session *Session) {
 	confirmationMessage := APF_CHANNEL_OPEN_CONFIRMATION_MESSAGE{}
 	dataBuffer := bytes.NewBuffer(data)
 	err := binary.Read(dataBuffer, binary.BigEndian, &confirmationMessage)
@@ -232,7 +232,7 @@ func ProcessChannelOpenConfirmation(data []byte, session *LMESession) {
 	session.TXWindow = confirmationMessage.InitialWindowSize
 	session.Status <- true
 }
-func ProcessChannelOpenFailure(data []byte, session *LMESession) {
+func ProcessChannelOpenFailure(data []byte, session *Session) {
 	channelOpenFailure := APF_CHANNEL_OPEN_FAILURE_MESSAGE{}
 	dataBuffer := bytes.NewBuffer(data)
 	err := binary.Read(dataBuffer, binary.BigEndian, &channelOpenFailure)
