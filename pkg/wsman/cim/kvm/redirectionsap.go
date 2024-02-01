@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package kvm facilitates communication with Intel® AMT devices derived from Service Access Point, that describes an access point to start the KVM redirection. One access point represents access to a single KVM redirection stream.
 package kvm
 
 import (
