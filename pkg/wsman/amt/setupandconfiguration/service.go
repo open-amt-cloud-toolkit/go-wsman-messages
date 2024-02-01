@@ -9,6 +9,7 @@ package setupandconfiguration
 import (
 	"encoding/base64"
 	"encoding/xml"
+	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -273,5 +274,11 @@ func (s Service) Unprovision(provisioningMode ProvisioningModeValue) (response R
 	if err != nil {
 		return
 	}
+	if response.Body.Unprovision_OUTPUT.ReturnValue != 0 {
+		// log.Error("Status: Failed to deactivate. ReturnValue: ", response.Body.Unprovision_OUTPUT.ReturnValue)
+		err = errors.New("Status: Failed to deactivate. ReturnValue: " + fmt.Sprintf("%d", response.Body.Unprovision_OUTPUT.ReturnValue))
+		return
+	}
+
 	return
 }

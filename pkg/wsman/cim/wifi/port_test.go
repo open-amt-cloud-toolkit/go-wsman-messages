@@ -123,7 +123,7 @@ func TestPositiveCIMWifiPort(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
-					RequestStateChange_OUTPUT: message.ReturnValue{
+					RequestStateChange_OUTPUT: common.ReturnValue{
 						XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiPort", Local: "RequestStateChange_OUTPUT"},
 						ReturnValue: 0,
 					},
@@ -249,7 +249,7 @@ func TestNegativeCIMWifiPort(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
-					RequestStateChange_OUTPUT: message.ReturnValue{
+					RequestStateChange_OUTPUT: common.ReturnValue{
 						XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiPort", Local: "RequestStateChange_OUTPUT"},
 						ReturnValue: 0,
 					},

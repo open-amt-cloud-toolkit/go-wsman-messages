@@ -11,6 +11,9 @@ import (
 	"fmt"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/amt/methods"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/wifi"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
@@ -120,90 +123,91 @@ func (service Service) Put(wiFiPortConfigurationService WiFiPortConfigurationSer
 // ValueMap={0, 1, 2, 3, 4, .., 32768..65535}
 //
 // Values={Completed with No Error, Not Supported, Failed, Invalid Parameter, Invalid Reference, Method Reserved, Vendor Specific}
-// func (service Service) AddWiFiSettings(wifiEndpointSettings wifi.WiFiEndpointSettings_INPUT, ieee8021xSettingsInput *models.IEEE8021xSettings, wifiEndpoint, clientCredential, caCredential string) (response Response, err error) {
-// 	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_WiFiPortConfigurationService, AddWiFiSettings), AMT_WiFiPortConfigurationService, nil, "", "")
-// 	input := AddWiFiSettings_INPUT{
-// 		WifiEndpoint: WiFiEndpoint{
-// 			Address: "/wsman",
-// 			ReferenceParameters: ReferenceParameters{
-// 				H:           "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
-// 				ResourceURI: fmt.Sprintf("%s%s", message.CIMSchema, wifi.CIM_WiFiEndpoint),
-// 				SelectorSet: SelectorSet{
-// 					H: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
-// 					Selector: []Selector{
-// 						{
-// 							H:     "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
-// 							Name:  "Name",
-// 							Value: wifiEndpoint,
-// 						},
-// 					},
-// 				},
-// 			},
-// 		},
-// 		WiFiEndpointSettings: wifiEndpointSettings,
-// 	}
-// 	input.WiFiEndpointSettings.H = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings"
-// 	if ieee8021xSettingsInput != nil {
-// 		input.IEEE8021xSettings = ieee8021xSettingsInput
-// 		input.IEEE8021xSettings.H = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_IEEE8021xSettings"
-// 		input.CACredential = &CACredentialRequest{
-// 			H:       "http://schemas.xmlsoap.org/ws/2004/08/addressing",
-// 			Address: "default",
-// 			ReferenceParameters: ReferenceParameters{
-// 				H:           "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
-// 				ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
-// 				SelectorSet: SelectorSet{
-// 					H: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
-// 					Selector: []Selector{
-// 						{
-// 							H:     "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
-// 							Name:  "InstanceID",
-// 							Value: caCredential,
-// 						},
-// 					},
-// 				},
-// 			},
-// 		}
-// 		if clientCredential != "" {
-// 			input.ClientCredential = &ClientCredentialRequest{
-// 				H:       "http://schemas.xmlsoap.org/ws/2004/08/addressing",
-// 				Address: "default",
-// 				ReferenceParameters: ReferenceParameters{
-// 					H:           "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
-// 					ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
-// 					SelectorSet: SelectorSet{
-// 						H: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
-// 						Selector: []Selector{
-// 							{
-// 								H:     "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
-// 								Name:  "InstanceID",
-// 								Value: clientCredential,
-// 							},
-// 						},
-// 					},
-// 				},
-// 			}
-// 		}
-// 	}
+func (service Service) AddWiFiSettings(wifiEndpointSettings wifi.WiFiEndpointSettingsRequest, ieee8021xSettingsInput models.IEEE8021xSettings, wifiEndpoint, clientCredential, caCredential string) (response Response, err error) {
+	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_WiFiPortConfigurationService, AddWiFiSettings), AMT_WiFiPortConfigurationService, nil, "", "")
+	input := AddWiFiSettings_INPUT{
+		WifiEndpoint: WiFiEndpoint{
+			Address: "/wsman",
+			ReferenceParameters: ReferenceParameters{
+				H:           "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+				ResourceURI: fmt.Sprintf("%s%s", message.CIMSchema, wifi.CIM_WiFiEndpoint),
+				SelectorSet: SelectorSet{
+					H: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+					Selector: []Selector{
+						{
+							H:     "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+							Name:  "Name",
+							Value: wifiEndpoint,
+						},
+					},
+				},
+			},
+		},
+		WiFiEndpointSettings: wifiEndpointSettings,
+	}
+	input.WiFiEndpointSettings.H = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings"
+	if wifiEndpointSettings.AuthenticationMethod == wifi.AuthenticationMethod_WPA_IEEE8021x ||
+		wifiEndpointSettings.AuthenticationMethod == wifi.AuthenticationMethod_WPA2_IEEE8021x {
+		input.IEEE8021xSettings = ieee8021xSettingsInput
+		input.IEEE8021xSettings.H = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_IEEE8021xSettings"
+		input.CACredential = &CACredentialRequest{
+			H:       "http://schemas.xmlsoap.org/ws/2004/08/addressing",
+			Address: "default",
+			ReferenceParameters: ReferenceParameters{
+				H:           "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+				ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
+				SelectorSet: SelectorSet{
+					H: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+					Selector: []Selector{
+						{
+							H:     "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+							Name:  "InstanceID",
+							Value: caCredential,
+						},
+					},
+				},
+			},
+		}
+		if clientCredential != "" {
+			input.ClientCredential = &ClientCredentialRequest{
+				H:       "http://schemas.xmlsoap.org/ws/2004/08/addressing",
+				Address: "default",
+				ReferenceParameters: ReferenceParameters{
+					H:           "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+					ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
+					SelectorSet: SelectorSet{
+						H: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+						Selector: []Selector{
+							{
+								H:     "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+								Name:  "InstanceID",
+								Value: clientCredential,
+							},
+						},
+					},
+				},
+			}
+		}
+	}
 
-// 	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(AddWiFiSettings), AMT_WiFiPortConfigurationService, &input)
-// 	response = Response{
-// 		Message: &client.Message{
-// 			XMLInput: service.base.WSManMessageCreator.CreateXML(header, body),
-// 		},
-// 	}
-// 	// send the message to AMT
-// 	err = service.base.Execute(response.Message)
-// 	if err != nil {
-// 		return
-// 	}
-// 	// put the xml response into the go struct
-// 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
-// 	if err != nil {
-// 		return
-// 	}
-// 	return
-// }
+	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(AddWiFiSettings), AMT_WiFiPortConfigurationService, &input)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+	// send the message to AMT
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+}
 
 // TODO: Add UpdateWiFiSettings
 // TODO: Add DeleteAllITProfiles

@@ -35,9 +35,11 @@ const (
 	AuthenticationMethod_WPA2_PSK
 	AuthenticationMethod_WPA2_IEEE8021x
 	AuthenticationMethod_DMTFReserved
-	AuthenticationMethod_WPA3_SAE       AuthenticationMethod = 32768
-	AuthenticationMethod_WPA3_OWE       AuthenticationMethod = 32769
-	AuthenticationMethod_VendorReserved AuthenticationMethod = 32770
+)
+const (
+	AuthenticationMethod_WPA3_SAE AuthenticationMethod = iota + 32768
+	AuthenticationMethod_WPA3_OWE
+	AuthenticationMethod_VendorReserved
 )
 
 const (
@@ -53,4 +55,20 @@ const (
 	EncryptionMethod_CCMP
 	EncryptionMethod_None
 	EncryptionMethod_DMTFReserved
+)
+
+const (
+	CompletedwithNoError ReturnValue = iota
+	NotSupported
+	UnknownorUnspecifiedError
+	CannotcompletewithinTimeoutPeriod
+	Failed
+	InvalidParameter
+	InUse
+)
+const (
+	MethodParametersCheckedJobStarted ReturnValue = iota + 4096
+	InvalidStateTransition
+	UseofTimeoutParameterNotSupported
+	Busy
 )
