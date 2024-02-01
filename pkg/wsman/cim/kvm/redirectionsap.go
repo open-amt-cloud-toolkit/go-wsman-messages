@@ -8,9 +8,9 @@ package kvm
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/methods"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/methods"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
 // NewKVMRedirectionSAP returns a new instance of the KVMRedirectionSAP struct.

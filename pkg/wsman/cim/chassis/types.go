@@ -7,7 +7,7 @@ package chassis
 
 import (
 	"encoding/xml"
-
+  
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"

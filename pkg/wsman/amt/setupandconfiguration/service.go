@@ -12,9 +12,9 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/methods"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/amt/methods"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
 // DecodeUUID formats the returned AMT base64 encoded UUID into a human readable UUID
