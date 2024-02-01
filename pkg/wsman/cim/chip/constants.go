@@ -6,3 +6,26 @@
 package chip
 
 const CIM_Chip string = "CIM_Chip"
+
+const (
+	OperationalStatusUnknown OperationalStatus = iota
+	OperationalStatusOther
+	OperationalStatusOK
+	OperationalStatusDegraded
+	OperationalStatusStressed
+	OperationalStatusPredictiveFailure
+	OperationalStatusError
+	OperationalStatusNonRecoverableError
+	OperationalStatusStarting
+	OperationalStatusStopping
+	OperationalStatusStopped
+	OperationalStatusInService
+	OperationalStatusNoContact
+	OperationalStatusLostCommunication
+	OperationalStatusAborted
+	OperationalStatusDormant
+	OperationalStatusSupportingEntityinError
+	OperationalStatusCompleted
+	OperationalStatusPowerMode
+	OperationalStatusRelocating
+)
