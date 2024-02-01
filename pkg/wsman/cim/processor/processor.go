@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package processor facilitates communication with Intel® AMT devices capabilities and management of the Processor LogicalDevice
 package processor
 
 import (
