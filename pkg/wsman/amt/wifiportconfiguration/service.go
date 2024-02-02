@@ -211,6 +211,10 @@ func (service Service) AddWiFiSettings(wifiEndpointSettings wifi.WiFiEndpointSet
 	if err != nil {
 		return
 	}
+	if response.Body.AddWiFiSettings_OUTPUT.ReturnValue != 0 {
+		err = fmt.Errorf("AddWiFiSettings_OUTPUT.ReturnValue: %d", response.Body.AddWiFiSettings_OUTPUT.ReturnValue)
+	}
+
 	return
 }
 
