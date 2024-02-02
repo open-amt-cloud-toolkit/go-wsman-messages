@@ -8,6 +8,7 @@ package wifiportconfiguration
 
 import (
 	"encoding/xml"
+	"errors"
 	"fmt"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
@@ -102,6 +103,10 @@ func (service Service) Put(wiFiPortConfigurationService WiFiPortConfigurationSer
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
+	}
+
+	if response.Body.WiFiPortConfigurationService.LocalProfileSynchronizationEnabled == 0 {
+		err = errors.New("failed to enable wifi local profile synchronization")
 	}
 	return
 }
