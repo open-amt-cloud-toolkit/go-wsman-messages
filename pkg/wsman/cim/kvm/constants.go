@@ -24,4 +24,21 @@ const (
 	KVMRedirectionSAPKRaw
 	KVMRedirectionSAPKRDP
 	KVMRedirectionSAPKVNC_RFB
+	KVMRedirectionSAPDMTFReserved
+	KVMRedirectionSAPVendorSpecified
+)
+const (
+	EnabledStateUnknown EnabledState = iota
+	EnabledStateOther
+	EnabledStateEnabled
+	EnabledStateDisabled
+	EnabledStateShuttingDown
+	EnabledStateNotApplicable
+	EnabledStateEnabledButOffline
+	EnabledStateInTest
+	EnabledStateDeferred
+	EnabledStateQuiesce
+	EnabledStateStarting
+	EnabledStateDMTFReserved
+	EnabledStateVendorReserved
 )

@@ -8,12 +8,12 @@ package ips
 import (
 	// "reflect"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/alarmclock"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/hostbasedsetup"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/ieee8021x"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/optin"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips/alarmclock"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips/hostbasedsetup"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips/ieee8021x"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips/optin"
 )
 
 type Messages struct {

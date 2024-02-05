@@ -14,52 +14,58 @@ import (
 )
 
 func TestNewClient(t *testing.T) {
-	target := "example.com"
+	cp := Parameters{
+		Target:            "example.com",
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         false,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
 	expectedTarget := "http://example.com:16992/wsman"
-	username := "user"
-	password := "password"
-	useDigest := false
-	useTLS := false
-	selfSignedAllowed := false
 
-	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(cp)
 
 	if client.endpoint != expectedTarget {
-		t.Errorf("Expected endpoint to be %s, but got %s", target, client.endpoint)
+		t.Errorf("Expected endpoint to be %s, but got %s", cp.Target, client.endpoint)
 	}
-	if client.username != username {
-		t.Errorf("Expected username to be %s, but got %s", username, client.username)
+	if client.username != cp.Username {
+		t.Errorf("Expected username to be %s, but got %s", cp.Username, client.username)
 	}
-	if client.password != password {
-		t.Errorf("Expected password to be %s, but got %s", password, client.password)
+	if client.password != cp.Password {
+		t.Errorf("Expected password to be %s, but got %s", cp.Password, client.password)
 	}
-	if client.useDigest != useDigest {
-		t.Errorf("Expected useDigest to be %v, but got %v", useDigest, client.useDigest)
+	if client.useDigest != cp.UseDigest {
+		t.Errorf("Expected useDigest to be %v, but got %v", cp.UseDigest, client.useDigest)
 	}
 }
 
 func TestNewClient_TLS(t *testing.T) {
-	target := "example.com"
 	expectedTarget := "https://example.com:16993/wsman"
-	username := "user"
-	password := "password"
-	useDigest := false
-	useTLS := true
-	selfSignedAllowed := true
+	cp := Parameters{
+		Target:            "example.com",
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         false,
+		UseTLS:            true,
+		SelfSignedAllowed: true,
+		LogAMTMessages:    false,
+	}
 
-	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(cp)
 
 	if client.endpoint != expectedTarget {
-		t.Errorf("Expected endpoint to be %s, but got %s", target, client.endpoint)
+		t.Errorf("Expected endpoint to be %s, but got %s", cp.Target, client.endpoint)
 	}
-	if client.username != username {
-		t.Errorf("Expected username to be %s, but got %s", username, client.username)
+	if client.username != cp.Username {
+		t.Errorf("Expected username to be %s, but got %s", cp.Username, client.username)
 	}
-	if client.password != password {
-		t.Errorf("Expected password to be %s, but got %s", password, client.password)
+	if client.password != cp.Password {
+		t.Errorf("Expected password to be %s, but got %s", cp.Password, client.password)
 	}
-	if client.useDigest != useDigest {
-		t.Errorf("Expected useDigest to be %v, but got %v", useDigest, client.useDigest)
+	if client.useDigest != cp.UseDigest {
+		t.Errorf("Expected useDigest to be %v, but got %v", cp.UseDigest, client.useDigest)
 	}
 }
 
@@ -71,14 +77,17 @@ func TestClient_Post(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	target := ts.URL
-	username := "user"
-	password := "password"
-	useDigest := false
-	useTLS := false
-	selfSignedAllowed := false
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         false,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
 
-	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(cp)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	client.endpoint = ts.URL
@@ -120,14 +129,17 @@ func TestClient_PostWithDigestAuth(t *testing.T) {
 	}))))
 	defer ts.Close()
 
-	target := ts.URL
-	username := "user"
-	password := "password"
-	useDigest := true
-	useTLS := false
-	selfSignedAllowed := false
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         true,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
 
-	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(cp)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	client.endpoint = ts.URL
@@ -149,14 +161,17 @@ func TestClient_PostWithDigestAuthUnauthorized(t *testing.T) {
 	})))
 	defer ts.Close()
 
-	target := ts.URL
-	username := "wronguser"
-	password := "wrongpassword"
-	useDigest := true
-	useTLS := false
-	selfSignedAllowed := false
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "wronguser",
+		Password:          "wrongpassword",
+		UseDigest:         true,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
 
-	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(cp)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	client.endpoint = ts.URL
@@ -180,14 +195,17 @@ func TestClient_PostWithBasicAuth(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	target := ts.URL
-	username := "user"
-	password := "password"
-	useDigest := false
-	useTLS := false
-	selfSignedAllowed := false
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         false,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
 
-	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(cp)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	client.endpoint = ts.URL
@@ -207,14 +225,16 @@ func TestClient_PostUnauthorized(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	target := ts.URL
-	username := "wronguser"
-	password := "wrongpassword"
-	useDigest := false
-	useTLS := false
-	selfSignedAllowed := false
-
-	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "wronguser",
+		Password:          "wrongpassword",
+		UseDigest:         false,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
+	client := NewWsman(cp)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	client.endpoint = ts.URL
@@ -232,14 +252,17 @@ func TestClient_PostInvalidResponse(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	target := ts.URL
-	username := "user"
-	password := "password"
-	useDigest := false
-	useTLS := false
-	selfSignedAllowed := false
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         false,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
 
-	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(cp)
 	msg := "<SampleRequest>Request</SampleRequest>"
 
 	client.endpoint = ts.URL
@@ -263,14 +286,17 @@ func TestClient_PostWithDigestBlankRealm(t *testing.T) {
 	})))
 	defer ts.Close()
 
-	target := ts.URL
-	username := "user"
-	password := "password"
-	useDigest := true
-	useTLS := false
-	selfSignedAllowed := false
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         true,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
 
-	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(cp)
 	client.challenge.Realm = ""
 	msg := "<SampleRequest>Request</SampleRequest>"
 
@@ -286,14 +312,18 @@ func TestClient_PostWithDigestBlankRealm(t *testing.T) {
 }
 
 func TestClient_ProxyUrlTransport(t *testing.T) {
-	target := "example.com"
-	username := "user"
-	password := "password"
-	useDigest := true
-	useTLS := false
-	selfSignedAllowed := false
 
-	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	cp := Parameters{
+		Target:            "example.com",
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         true,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
+
+	client := NewWsman(cp)
 	err := client.ProxyUrl("http://localhost:3128")
 	if err != nil {
 		t.Error("Failed to set proxy on proper Transport")
@@ -301,14 +331,17 @@ func TestClient_ProxyUrlTransport(t *testing.T) {
 }
 
 func TestClient_InvalidProxyUrlGoodTransport(t *testing.T) {
-	target := "example.com"
-	username := "user"
-	password := "password"
-	useDigest := true
-	useTLS := false
-	selfSignedAllowed := false
+	cp := Parameters{
+		Target:            "example.com",
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         true,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
 
-	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(cp)
 	err := client.ProxyUrl("localhost")
 	if err == nil {
 		t.Error("Failed to detect invalid proxy url")
@@ -323,14 +356,18 @@ func (*rt) RoundTrip(r *http.Request) (*http.Response, error) {
 }
 
 func TestClient_SimpleRountripper(t *testing.T) {
-	target := "example.com"
-	username := "user"
-	password := "password"
-	useDigest := true
-	useTLS := false
-	selfSignedAllowed := false
+	cp := Parameters{
+		Target:            "example.com",
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         true,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
+
 	mockrt := rt{}
-	client := NewWsman(target, username, password, useDigest, useTLS, selfSignedAllowed)
+	client := NewWsman(cp)
 	client.Transport = &mockrt
 	err := client.ProxyUrl("http://localhost:3128")
 	if err == nil {

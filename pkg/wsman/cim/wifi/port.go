@@ -7,10 +7,12 @@ package wifi
 
 import (
 	"encoding/xml"
+	"errors"
+	"strconv"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/methods"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/methods"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
 // NewWiFiPort returns a new instance of the WiFiPort struct.
@@ -37,6 +39,9 @@ func (port Port) RequestStateChange(requestedState int) (response Response, err 
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
+	}
+	if response.Body.RequestStateChange_OUTPUT.ReturnValue != 0 {
+		err = errors.New("RequestStateChange failed with return code " + strconv.Itoa(response.Body.RequestStateChange_OUTPUT.ReturnValue))
 	}
 	return
 }

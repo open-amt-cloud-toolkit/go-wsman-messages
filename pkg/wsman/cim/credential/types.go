@@ -8,10 +8,10 @@ package credential
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 )
 
 type Context struct {
@@ -40,7 +40,7 @@ type (
 	}
 
 	CredentialContext struct {
-		ElementInContext        models.AssociationReference `xml:"ElementInContext"`
-		ElementProvidingContext models.AssociationReference `xml:"ElementProvidingContext"`
+		ElementInContext        models.AssociationReference `xml:"ElementInContext"`        // A Credential whose context is defined.
+		ElementProvidingContext models.AssociationReference `xml:"ElementProvidingContext"` // The ManagedElement that provides context or scope for the Credential.
 	}
 )

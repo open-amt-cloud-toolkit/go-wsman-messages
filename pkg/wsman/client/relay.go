@@ -124,7 +124,7 @@ func (t *WsTransport) disconnectWebsocket() {
 func (t *WsTransport) RoundTrip(r *http.Request) (resp *http.Response, err error) {
 	// Sanity check
 	if t.wsurl == "" || t.protocol == 0 || t.host == "" || t.username == "" || t.password == "" || t.port == 0 {
-		return nil, errors.New("Invalid Transport data")
+		return nil, errors.New("invalid transport data")
 	}
 	// Check if we had already established websocket for this transport object, if not create
 	if t.conn == nil || t.conn.UnderlyingConn() == nil {

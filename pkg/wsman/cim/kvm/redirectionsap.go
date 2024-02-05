@@ -3,14 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package kvm facilitates communication with Intel® AMT devices derived from Service Access Point, that describes an access point to start the KVM redirection. One access point represents access to a single KVM redirection stream.
 package kvm
 
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/methods"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/methods"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
 // NewKVMRedirectionSAP returns a new instance of the KVMRedirectionSAP struct.

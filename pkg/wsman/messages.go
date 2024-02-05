@@ -7,15 +7,15 @@
 package wsman
 
 import (
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/amt"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips"
 )
 
 // NewMessages instantiates a new Messages class with client connection parameters
-func NewMessages(cp ClientParameters) Messages {
-	client := client.NewWsman(cp.Target, cp.Username, cp.Password, cp.UseDigest, cp.UseTLS, cp.SelfSignedAllowed)
+func NewMessages(cp client.Parameters) Messages {
+	client := client.NewWsman(cp)
 	m := Messages{
 		client: client,
 	}

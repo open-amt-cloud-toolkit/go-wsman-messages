@@ -11,9 +11,9 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/ips/methods"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips/methods"
 )
 
 // NewHostBasedSetupService returns a new instance of the HostBasedSetupService struct.
@@ -99,6 +99,9 @@ func (service Service) AddNextCertInChain(cert string, isLeaf bool, isRoot bool)
 	if err != nil {
 		return
 	}
+	if response.Body.AdminSetup_OUTPUT.ReturnValue != 0 {
+		err = fmt.Errorf("AddNextCertInChain returned %d", response.Body.AdminSetup_OUTPUT.ReturnValue)
+	}
 	return
 }
 
@@ -127,6 +130,9 @@ func (service Service) AdminSetup(adminPassEncryptionType AdminPassEncryptionTyp
 	if err != nil {
 		return
 	}
+	if response.Body.AdminSetup_OUTPUT.ReturnValue != 0 {
+		err = fmt.Errorf("AdminSetup returned %d", response.Body.AdminSetup_OUTPUT.ReturnValue)
+	}
 	return
 }
 
@@ -150,6 +156,10 @@ func (service Service) Setup(adminPassEncryptionType AdminPassEncryptionType, di
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
+	}
+	if response.Body.Setup_OUTPUT.ReturnValue != 0 {
+		//, errors.New("unable to activate CCM, check to make sure the device is not alreacy activated")
+		err = fmt.Errorf("Setup returned %d", response.Body.Setup_OUTPUT.ReturnValue)
 	}
 	return
 }

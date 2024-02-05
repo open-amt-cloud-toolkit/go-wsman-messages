@@ -14,6 +14,8 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 const ContentType = "application/soap+xml; charset=utf-8"
@@ -35,18 +37,19 @@ type WSMan interface {
 // Target is a thin wrapper around http.Target.
 type Target struct {
 	http.Client
-	endpoint     string
-	username     string
-	password     string
-	useDigest    bool
-	OptimizeEnum bool
-	challenge    *authChallenge
+	endpoint       string
+	username       string
+	password       string
+	useDigest      bool
+	OptimizeEnum   bool
+	logAMTMessages bool
+	challenge      *authChallenge
 }
 
-func NewWsman(target, username, password string, useDigest, useTLS, selfSignedAllowed bool) *Target {
+func NewWsman(cp Parameters) *Target {
 	path := "/wsman"
 	port := NonTLSPort
-	if useTLS {
+	if cp.UseTLS {
 		port = TLSPort
 	}
 	protocol := "http"
@@ -54,15 +57,16 @@ func NewWsman(target, username, password string, useDigest, useTLS, selfSignedAl
 		protocol = "https"
 	}
 	res := &Target{
-		endpoint:  protocol + "://" + target + ":" + port + path,
-		username:  username,
-		password:  password,
-		useDigest: useDigest,
+		endpoint:       protocol + "://" + cp.Target + ":" + port + path,
+		username:       cp.Username,
+		password:       cp.Password,
+		useDigest:      cp.UseDigest,
+		logAMTMessages: cp.LogAMTMessages,
 	}
 
 	res.Timeout = 10 * time.Second
 	res.Transport = &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: selfSignedAllowed},
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: cp.SelfSignedAllowed},
 	}
 	if res.useDigest {
 		res.challenge = &authChallenge{Username: res.username, Password: res.password}
@@ -95,6 +99,9 @@ func (c *Target) Post(msg string) (response []byte, err error) {
 	}
 	req.Header.Add("content-type", ContentType)
 
+	if c.logAMTMessages {
+		logrus.Trace(msg)
+	}
 	res, err := c.Do(req)
 	if err != nil {
 		return nil, err
@@ -116,7 +123,7 @@ func (c *Target) Post(msg string) (response []byte, err error) {
 		req.Header.Set("Authorization", auth)
 		req.Header.Add("content-type", ContentType)
 		res, err = c.Do(req)
-		if err != nil {
+		if err != nil && err.Error() != io.EOF.Error() {
 			return nil, err
 		}
 	}
@@ -125,10 +132,18 @@ func (c *Target) Post(msg string) (response []byte, err error) {
 
 	if res.StatusCode >= 400 {
 		b, _ := io.ReadAll(res.Body)
+		if c.logAMTMessages {
+			logrus.Trace(string(b))
+		}
 		return nil, fmt.Errorf("wsman.Client: post received %v\n'%v'", res.Status, string(b))
 	}
+
 	response, err = io.ReadAll(res.Body)
-	if err != nil {
+	if c.logAMTMessages {
+		logrus.Trace(string(response))
+	}
+
+	if err != nil && err.Error() != io.EOF.Error() {
 		return nil, err
 	}
 
@@ -140,12 +155,12 @@ func (c *Target) ProxyUrl(proxy_str string) (err error) {
 	//check if c.Transport is *http.Transport, otherwise currently it is not supported
 	_, ok := c.Transport.(*http.Transport)
 	if !ok {
-		return errors.New("Transport does not support proxy")
+		return errors.New("transport does not support proxy")
 	}
 	// check if proxy parsing failed or check if scheme is not nil
 	proxyUrl, err := url.Parse(proxy_str)
 	if err != nil || (proxyUrl != nil && proxyUrl.Scheme == "") {
-		return errors.New("Unknown URL Scheme")
+		return errors.New("unknown URL Scheme")
 	}
 	c.Transport.(*http.Transport).Proxy = http.ProxyURL(proxyUrl)
 	return nil

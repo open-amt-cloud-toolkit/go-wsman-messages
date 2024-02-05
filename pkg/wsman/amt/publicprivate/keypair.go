@@ -12,8 +12,8 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
 // NewPublicPrivateKeyPairWithClient instantiates a new KeyPair
@@ -88,10 +88,10 @@ func (keyPair KeyPair) Pull(enumerationContext string) (response Response, err e
 }
 
 // Deletes an instance of a key pair
-func (keyPair KeyPair) Delete(handle int) (response Response, err error) {
+func (keyPair KeyPair) Delete(handle string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
-		Value: fmt.Sprintf("Intel(r) AMT Key: Handle: %d", handle),
+		Value: handle,
 	}
 	response = Response{
 		Message: &client.Message{

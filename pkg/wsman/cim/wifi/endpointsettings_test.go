@@ -11,9 +11,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
 func TestPositiveCIMWifiEndpointSettings(t *testing.T) {
@@ -67,7 +67,7 @@ func TestPositiveCIMWifiEndpointSettings(t *testing.T) {
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
-						EndpointSettingsItems: []WiFiEndpointSettings{
+						EndpointSettingsItems: []WiFiEndpointSettingsResponse{
 							{
 								XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings", Local: "CIM_WiFiEndpointSettings"},
 								AuthenticationMethod: 2,
@@ -95,7 +95,7 @@ func TestPositiveCIMWifiEndpointSettings(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
-					RequestStateChange_OUTPUT: message.ReturnValue{
+					RequestStateChange_OUTPUT: common.ReturnValue{
 						ReturnValue: 0,
 					},
 				},
@@ -165,7 +165,7 @@ func TestNegativeCIMWifiEndpointSettings(t *testing.T) {
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
-						EndpointSettingsItems: []WiFiEndpointSettings{
+						EndpointSettingsItems: []WiFiEndpointSettingsResponse{
 							{
 								XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings", Local: "CIM_WiFiEndpointSettings"},
 								AuthenticationMethod: 2,
@@ -193,7 +193,7 @@ func TestNegativeCIMWifiEndpointSettings(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
-					RequestStateChange_OUTPUT: message.ReturnValue{
+					RequestStateChange_OUTPUT: common.ReturnValue{
 						ReturnValue: 0,
 					},
 				},

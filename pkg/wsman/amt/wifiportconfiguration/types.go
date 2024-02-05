@@ -8,11 +8,11 @@ package wifiportconfiguration
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/models"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/cim/wifi"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/models"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/wifi"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 )
 
 type Service struct {
@@ -167,10 +167,10 @@ type (
 		XMLName              xml.Name `xml:"h:AddWiFiSettings_INPUT"`
 		H                    string   `xml:"xmlns:h,attr"`
 		WifiEndpoint         WiFiEndpoint
-		WiFiEndpointSettings wifi.WiFiEndpointSettings_INPUT
-		IEEE8021xSettings    *models.IEEE8021xSettings `xml:"h:IEEE8021xSettingsInput,omitempty"`
-		ClientCredential     *ClientCredentialRequest  `xml:"h:ClientCredential,omitempty"`
-		CACredential         *CACredentialRequest      `xml:"h:CACredential,omitempty"`
+		WiFiEndpointSettings wifi.WiFiEndpointSettingsRequest
+		IEEE8021xSettings    models.IEEE8021xSettings `xml:"h:IEEE8021xSettingsInput,omitempty"`
+		ClientCredential     *ClientCredentialRequest `xml:"h:ClientCredential,omitempty"`
+		CACredential         *CACredentialRequest     `xml:"h:CACredential,omitempty"`
 	}
 	WiFiPortConfigurationServiceRequest struct {
 		XMLName                            xml.Name                           `xml:"h:AMT_WiFiPortConfigurationService"`

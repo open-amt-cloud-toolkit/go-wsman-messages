@@ -12,9 +12,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/common"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/wsmantesting"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
 func TestPositiveAMT_PublicPrivateKeyPair(t *testing.T) {
@@ -115,7 +115,7 @@ func TestPositiveAMT_PublicPrivateKeyPair(t *testing.T) {
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Key: Handle: 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
 					client.CurrentMessage = "Delete"
-					return elementUnderTest.Delete(0)
+					return elementUnderTest.Delete("Intel(r) AMT Key: Handle: 0")
 				},
 				Body{XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"}},
 			},
@@ -231,7 +231,7 @@ func TestNegativeAMT_PublicPrivateKeyPair(t *testing.T) {
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Key: Handle: 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
 					client.CurrentMessage = "Error"
-					return elementUnderTest.Delete(0)
+					return elementUnderTest.Delete("Intel(r) AMT Key: Handle: 0")
 				},
 				Body{XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"}},
 			},

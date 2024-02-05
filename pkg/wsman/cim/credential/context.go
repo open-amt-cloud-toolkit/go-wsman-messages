@@ -3,13 +3,25 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package credential facilitates communication with Intel® AMT devices in order to define a context (e.g., a System or Service) of a Credential.
+//
+// One example is a shared secret/ password which is defined within the context of an application (or Service).
+//
+// Generally, there is one scoping element for a Credential, however the multiplicities of the association allow a Credential to be scoped by more than one element.
+//
+// If this association is not instantiated for a Credential, that Credential is assumed to be scoped to the Namespace.
+//
+// This association may also be used to indicate that a Credential is valid in some other environment.
+//
+// For instance associating the Credential to a RemoteServiceAccessPoint would indicate that the Credential is used to access the remote service.
+
 package credential
 
 import (
 	"encoding/xml"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
 // NewContext returns a new instance of the NewContext struct.

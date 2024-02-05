@@ -7,11 +7,14 @@ package publickey
 
 import (
 	"encoding/xml"
+	"errors"
 	"fmt"
+	"strconv"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/methods"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/amt/methods"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 )
 
 // NewPublicKeyManagementServiceWithClient instantiates a new ManagementService
@@ -102,6 +105,40 @@ func (managementService ManagementService) Delete(instanceID string) (response R
 	return
 }
 
+//unittest
+// func TestCheckReturnValue(t *testing.T) {
+// 	tests := []struct {
+// 		name string
+// 		in   error
+// 		item string
+// 		want error
+// 	}{
+// 		{"TestNoError", 0, "item", nil},
+// 		{"TestAlreadyExists", common.PT_STATUS_DUPLICATE, "item", utils.AmtPtStatusCodeBase + common.PT_STATUS_DUPLICATE},
+// 		{"TestInvalidItem", common.PT_STATUS_INVALID_CERT, "item", utils.AmtPtStatusCodeBase + common.PT_STATUS_INVALID_CERT},
+// 		{"TestNonZeroReturnCode", 2082, "item", utils.AmtPtStatusCodeBase + 2082},
+// 	}
+
+//		for _, tt := range tests {
+//			t.Run(tt.name, func(t *testing.T) {
+//				got := checkReturnValue(tt.in, tt.item)
+//				assert.Equal(t, tt.want, got)
+//			})
+//		}
+//	}
+func checkReturnValue(rc int, item string) (err error) {
+	if rc != common.PT_STATUS_SUCCESS {
+		if rc == common.PT_STATUS_DUPLICATE {
+			return errors.New(item + " already exists and must be removed before continuing")
+		} else if rc == common.PT_STATUS_INVALID_CERT {
+			return errors.New(item + " is invalid")
+		} else {
+			return errors.New(item + " non-zero return code: " + strconv.Itoa(rc))
+		}
+	}
+	return nil
+}
+
 // This function adds new certificate to the Intel® AMT CertStore. A certificate cannot be removed if it is referenced (for example, used by TLS, 802.1X or EAC).
 func (managementService ManagementService) AddCertificate(certificateBlob string) (response Response, err error) {
 	header := managementService.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_PublicKeyManagementService, AddCertificate), AMT_PublicKeyManagementService, nil, "", "")
@@ -125,6 +162,7 @@ func (managementService ManagementService) AddCertificate(certificateBlob string
 	if err != nil {
 		return
 	}
+	err = checkReturnValue(response.Body.AddCertificate_OUTPUT.ReturnValue, "Client Certificate")
 	return
 }
 
@@ -152,6 +190,8 @@ func (managementService ManagementService) AddTrustedRootCertificate(certificate
 	if err != nil {
 		return
 	}
+	err = checkReturnValue(response.Body.AddTrustedRootCertificate_OUTPUT.ReturnValue, "Root Certificate")
+
 	return
 }
 
@@ -179,6 +219,8 @@ func (managementService ManagementService) GenerateKeyPair(keyAlgorithm KeyAlgor
 	if err != nil {
 		return
 	}
+	err = checkReturnValue(response.Body.AddKey_OUTPUT.ReturnValue, "Private Key")
+
 	return
 }
 

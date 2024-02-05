@@ -9,12 +9,13 @@ package setupandconfiguration
 import (
 	"encoding/base64"
 	"encoding/xml"
+	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/internal/message"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/amt/methods"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/amt/methods"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
 // DecodeUUID formats the returned AMT base64 encoded UUID into a human readable UUID
@@ -273,5 +274,11 @@ func (s Service) Unprovision(provisioningMode ProvisioningModeValue) (response R
 	if err != nil {
 		return
 	}
+	if response.Body.Unprovision_OUTPUT.ReturnValue != 0 {
+		// log.Error("Status: Failed to deactivate. ReturnValue: ", response.Body.Unprovision_OUTPUT.ReturnValue)
+		err = errors.New("Status: Failed to deactivate. ReturnValue: " + fmt.Sprintf("%d", response.Body.Unprovision_OUTPUT.ReturnValue))
+		return
+	}
+
 	return
 }
