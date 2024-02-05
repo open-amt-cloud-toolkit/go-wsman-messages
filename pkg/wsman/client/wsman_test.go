@@ -1,0 +1,376 @@
+/*********************************************************************
+ * Copyright (c) Intel Corporation 2023
+ * SPDX-License-Identifier: Apache-2.0
+ **********************************************************************/
+
+package client
+
+import (
+	"strings"
+	"testing"
+
+	"net/http"
+	"net/http/httptest"
+)
+
+func TestNewClient(t *testing.T) {
+	cp := Parameters{
+		Target:            "example.com",
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         false,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
+	expectedTarget := "http://example.com:16992/wsman"
+
+	client := NewWsman(cp)
+
+	if client.endpoint != expectedTarget {
+		t.Errorf("Expected endpoint to be %s, but got %s", cp.Target, client.endpoint)
+	}
+	if client.username != cp.Username {
+		t.Errorf("Expected username to be %s, but got %s", cp.Username, client.username)
+	}
+	if client.password != cp.Password {
+		t.Errorf("Expected password to be %s, but got %s", cp.Password, client.password)
+	}
+	if client.useDigest != cp.UseDigest {
+		t.Errorf("Expected useDigest to be %v, but got %v", cp.UseDigest, client.useDigest)
+	}
+}
+
+func TestNewClient_TLS(t *testing.T) {
+	expectedTarget := "https://example.com:16993/wsman"
+	cp := Parameters{
+		Target:            "example.com",
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         false,
+		UseTLS:            true,
+		SelfSignedAllowed: true,
+		LogAMTMessages:    false,
+	}
+
+	client := NewWsman(cp)
+
+	if client.endpoint != expectedTarget {
+		t.Errorf("Expected endpoint to be %s, but got %s", cp.Target, client.endpoint)
+	}
+	if client.username != cp.Username {
+		t.Errorf("Expected username to be %s, but got %s", cp.Username, client.username)
+	}
+	if client.password != cp.Password {
+		t.Errorf("Expected password to be %s, but got %s", cp.Password, client.password)
+	}
+	if client.useDigest != cp.UseDigest {
+		t.Errorf("Expected useDigest to be %v, but got %v", cp.UseDigest, client.useDigest)
+	}
+}
+
+func TestClient_Post(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", ContentType)
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("<SampleResponse>OK</SampleResponse>"))
+	}))
+	defer ts.Close()
+
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         false,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
+
+	client := NewWsman(cp)
+	msg := "<SampleRequest>Request</SampleRequest>"
+
+	client.endpoint = ts.URL
+
+	response, err := client.Post(msg)
+	if err != nil {
+		t.Errorf("Unexpected error during POST: %v", err)
+	}
+
+	expectedResponse := "<SampleResponse>OK</SampleResponse>"
+	if string(response) != expectedResponse {
+		t.Errorf("Expected response to be %s, but got %s", expectedResponse, response)
+	}
+}
+func newMockDigestAuthHandler(username, password string, handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authHeader := r.Header.Get("Authorization")
+		if strings.HasPrefix(authHeader, "Digest ") {
+			// Check for the correct username and password in the Authorization header
+			if strings.Contains(authHeader, `username="`+username+`"`) { // &&strings.Contains(authHeader, `uri="`+r.URL.RequestURI()
+				handler.ServeHTTP(w, r)
+			} else {
+				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			}
+		} else {
+			// Simulate a server requesting digest authentication with required fields
+			w.Header().Set("WWW-Authenticate", `Digest realm="example.com", nonce="mock-nonce", qop="auth", opaque="opaque-data", algorithm=MD5`)
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		}
+	})
+}
+func TestClient_PostWithDigestAuth(t *testing.T) {
+	// Use a simple digest auth implementation for testing purposes
+
+	ts := httptest.NewServer(newMockDigestAuthHandler("user", "password", http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", ContentType)
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("<SampleResponse>OK</SampleResponse>"))
+	}))))
+	defer ts.Close()
+
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         true,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
+
+	client := NewWsman(cp)
+	msg := "<SampleRequest>Request</SampleRequest>"
+
+	client.endpoint = ts.URL
+	response, err := client.Post(msg)
+	if err != nil {
+		t.Errorf("Unexpected error during POST with digest auth: %v", err)
+	}
+
+	expectedResponse := "<SampleResponse>OK</SampleResponse>"
+	if string(response) != expectedResponse {
+		t.Errorf("Expected response to be %s, but got %s", expectedResponse, response)
+	}
+}
+
+func TestClient_PostWithDigestAuthUnauthorized(t *testing.T) {
+	ts := httptest.NewServer(newMockDigestAuthHandler("user", "password", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", ContentType)
+		w.WriteHeader(http.StatusOK)
+	})))
+	defer ts.Close()
+
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "wronguser",
+		Password:          "wrongpassword",
+		UseDigest:         true,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
+
+	client := NewWsman(cp)
+	msg := "<SampleRequest>Request</SampleRequest>"
+
+	client.endpoint = ts.URL
+	_, err := client.Post(msg)
+	if err == nil {
+		t.Error("Expected error during POST with wrong digest auth credentials, but got nil")
+	}
+}
+
+func TestClient_PostWithBasicAuth(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		username, password, ok := r.BasicAuth()
+		if !ok || username != "user" || password != "password" {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		w.Header().Set("Content-Type", ContentType)
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("<SampleResponse>OK</SampleResponse>"))
+	}))
+	defer ts.Close()
+
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         false,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
+
+	client := NewWsman(cp)
+	msg := "<SampleRequest>Request</SampleRequest>"
+
+	client.endpoint = ts.URL
+	response, err := client.Post(msg)
+	if err != nil {
+		t.Errorf("Unexpected error during POST with basic auth: %v", err)
+	}
+
+	expectedResponse := "<SampleResponse>OK</SampleResponse>"
+	if string(response) != expectedResponse {
+		t.Errorf("Expected response to be %s, but got %s", expectedResponse, response)
+	}
+}
+func TestClient_PostUnauthorized(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+	}))
+	defer ts.Close()
+
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "wronguser",
+		Password:          "wrongpassword",
+		UseDigest:         false,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
+	client := NewWsman(cp)
+	msg := "<SampleRequest>Request</SampleRequest>"
+
+	client.endpoint = ts.URL
+	_, err := client.Post(msg)
+	if err == nil {
+		t.Error("Expected error during POST with wrong credentials, but got nil")
+	}
+}
+
+func TestClient_PostInvalidResponse(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", ContentType)
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte("Internal Server Error"))
+	}))
+	defer ts.Close()
+
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         false,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
+
+	client := NewWsman(cp)
+	msg := "<SampleRequest>Request</SampleRequest>"
+
+	client.endpoint = ts.URL
+	_, err := client.Post(msg)
+	if err == nil {
+		t.Error("Expected error during POST with invalid response, but got nil")
+	}
+}
+
+func TestClient_PostWithDigestBlankRealm(t *testing.T) {
+	ts := httptest.NewServer(newMockDigestAuthHandler("user", "password", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authHeader := r.Header.Get("Authorization")
+		if strings.HasPrefix(authHeader, "Digest ") {
+			//Simulate internal server error
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			// Simulate a server requesting digest authentication with required fields
+			w.Header().Set("WWW-Authenticate", `Digest realm="example.com", nonce="mock-nonce", qop="auth", opaque="opaque-data", algorithm=MD5`)
+			w.WriteHeader(http.StatusUnauthorized)
+		}
+	})))
+	defer ts.Close()
+
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         true,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
+
+	client := NewWsman(cp)
+	client.challenge.Realm = ""
+	msg := "<SampleRequest>Request</SampleRequest>"
+
+	client.endpoint = ts.URL
+	_, err := client.Post(msg)
+	if err == nil {
+		t.Error("Expected error during POST with wrong digest auth credentials, but got nil")
+	}
+	if !strings.Contains(err.Error(), "500 Internal Server Error") {
+		t.Error("Wsman client should not send digest on initial challenges")
+	}
+
+}
+
+func TestClient_ProxyUrlTransport(t *testing.T) {
+
+	cp := Parameters{
+		Target:            "example.com",
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         true,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
+
+	client := NewWsman(cp)
+	err := client.ProxyUrl("http://localhost:3128")
+	if err != nil {
+		t.Error("Failed to set proxy on proper Transport")
+	}
+}
+
+func TestClient_InvalidProxyUrlGoodTransport(t *testing.T) {
+	cp := Parameters{
+		Target:            "example.com",
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         true,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
+
+	client := NewWsman(cp)
+	err := client.ProxyUrl("localhost")
+	if err == nil {
+		t.Error("Failed to detect invalid proxy url")
+	}
+}
+
+// inline struct for mock roundtripper
+type rt struct{}
+
+func (*rt) RoundTrip(r *http.Request) (*http.Response, error) {
+	return nil, nil
+}
+
+func TestClient_SimpleRountripper(t *testing.T) {
+	cp := Parameters{
+		Target:            "example.com",
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         true,
+		UseTLS:            false,
+		SelfSignedAllowed: false,
+		LogAMTMessages:    false,
+	}
+
+	mockrt := rt{}
+	client := NewWsman(cp)
+	client.Transport = &mockrt
+	err := client.ProxyUrl("http://localhost:3128")
+	if err == nil {
+		t.Error("Failed to detect proper transport")
+	}
+}

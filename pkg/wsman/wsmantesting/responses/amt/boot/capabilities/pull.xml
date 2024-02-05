@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<a:Envelope xmlns:a="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:b="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+    xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"
+    xmlns:d="http://schemas.xmlsoap.org/ws/2005/02/trust"
+    xmlns:e="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+    xmlns:f="http://schemas.dmtf.org/wbem/wsman/1/cimbinding.xsd"
+    xmlns:g="http://schemas.xmlsoap.org/ws/2004/09/enumeration"
+    xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_BootCapabilities"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <a:Header>
+        <b:To>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:To>
+        <b:RelatesTo>8</b:RelatesTo>
+        <b:Action a:mustUnderstand="true">http://schemas.xmlsoap.org/ws/2004/09/enumeration/PullResponse</b:Action>
+        <b:MessageID>uuid:00000000-8086-8086-8086-0000000025F3</b:MessageID>
+        <c:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_BootCapabilities</c:ResourceURI>
+    </a:Header>
+    <a:Body>
+        <g:PullResponse>
+            <g:Items>
+                <h:AMT_BootCapabilities>
+                    <h:BIOSPause>false</h:BIOSPause>
+                    <h:BIOSReflash>true</h:BIOSReflash>
+                    <h:BIOSSecureBoot>true</h:BIOSSecureBoot>
+                    <h:BIOSSetup>true</h:BIOSSetup>
+                    <h:ConfigurationDataReset>false</h:ConfigurationDataReset>
+                    <h:ElementName>Intel(r) AMT: Boot Capabilities</h:ElementName>
+                    <h:ForceCDorDVDBoot>true</h:ForceCDorDVDBoot>
+                    <h:ForceDiagnosticBoot>false</h:ForceDiagnosticBoot>
+                    <h:ForceHardDriveBoot>true</h:ForceHardDriveBoot>
+                    <h:ForceHardDriveSafeModeBoot>false</h:ForceHardDriveSafeModeBoot>
+                    <h:ForcePXEBoot>true</h:ForcePXEBoot>
+                    <h:ForcedProgressEvents>true</h:ForcedProgressEvents>
+                    <h:IDER>true</h:IDER>
+                    <h:InstanceID>Intel(r) AMT:BootCapabilities 0</h:InstanceID>
+                    <h:KeyboardLock>true</h:KeyboardLock>
+                    <h:PowerButtonLock>false</h:PowerButtonLock>
+                    <h:ResetButtonLock>false</h:ResetButtonLock>
+                    <h:SOL>true</h:SOL>
+                    <h:SecureErase>false</h:SecureErase>
+                    <h:SleepButtonLock>false</h:SleepButtonLock>
+                    <h:UserPasswordBypass>true</h:UserPasswordBypass>
+                    <h:VerbosityQuiet>false</h:VerbosityQuiet>
+                    <h:VerbosityScreenBlank>false</h:VerbosityScreenBlank>
+                    <h:VerbosityVerbose>false</h:VerbosityVerbose>
+                </h:AMT_BootCapabilities>
+            </g:Items>
+            <g:EndOfSequence></g:EndOfSequence>
+        </g:PullResponse>
+    </a:Body>
+</a:Envelope>

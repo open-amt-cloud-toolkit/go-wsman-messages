@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<a:Envelope xmlns:a="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:b="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+    xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"
+    xmlns:d="http://schemas.xmlsoap.org/ws/2005/02/trust"
+    xmlns:e="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+    xmlns:f="http://schemas.dmtf.org/wbem/wsman/1/cimbinding.xsd"
+    xmlns:g="http://schemas.xmlsoap.org/ws/2004/09/enumeration"
+    xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog"
+    xmlns:i="http://schemas.dmtf.org/wbem/wscim/1/common"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <a:Header>
+        <b:To>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:To>
+        <b:RelatesTo>8</b:RelatesTo>
+        <b:Action a:mustUnderstand="true">http://schemas.xmlsoap.org/ws/2004/09/enumeration/PullResponse</b:Action>
+        <b:MessageID>uuid:00000000-8086-8086-8086-000000002721</b:MessageID>
+        <c:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog</c:ResourceURI>
+    </a:Header>
+    <a:Body>
+        <g:PullResponse>
+            <g:Items>
+                <h:AMT_MessageLog>
+                    <h:Capabilities>5</h:Capabilities>
+                    <h:Capabilities>6</h:Capabilities>
+                    <h:Capabilities>8</h:Capabilities>
+                    <h:Capabilities>7</h:Capabilities>
+                    <h:CharacterSet>10</h:CharacterSet>
+                    <h:CreationClassName>AMT_MessageLog</h:CreationClassName>
+                    <h:CurrentNumberOfRecords>390</h:CurrentNumberOfRecords>
+                    <h:ElementName>Intel(r) AMT:MessageLog 1</h:ElementName>
+                    <h:EnabledDefault>2</h:EnabledDefault>
+                    <h:EnabledState>2</h:EnabledState>
+                    <h:HealthState>5</h:HealthState>
+                    <h:IsFrozen>false</h:IsFrozen>
+                    <h:LastChange>0</h:LastChange>
+                    <h:LogState>4</h:LogState>
+                    <h:MaxLogSize>0</h:MaxLogSize>
+                    <h:MaxNumberOfRecords>390</h:MaxNumberOfRecords>
+                    <h:MaxRecordSize>21</h:MaxRecordSize>
+                    <h:Name>Intel(r) AMT:MessageLog 1</h:Name>
+                    <h:OperationalStatus>2</h:OperationalStatus>
+                    <h:OverwritePolicy>2</h:OverwritePolicy>
+                    <h:PercentageNearFull>100</h:PercentageNearFull>
+                    <h:RequestedState>12</h:RequestedState>
+                    <h:SizeOfHeader>0</h:SizeOfHeader>
+                    <h:SizeOfRecordHeader>0</h:SizeOfRecordHeader>
+                    <h:Status>OK</h:Status>
+                </h:AMT_MessageLog>
+            </g:Items>
+            <g:EndOfSequence></g:EndOfSequence>
+        </g:PullResponse>
+    </a:Body>
+</a:Envelope>

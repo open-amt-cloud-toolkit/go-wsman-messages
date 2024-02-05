@@ -17,10 +17,10 @@ on:
     types:
       - created
   push:
-    branches: [ main ]
+    branches: [ main, v2.0 ]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ main ]
+    branches: [ main, v2.0 ]
   schedule:
     - cron: '26 23 * * 0'
 

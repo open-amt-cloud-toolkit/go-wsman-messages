@@ -8,14 +8,8 @@ package message
 import (
 	"fmt"
 
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/pkg/wsman"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
-
-type Base struct {
-	WSManMessageCreator *WSManMessageCreator
-	className           string
-	client              wsman.WSManClient
-}
 
 func NewBase(wsmanMessageCreator *WSManMessageCreator, className string) Base {
 	return Base{
@@ -24,7 +18,7 @@ func NewBase(wsmanMessageCreator *WSManMessageCreator, className string) Base {
 	}
 }
 
-func NewBaseWithClient(wsmanMessageCreator *WSManMessageCreator, className string, client wsman.WSManClient) Base {
+func NewBaseWithClient(wsmanMessageCreator *WSManMessageCreator, className string, client client.WSMan) Base {
 	return Base{
 		WSManMessageCreator: wsmanMessageCreator,
 		className:           className,
@@ -32,7 +26,7 @@ func NewBaseWithClient(wsmanMessageCreator *WSManMessageCreator, className strin
 	}
 }
 
-// Enumerates the instances of this class
+// Enumerate returns an enumeration context which is used in a subsequent Pull call
 func (b *Base) Enumerate() string {
 	header := b.WSManMessageCreator.CreateHeader(BaseActionsEnumerate, b.className, nil, "", "")
 
@@ -45,7 +39,7 @@ func (b *Base) Get(selector *Selector) string {
 	return b.WSManMessageCreator.CreateXML(header, GetBody)
 }
 
-// Pulls instances of this class, following an Enumerate operation
+// Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
 func (b *Base) Pull(enumerationContext string) string {
 	header := b.WSManMessageCreator.CreateHeader(BaseActionsPull, b.className, nil, "", "")
 	body := createCommonBodyPull(enumerationContext, 0, 0)
@@ -88,7 +82,7 @@ func (b *Base) RequestStateChange(actionName string, requestedState int) string 
 	return b.WSManMessageCreator.CreateXML(header, body)
 }
 
-func (b *Base) Execute(message *wsman.Message) error {
+func (b *Base) Execute(message *client.Message) error {
 	if b.client != nil {
 		xmlResponse, err := b.client.Post(message.XMLInput)
 		message.XMLOutput = string(xmlResponse)
