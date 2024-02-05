@@ -99,6 +99,9 @@ func (c *Target) Post(msg string) (response []byte, err error) {
 	}
 	req.Header.Add("content-type", ContentType)
 
+	if c.logAMTMessages {
+		logrus.Trace(msg)
+	}
 	res, err := c.Do(req)
 	if err != nil {
 		return nil, err
@@ -120,7 +123,7 @@ func (c *Target) Post(msg string) (response []byte, err error) {
 		req.Header.Set("Authorization", auth)
 		req.Header.Add("content-type", ContentType)
 		res, err = c.Do(req)
-		if err != nil {
+		if err != nil && err.Error() != io.EOF.Error() {
 			return nil, err
 		}
 	}
@@ -129,18 +132,18 @@ func (c *Target) Post(msg string) (response []byte, err error) {
 
 	if res.StatusCode >= 400 {
 		b, _ := io.ReadAll(res.Body)
+		if c.logAMTMessages {
+			logrus.Trace(string(b))
+		}
 		return nil, fmt.Errorf("wsman.Client: post received %v\n'%v'", res.Status, string(b))
 	}
 
-	if c.logAMTMessages {
-		logrus.Trace(msg)
-	}
 	response, err = io.ReadAll(res.Body)
 	if c.logAMTMessages {
 		logrus.Trace(string(response))
 	}
 
-	if err != nil {
+	if err != nil && err.Error() != io.EOF.Error() {
 		return nil, err
 	}
 
