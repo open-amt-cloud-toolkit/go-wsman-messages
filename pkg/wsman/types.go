@@ -19,13 +19,3 @@ type Messages struct {
 	CIM    cim.Messages
 	IPS    ips.Messages
 }
-
-// ClientParameters struct defines the connection settings for wsman client
-type ClientParameters struct {
-	Target            string
-	Username          string
-	Password          string
-	UseDigest         bool
-	UseTLS            bool
-	SelfSignedAllowed bool
-}
