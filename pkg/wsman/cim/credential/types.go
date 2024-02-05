@@ -40,7 +40,7 @@ type (
 	}
 
 	CredentialContext struct {
-		ElementInContext        models.AssociationReference `xml:"ElementInContext"`
-		ElementProvidingContext models.AssociationReference `xml:"ElementProvidingContext"`
+		ElementInContext        models.AssociationReference `xml:"ElementInContext"`        // A Credential whose context is defined.
+		ElementProvidingContext models.AssociationReference `xml:"ElementProvidingContext"` // The ManagedElement that provides context or scope for the Credential.
 	}
 )
