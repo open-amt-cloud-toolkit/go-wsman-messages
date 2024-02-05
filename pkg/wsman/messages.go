@@ -15,7 +15,7 @@ import (
 
 // NewMessages instantiates a new Messages class with client connection parameters
 func NewMessages(cp client.Parameters) Messages {
-	client := client.NewWsman(cp.Target, cp.Username, cp.Password, cp.UseDigest, cp.UseTLS, cp.SelfSignedAllowed)
+	client := client.NewWsman(cp)
 	m := Messages{
 		client: client,
 	}

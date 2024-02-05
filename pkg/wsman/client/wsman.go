@@ -46,10 +46,10 @@ type Target struct {
 	challenge      *authChallenge
 }
 
-func NewWsman(target, username, password string, useDigest, useTLS, selfSignedAllowed, logAMTMessages bool) *Target {
+func NewWsman(cp Parameters) *Target {
 	path := "/wsman"
 	port := NonTLSPort
-	if useTLS {
+	if cp.UseTLS {
 		port = TLSPort
 	}
 	protocol := "http"
@@ -57,16 +57,16 @@ func NewWsman(target, username, password string, useDigest, useTLS, selfSignedAl
 		protocol = "https"
 	}
 	res := &Target{
-		endpoint:       protocol + "://" + target + ":" + port + path,
-		username:       username,
-		password:       password,
-		useDigest:      useDigest,
-		logAMTMessages: logAMTMessages,
+		endpoint:       protocol + "://" + cp.Target + ":" + port + path,
+		username:       cp.Username,
+		password:       cp.Password,
+		useDigest:      cp.UseDigest,
+		logAMTMessages: cp.LogAMTMessages,
 	}
 
 	res.Timeout = 10 * time.Second
 	res.Transport = &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: selfSignedAllowed},
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: cp.SelfSignedAllowed},
 	}
 	if res.useDigest {
 		res.challenge = &authChallenge{Username: res.username, Password: res.password}
