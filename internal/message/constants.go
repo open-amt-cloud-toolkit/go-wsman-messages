@@ -60,4 +60,9 @@ const (
 	DeleteBody           = "<Body></Body>"
 	EnumerateBody        = "<Body><Enumerate xmlns=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration\" /></Body>"
 	GetBody              = "<Body></Body>"
+	AMTSchema            = "http://intel.com/wbem/wscim/1/amt-schema/1/"
+	CIMSchema            = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
+	IPSSchema            = "http://intel.com/wbem/wscim/1/ips-schema/1/"
+	XMLBodySpace         = "http://www.w3.org/2003/05/soap-envelope"
+	XMLPullResponseSpace = "http://schemas.xmlsoap.org/ws/2004/09/enumeration"
 )

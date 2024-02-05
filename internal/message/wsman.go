@@ -13,30 +13,6 @@ import (
 	"strings"
 )
 
-type Selector struct {
-	XMLName xml.Name `xml:"w:Selector,omitempty"`
-	Name    string   `xml:"Name,attr"`
-	Value   string   `xml:",chardata"`
-}
-type Selector_OUTPUT struct {
-	XMLName xml.Name `xml:"Selector,omitempty"`
-	Name    string   `xml:"Name,attr"`
-	Value   string   `xml:",chardata"`
-}
-
-type ReturnValue struct {
-	ReturnValue    int
-	ReturnValueStr string
-}
-type WSManMessageCreator struct {
-	MessageID        int
-	XmlCommonPrefix  string
-	XmlCommonEnd     string
-	AnonymousAddress string
-	DefaultTimeout   string
-	ResourceURIBase  string
-}
-
 func NewWSManMessageCreator(resourceUriBase string) *WSManMessageCreator {
 	return &WSManMessageCreator{
 		MessageID:        0,
@@ -118,30 +94,6 @@ func (w *WSManMessageCreator) createSelector(selectorSet Selector) string {
 		return fmt.Sprintf(`<w:SelectorSet><w:Selector Name="%s">%s</w:Selector></w:SelectorSet>`, selectorSet.Name, selectorSet.Value)
 	}
 	return ""
-
-	// result := "<w:SelectorSet>"
-	// for propName, propValue := range v {
-	// 	propValueMap := propValue.(map[string]interface{})
-	// 	result += fmt.Sprintf(`<w:Selector Name="%s">`, propName)
-	// 	if refParams, ok := propValueMap["ReferenceParameters"].(map[string]interface{}); ok {
-	// 		address := propValueMap["Address"].(string)
-	// 		resourceURI := refParams["ResourceURI"].(string)
-	// 		selectorSet := refParams["SelectorSet"].(map[string]interface{})
-	// 		selectorArray := selectorSet["Selector"].(map[string]interface{})
-	// 		result += "<a:EndpointReference>"
-	// 		result += fmt.Sprintf(`<a:Address>%s</a:Address><a:ReferenceParameters><w:ResourceURI>%s</w:ResourceURI><w:SelectorSet>`, address, resourceURI)
-
-	// 		if name, ok := selectorArray["$.Name"].(string); ok {
-	// 			value := selectorArray["_"].(string)
-	// 			result += fmt.Sprintf(`<w:Selector Name="%s">%s</w:Selector>`, name, value)
-	// 		}
-	// 		result += "</w:SelectorSet></a:ReferenceParameters></a:EndpointReference>"
-	// 	}
-	// 	result += "</w:Selector>"
-	// }
-	// result += "</w:SelectorSet>"
-	// return result
-
 }
 
 // createSelectorObjectForBody creates an object for the body using the given selector.
