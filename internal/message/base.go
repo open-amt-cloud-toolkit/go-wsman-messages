@@ -7,7 +7,6 @@ package message
 
 import (
 	"fmt"
-	"reflect"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
@@ -53,29 +52,17 @@ func (b *Base) Delete(selector Selector) string {
 	return b.WSManMessageCreator.CreateXML(header, DeleteBody)
 }
 
-// Exec executes the specified method with params as inputs
-func (b *Base) Exec(method string, params map[string]interface{}) string {
+// ExecMethod executes the specified method with params as inputs
+func (b *Base) ExecMethod(method string, params interface{}, useHeaderSelector bool, customSelector *Selector) string {
 	action := b.WSManMessageCreator.ResourceURIBase + b.className + "/" + method
-	header := b.WSManMessageCreator.CreateHeader(action, b.className, nil, "", "")
-	// build body
-	body := "<Body>"
-	body += "<r:" + method + "_INPUT " + "xmlns:r=\"" + b.WSManMessageCreator.ResourceURIBase + b.className + "\">"
-	args_xml := ""
-	for k, v := range params {
-		if v != nil {
-			if reflect.TypeOf(v).Kind() == reflect.Array || reflect.TypeOf(v).Kind() == reflect.Slice {
-				ar := reflect.ValueOf(v)
-				for i := 0; i < ar.Len(); i++ {
-					args_xml += "<r:" + string(k) + ">" + fmt.Sprintf("%v", ar.Index(i)) + "</r:" + string(k) + ">"
-				}
-			} else {
-				args_xml += "<r:" + string(k) + ">" + fmt.Sprintf("%v", v) + "</r:" + string(k) + ">"
-			}
-		}
+	ns := b.WSManMessageCreator.ResourceURIBase + b.className
+	var header string
+	if useHeaderSelector {
+		header = b.WSManMessageCreator.CreateHeader(action, b.className, customSelector, "", "")
+	} else {
+		header = b.WSManMessageCreator.CreateHeader(action, b.className, nil, "", "")
 	}
-	body += args_xml
-	body += "</r:" + method + "_INPUT>"
-	body += "</Body>"
+	body := b.WSManMessageCreator.CreateBody(method, ns, &params)
 	return b.WSManMessageCreator.CreateXML(header, body)
 }
 

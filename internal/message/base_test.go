@@ -6,6 +6,7 @@
 package message
 
 import (
+	"encoding/xml"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -69,31 +70,50 @@ func TestBase(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	})
 
-	t.Run("ExecNoArg", func(t *testing.T) {
+	t.Run("ExecMethodNoParam", func(t *testing.T) {
 		method := "ClearLog"
-		params := map[string]interface{}{}
-		expected := "<?xml version=\"1.0\" encoding=\"utf-8\"?><Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:a=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\" xmlns:w=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\" xmlns=\"http://www.w3.org/2003/05/soap-envelope\"><Header><a:Action>test-uriTestClass/ClearLog</a:Action><a:To>/wsman</a:To><w:ResourceURI>test-uriTestClass</w:ResourceURI><a:MessageID>8</a:MessageID><a:ReplyTo><a:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address></a:ReplyTo><w:OperationTimeout>PT60S</w:OperationTimeout></Header><Body><r:ClearLog_INPUT xmlns:r=\"test-uriTestClass\"></r:ClearLog_INPUT></Body></Envelope>"
-		actual := base.Exec(method, params)
+		type ClearLog_INPUT struct {
+			XMLName xml.Name `xml:"h:ClearLog_INPUT"`
+			H       string   `xml:"xmlns:h,attr"`
+		}
+		params := ClearLog_INPUT{
+			H: base.WSManMessageCreator.ResourceURIBase + base.className,
+		}
+		expected := "<?xml version=\"1.0\" encoding=\"utf-8\"?><Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:a=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\" xmlns:w=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\" xmlns=\"http://www.w3.org/2003/05/soap-envelope\"><Header><a:Action>test-uriTestClass/ClearLog</a:Action><a:To>/wsman</a:To><w:ResourceURI>test-uriTestClass</w:ResourceURI><a:MessageID>8</a:MessageID><a:ReplyTo><a:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address></a:ReplyTo><w:OperationTimeout>PT60S</w:OperationTimeout></Header><Body><h:ClearLog_INPUT xmlns:h=\"test-uriTestClass\"></h:ClearLog_INPUT></Body></Envelope>"
+		actual := base.ExecMethod(method, params, false, nil)
 		assert.Equal(t, expected, actual)
 	})
 
-	t.Run("ExecOneArg", func(t *testing.T) {
+	t.Run("ExecMethodParam", func(t *testing.T) {
 		method := "RequestStateChange"
-		params := map[string]interface{}{
-			"RequestedState": 1,
+		type RequestStateChange_INPUT struct {
+			XMLName        xml.Name `xml:"h:RequestStateChange_INPUT"`
+			H              string   `xml:"xmlns:h,attr"`
+			RequestedState int      `xml:"h:RequestedState"`
 		}
-		expected := "<?xml version=\"1.0\" encoding=\"utf-8\"?><Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:a=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\" xmlns:w=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\" xmlns=\"http://www.w3.org/2003/05/soap-envelope\"><Header><a:Action>test-uriTestClass/RequestStateChange</a:Action><a:To>/wsman</a:To><w:ResourceURI>test-uriTestClass</w:ResourceURI><a:MessageID>9</a:MessageID><a:ReplyTo><a:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address></a:ReplyTo><w:OperationTimeout>PT60S</w:OperationTimeout></Header><Body><r:RequestStateChange_INPUT xmlns:r=\"test-uriTestClass\"><r:RequestedState>1</r:RequestedState></r:RequestStateChange_INPUT></Body></Envelope>"
-		actual := base.Exec(method, params)
+		params := RequestStateChange_INPUT{
+			H:              base.WSManMessageCreator.ResourceURIBase + base.className,
+			RequestedState: 2,
+		}
+		expected := "<?xml version=\"1.0\" encoding=\"utf-8\"?><Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:a=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\" xmlns:w=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\" xmlns=\"http://www.w3.org/2003/05/soap-envelope\"><Header><a:Action>test-uriTestClass/RequestStateChange</a:Action><a:To>/wsman</a:To><w:ResourceURI>test-uriTestClass</w:ResourceURI><a:MessageID>9</a:MessageID><a:ReplyTo><a:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address></a:ReplyTo><w:OperationTimeout>PT60S</w:OperationTimeout></Header><Body><h:RequestStateChange_INPUT xmlns:h=\"test-uriTestClass\"><h:RequestedState>2</h:RequestedState></h:RequestStateChange_INPUT></Body></Envelope>"
+		actual := base.ExecMethod(method, params, false, nil)
 		assert.Equal(t, expected, actual)
 	})
 
-	t.Run("ExecArrayArg", func(t *testing.T) {
-		method := "AddArray"
-		params := map[string]interface{}{
-			"Data": []string{"One", "Two", "Three", "Four"},
+	t.Run("ExecMethodParamSelector", func(t *testing.T) {
+		method := "RequestStateChange"
+		type RequestStateChange_INPUT struct {
+			XMLName        xml.Name `xml:"h:RequestStateChange_INPUT"`
+			H              string   `xml:"xmlns:h,attr"`
+			RequestedState int      `xml:"h:RequestedState"`
 		}
-		expected := "<?xml version=\"1.0\" encoding=\"utf-8\"?><Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:a=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\" xmlns:w=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\" xmlns=\"http://www.w3.org/2003/05/soap-envelope\"><Header><a:Action>test-uriTestClass/AddArray</a:Action><a:To>/wsman</a:To><w:ResourceURI>test-uriTestClass</w:ResourceURI><a:MessageID>10</a:MessageID><a:ReplyTo><a:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address></a:ReplyTo><w:OperationTimeout>PT60S</w:OperationTimeout></Header><Body><r:AddArray_INPUT xmlns:r=\"test-uriTestClass\"><r:Data>One</r:Data><r:Data>Two</r:Data><r:Data>Three</r:Data><r:Data>Four</r:Data></r:AddArray_INPUT></Body></Envelope>"
-		actual := base.Exec(method, params)
+		params := RequestStateChange_INPUT{
+			H:              base.WSManMessageCreator.ResourceURIBase + base.className,
+			RequestedState: 2,
+		}
+		expected := "<?xml version=\"1.0\" encoding=\"utf-8\"?><Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:a=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\" xmlns:w=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\" xmlns=\"http://www.w3.org/2003/05/soap-envelope\"><Header><a:Action>test-uriTestClass/RequestStateChange</a:Action><a:To>/wsman</a:To><w:ResourceURI>test-uriTestClass</w:ResourceURI><a:MessageID>10</a:MessageID><a:ReplyTo><a:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address></a:ReplyTo><w:OperationTimeout>PT60S</w:OperationTimeout></Header><Body><h:RequestStateChange_INPUT xmlns:h=\"test-uriTestClass\"><h:RequestedState>2</h:RequestedState></h:RequestStateChange_INPUT></Body></Envelope>"
+		actual := base.ExecMethod(method, params, true, nil)
 		assert.Equal(t, expected, actual)
 	})
+
 }
