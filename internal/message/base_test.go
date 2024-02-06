@@ -68,4 +68,32 @@ func TestBase(t *testing.T) {
 		actual := base.RequestStateChange(actionName, requestedState)
 		assert.Equal(t, expected, actual)
 	})
+
+	t.Run("ExecNoArg", func(t *testing.T) {
+		method := "ClearLog"
+		params := map[string]interface{}{}
+		expected := "<?xml version=\"1.0\" encoding=\"utf-8\"?><Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:a=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\" xmlns:w=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\" xmlns=\"http://www.w3.org/2003/05/soap-envelope\"><Header><a:Action>test-uriTestClass/ClearLog</a:Action><a:To>/wsman</a:To><w:ResourceURI>test-uriTestClass</w:ResourceURI><a:MessageID>8</a:MessageID><a:ReplyTo><a:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address></a:ReplyTo><w:OperationTimeout>PT60S</w:OperationTimeout></Header><Body><r:ClearLog_INPUT xmlns:r=\"test-uriTestClass\"></r:ClearLog_INPUT></Body></Envelope>"
+		actual := base.Exec(method, params)
+		assert.Equal(t, expected, actual)
+	})
+
+	t.Run("ExecOneArg", func(t *testing.T) {
+		method := "RequestStateChange"
+		params := map[string]interface{}{
+			"RequestedState": 1,
+		}
+		expected := "<?xml version=\"1.0\" encoding=\"utf-8\"?><Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:a=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\" xmlns:w=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\" xmlns=\"http://www.w3.org/2003/05/soap-envelope\"><Header><a:Action>test-uriTestClass/RequestStateChange</a:Action><a:To>/wsman</a:To><w:ResourceURI>test-uriTestClass</w:ResourceURI><a:MessageID>9</a:MessageID><a:ReplyTo><a:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address></a:ReplyTo><w:OperationTimeout>PT60S</w:OperationTimeout></Header><Body><r:RequestStateChange_INPUT xmlns:r=\"test-uriTestClass\"><r:RequestedState>1</r:RequestedState></r:RequestStateChange_INPUT></Body></Envelope>"
+		actual := base.Exec(method, params)
+		assert.Equal(t, expected, actual)
+	})
+
+	t.Run("ExecArrayArg", func(t *testing.T) {
+		method := "AddArray"
+		params := map[string]interface{}{
+			"Data": []string{"One", "Two", "Three", "Four"},
+		}
+		expected := "<?xml version=\"1.0\" encoding=\"utf-8\"?><Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:a=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\" xmlns:w=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\" xmlns=\"http://www.w3.org/2003/05/soap-envelope\"><Header><a:Action>test-uriTestClass/AddArray</a:Action><a:To>/wsman</a:To><w:ResourceURI>test-uriTestClass</w:ResourceURI><a:MessageID>10</a:MessageID><a:ReplyTo><a:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address></a:ReplyTo><w:OperationTimeout>PT60S</w:OperationTimeout></Header><Body><r:AddArray_INPUT xmlns:r=\"test-uriTestClass\"><r:Data>One</r:Data><r:Data>Two</r:Data><r:Data>Three</r:Data><r:Data>Four</r:Data></r:AddArray_INPUT></Body></Envelope>"
+		actual := base.Exec(method, params)
+		assert.Equal(t, expected, actual)
+	})
 }

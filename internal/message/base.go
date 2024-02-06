@@ -7,6 +7,7 @@ package message
 
 import (
 	"fmt"
+	"reflect"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
@@ -50,6 +51,32 @@ func (b *Base) Pull(enumerationContext string) string {
 func (b *Base) Delete(selector Selector) string {
 	header := b.WSManMessageCreator.CreateHeader(BaseActionsDelete, b.className, &selector, "", "")
 	return b.WSManMessageCreator.CreateXML(header, DeleteBody)
+}
+
+// Exec executes the specified method with params as inputs
+func (b *Base) Exec(method string, params map[string]interface{}) string {
+	action := b.WSManMessageCreator.ResourceURIBase + b.className + "/" + method
+	header := b.WSManMessageCreator.CreateHeader(action, b.className, nil, "", "")
+	// build body
+	body := "<Body>"
+	body += "<r:" + method + "_INPUT " + "xmlns:r=\"" + b.WSManMessageCreator.ResourceURIBase + b.className + "\">"
+	args_xml := ""
+	for k, v := range params {
+		if v != nil {
+			if reflect.TypeOf(v).Kind() == reflect.Array || reflect.TypeOf(v).Kind() == reflect.Slice {
+				ar := reflect.ValueOf(v)
+				for i := 0; i < ar.Len(); i++ {
+					args_xml += "<r:" + string(k) + ">" + fmt.Sprintf("%v", ar.Index(i)) + "</r:" + string(k) + ">"
+				}
+			} else {
+				args_xml += "<r:" + string(k) + ">" + fmt.Sprintf("%v", v) + "</r:" + string(k) + ">"
+			}
+		}
+	}
+	body += args_xml
+	body += "</r:" + method + "_INPUT>"
+	body += "</Body>"
+	return b.WSManMessageCreator.CreateXML(header, body)
 }
 
 // Put will change properties of the selected instance
