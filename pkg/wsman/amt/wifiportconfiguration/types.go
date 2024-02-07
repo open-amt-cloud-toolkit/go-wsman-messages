@@ -156,9 +156,9 @@ type (
 		H                    string   `xml:"xmlns:h,attr"`
 		WifiEndpoint         WiFiEndpoint
 		WiFiEndpointSettings wifi.WiFiEndpointSettingsRequest
-		IEEE8021xSettings    models.IEEE8021xSettings `xml:"h:IEEE8021xSettingsInput,omitempty"`
-		ClientCredential     *ClientCredentialRequest `xml:"h:ClientCredential,omitempty"`
-		CACredential         *CACredentialRequest     `xml:"h:CACredential,omitempty"`
+		IEEE8021xSettings    *models.IEEE8021xSettings `xml:"h:IEEE8021xSettingsInput,omitempty"`
+		ClientCredential     *ClientCredentialRequest  `xml:"h:ClientCredential,omitempty"`
+		CACredential         *CACredentialRequest      `xml:"h:CACredential,omitempty"`
 	}
 	WiFiPortConfigurationServiceRequest struct {
 		XMLName                            xml.Name                           `xml:"h:AMT_WiFiPortConfigurationService"`
