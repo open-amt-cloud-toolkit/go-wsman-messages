@@ -49,7 +49,7 @@ type (
 		LocalProfileSynchronizationEnabled LocalProfileSynchronizationEnabled `xml:"localProfileSynchronizationEnabled"`        // Administrator's policy regarding enablement of local profile synchronization.Remote profile synchronization is always enabled.
 		LastConnectedSsidUnderMeControl    string                             `xml:"LastConnectedSsidUnderMeControl,omitempty"` // The SSID of the Wireless network that was last connected in ME Control state
 		NoHostCsmeSoftwarePolicy           NoHostCsmeSoftwarePolicy           `xml:"NoHostCsmeSoftwarePolicy"`                  // Setting Policy regarding no HOST CSME software.
-		UEFIWiFiProfileShareEnabled        UEFIWiFiProfileShareEnabled        `xml:"UEFIWiFiProfileShareEnabled"`               // Enables or disables UEFI/CSME Wi-Fi Profile Sharing.
+		UEFIWiFiProfileShareEnabled        bool                               `xml:"UEFIWiFiProfileShareEnabled"`               // Enables or disables UEFI/CSME Wi-Fi Profile Sharing. The feature is available from Intel® CSME 16.0. The feature can be disabled even if the value of AMT_BootCapabilities.UEFIWiFiCoExistenceAndProfileShare is False.
 	}
 	PullResponse struct {
 		XMLName                    xml.Name                               `xml:"PullResponse"`
@@ -84,18 +84,6 @@ type (
 	//
 	// Values={NoHostCsmeSoftwareRelaxedPolicy, NoHostCsmeSoftwareAggressivePolicy, Reserved}
 	NoHostCsmeSoftwarePolicy int
-	// Enables or disables UEFI/CSME Wi-Fi Profile Sharing.
-	//
-	// The feature is available from Intel® CSME 16.0.
-	//
-	// The feature can be disabled even if the value of AMT_BootCapabilities.UEFIWiFiCoExistenceAndProfileShare is False.
-	//
-	// Valid Values:
-	//
-	// 1: Enable
-	//
-	// 0: Disable
-	UEFIWiFiProfileShareEnabled int
 	// RequestedState is an integer enumeration that indicates the last requested or desired state for the element, irrespective of the mechanism through which it was requested. The actual state of the element is represented by EnabledState. This property is provided to compare the last requested and current enabled or disabled states. Note that when EnabledState is set to 5 ("Not Applicable"), then this property has no meaning. Refer to the EnabledState property description for explanations of the values in the RequestedState enumeration.
 	//
 	// "Unknown" (0) indicates the last requested state for the element is unknown.
@@ -186,7 +174,7 @@ type (
 		LocalProfileSynchronizationEnabled LocalProfileSynchronizationEnabled `xml:"h:localProfileSynchronizationEnabled"`        // Administrator's policy regarding enablement of local profile synchronization.Remote profile synchronization is always enabled.
 		LastConnectedSsidUnderMeControl    string                             `xml:"h:LastConnectedSsidUnderMeControl,omitempty"` // The SSID of the Wireless network that was last connected in ME Control state
 		NoHostCsmeSoftwarePolicy           NoHostCsmeSoftwarePolicy           `xml:"h:NoHostCsmeSoftwarePolicy,omitempty"`        // Setting Policy regarding no HOST CSME software.
-		UEFIWiFiProfileShareEnabled        UEFIWiFiProfileShareEnabled        `xml:"h:UEFIWiFiProfileShareEnabled,omitempty"`     // Enables or disables UEFI/CSME Wi-Fi Profile Sharing.
+		UEFIWiFiProfileShareEnabled        bool                               `xml:"h:UEFIWiFiProfileShareEnabled,omitempty"`     // Enables or disables UEFI/CSME Wi-Fi Profile Sharing. The feature is available from Intel® CSME 16.0. The feature can be disabled even if the value of AMT_BootCapabilities.UEFIWiFiCoExistenceAndProfileShare is False.
 	}
 
 	// a Reference to an AMT_PublicKeyCertificate, which represents the CA certificate
