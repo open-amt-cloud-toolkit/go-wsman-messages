@@ -153,7 +153,7 @@ func (service Service) AddWiFiSettings(wifiEndpointSettings wifi.WiFiEndpointSet
 	input.WiFiEndpointSettings.H = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings"
 	if wifiEndpointSettings.AuthenticationMethod == wifi.AuthenticationMethod_WPA_IEEE8021x ||
 		wifiEndpointSettings.AuthenticationMethod == wifi.AuthenticationMethod_WPA2_IEEE8021x {
-		input.IEEE8021xSettings = ieee8021xSettingsInput
+		input.IEEE8021xSettings = &ieee8021xSettingsInput
 		input.IEEE8021xSettings.H = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_IEEE8021xSettings"
 		input.CACredential = &CACredentialRequest{
 			H:       "http://schemas.xmlsoap.org/ws/2004/08/addressing",
