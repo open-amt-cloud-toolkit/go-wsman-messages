@@ -200,18 +200,18 @@ type SharedCredential struct {
 type IEEE8021xSettings struct {
 	XMLName                         xml.Name                        `xml:"h:IEEE8021xSettingsInput,omitempty"`
 	H                               string                          `xml:"xmlns:q,attr"`
-	ElementName                     string                          `xml:"ElementName,omitempty"`
-	InstanceID                      string                          `xml:"InstanceID,omitempty"`
-	AuthenticationProtocol          AuthenticationProtocol          `xml:"AuthenticationProtocol"`
-	RoamingIdentity                 string                          `xml:"RoamingIdentity,omitempty"`
-	ServerCertificateName           string                          `xml:"ServerCertificateName,omitempty"`
-	ServerCertificateNameComparison ServerCertificateNameComparison `xml:"ServerCertificateNameComparison,omitempty"`
-	Username                        string                          `xml:"Username,omitempty"`
-	Password                        string                          `xml:"Password,omitempty"`
-	Domain                          string                          `xml:"Domain,omitempty"`
-	ProtectedAccessCredential       string                          `xml:"ProtectedAccessCredential,omitempty"`
-	PACPassword                     string                          `xml:"PACPassword,omitempty"`
-	PSK                             string                          `xml:"PSK,omitempty"`
+	ElementName                     string                          `xml:"q:ElementName,omitempty"`
+	InstanceID                      string                          `xml:"q:InstanceID,omitempty"`
+	AuthenticationProtocol          AuthenticationProtocol          `xml:"q:AuthenticationProtocol"`
+	RoamingIdentity                 string                          `xml:"q:RoamingIdentity,omitempty"`
+	ServerCertificateName           string                          `xml:"q:ServerCertificateName,omitempty"`
+	ServerCertificateNameComparison ServerCertificateNameComparison `xml:"q:ServerCertificateNameComparison,omitempty"`
+	Username                        string                          `xml:"q:Username,omitempty"`
+	Password                        string                          `xml:"q:Password,omitempty"`
+	Domain                          string                          `xml:"q:Domain,omitempty"`
+	ProtectedAccessCredential       string                          `xml:"q:ProtectedAccessCredential,omitempty"`
+	PACPassword                     string                          `xml:"q:PACPassword,omitempty"`
+	PSK                             string                          `xml:"q:PSK,omitempty"`
 }
 
 type AuthenticationProtocol int
