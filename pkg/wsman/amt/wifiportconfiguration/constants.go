@@ -22,11 +22,6 @@ const (
 )
 
 const (
-	Disabled UEFIWiFiProfileShareEnabled = iota
-	Enabled
-)
-
-const (
 	HealthStateUnknown             HealthState = 0
 	HealthStateOK                  HealthState = 5
 	HealthStateDegradedWarning     HealthState = 10
