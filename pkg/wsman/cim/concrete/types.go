@@ -37,7 +37,7 @@ type (
 		Items   []ConcreteDependency `xml:"Items>CIM_ConcreteDependency"`
 	}
 	ConcreteDependency struct {
-		Antecedent models.AssociationReference `xml:"Antecedent"`
-		Dependent  models.AssociationReference `xml:"Dependent"`
+		Antecedent models.AssociationReference `xml:"Antecedent"` // Antecedent represents the independent object in this association.
+		Dependent  models.AssociationReference `xml:"Dependent"`  // Dependent represents the object that is dependent on the Antecedent.
 	}
 )
