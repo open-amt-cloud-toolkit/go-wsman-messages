@@ -96,7 +96,7 @@ type OptInService struct {
 	OptInDisplayTimeout     int                  `xml:"h:OptInDisplayTimeout,omitempty"`
 }
 
-type OptInRequired int
+type OptInRequired uint32
 type OptInState int
 type CanModifyOptInPolicy int
 type ReturnValue int
