@@ -51,10 +51,10 @@ type (
 	IEEE8021xSettingsRequest struct {
 		H             string   `xml:"xmlns:w,attr"`
 		XMLName       xml.Name `xml:"CIM_IEEE8021xSettings"`
-		ElementName   string   `xml:"w:ElementName"`
-		InstanceID    string   `xml:"w:InstanceID"`
-		Enabled       int      `xml:"w:Enabled"`
-		AvailableInS0 bool     `xml:"w:AvailableInS0"`
-		PxeTimeout    int      `xml:"w:PxeTimeout"`
+		ElementName   string   `xml:"w:ElementName"`   // The user-friendly name for this instance of SettingData.
+		InstanceID    string   `xml:"w:InstanceID"`    // Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class.
+		Enabled       int      `xml:"w:Enabled"`       // Indicates whether the 802.1x profile is enabled.
+		AvailableInS0 bool     `xml:"w:AvailableInS0"` // Indicates the activity setting of the 802.1X module in S0 state.
+		PxeTimeout    int      `xml:"w:PxeTimeout"`    // Timeout in seconds, in which the Intel(R) AMT will hold an authenticated 802.1X session.
 	}
 )
