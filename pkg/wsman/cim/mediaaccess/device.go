@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package mediaaccess facilitiates communication with Intel® AMT devices to represent the ability to access one or more media and use this media to store and retrieve data.
 package mediaaccess
 
 import (
