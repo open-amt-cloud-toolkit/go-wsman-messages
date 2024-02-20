@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package power facilitates communication with Intel® AMT devices where a class derived from Service describes power management functionality, hosted on a System.
+//
+// Whether this service might be used to affect the power state of a particular element is defined by the CIM_ServiceAvailable ToElement association.
 package power
 
 import (
