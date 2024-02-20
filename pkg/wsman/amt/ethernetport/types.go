@@ -95,8 +95,6 @@ type SettingsRequest struct {
 	PhysicalNicMedium            PhysicalNicMedium            `xml:"h:PhysicalNicMedium,omitempty"`            // Indicates which medium is currently used by Intel® AMT to communicate with the NIC. Note: Applicable in Intel AMT 15.0 and later.
 }
 
-type Selector message.Selector
-
 // Enumeration values for link policy restrictions for better power consumption. If Intel® AMT will not be able to determine the exact power state, the more restrictive closest configuration applies.
 //
 // ValueMap={1, 14, 16, 224}

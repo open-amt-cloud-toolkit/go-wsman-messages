@@ -24,10 +24,10 @@ func NewEthernetPortSettingsWithClient(wsmanMessageCreator *message.WSManMessage
 }
 
 // Get retrieves the representation of the instance
-func (s Settings) Get(instanceId int) (response Response, err error) {
+func (s Settings) Get(instanceID string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
-		Value: fmt.Sprintf("Intel(r) AMT Ethernet Port Settings %d", instanceId),
+		Value: instanceID,
 	}
 	response = Response{
 		Message: &client.Message{
