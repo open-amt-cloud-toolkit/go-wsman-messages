@@ -21,7 +21,11 @@ func NewSoftwareIdentityWithClient(wsmanMessageCreator *message.WSManMessageCrea
 }
 
 // Get retrieves the representation of the instance
-func (identity Identity) Get(selector Selector) (response Response, err error) {
+func (identity Identity) Get(instanceID string) (response Response, err error) {
+	selector := message.Selector{
+		Name:  "InstanceID",
+		Value: instanceID,
+	}
 	response = Response{
 		Message: &client.Message{
 			XMLInput: identity.base.Get((*message.Selector)(&selector)),
