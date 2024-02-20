@@ -42,7 +42,7 @@ func TestPositiveAMT_EthernetPortSettings(t *testing.T) {
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Ethernet Port Settings 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
 					client.CurrentMessage = "Get"
-					return elementUnderTest.Get(0)
+					return elementUnderTest.Get("Intel(r) AMT Ethernet Port Settings 0")
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
@@ -222,7 +222,7 @@ func TestNegativeAMT_EthernetPortSettings(t *testing.T) {
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Ethernet Port Settings 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
 					client.CurrentMessage = "Error"
-					return elementUnderTest.Get(0)
+					return elementUnderTest.Get("Intel(r) AMT Ethernet Port Settings 0")
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},

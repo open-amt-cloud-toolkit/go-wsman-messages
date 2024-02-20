@@ -44,6 +44,4 @@ type (
 		VersionString string   `xml:"VersionString"`
 		IsEntity      bool     `xml:"IsEntity"`
 	}
-
-	Selector message.Selector
 )
