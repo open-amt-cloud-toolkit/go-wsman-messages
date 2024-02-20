@@ -44,11 +44,7 @@ func TestPositiveCIMSoftwareIdentity(t *testing.T) {
 				"",
 				func() (Response, error) {
 					client.CurrentMessage = "Get"
-					selector := Selector{
-						Name:  "InstanceID",
-						Value: "AMTApps",
-					}
-					return elementUnderTest.Get(selector)
+					return elementUnderTest.Get("AMTApps")
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
@@ -206,11 +202,7 @@ func TestNegativeCIMSoftwareIdentity(t *testing.T) {
 				"",
 				func() (Response, error) {
 					client.CurrentMessage = "Error"
-					selector := Selector{
-						Name:  "InstanceID",
-						Value: "AMTApps",
-					}
-					return elementUnderTest.Get(selector)
+					return elementUnderTest.Get("AMTApps")
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
