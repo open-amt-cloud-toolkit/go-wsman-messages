@@ -228,10 +228,23 @@ func (managementService ManagementService) GenerateKeyPair(keyAlgorithm KeyAlgor
 func (managementService ManagementService) GeneratePKCS10RequestEx(keyPair, nullSignedCertificateRequest string, signingAlgorithm SigningAlgorithm) (response Response, err error) {
 	header := managementService.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_PublicKeyManagementService, GeneratePKCS10RequestEx), AMT_PublicKeyManagementService, nil, "", "")
 	pkcs10Request := PKCS10Request{
-		H:                            fmt.Sprintf("%s%s", message.AMTSchema, AMT_PublicKeyManagementService),
-		KeyPair:                      keyPair,
-		NullSignedCertificateRequest: nullSignedCertificateRequest,
+		H: fmt.Sprintf("%s%s", message.AMTSchema, AMT_PublicKeyManagementService),
+		KeyPair: KeyPair{
+			Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
+			ReferenceParameters: ReferenceParametersRequest{
+				ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicPrivateKeyPair",
+				SelectorSet: SelectorSetRequest{
+					Selectors: []SelectorRequest{
+						{
+							Name: "InstanceID",
+							Text: keyPair,
+						},
+					},
+				},
+			},
+		},
 		SigningAlgorithm:             signingAlgorithm,
+		NullSignedCertificateRequest: nullSignedCertificateRequest,
 	}
 	body := managementService.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GeneratePKCS10RequestEx), AMT_PublicKeyManagementService, &pkcs10Request)
 	response = Response{

@@ -14,6 +14,9 @@ type MockClient struct {
 }
 
 func (c *MockClient) Post(msg string) ([]byte, error) {
+	if strings.ToLower(c.CurrentMessage) == "error" {
+		return []byte(""), nil
+	}
 	// read an xml file from disk:
 	xmlFile, err := os.Open("../../wsmantesting/responses/" + c.PackageUnderTest + "/" + strings.ToLower(c.CurrentMessage) + ".xml")
 	if err != nil {
