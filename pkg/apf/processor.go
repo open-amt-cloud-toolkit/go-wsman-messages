@@ -258,6 +258,9 @@ func ProcessProtocolVersion(data []byte) APF_PROTOCOL_VERSION_MESSAGE {
 // Send the AFP service accept message to the MEI
 func ServiceAccept(serviceName string) APF_SERVICE_ACCEPT_MESSAGE {
 	log.Debug("sending APF_SERVICE_ACCEPT_MESSAGE")
+	if len(serviceName) != 18 {
+		serviceName = fmt.Sprintf("'%-18s'", serviceName)
+	}
 	var test [18]byte
 	copy(test[:], []byte(serviceName)[:18])
 	serviceAcceptMessage := APF_SERVICE_ACCEPT_MESSAGE{
