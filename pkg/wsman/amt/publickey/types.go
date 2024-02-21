@@ -36,6 +36,7 @@ type (
 		AddCertificate_OUTPUT                 AddCertificate_OUTPUT            `xml:"AddCertificate_OUTPUT,omitempty"`
 		AddKey_OUTPUT                         AddKey_OUTPUT                    `xml:"AddKey_OUTPUT,omitempty"`
 		GenerateKeyPair_OUTPUT                GenerateKeyPair_OUTPUT           `xml:"GenerateKeyPair_OUTPUT,omitempty"`
+		GeneratePKCS10RequestEx_OUTPUT        GeneratePKCS10RequestEx_OUTPUT   `xml:"GeneratePKCS10RequestEx_OUTPUT,omitempty"`
 		KeyManagementGetResponse              KeyManagementResponse            `xml:"AMT_PublicKeyManagementService,omitempty"`
 		PublicKeyCertificateGetAndPutResponse PublicKeyCertificateResponse     `xml:"AMT_PublicKeyCertificate,omitempty"`
 		EnumerateResponse                     common.EnumerateResponse
@@ -88,6 +89,11 @@ type (
 		KeyPair     KeyPairResponse `xml:"KeyPair,omitempty"`
 		ReturnValue int             `xml:"ReturnValue,omitempty"`
 	}
+	GeneratePKCS10RequestEx_OUTPUT struct {
+		XMLName                  xml.Name `xml:"GeneratePKCS10RequestEx_OUTPUT,omitempty"`
+		SignedCertificateRequest string   `xml:"SignedCertificateRequest,omitempty"`
+		ReturnValue              int      `xml:"ReturnValue,omitempty"`
+	}
 	KeyPairResponse struct {
 		XMLName             xml.Name                    `xml:"KeyPair,omitempty"`
 		Address             string                      `xml:"Address,omitempty"`
@@ -104,13 +110,13 @@ type (
 		ReferenceParameters ReferenceParametersResponse `xml:"ReferenceParameters,omitempty"`
 	}
 	ReferenceParametersResponse struct {
-		XMLName     xml.Name `xml:"ReferenceParameters,omitempty"`
-		ResourceURI string
+		XMLName     xml.Name            `xml:"ReferenceParameters,omitempty"`
+		ResourceURI string              `xml:"ResourceURI,omitempty"`
 		SelectorSet SelectorSetResponse `xml:"SelectorSet,omitempty"`
 	}
 	SelectorSetResponse struct {
 		XMLName   xml.Name           `xml:"SelectorSet,omitempty"`
-		Selectors []SelectorResponse `xml:"Selector"`
+		Selectors []SelectorResponse `xml:"Selector,omitempty"`
 	}
 	SelectorResponse struct {
 		XMLName xml.Name `xml:"Selector,omitempty"`
@@ -236,9 +242,29 @@ type (
 	PKCS10Request struct {
 		XMLName                      xml.Name         `xml:"h:GeneratePKCS10RequestEx_INPUT"`
 		H                            string           `xml:"xmlns:h,attr"`
-		KeyPair                      string           `xml:"h:KeyPair"`
-		NullSignedCertificateRequest string           `xml:"h:NullSignedCertificateRequest"` // A binary representation of the null-signed PKCS#10 request.the request must include a valid PKCS10RequestInfo, that will be signed by AMT FW. The Public Key specified in the request must match the public key of the referenced KeyPair parameter.
+		KeyPair                      KeyPair          `xml:"h:KeyPair"`
 		SigningAlgorithm             SigningAlgorithm `xml:"h:SigningAlgorithm"`             // The signing algorithm that the FW should use for signing the certificate request
+		NullSignedCertificateRequest string           `xml:"h:NullSignedCertificateRequest"` // A binary representation of the null-signed PKCS#10 request.the request must include a valid PKCS10RequestInfo, that will be signed by AMT FW. The Public Key specified in the request must match the public key of the referenced KeyPair parameter.
+	}
+
+	KeyPair struct {
+		XMLName             xml.Name                   `xml:"h:KeyPair,omitempty"`
+		Address             string                     `xml:"a:Address,omitempty"`
+		ReferenceParameters ReferenceParametersRequest `xml:"a:ReferenceParameters,omitempty"`
+	}
+	ReferenceParametersRequest struct {
+		XMLName     xml.Name           `xml:"a:ReferenceParameters,omitempty"`
+		ResourceURI string             `xml:"w:ResourceURI"`
+		SelectorSet SelectorSetRequest `xml:"w:SelectorSet,omitempty"`
+	}
+	SelectorSetRequest struct {
+		XMLName   xml.Name          `xml:"w:SelectorSet,omitempty"`
+		Selectors []SelectorRequest `xml:"w:Selector"`
+	}
+	SelectorRequest struct {
+		XMLName xml.Name `xml:"w:Selector,omitempty"`
+		Name    string   `xml:"Name,attr"`
+		Text    string   `xml:",chardata"`
 	}
 
 	// The signing algorithm that the FW should use for signing the certificate request
