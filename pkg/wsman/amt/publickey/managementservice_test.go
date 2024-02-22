@@ -228,16 +228,26 @@ func TestPositiveAMT_PublicKeyManagementService(t *testing.T) {
 					},
 				},
 			},
-
-			// {"should return a valid amt_PublicKeyManagementService GeneratePKCS10RequestEx wsman message", AMT_PublicKeyManagementService, "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/GeneratePKCS10RequestEx", `<h:GeneratePKCS10RequestEx_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService"><h:KeyPair>test</h:KeyPair><h:NullSignedCertificateRequest>reallylongcertificateteststring</h:NullSignedCertificateRequest><h:SigningAlgorithm>1</h:SigningAlgorithm></h:GeneratePKCS10RequestEx_INPUT>`, "", func() string {
-			// 	pkcs10Request := PKCS10Request{
-			// 		KeyPair:                      "test",
-			// 		NullSignedCertificateRequest: "reallylongcertificateteststring",
-			// 		SigningAlgorithm:             1,
-			// 	}
-			// 	return elementUnderTest.GeneratePKCS10RequestEx(pkcs10Request)
-			// }},
-
+			// PKCS10RequestEx
+			{
+				"should return a valid amt_PublicKeyManagementService GeneratePKCS10RequestEx wsman message",
+				AMT_PublicKeyManagementService,
+				"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/GeneratePKCS10RequestEx",
+				fmt.Sprintf("<h:GeneratePKCS10RequestEx_INPUT xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService\"><h:KeyPair><a:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address><a:ReferenceParameters><w:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicPrivateKeyPair</w:ResourceURI><w:SelectorSet><w:Selector Name=\"InstanceID\">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:KeyPair><h:SigningAlgorithm>1</h:SigningAlgorithm><h:NullSignedCertificateRequest>reallylongcertificateteststring</h:NullSignedCertificateRequest></h:GeneratePKCS10RequestEx_INPUT>", "test"),
+				"",
+				func() (Response, error) {
+					client.CurrentMessage = "GeneratePKCS10RequestEx"
+					return elementUnderTest.GeneratePKCS10RequestEx("test", "reallylongcertificateteststring", 1)
+				},
+				Body{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					GeneratePKCS10RequestEx_OUTPUT: GeneratePKCS10RequestEx_OUTPUT{
+						XMLName:                  xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_PublicKeyManagementService), Local: "GeneratePKCS10RequestEx_OUTPUT"},
+						SignedCertificateRequest: "test?",
+						ReturnValue:              0,
+					},
+				},
+			},
 			// AddKey
 			{
 				"should return a valid amt_PublicKeyManagementService AddKey wsman message",
@@ -323,7 +333,7 @@ func TestNegativeAMT_PublicKeyManagementService(t *testing.T) {
 		}{
 			//GETS
 			{
-				"should create a valid AMT_PublicKeyManagementService Get wsman message",
+				"should create a invalid AMT_PublicKeyManagementService Get wsman message",
 				AMT_PublicKeyManagementService,
 				wsmantesting.GET,
 				"",
@@ -349,7 +359,7 @@ func TestNegativeAMT_PublicKeyManagementService(t *testing.T) {
 			},
 			//ENUMERATES
 			{
-				"should create a valid AMT_PublicKeyManagementService Enumerate wsman message",
+				"should create a invalid AMT_PublicKeyManagementService Enumerate wsman message",
 				AMT_PublicKeyManagementService,
 				wsmantesting.ENUMERATE,
 				wsmantesting.ENUMERATE_BODY,
@@ -367,7 +377,7 @@ func TestNegativeAMT_PublicKeyManagementService(t *testing.T) {
 			},
 			//PULLS
 			{
-				"should create a valid AMT_PublicKeyManagementService Pull wsman message",
+				"should create a invalid AMT_PublicKeyManagementService Pull wsman message",
 				AMT_PublicKeyManagementService,
 				wsmantesting.PULL,
 				wsmantesting.PULL_BODY,
@@ -399,7 +409,7 @@ func TestNegativeAMT_PublicKeyManagementService(t *testing.T) {
 
 			// AddTrustedRootCertificate
 			{
-				"should return a valid amt_PublicKeyManagementService AddTrustedRootCertificate wsman message",
+				"should return a invalid amt_PublicKeyManagementService AddTrustedRootCertificate wsman message",
 				AMT_PublicKeyManagementService,
 				`http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/AddTrustedRootCertificate`,
 				fmt.Sprintf(`<h:AddTrustedRootCertificate_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService"><h:CertificateBlob>%s</h:CertificateBlob></h:AddTrustedRootCertificate_INPUT>`, wsmantesting.TrustedRootCert),
@@ -437,7 +447,7 @@ func TestNegativeAMT_PublicKeyManagementService(t *testing.T) {
 
 			// GenerateKeyPair
 			{
-				"should return a valid amt_PublicKeyManagementService GenerateKeyPair wsman message",
+				"should return a invalid amt_PublicKeyManagementService GenerateKeyPair wsman message",
 				AMT_PublicKeyManagementService,
 				`http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/GenerateKeyPair`,
 				`<h:GenerateKeyPair_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService"><h:KeyAlgorithm>0</h:KeyAlgorithm><h:KeyLength>2048</h:KeyLength></h:GenerateKeyPair_INPUT>`,
@@ -474,7 +484,7 @@ func TestNegativeAMT_PublicKeyManagementService(t *testing.T) {
 			},
 			// AddCertificate
 			{
-				"should return a valid amt_PublicKeyManagementService AddCertificate wsman message",
+				"should return a invalid amt_PublicKeyManagementService AddCertificate wsman message",
 				AMT_PublicKeyManagementService,
 				`http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/AddCertificate`,
 				fmt.Sprintf(`<h:AddCertificate_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService"><h:CertificateBlob>%s</h:CertificateBlob></h:AddCertificate_INPUT>`, wsmantesting.TrustedRootCert),
@@ -510,18 +520,30 @@ func TestNegativeAMT_PublicKeyManagementService(t *testing.T) {
 				},
 			},
 
-			// {"should return a valid amt_PublicKeyManagementService GeneratePKCS10RequestEx wsman message", AMT_PublicKeyManagementService, "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/GeneratePKCS10RequestEx", `<h:GeneratePKCS10RequestEx_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService"><h:KeyPair>test</h:KeyPair><h:NullSignedCertificateRequest>reallylongcertificateteststring</h:NullSignedCertificateRequest><h:SigningAlgorithm>1</h:SigningAlgorithm></h:GeneratePKCS10RequestEx_INPUT>`, "", func() string {
-			// 	pkcs10Request := PKCS10Request{
-			// 		KeyPair:                      "test",
-			// 		NullSignedCertificateRequest: "reallylongcertificateteststring",
-			// 		SigningAlgorithm:             1,
-			// 	}
-			// 	return elementUnderTest.GeneratePKCS10RequestEx(pkcs10Request)
-			// }},
+			// PKCS10RequestEx
+			{
+				"should return a invalid amt_PublicKeyManagementService GeneratePKCS10RequestEx wsman message",
+				AMT_PublicKeyManagementService,
+				"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/GeneratePKCS10RequestEx",
+				fmt.Sprintf("<h:GeneratePKCS10RequestEx_INPUT xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService\"><h:KeyPair><a:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address><a:ReferenceParameters><w:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicPrivateKeyPair</w:ResourceURI><w:SelectorSet><w:Selector Name=\"InstanceID\">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:KeyPair><h:SigningAlgorithm>1</h:SigningAlgorithm><h:NullSignedCertificateRequest>reallylongcertificateteststring</h:NullSignedCertificateRequest></h:GeneratePKCS10RequestEx_INPUT>", "test"),
+				"",
+				func() (Response, error) {
+					client.CurrentMessage = "Error"
+					return elementUnderTest.GeneratePKCS10RequestEx("test", "reallylongcertificateteststring", 1)
+				},
+				Body{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					GeneratePKCS10RequestEx_OUTPUT: GeneratePKCS10RequestEx_OUTPUT{
+						XMLName:                  xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_PublicKeyManagementService), Local: "GeneratePKCS10RequestEx_OUTPUT"},
+						SignedCertificateRequest: "test?",
+						ReturnValue:              0,
+					},
+				},
+			},
 
 			// AddKey
 			{
-				"should return a valid amt_PublicKeyManagementService AddKey wsman message",
+				"should return a invalid amt_PublicKeyManagementService AddKey wsman message",
 				AMT_PublicKeyManagementService,
 				"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService/AddKey",
 				`<h:AddKey_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyManagementService"><h:KeyBlob>privatekey</h:KeyBlob></h:AddKey_INPUT>`,
@@ -559,7 +581,7 @@ func TestNegativeAMT_PublicKeyManagementService(t *testing.T) {
 			},
 			// DELETE
 			{
-				"should create a valid amt_PublicKeyManagementService Delete wsman message",
+				"should create a invalid amt_PublicKeyManagementService Delete wsman message",
 				AMT_PublicKeyManagementService,
 				wsmantesting.DELETE,
 				"",
