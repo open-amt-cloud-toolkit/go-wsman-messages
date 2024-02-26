@@ -115,11 +115,27 @@ func TestProcessProtocolVersion(t *testing.T) {
 	assert.NotNil(t, result)
 }
 
-func TestServiceAccept(t *testing.T) {
+func TestServiceAcceptLessThan18Characters(t *testing.T) {
+	serviceName := "test"
+	result := ServiceAccept(serviceName)
+	assert.NotNil(t, result)
+}
+func TestServiceAcceptEmptyString(t *testing.T) {
 	serviceName := ""
 	result := ServiceAccept(serviceName)
 	assert.NotNil(t, result)
 }
+func TestServiceAccept18Characters(t *testing.T) {
+	serviceName := "                  "
+	result := ServiceAccept(serviceName)
+	assert.NotNil(t, result)
+}
+func TestServiceAcceptMoreThan18Characters(t *testing.T) {
+	serviceName := "                   "
+	result := ServiceAccept(serviceName)
+	assert.NotNil(t, result)
+}
+
 func TestProtocolVersion(t *testing.T) {
 	result := ProtocolVersion(1, 0, 9)
 	assert.NotNil(t, result)
