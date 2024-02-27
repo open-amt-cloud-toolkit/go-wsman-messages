@@ -3,6 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package service facilitates communication with Intel® AMT devices to convey. the semantics of a Service that is available for the use of a ManagedElement. \
+//
+// An example of an available Service is that a Processor and an enclosure (a PhysicalElement) can use AlertOnLAN Services to signal an incomplete or erroneous boot.
+//
+// In reality, AlertOnLAN is simply a HostedService on a computer system that is generally available for use and is not a dependency of the processor or enclosure.
+//
+// To describe that the use of this service might be restricted or have limited availability or applicability, the CIM_ServiceAvailableToElement association would be instantiated between the Service and specific CIM_Processors and CIM_Chassis.
 package service
 
 import (
