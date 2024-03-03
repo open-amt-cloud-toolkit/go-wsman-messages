@@ -11,7 +11,7 @@
         <b:To>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:To>
         <b:RelatesTo>5</b:RelatesTo>
         <b:Action a:mustUnderstand="true">http://schemas.xmlsoap.org/ws/2004/09/transfer/PutResponse</b:Action>
-        <b:MessageID>uuid:00000000-8086-8086-8086-0000000025E8</b:MessageID>
+        <b:MessageID>uuid:00000000-8086-8086-8086-0000001BBCE5</b:MessageID>
         <c:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_BootSettingData</c:ResourceURI>
     </a:Header>
     <a:Body>
@@ -21,6 +21,7 @@
             <g:BIOSPause>false</g:BIOSPause>
             <g:BIOSSetup>false</g:BIOSSetup>
             <g:BootMediaIndex>0</g:BootMediaIndex>
+            <g:BootguardStatus>127</g:BootguardStatus>
             <g:ConfigurationDataReset>false</g:ConfigurationDataReset>
             <g:ElementName>Intel(r) AMT Boot Configuration Settings</g:ElementName>
             <g:EnforceSecureBoot>false</g:EnforceSecureBoot>
@@ -32,15 +33,22 @@
             <g:LockPowerButton>false</g:LockPowerButton>
             <g:LockResetButton>false</g:LockResetButton>
             <g:LockSleepButton>false</g:LockSleepButton>
-            <g:OptionsCleared>false</g:OptionsCleared>
+            <g:OptionsCleared>true</g:OptionsCleared>
             <g:OwningEntity>Intel(r) AMT</g:OwningEntity>
+            <g:PlatformErase>false</g:PlatformErase>
+            <g:RPEEnabled>true</g:RPEEnabled>
             <g:RSEPassword></g:RSEPassword>
             <g:ReflashBIOS>false</g:ReflashBIOS>
+            <g:SecureBootControlEnabled>true</g:SecureBootControlEnabled>
             <g:SecureErase>false</g:SecureErase>
+            <g:UEFIHTTPSBootEnabled>true</g:UEFIHTTPSBootEnabled>
+            <g:UEFILocalPBABootEnabled>true</g:UEFILocalPBABootEnabled>
+            <g:UefiBootNumberOfParams>0</g:UefiBootNumberOfParams>
             <g:UseIDER>false</g:UseIDER>
             <g:UseSOL>false</g:UseSOL>
             <g:UseSafeMode>false</g:UseSafeMode>
             <g:UserPasswordBypass>false</g:UserPasswordBypass>
+            <g:WinREBootEnabled>true</g:WinREBootEnabled>
         </g:AMT_BootSettingData>
     </a:Body>
 </a:Envelope>
