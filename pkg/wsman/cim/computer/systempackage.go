@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package computer facilitates communication with Intel® AMT devices in a way similar to the way that LogicalDevices are 'Realized' by PhysicalElements, however ComputerSystem may be realized realized in one or more PhysicalPackages.
+//
+// The ComputerSystemPackage association explicitly defines this relationship.
 package computer
 
 import (
