@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
-// Package WifiPort facilitates communication with Intel® AMT devices where WiFiPort is the logical representation of wireless local area network communications hardware that conforms to the IEEE 802.11 series of specifications.
-//
-// It embodies properties at the lowest layers of a network stack, such as the antennas used for transmission and reception, the address permanently embedded into the hardware, and the operational bandwidth of the device.
 package wifi
 
 import (

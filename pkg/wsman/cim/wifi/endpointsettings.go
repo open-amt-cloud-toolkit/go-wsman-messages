@@ -3,7 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
-// Package WifiEndpointSettings facilitates communication with Intel® AMT devices that describes setting data that can be applied to an instance of CIM_WiFiEndpoint to enable it to associate to a particular Wi-Fi network.
+// Package WiFi facilitates communication with Intel® AMT devices to access and configure WiFi Endpoint Settings WiFi Port features of AMT.
+//
+// WiFiEndpointSettings:
+// A class derived from SettingData that can be applied to an instance of CIM_WiFiEndpoint to enable it to associate to a particular Wi-Fi network.
+//
+// WiFiPort:
+// A class derived from NetworkPort that provides the logical representation of wireless local area network communications hardware that conforms to the IEEE 802.11 series of specifications.
+// It embodies properties at the lowest layers of a network stack, such as the antennas used for transmission and reception, the address permanently embedded into the hardware, and the operational bandwidth of the device.
 package wifi
 
 import (
