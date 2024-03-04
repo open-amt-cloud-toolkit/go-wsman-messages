@@ -49,9 +49,9 @@ type (
 		ReferenceParameters ReferenceParameters
 	}
 	ComputerSystemPackage struct {
-		Antecedent   Antecedent
-		Dependent    Dependent
-		PlatformGUID string `xml:"PlatformGUID,omitempty"`
+		Antecedent   Antecedent // The PhysicalPackage(s) that realize a Unitary ComputerSystem.
+		Dependent    Dependent  // The UnitaryComputerSystem.
+		PlatformGUID string     `xml:"PlatformGUID,omitempty"` // A Gloabally Unique Identifier for the System's Package.
 	}
 	ReferenceParameters struct {
 		XMLName     xml.Name    `xml:"ReferenceParameters"`
