@@ -45,9 +45,9 @@ type (
 		ReferenceParameters ReferenceParameters
 	}
 	SystemPackage struct {
-		Antecedent   Antecedent
-		Dependent    Dependent
-		PlatformGUID string `xml:"PlatformGUID,omitempty"`
+		Antecedent   Antecedent // The PhysicalElements that provide the packaging of a System.
+		Dependent    Dependent  // The System whose packaging is described.
+		PlatformGUID string     `xml:"PlatformGUID,omitempty"` // A Globally Unique Identifier for the System's Package.
 	}
 	ReferenceParameters struct {
 		XMLName     xml.Name    `xml:"ReferenceParameters"`
