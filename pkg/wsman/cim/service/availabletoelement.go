@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
-// Package service facilitates communication with Intel® AMT devices to convey. the semantics of a Service that is available for the use of a ManagedElement. \
+// Package service facilitates communication with Intel® AMT devices to convey the semantics of a Service that is available for the use of a ManagedElement.
 //
 // An example of an available Service is that a Processor and an enclosure (a PhysicalElement) can use AlertOnLAN Services to signal an incomplete or erroneous boot.
 //
