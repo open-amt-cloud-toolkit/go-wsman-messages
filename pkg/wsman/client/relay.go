@@ -32,6 +32,7 @@ type WsTransport struct {
 	tls       bool
 	tls1only  bool
 	token     string
+	mode      string
 	conn      *websocket.Conn
 	tlsconfig *tls.Config
 	buf_mutex sync.Mutex
@@ -39,7 +40,7 @@ type WsTransport struct {
 }
 
 // NewTransport creates a new Websocket RoundTripper.
-func NewWsTransport(wsurl string, protocol int, host, username, password string, port int, tls, tls1only bool, token string, tlsconfig *tls.Config) *WsTransport {
+func NewWsTransport(wsurl string, protocol int, host, username, password string, port int, tls, tls1only bool, token string, mode string, tlsconfig *tls.Config) *WsTransport {
 	t := &WsTransport{
 		wsurl:     wsurl,
 		protocol:  protocol,
@@ -50,6 +51,7 @@ func NewWsTransport(wsurl string, protocol int, host, username, password string,
 		tls:       tls,
 		tls1only:  tls1only,
 		token:     token,
+		mode:      mode,
 		tlsconfig: tlsconfig,
 		buf_mutex: sync.Mutex{},
 	}
@@ -76,8 +78,15 @@ func (t *WsTransport) buildUrl() string {
 	q.Set("user", t.username)
 	q.Set("pass", t.password)
 	q.Set("port", strconv.Itoa(t.port))
-	q.Set("tls", strconv.FormatBool(t.tls))
-	q.Set("tls1only", strconv.FormatBool(t.tls1only))
+	q.Set("tls", "0")
+	if t.tls {
+		q.Set("tls", "1")
+	}
+	q.Set("tls1only", "0")
+	if t.tls1only {
+		q.Set("tls1only", "1")
+	}
+	q.Set("mode", t.mode)
 	// Set query string to URL
 	u.RawQuery = q.Encode()
 	return u.String()
