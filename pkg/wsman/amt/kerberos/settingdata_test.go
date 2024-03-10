@@ -17,6 +17,28 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetResponse: KerberosSettingDataResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"RealmName\":\"\",\"ServicePrincipalName\":null,\"ServicePrincipalProtocol\":null,\"KeyVersion\":0,\"EncryptionAlgorithm\":0,\"MasterKey\":null,\"MaximumClockTolerance\":0,\"KrbEnabled\":false,\"Passphrase\":\"\",\"Salt\":\"\",\"IterationCount\":0,\"SupportedEncryptionAlgorithms\":null,\"ConfiguredEncryptionAlgorithms\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"KerberosSettingDataItems\":null},\"GetCredentialCacheState_OUTPUT\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Enabled\":false,\"ReturnValue\":0}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetResponse: KerberosSettingDataResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    realmname: \"\"\n    serviceprincipalname: []\n    serviceprincipalprotocol: []\n    keyversion: 0\n    encryptionalgorithm: 0\n    masterkey: []\n    maximumclocktolerance: 0\n    krbenabled: false\n    passphrase: \"\"\n    salt: \"\"\n    iterationcount: 0\n    supportedencryptionalgorithms: []\n    configuredencryptionalgorithms: []\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    kerberossettingdataitems: []\ngetcredentialcachestate_output:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    enabled: false\n    returnvalue: 0\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveAMT_KerberosSettingData(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"

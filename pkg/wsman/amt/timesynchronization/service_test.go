@@ -17,6 +17,28 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetResponse: TimeSynchronizationServiceResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Name\":\"\",\"CreationClassName\":\"\",\"SystemName\":\"\",\"SystemCreationClassName\":\"\",\"ElementName\":\"\",\"EnabledState\":0,\"RequestedState\":0,\"LocalTimeSyncEnabled\":0,\"TimeSource\":0},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"TimeSynchronizationServiceItems\":null},\"GetLowAccuracyTimeSynchResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Ta0\":0,\"ReturnValue\":0},\"SetHighAccuracyTimeSynchResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetResponse: TimeSynchronizationServiceResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    name: \"\"\n    creationclassname: \"\"\n    systemname: \"\"\n    systemcreationclassname: \"\"\n    elementname: \"\"\n    enabledstate: 0\n    requestedstate: 0\n    localtimesyncenabled: 0\n    timesource: 0\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    timesynchronizationserviceitems: []\ngetlowaccuracytimesynchresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    ta0: 0\n    returnvalue: 0\nsethighaccuracytimesynchresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveAMT_TimeSynchronizationService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"

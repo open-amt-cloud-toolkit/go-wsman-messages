@@ -16,6 +16,28 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			CredentialContextGetResponse: CredentialContextResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ProfileGetAndPutResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"Enabled\":false,\"ActiveInS0\":false,\"AuthenticationProtocol\":0,\"RoamingIdentity\":\"\",\"ServerCertificateName\":\"\",\"ServerCertificateNameComparison\":0,\"Username\":\"\",\"Password\":\"\",\"Domain\":\"\",\"ProtectedAccessCredential\":null,\"PACPassword\":\"\",\"ClientCertificate\":\"\",\"ServerCertificateIssue\":\"\",\"PxeTimeout\":0},\"CredentialContextGetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"}},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ProfileItems\":null,\"CredentialContextItems\":null}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			CredentialContextGetResponse: CredentialContextResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nprofilegetandputresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    enabled: false\n    activeins0: false\n    authenticationprotocol: 0\n    roamingidentity: \"\"\n    servercertificatename: \"\"\n    servercertificatenamecomparison: 0\n    username: \"\"\n    password: \"\"\n    domain: \"\"\n    protectedaccesscredential: []\n    pacpassword: \"\"\n    clientcertificate: \"\"\n    servercertificateissue: \"\"\n    pxetimeout: 0\ncredentialcontextgetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    profileitems: []\n    credentialcontextitems: []\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveAMT_8021xCredentialContext(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"

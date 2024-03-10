@@ -23,6 +23,28 @@ const (
 	GetBody          = `<g:AMT_AlarmClockService><g:CreationClassName>AMT_AlarmClockService</g:CreationClassName><g:ElementName>Intel(r) AMT Alarm Clock Service</g:ElementName><g:Name>Intel(r) AMT Alarm Clock Service</g:Name><g:SystemCreationClassName>CIM_ComputerSystem</g:SystemCreationClassName><g:SystemName>ManagedSystem</g:SystemName></g:AMT_AlarmClockService>`
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetResponse: AlarmClockService{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Name\":\"\",\"CreationClassName\":\"\",\"SystemName\":\"\",\"SystemCreationClassName\":\"\",\"ElementName\":\"\",\"NextAMTAlarmTime\":\"\",\"AMTAlarmClockInterval\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"AddAlarmOutput\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"AlarmClock\":{\"Address\":\"\",\"ReferenceParameters\":{\"ResourceURI\":\"\",\"SelectorSet\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Selector\":null}}},\"ReturnValue\":0},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"AlarmClockServiceItems\":null}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetResponse: AlarmClockService{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    name: \"\"\n    creationclassname: \"\"\n    systemname: \"\"\n    systemcreationclassname: \"\"\n    elementname: \"\"\n    nextamtalarmtime: \"\"\n    amtalarmclockinterval: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\naddalarmoutput:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    alarmclock:\n        address: \"\"\n        referenceparameters:\n            resourceuri: \"\"\n            selectorset:\n                xmlname:\n                    space: \"\"\n                    local: \"\"\n                selector: []\n    returnvalue: 0\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    alarmclockserviceitems: []\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveAMT_AlarmClockService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"

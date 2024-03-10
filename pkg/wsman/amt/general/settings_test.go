@@ -15,6 +15,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetResponse: GeneralSettingsResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"NetworkInterfaceEnabled\":false,\"DigestRealm\":\"\",\"IdleWakeTimeout\":0,\"HostName\":\"\",\"DomainName\":\"\",\"PingResponseEnabled\":false,\"WsmanOnlyMode\":false,\"PreferredAddressFamily\":0,\"DHCPv6ConfigurationTimeout\":0,\"DDNSUpdateEnabled\":false,\"DDNSUpdateByDHCPServerEnabled\":false,\"SharedFQDN\":false,\"HostOSFQDN\":\"\",\"DDNSTTL\":0,\"AMTNetworkEnabled\":0,\"RmcpPingResponseEnabled\":false,\"DDNSPeriodicUpdateInterval\":0,\"PresenceNotificationInterval\":0,\"PrivacyLevel\":0,\"PowerSource\":0,\"ThunderboltDockEnabled\":0,\"OemID\":0,\"DHCPSyncRequiresHostname\":0},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GeneralSettingsItems\":null},\"PutResponse\":{}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetResponse: GeneralSettingsResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    networkinterfaceenabled: false\n    digestrealm: \"\"\n    idlewaketimeout: 0\n    hostname: \"\"\n    domainname: \"\"\n    pingresponseenabled: false\n    wsmanonlymode: false\n    preferredaddressfamily: 0\n    dhcpv6configurationtimeout: 0\n    ddnsupdateenabled: false\n    ddnsupdatebydhcpserverenabled: false\n    sharedfqdn: false\n    hostosfqdn: \"\"\n    ddnsttl: 0\n    amtnetworkenabled: 0\n    rmcppingresponseenabled: false\n    ddnsperiodicupdateinterval: 0\n    presencenotificationinterval: 0\n    privacylevel: 0\n    powersource: 0\n    thunderboltdockenabled: 0\n    oemid: 0\n    dhcpsyncrequireshostname: 0\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    generalsettingsitems: []\nputresponse: {}\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveAMT_GeneralSettings(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
