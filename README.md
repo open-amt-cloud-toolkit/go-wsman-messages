@@ -1,5 +1,10 @@
 # go-wsman-messages
 
+![CodeQL](https://github.com/open-amt-cloud-toolkit/go-wsman-messages/actions/workflows/codeql-analysis.yml/badge.svg?branch=main&event=push) 
+![codecov.io](https://codecov.io/github/open-amt-cloud-toolkit/go-wsman-messages/coverage.svg?branch=main) 
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/open-amt-cloud-toolkit/go-wsman-messages/badge)](https://api.securityscorecards.dev/projects/github.com/open-amt-cloud-toolkit/go-wsman-messages) 
+[![Discord Shield](https://discordapp.com/api/guilds/1063200098680582154/widget.png?style=shield)](https://discord.gg/yrcMp2kDWh)
+
 > Disclaimer: Production viable releases are tagged and listed under 'Releases'.  All other check-ins should be considered 'in-development' and should not be used in production
 
 This repository contains a Go library that creates properly formatted wsman messages to send to Intel® Active Management Technology (AMT) capable platforms. These messages are based on the AMT SDK documentation, which can be found [here](https://software.intel.com/content/www/us/en/develop/articles/intel-active-management-technology-software-development-kit-sdk.html).
