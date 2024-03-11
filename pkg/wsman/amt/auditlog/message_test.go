@@ -16,6 +16,28 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetResponse: AuditLog{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"OverwritePolicy\":0,\"CurrentNumberOfRecords\":0,\"MaxNumberOfRecords\":0,\"ElementName\":\"\",\"EnabledState\":0,\"RequestedState\":0,\"PercentageFree\":0,\"Name\":\"\",\"TimeOfLastRecord\":{\"Datetime\":\"\"},\"AuditState\":0,\"MaxAllowedAuditors\":0,\"StoragePolicy\":0,\"MinDaysToKeep\":0},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"AuditLogItems\":null},\"ReadRecordsResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"TotalRecordCount\":0,\"RecordsReturned\":0,\"EventRecords\":null,\"ReturnValue\":0}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetResponse: AuditLog{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    overwritepolicy: 0\n    currentnumberofrecords: 0\n    maxnumberofrecords: 0\n    elementname: \"\"\n    enabledstate: 0\n    requestedstate: 0\n    percentagefree: 0\n    name: \"\"\n    timeoflastrecord:\n        datetime: \"\"\n    auditstate: 0\n    maxallowedauditors: 0\n    storagepolicy: 0\n    mindaystokeep: 0\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    auditlogitems: []\nreadrecordsresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    totalrecordcount: 0\n    recordsreturned: 0\n    eventrecords: []\n    returnvalue: 0\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveAMT_AuditLog(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"

@@ -15,6 +15,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetResponse: ManagementRemoteResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"AccessInfo\":\"\",\"CN\":\"\",\"CreationClassName\":\"\",\"ElementName\":\"\",\"InfoFormat\":0,\"Name\":\"\",\"Port\":0,\"SystemCreationClassName\":\"\",\"SystemName\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ManagementRemoteItems\":null}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetResponse: ManagementRemoteResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    accessinfo: \"\"\n    cn: \"\"\n    creationclassname: \"\"\n    elementname: \"\"\n    infoformat: 0\n    name: \"\"\n    port: 0\n    systemcreationclassname: \"\"\n    systemname: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    managementremoteitems: []\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
