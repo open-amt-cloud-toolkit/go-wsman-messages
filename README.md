@@ -7,9 +7,7 @@
 
 > Disclaimer: Production viable releases are tagged and listed under 'Releases'.  All other check-ins should be considered 'in-development' and should not be used in production
 
-This repository contains a Go library that creates properly formatted wsman messages to send to Intel® Active Management Technology (AMT) capable platforms. These messages are based on the AMT SDK documentation, which can be found [here](https://software.intel.com/content/www/us/en/develop/articles/intel-active-management-technology-software-development-kit-sdk.html).
-
-This library provides an easy to use API that returns an XML string that is ready to be sent to an Intel® AMT device. It supports calls into AMT, IPS, and CIM classes supported by Intel® AMT devices.
+This repository contains a Go library that implements APIs for communicating with Intel® Active Management Technology (AMT) capable platforms. These APIs are based on the AMT SDK documentation, which can be found [here](https://software.intel.com/content/www/us/en/develop/articles/intel-active-management-technology-software-development-kit-sdk.html).
 
 ## How to use it
 
@@ -18,29 +16,30 @@ To use this library, you need to import it in your Go project:
 import "github.com/open-amt-cloud-toolkit/go-wsman-messages"
 ```
 
-Then, you can create an instance of the message class you want to use, such as `amt.NewMessages()`, `ips.NewMessages()`, or `cim.NewMessages()`. For example:
+Then, you can create an instance of the wsman.Messages struct by passing in the client parameters using the client.Parameters struct. For example:
 
 ```go
-amtClass := amt.NewMessages()
+clientParams := client.Parameters{
+    Target:             "192.168.0.120",
+    Username:           "admin",
+    Password:           "amtP@ssw0rd",
+    UseDigest:          true,
+    UseTLS:             true,
+    SelfSignedAllowed:  true,
+    LogAMTMessages:     true,
+}
+wsmanMessages := wsman.NewMessages(clientParams)
 ```
 
-Next, you can call the methods of the message class to get the XML string for the desired operation. For example, to get the general settings of an Intel® AMT device, you can do:
+Next, you can call the various methods of the wsman.Messages struct.  Go-wsman-messages will authenticate with AMT using the client parameters provided and send the message to the Intel® AMT device and handle the response, returning a package specific Response struct or error message.  For example, to get the general settings of an Intel® AMT device, you can do:
 
 ```go
-message := amtClass.GeneralSettings.Get()
-```
-
-Finally, you can send the message to the Intel® AMT device using the wsman HTTP Client. For example:
-
-```go
-client := wsman.NewClient("http://localhost:16992/wsman", username, password, true)
-response, err := client.Post(message) 
+response, err := wsmanMessages.AMT.GeneralSettings.Get()
 if err != nil {
-// handle error
+    // handle error
 }
 // process response
 ```
-
 
 # Dev tips for passing CI Checks
 
