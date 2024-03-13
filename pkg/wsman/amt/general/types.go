@@ -77,7 +77,7 @@ type (
 type (
 	GeneralSettingsRequest struct {
 		XMLName                       xml.Name               `xml:"h:AMT_GeneralSettings"`
-		H                             string                 `xml:"h:xmlns:h,attr"`
+		H                             string                 `xml:"xmlns:h,attr"`
 		ElementName                   string                 `xml:"h:ElementName,omitempty"`                   // The user-friendly name for this instance of SettingData. In addition, the user-friendly name can be used as an index property for a search or query. (Note: The name does not have to be unique within a namespace.)
 		InstanceID                    string                 `xml:"h:InstanceID,omitempty"`                    // Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class. This is a read-only property.
 		NetworkInterfaceEnabled       bool                   `xml:"h:NetworkInterfaceEnabled,omitempty"`       // Indicates whether the network interface is enabled. This is a read-only property.
