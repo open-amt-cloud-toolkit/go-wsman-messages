@@ -17,6 +17,28 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			PullResponse: PullResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Items\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"StartTime\":\"\",\"Interval\":\"\",\"DeleteOnCompletion\":false}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			PullResponse: PullResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    items: []\nenumerateresponse:\n    enumerationcontext: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    starttime: \"\"\n    interval: \"\"\n    deleteoncompletion: false\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveIPS_AlarmClockOccurrence(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/ips-schema/1/"

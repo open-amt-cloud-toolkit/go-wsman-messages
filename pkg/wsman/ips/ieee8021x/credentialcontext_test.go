@@ -16,6 +16,28 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			PullResponse: PullResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"IEEE8021xSettingsItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"IEEE8021xSettingsResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"Enabled\":0,\"AvailableInS0\":false,\"PxeTimeout\":0},\"SetCertificatesResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			PullResponse: PullResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    ieee8021xsettingsitems: []\nenumerateresponse:\n    enumerationcontext: \"\"\nieee8021xsettingsresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    enabled: 0\n    availableins0: false\n    pxetimeout: 0\nsetcertificatesresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveIPS_8021xCredentialContext(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/ips-schema/1/"

@@ -16,6 +16,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetAndPutResponse: RedirectionResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetAndPutResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"CreationClassName\":\"\",\"ElementName\":\"\",\"EnabledState\":0,\"ListenerEnabled\":false,\"Name\":\"\",\"SystemCreationClassName\":\"\",\"SystemName\":\"\",\"AccessLog\":null},\"RequestStateChange_OUTPUT\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"RedirectionItems\":null}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetAndPutResponse: RedirectionResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetandputresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    creationclassname: \"\"\n    elementname: \"\"\n    enabledstate: 0\n    listenerenabled: false\n    name: \"\"\n    systemcreationclassname: \"\"\n    systemname: \"\"\n    accesslog: []\nrequeststatechange_output:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    redirectionitems: []\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveAMT_RedirectionService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"

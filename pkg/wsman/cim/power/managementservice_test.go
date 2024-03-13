@@ -20,6 +20,28 @@ const (
 	RequestPowerStateChange_BODY = "<h:RequestPowerStateChange_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_PowerManagementService\"><h:PowerState>8</h:PowerState><h:ManagedElement><Address xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\"><ResourceURI xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ComputerSystem</ResourceURI><SelectorSet xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\"><Selector Name=\"CreationClassName\">CIM_ComputerSystem</Selector><Selector Name=\"Name\">ManagedSystem</Selector></SelectorSet></ReferenceParameters></h:ManagedElement></h:RequestPowerStateChange_INPUT>"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			PullResponse: PullResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"RequestPowerStateChangeResponse\":{\"ReturnValue\":0},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"CreationClassName\":\"\",\"ElementName\":\"\",\"EnabledState\":0,\"Name\":\"\",\"RequestedState\":0,\"SystemCreationClassName\":\"\",\"SystemName\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PowerManagementServiceItems\":null}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			PullResponse: PullResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nrequestpowerstatechangeresponse:\n    returnvalue: 0\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    creationclassname: \"\"\n    elementname: \"\"\n    enabledstate: 0\n    name: \"\"\n    requestedstate: 0\n    systemcreationclassname: \"\"\n    systemname: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    powermanagementserviceitems: []\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveCIMPowerManagementService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"

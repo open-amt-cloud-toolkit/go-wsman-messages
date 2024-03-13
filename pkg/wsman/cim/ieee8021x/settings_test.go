@@ -16,6 +16,28 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			PullResponse: PullResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"IEEE8021xSettingsItems\":null},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"Enabled\":0,\"AvailableInS0\":false,\"PxeTimeout\":0}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			PullResponse: PullResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    ieee8021xsettingsitems: []\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    enabled: 0\n    availableins0: false\n    pxetimeout: 0\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveCIMIEEE8021xSettings(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"

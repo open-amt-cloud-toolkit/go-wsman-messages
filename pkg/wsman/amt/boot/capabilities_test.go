@@ -16,6 +16,28 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			BootCapabilitiesGetResponse: BootCapabilitiesResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"BootSettingDataGetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"InstanceID\":\"\",\"ElementName\":\"\",\"OwningEntity\":\"\",\"UseSOL\":false,\"UseSafeMode\":false,\"ReflashBIOS\":false,\"BIOSSetup\":false,\"BIOSPause\":false,\"LockPowerButton\":false,\"LockResetButton\":false,\"LockKeyboard\":false,\"LockSleepButton\":false,\"UserPasswordBypass\":false,\"ForcedProgressEvents\":false,\"FirmwareVerbosity\":0,\"ConfigurationDataReset\":false,\"IDERBootDevice\":0,\"UseIDER\":false,\"EnforceSecureBoot\":false,\"BootMediaIndex\":0,\"SecureErase\":false,\"RSEPassword\":\"\",\"OptionsCleared\":false,\"WinREBootEnabled\":false,\"UEFILocalPBABootEnabled\":false,\"UEFIHTTPSBootEnabled\":false,\"SecureBootControlEnabled\":false,\"BootguardStatus\":false,\"BIOSLastStatus\":null,\"UEFIBootParametersArray\":null,\"UEFIBootNumberOfParams\":null,\"RPEEnabled\":false,\"PlatformErase\":false},\"BootCapabilitiesGetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"InstanceID\":\"\",\"ElementName\":\"\",\"IDER\":false,\"SOL\":false,\"BIOSReflash\":false,\"BIOSSetup\":false,\"BIOSPause\":false,\"ForcePXEBoot\":false,\"ForceHardDriveBoot\":false,\"ForceHardDriveSafeModeBoot\":false,\"ForceDiagnosticBoot\":false,\"ForceCDorDVDBoot\":false,\"VerbosityScreenBlank\":false,\"PowerButtonLock\":false,\"ResetButtonLock\":false,\"KeyboardLock\":false,\"SleepButtonLock\":false,\"UserPasswordBypass\":false,\"ForcedProgressEvents\":false,\"VerbosityVerbose\":false,\"VerbosityQuiet\":false,\"ConfigurationDataReset\":false,\"BIOSSecureBoot\":false,\"SecureErase\":false,\"ForceWinREBoot\":false,\"ForceUEFILocalPBABoot\":false,\"ForceUEFIHTTPSBoot\":false,\"AMTSecureBootControl\":false,\"UEFIWiFiCoExistenceAndProfileShare\":false,\"PlatformErase\":0},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"BootSettingDataItems\":null,\"BootCapabilitiesItems\":null}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			BootCapabilitiesGetResponse: BootCapabilitiesResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nbootsettingdatagetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    instanceid: \"\"\n    elementname: \"\"\n    owningentity: \"\"\n    usesol: false\n    usesafemode: false\n    reflashbios: false\n    biossetup: false\n    biospause: false\n    lockpowerbutton: false\n    lockresetbutton: false\n    lockkeyboard: false\n    locksleepbutton: false\n    userpasswordbypass: false\n    forcedprogressevents: false\n    firmwareverbosity: 0\n    configurationdatareset: false\n    iderbootdevice: 0\n    useider: false\n    enforcesecureboot: false\n    bootmediaindex: 0\n    secureerase: false\n    rsepassword: \"\"\n    optionscleared: false\n    winrebootenabled: false\n    uefilocalpbabootenabled: false\n    uefihttpsbootenabled: false\n    securebootcontrolenabled: false\n    bootguardstatus: false\n    bioslaststatus: []\n    uefibootparametersarray: []\n    uefibootnumberofparams: []\n    rpeenabled: false\n    platformerase: false\nbootcapabilitiesgetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    instanceid: \"\"\n    elementname: \"\"\n    ider: false\n    sol: false\n    biosreflash: false\n    biossetup: false\n    biospause: false\n    forcepxeboot: false\n    forceharddriveboot: false\n    forceharddrivesafemodeboot: false\n    forcediagnosticboot: false\n    forcecdordvdboot: false\n    verbosityscreenblank: false\n    powerbuttonlock: false\n    resetbuttonlock: false\n    keyboardlock: false\n    sleepbuttonlock: false\n    userpasswordbypass: false\n    forcedprogressevents: false\n    verbosityverbose: false\n    verbosityquiet: false\n    configurationdatareset: false\n    biossecureboot: false\n    secureerase: false\n    forcewinreboot: false\n    forceuefilocalpbaboot: false\n    forceuefihttpsboot: false\n    amtsecurebootcontrol: false\n    uefiwificoexistenceandprofileshare: false\n    platformerase: 0\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    bootsettingdataitems: []\n    bootcapabilitiesitems: []\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveAMT_BootCapabilities(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"

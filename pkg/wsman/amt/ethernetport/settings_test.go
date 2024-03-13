@@ -15,6 +15,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetAndPutResponse: SettingsResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetAndPutResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"VLANTag\":0,\"SharedMAC\":false,\"MACAddress\":\"\",\"LinkIsUp\":false,\"LinkPolicy\":null,\"LinkPreference\":0,\"LinkControl\":0,\"SharedStaticIp\":false,\"SharedDynamicIP\":false,\"IpSyncEnabled\":false,\"DHCPEnabled\":false,\"IPAddress\":\"\",\"SubnetMask\":\"\",\"DefaultGateway\":\"\",\"PrimaryDNS\":\"\",\"SecondaryDNS\":\"\",\"ConsoleTcpMaxRetransmissions\":0,\"WLANLinkProtectionLevel\":0,\"PhysicalConnectionType\":0,\"PhysicalNicMedium\":0},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"EthernetPortItems\":null}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetAndPutResponse: SettingsResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetandputresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    vlantag: 0\n    sharedmac: false\n    macaddress: \"\"\n    linkisup: false\n    linkpolicy: []\n    linkpreference: 0\n    linkcontrol: 0\n    sharedstaticip: false\n    shareddynamicip: false\n    ipsyncenabled: false\n    dhcpenabled: false\n    ipaddress: \"\"\n    subnetmask: \"\"\n    defaultgateway: \"\"\n    primarydns: \"\"\n    secondarydns: \"\"\n    consoletcpmaxretransmissions: 0\n    wlanlinkprotectionlevel: 0\n    physicalconnectiontype: 0\n    physicalnicmedium: 0\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    ethernetportitems: []\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveAMT_EthernetPortSettings(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
@@ -155,7 +177,7 @@ func TestPositiveAMT_EthernetPortSettings(t *testing.T) {
 						SharedStaticIp: true,
 					}
 					client.CurrentMessage = "Put"
-					return elementUnderTest.Put(ethernetPortSettings, 0)
+					return elementUnderTest.Put(ethernetPortSettings, ethernetPortSettings.InstanceID)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
@@ -335,7 +357,7 @@ func TestNegativeAMT_EthernetPortSettings(t *testing.T) {
 						SharedStaticIp: true,
 					}
 					client.CurrentMessage = "Error"
-					return elementUnderTest.Put(ethernetPortSettings, 0)
+					return elementUnderTest.Put(ethernetPortSettings, ethernetPortSettings.InstanceID)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},

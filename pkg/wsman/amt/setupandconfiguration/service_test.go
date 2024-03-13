@@ -19,6 +19,28 @@ import (
 
 const GetUuid_BODY = "<h:GetUuid_INPUT xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService\"></h:GetUuid_INPUT>"
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetResponse: SetupAndConfigurationServiceResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"RequestedState\":0,\"EnabledState\":0,\"ElementName\":\"\",\"SystemCreationClassName\":\"\",\"SystemName\":\"\",\"CreationClassName\":\"\",\"Name\":\"\",\"ProvisioningMode\":0,\"ProvisioningState\":0,\"ZeroTouchConfigurationEnabled\":false,\"ProvisioningServerOTP\":\"\",\"ConfigurationServerFQDN\":\"\",\"PasswordModel\":0,\"DhcpDNSSuffix\":\"\",\"TrustedDNSSuffix\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"SetupAndConfigurationServiceItems\":null},\"GetUuid_OUTPUT\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"UUID\":\"\"},\"Unprovision_OUTPUT\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0},\"CommitChanges_OUTPUT\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0},\"SetMEBxPassword_OUTPUT\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			GetResponse: SetupAndConfigurationServiceResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    requestedstate: 0\n    enabledstate: 0\n    elementname: \"\"\n    systemcreationclassname: \"\"\n    systemname: \"\"\n    creationclassname: \"\"\n    name: \"\"\n    provisioningmode: 0\n    provisioningstate: 0\n    zerotouchconfigurationenabled: false\n    provisioningserverotp: \"\"\n    configurationserverfqdn: \"\"\n    passwordmodel: 0\n    dhcpdnssuffix: \"\"\n    trusteddnssuffix: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    setupandconfigurationserviceitems: []\ngetuuid_output:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    uuid: \"\"\nunprovision_output:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\ncommitchanges_output:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\nsetmebxpassword_output:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveAMT_SetupAndConfigurationService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"

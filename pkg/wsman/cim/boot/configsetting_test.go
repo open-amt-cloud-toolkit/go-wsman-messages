@@ -17,6 +17,28 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			ConfigSettingGetResponse: BootConfigSetting{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ConfigSettingGetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"InstanceID\":\"\",\"ElementName\":\"\"},\"SourceSettingGetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"StructuredBootString\":\"\",\"BIOSBootString\":\"\",\"BootString\":\"\",\"FailThroughSupported\":0},\"ServiceGetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Name\":\"\",\"CreationClassName\":\"\",\"SystemName\":\"\",\"SystemCreationClassName\":\"\",\"ElementName\":\"\",\"OperationalStatus\":null,\"EnabledState\":0,\"RequestedState\":0},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"BootSourceSettingItems\":null,\"BootConfigSettingItems\":null,\"BootServiceItems\":null},\"ChangeBootOrder_OUTPUT\":{\"ReturnValue\":0}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			ConfigSettingGetResponse: BootConfigSetting{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nconfigsettinggetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    instanceid: \"\"\n    elementname: \"\"\nsourcesettinggetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    structuredbootstring: \"\"\n    biosbootstring: \"\"\n    bootstring: \"\"\n    failthroughsupported: 0\nservicegetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    name: \"\"\n    creationclassname: \"\"\n    systemname: \"\"\n    systemcreationclassname: \"\"\n    elementname: \"\"\n    operationalstatus: []\n    enabledstate: 0\n    requestedstate: 0\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    bootsourcesettingitems: []\n    bootconfigsettingitems: []\n    bootserviceitems: []\nchangebootorder_output:\n    returnvalue: 0\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveConfigSetting(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"

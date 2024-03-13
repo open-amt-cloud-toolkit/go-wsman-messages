@@ -87,4 +87,35 @@ func TestCreateBody(t *testing.T) {
 		expectedResult := `<Body><h:testMethod xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/testUri"><h:testXmlns>test</h:testXmlns></h:testMethod></Body>`
 		assert.Equal(t, expectedResult, result)
 	})
+	t.Run("should create body without data", func(t *testing.T) {
+		result := wsmanMessageCreator.CreateBody("testMethod", "testUri", nil)
+		expectedResult := "<Body><h:testMethod xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/testUri\"></h:testMethod></Body>"
+		assert.Equal(t, expectedResult, result)
+	})
+}
+
+func TestCreateSelectorObjectForBody(t *testing.T) {
+	wsmanMessageCreator := NewWSManMessageCreator("http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/")
+	t.Run("should return map string interface", func(t *testing.T) {
+		selector := Selector{
+			Name:  "InstanceID",
+			Value: "Value",
+		}
+		result := wsmanMessageCreator.CreateSelectorObjectForBody(selector)
+		expectedResult := map[string]interface{}(map[string]interface{}{"Selector": []map[string]interface{}{{"$": map[string]string{"Name": "InstanceID"}, "_": "Value"}}})
+		assert.Equal(t, expectedResult, result)
+	})
+}
+
+func TestIsSlice(t *testing.T) {
+	t.Run("should return true if input is slice", func(t *testing.T) {
+		slice := []string{"123", "456"}
+		result := IsSlice(slice)
+		assert.True(t, result)
+	})
+	t.Run("should return false if input is not slice", func(t *testing.T) {
+		notSlice := 0
+		result := IsSlice(notSlice)
+		assert.False(t, result)
+	})
 }

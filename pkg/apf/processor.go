@@ -26,7 +26,7 @@ func Process(data []byte, session *Session) bytes.Buffer {
 	case APF_DISCONNECT: // (1) Intel AMT wants to completely disconnect. Not sure when this happens.
 		log.Debug("received APF_DISCONNECT")
 	case APF_SERVICE_REQUEST: // (5)
-		log.Debug("received APF SERVICE REQUEST")
+		log.Debug("received APF_SERVICE_REQUEST")
 		dataToSend = ProcessServiceRequest(data)
 	case APF_CHANNEL_OPEN_CONFIRMATION: // (91) Intel AMT confirmation to an APF_CHANNEL_OPEN request.
 		log.Debug("received APF_CHANNEL_OPEN_CONFIRMATION")
@@ -75,10 +75,7 @@ func ProcessChannelClose(data []byte, session *Session) APF_CHANNEL_CLOSE_MESSAG
 		log.Error(err)
 	}
 	log.Tracef("%+v", closeMessage)
-	// session.DataBuffer <- session.Tempdata
-	// session.Tempdata = []byte{}
-	close := ChannelClose(closeMessage.RecipientChannel)
-	return close
+	return ChannelClose(closeMessage.RecipientChannel)
 }
 func ProcessGlobalRequest(data []byte) interface{} {
 	genericHeader := APF_GENERIC_HEADER{}

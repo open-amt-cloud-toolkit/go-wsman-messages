@@ -17,6 +17,28 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			WiFiPortConfigurationService: WiFiPortConfigurationServiceResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"WiFiPortConfigurationService\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"RequestedState\":0,\"EnabledState\":0,\"HealthState\":0,\"ElementName\":\"\",\"SystemCreationClassName\":\"\",\"SystemName\":\"\",\"CreationClassName\":\"\",\"Name\":\"\",\"LocalProfileSynchronizationEnabled\":0,\"LastConnectedSsidUnderMeControl\":\"\",\"NoHostCsmeSoftwarePolicy\":0,\"UEFIWiFiProfileShareEnabled\":false},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"WiFiPortConfigurationItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"AddWiFiSettings_OUTPUT\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			WiFiPortConfigurationService: WiFiPortConfigurationServiceResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nwifiportconfigurationservice:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    requestedstate: 0\n    enabledstate: 0\n    healthstate: 0\n    elementname: \"\"\n    systemcreationclassname: \"\"\n    systemname: \"\"\n    creationclassname: \"\"\n    name: \"\"\n    localprofilesynchronizationenabled: 0\n    lastconnectedssidundermecontrol: \"\"\n    nohostcsmesoftwarepolicy: 0\n    uefiwifiprofileshareenabled: false\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    wifiportconfigurationitems: []\nenumerateresponse:\n    enumerationcontext: \"\"\naddwifisettings_output:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveAMT_WiFiPortConfigurationService(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"

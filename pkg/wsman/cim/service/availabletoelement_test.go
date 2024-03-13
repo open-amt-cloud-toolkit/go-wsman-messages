@@ -16,6 +16,28 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			PullResponse: PullResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"AssociatedPowerManagementService\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"AssociatedPowerManagementService\":{\"AvailableRequestedPowerStates\":0,\"PowerState\":0,\"ServiceProvided\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Address\":\"\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ResourceURI\":\"\",\"SelelctorSet\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Selector\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Name\":\"\",\"Value\":\"\"}}}},\"UserOfService\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Address\":\"\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ResourceURI\":\"\",\"SelelctorSet\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Selector\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Name\":\"\",\"Value\":\"\"}}}}}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			PullResponse: PullResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    associatedpowermanagementservice: []\nenumerateresponse:\n    enumerationcontext: \"\"\nassociatedpowermanagementservice:\n    availablerequestedpowerstates: 0\n    powerstate: 0\n    serviceprovided:\n        xmlname:\n            space: \"\"\n            local: \"\"\n        address: \"\"\n        referenceparameters:\n            xmlname:\n                space: \"\"\n                local: \"\"\n            resourceuri: \"\"\n            selelctorset:\n                xmlname:\n                    space: \"\"\n                    local: \"\"\n                selector:\n                    xmlname:\n                        space: \"\"\n                        local: \"\"\n                    name: \"\"\n                    value: \"\"\n    userofservice:\n        xmlname:\n            space: \"\"\n            local: \"\"\n        address: \"\"\n        referenceparameters:\n            xmlname:\n                space: \"\"\n                local: \"\"\n            resourceuri: \"\"\n            selelctorset:\n                xmlname:\n                    space: \"\"\n                    local: \"\"\n                selector:\n                    xmlname:\n                        space: \"\"\n                        local: \"\"\n                    name: \"\"\n                    value: \"\"\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestNegativeAvailableToElement(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"

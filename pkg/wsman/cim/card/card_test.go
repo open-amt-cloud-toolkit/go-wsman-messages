@@ -15,6 +15,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestJson(t *testing.T) {
+	response := Response{
+		Body: Body{
+			PullResponse: PullResponse{},
+		},
+	}
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"CardItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PackageResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"CanBeFRUed\":false,\"CreationClassName\":\"\",\"ElementName\":\"\",\"Manufacturer\":\"\",\"Model\":\"\",\"OperationalStatus\":0,\"PackageType\":0,\"SerialNumber\":\"\",\"Tag\":\"\",\"Version\":\"\"}}"
+	result := response.JSON()
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestYaml(t *testing.T) {
+	response := Response{
+		Body: Body{
+			PullResponse: PullResponse{},
+		},
+	}
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    carditems: []\nenumerateresponse:\n    enumerationcontext: \"\"\npackageresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    canbefrued: false\n    creationclassname: \"\"\n    elementname: \"\"\n    manufacturer: \"\"\n    model: \"\"\n    operationalstatus: 0\n    packagetype: 0\n    serialnumber: \"\"\n    tag: \"\"\n    version: \"\"\n"
+	result := response.YAML()
+	assert.Equal(t, expectedResult, result)
+}
+
 func TestPositiveCIMCard(t *testing.T) {
 	messageID := 0
 	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
