@@ -114,7 +114,6 @@ func TestProcessProtocolVersion(t *testing.T) {
 	result := ProcessProtocolVersion(data)
 	assert.NotNil(t, result)
 }
-
 func TestServiceAcceptLessThan18Characters(t *testing.T) {
 	serviceName := "test"
 	result := ServiceAccept(serviceName)
@@ -135,7 +134,6 @@ func TestServiceAcceptMoreThan18Characters(t *testing.T) {
 	result := ServiceAccept(serviceName)
 	assert.NotNil(t, result)
 }
-
 func TestProtocolVersion(t *testing.T) {
 	result := ProtocolVersion(1, 0, 9)
 	assert.NotNil(t, result)
