@@ -24,6 +24,7 @@ func NewBootCapabilitiesWithClient(wsmanMessageCreator *message.WSManMessageCrea
 	}
 }
 
+//Test to see if this is broken 
 // Get retrieves the representation of the instance
 func (bootCapabilities Capabilities) Get() (response Response, err error) {
 	response = Response{
