@@ -22,7 +22,7 @@ func TestJson(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"CreationClassName\":\"\",\"ElementName\":\"\",\"Name\":\"\",\"SystemCreationClassName\":\"\",\"SystemName\":\"\",\"EnabledState\":0,\"RequestedState\":0,\"KVMProtocol\":0},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Items\":null}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"CreationClassName\":\"\",\"ElementName\":\"\",\"Name\":\"\",\"SystemCreationClassName\":\"\",\"SystemName\":\"\",\"EnabledState\":0,\"RequestedState\":0,\"KVMProtocol\":0},\"RequestStateChange_OUTPUT\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Items\":null}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -33,7 +33,7 @@ func TestYaml(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    creationclassname: \"\"\n    elementname: \"\"\n    name: \"\"\n    systemcreationclassname: \"\"\n    systemname: \"\"\n    enabledstate: 0\n    requestedstate: 0\n    kvmprotocol: 0\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    items: []\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    creationclassname: \"\"\n    elementname: \"\"\n    name: \"\"\n    systemcreationclassname: \"\"\n    systemname: \"\"\n    enabledstate: 0\n    requestedstate: 0\n    kvmprotocol: 0\nrequeststatechange_output:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    items: []\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }

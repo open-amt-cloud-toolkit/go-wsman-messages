@@ -30,7 +30,7 @@ type (
 	Body struct {
 		XMLName               xml.Name `xml:"Body"`
 		EnumerateResponse     common.EnumerateResponse
-		GetResponse           OptInServiceResponse `xml:"IPS_OptInService"`
+		GetAndPutResponse     OptInServiceResponse `xml:"IPS_OptInService"`
 		PullResponse          PullResponse         `xml:"PullResponse"`
 		StartOptInResponse    StartOptIn_OUTPUT    `xml:"StartOptIn_OUTPUT"`
 		CancelOptInResponse   CancelOptIn_OUTPUT   `xml:"CancelOptIn_OUTPUT"`
@@ -39,16 +39,16 @@ type (
 
 	OptInServiceResponse struct {
 		XMLName                 xml.Name `xml:"IPS_OptInService"`
-		Name                    string
-		CreationClassName       string
-		SystemName              string
-		SystemCreationClassName string
-		ElementName             string
-		OptInCodeTimeout        int
-		OptInRequired           int
-		OptInState              int
-		CanModifyOptInPolicy    int
-		OptInDisplayTimeout     int
+		Name                    string   `xml:"Name,omitempty"`
+		CreationClassName       string   `xml:"CreationClassName,omitempty"`
+		SystemName              string   `xml:"SystemName,omitempty"`
+		SystemCreationClassName string   `xml:"SystemCreationClassName,omitempty"`
+		ElementName             string   `xml:"ElementName,omitempty"`
+		OptInCodeTimeout        int      `xml:"OptInCodeTimeout,omitempty"`
+		OptInRequired           int      `xml:"OptInRequired"`
+		OptInState              int      `xml:"OptInState"`
+		CanModifyOptInPolicy    int      `xml:"CanModifyOptInPolicy,omitempty"`
+		OptInDisplayTimeout     int      `xml:"OptInDisplayTimeout,omitempty"`
 	}
 
 	PullResponse struct {
@@ -79,24 +79,18 @@ type (
 		H         string   `xml:"xmlns:h,attr"`
 		OptInCode int      `xml:"h:OptInCode"`
 	}
+	OptInServiceRequest struct {
+		XMLName                 xml.Name `xml:"h:IPS_OptInService"`
+		H                       string   `xml:"xmlns:h,attr"`
+		CanModifyOptInPolicy    int      `xml:"h:CanModifyOptInPolicy,omitempty"`
+		CreationClassName       string   `xml:"h:CreationClassName,omitempty"`
+		ElementName             string   `xml:"h:ElementName,omitempty"`
+		Name                    string   `xml:"h:Name,omitempty"`
+		OptInCodeTimeout        int      `xml:"h:OptInCodeTimeout,omitempty"`
+		OptInDisplayTimeout     int      `xml:"h:OptInDisplayTimeout,omitempty"`
+		OptInRequired           int      `xml:"h:OptInRequired"`
+		OptInState              int      `xml:"h:OptInState"`
+		SystemName              string   `xml:"h:SystemName,omitempty"`
+		SystemCreationClassName string   `xml:"h:SystemCreationClassName,omitempty"`
+	}
 )
-
-type OptInService struct {
-	XMLName                 xml.Name             `xml:"h:IPS_OptInService"`
-	H                       string               `xml:"xmlns:h,attr"`
-	Name                    string               `xml:"h:Name,omitempty"`
-	CreationClassName       string               `xml:"h:CreationClassName,omitempty"`
-	SystemName              string               `xml:"h:SystemName,omitempty"`
-	SystemCreationClassName string               `xml:"h:SystemCreationClassName,omitempty"`
-	ElementName             string               `xml:"h:ElementName,omitempty"`
-	OptInCodeTimeout        int                  `xml:"h:OptInCodeTimeout,omitempty"`
-	OptInRequired           OptInRequired        `xml:"h:OptInRequired,omitempty"`
-	OptInState              OptInState           `xml:"h:OptInState,omitempty"`
-	CanModifyOptInPolicy    CanModifyOptInPolicy `xml:"h:CanModifyOptInPolicy,omitempty"`
-	OptInDisplayTimeout     int                  `xml:"h:OptInDisplayTimeout,omitempty"`
-}
-
-type OptInRequired uint32
-type OptInState int
-type CanModifyOptInPolicy int
-type ReturnValue int

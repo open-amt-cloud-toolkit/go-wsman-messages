@@ -8,12 +8,12 @@ package optin
 const IPS_OptInService string = "IPS_OptInService"
 
 const (
-	FALSE CanModifyOptInPolicy = 0
-	TRUE  CanModifyOptInPolicy = 1
+	False int = 0
+	True  int = 1
 )
 
 const (
-	NotStarted OptInState = iota
+	NotStarted int = iota
 	Requested
 	Displayed
 	Received
@@ -21,13 +21,13 @@ const (
 )
 
 const (
-	None OptInRequired = 0
-	KVM  OptInRequired = 1
-	All  OptInRequired = 4294967295
+	None uint32 = 0
+	KVM  uint32 = 1
+	All  uint32 = 4294967295
 )
 
 const (
-	ReturnValuePTStatusSuccess ReturnValue = iota
+	ReturnValuePTStatusSuccess int = iota
 	ReturnValuePTStatusInternalError
 	ReturnValuePTStatusInvalidState
 	ReturnValuePTStatusBlocked
