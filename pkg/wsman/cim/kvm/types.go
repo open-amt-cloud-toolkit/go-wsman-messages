@@ -28,10 +28,11 @@ type (
 	}
 
 	Body struct {
-		XMLName           xml.Name          `xml:"Body"`
-		GetResponse       KVMRedirectionSAP `xml:"CIM_KVMRedirectionSAP"`
-		EnumerateResponse common.EnumerateResponse
-		PullResponse      PullResponse `xml:"PullResponse"`
+		XMLName                   xml.Name                  `xml:"Body"`
+		GetResponse               KVMRedirectionSAP         `xml:"CIM_KVMRedirectionSAP"`
+		RequestStateChange_OUTPUT RequestStateChange_OUTPUT `xml:"RequestStateChange_OUTPUT"`
+		EnumerateResponse         common.EnumerateResponse
+		PullResponse              PullResponse `xml:"PullResponse"`
 	}
 
 	KVMRedirectionSAP struct {
@@ -52,6 +53,14 @@ type (
 	PullResponse struct {
 		XMLName xml.Name            `xml:"PullResponse"`
 		Items   []KVMRedirectionSAP `xml:"Items>CIM_KVMRedirectionSAP"`
+	}
+
+	RequestStateChange_OUTPUT struct {
+		XMLName xml.Name `xml:"RequestStateChange_OUTPUT"`
+		// ValueMap={0, 1, 2, 3, 4, 5, 6, .., 4096, 4097, 4098, 4099, 4100..32767, 32768..65535}
+		//
+		// Values={Completed with No Error, Not Supported, Unknown or Unspecified Error, Cannot complete within Timeout Period, Failed, Invalid Parameter, In Use, DMTF Reserved, Method Parameters Checked - Job Started, Invalid State Transition, Use of Timeout Parameter Not Supported, Busy, Method Reserved, Vendor Specific}
+		ReturnValue int `xml:"ReturnValue"`
 	}
 )
 
