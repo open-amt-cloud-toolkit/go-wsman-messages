@@ -8,7 +8,9 @@ package redirection
 
 import (
 	"encoding/xml"
+	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/amt/methods"
@@ -136,6 +138,10 @@ func (service Service) RequestStateChange(requestedState RequestedState) (respon
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
+	}
+
+	if response.Body.RequestStateChange_OUTPUT.ReturnValue != 0 {
+		err = errors.New("RequestStateChange failed with return code " + strconv.Itoa(response.Body.RequestStateChange_OUTPUT.ReturnValue))
 	}
 	return
 }

@@ -23,7 +23,7 @@ func TestJson(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Name\":\"\",\"CreationClassName\":\"\",\"SystemName\":\"\",\"SystemCreationClassName\":\"\",\"ElementName\":\"\",\"OptInCodeTimeout\":0,\"OptInRequired\":0,\"OptInState\":0,\"CanModifyOptInPolicy\":0,\"OptInDisplayTimeout\":0},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"OptInServiceItems\":null},\"StartOptInResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0},\"CancelOptInResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0},\"SendOptInCodeResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"GetAndPutResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Name\":\"\",\"CreationClassName\":\"\",\"SystemName\":\"\",\"SystemCreationClassName\":\"\",\"ElementName\":\"\",\"OptInCodeTimeout\":0,\"OptInRequired\":0,\"OptInState\":0,\"CanModifyOptInPolicy\":0,\"OptInDisplayTimeout\":0},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"OptInServiceItems\":null},\"StartOptInResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0},\"CancelOptInResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0},\"SendOptInCodeResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -34,7 +34,7 @@ func TestYaml(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    name: \"\"\n    creationclassname: \"\"\n    systemname: \"\"\n    systemcreationclassname: \"\"\n    elementname: \"\"\n    optincodetimeout: 0\n    optinrequired: 0\n    optinstate: 0\n    canmodifyoptinpolicy: 0\n    optindisplaytimeout: 0\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    optinserviceitems: []\nstartoptinresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\ncanceloptinresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\nsendoptincoderesponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\ngetandputresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    name: \"\"\n    creationclassname: \"\"\n    systemname: \"\"\n    systemcreationclassname: \"\"\n    elementname: \"\"\n    optincodetimeout: 0\n    optinrequired: 0\n    optinstate: 0\n    canmodifyoptinpolicy: 0\n    optindisplaytimeout: 0\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    optinserviceitems: []\nstartoptinresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\ncanceloptinresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\nsendoptincoderesponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
@@ -71,7 +71,7 @@ func TestPositiveIPS_OptInService(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
-					GetResponse: OptInServiceResponse{
+					GetAndPutResponse: OptInServiceResponse{
 						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: IPS_OptInService},
 						CanModifyOptInPolicy:    1,
 						CreationClassName:       "IPS_OptInService",
@@ -137,7 +137,6 @@ func TestPositiveIPS_OptInService(t *testing.T) {
 					},
 				},
 			},
-
 			// SEND_OPT_IN_CODE
 			{
 				"should create a valid IPS_OptInService send opt in code wsman message",
@@ -157,7 +156,6 @@ func TestPositiveIPS_OptInService(t *testing.T) {
 					},
 				},
 			},
-
 			// START_OPT_IN
 			{
 				"should create a valid IPS_OptInService start opt in code wsman message",
@@ -177,7 +175,6 @@ func TestPositiveIPS_OptInService(t *testing.T) {
 					},
 				},
 			},
-
 			// CANCEL_OPT_IN
 			{
 				"should create a valid IPS_OptInService cancel opt in code wsman message",
@@ -243,7 +240,7 @@ func TestNegativeIPS_OptInService(t *testing.T) {
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
-					GetResponse: OptInServiceResponse{
+					GetAndPutResponse: OptInServiceResponse{
 						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: IPS_OptInService},
 						CanModifyOptInPolicy:    1,
 						CreationClassName:       "IPS_OptInService",
@@ -366,6 +363,47 @@ func TestNegativeIPS_OptInService(t *testing.T) {
 					CancelOptInResponse: CancelOptIn_OUTPUT{
 						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: "CancelOptIn_OUTPUT"},
 						ReturnValue: 2,
+					},
+				},
+			},
+			// PUT
+			{
+				"should create a valid IPS_OptInService Put wsman message",
+				IPS_OptInService,
+				wsmantesting.PUT,
+				`<h:IPS_OptInService xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_OptInService"><h:CanModifyOptInPolicy>1</h:CanModifyOptInPolicy><h:CreationClassName>IPS_OptInService</h:CreationClassName><h:ElementName>Intel(r) AMT OptIn Service</h:ElementName><h:Name>Intel(r) AMT OptIn Service</h:Name><h:OptInCodeTimeout>120</h:OptInCodeTimeout><h:OptInDisplayTimeout>300</h:OptInDisplayTimeout><h:OptInRequired>0</h:OptInRequired><h:OptInState>0</h:OptInState><h:SystemName>Intel(r) AMT</h:SystemName><h:SystemCreationClassName>CIM_ComputerSystem</h:SystemCreationClassName></h:IPS_OptInService>`,
+				"",
+				func() (Response, error) {
+					client.CurrentMessage = "Error"
+					request := OptInServiceRequest{
+						H:                       "http://intel.com/wbem/wscim/1/ips-schema/1//IPS_OptInService",
+						CanModifyOptInPolicy:    1,
+						CreationClassName:       "IPS_OptInService",
+						ElementName:             "Intel(r) AMT OptIn Service",
+						Name:                    "Intel(r) AMT OptIn Service",
+						OptInCodeTimeout:        120,
+						OptInDisplayTimeout:     300,
+						OptInRequired:           0,
+						OptInState:              0,
+						SystemCreationClassName: "CIM_ComputerSystem",
+						SystemName:              "Intel(r) AMT",
+					}
+					return elementUnderTest.Put(request)
+				},
+				Body{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					GetAndPutResponse: OptInServiceResponse{
+						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: IPS_OptInService},
+						CanModifyOptInPolicy:    1,
+						CreationClassName:       "IPS_OptInService",
+						ElementName:             "Intel(r) AMT OptIn Service",
+						Name:                    "Intel(r) AMT OptIn Service",
+						OptInCodeTimeout:        120,
+						OptInDisplayTimeout:     300,
+						OptInRequired:           0,
+						OptInState:              0,
+						SystemCreationClassName: "CIM_ComputerSystem",
+						SystemName:              "Intel(r) AMT",
 					},
 				},
 			},

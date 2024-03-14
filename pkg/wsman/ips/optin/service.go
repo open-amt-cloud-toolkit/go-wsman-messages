@@ -7,6 +7,7 @@ package optin
 
 import (
 	"encoding/xml"
+	"fmt"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
@@ -124,6 +125,25 @@ func (service Service) CancelOptIn() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: service.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// Put will change properties of the selected instance
+func (service Service) Put(request OptInServiceRequest) (response Response, err error) {
+	request.H = fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.Put(request, false, nil),
 		},
 	}
 	err = service.base.Execute(response.Message)
