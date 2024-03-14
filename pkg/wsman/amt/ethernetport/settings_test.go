@@ -177,7 +177,7 @@ func TestPositiveAMT_EthernetPortSettings(t *testing.T) {
 						SharedStaticIp: true,
 					}
 					client.CurrentMessage = "Put"
-					return elementUnderTest.Put(ethernetPortSettings, ethernetPortSettings.InstanceID)
+					return elementUnderTest.Put(ethernetPortSettings.InstanceID, ethernetPortSettings)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
@@ -357,7 +357,7 @@ func TestNegativeAMT_EthernetPortSettings(t *testing.T) {
 						SharedStaticIp: true,
 					}
 					client.CurrentMessage = "Error"
-					return elementUnderTest.Put(ethernetPortSettings, ethernetPortSettings.InstanceID)
+					return elementUnderTest.Put(ethernetPortSettings.InstanceID, ethernetPortSettings)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},

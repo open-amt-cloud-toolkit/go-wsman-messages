@@ -28,10 +28,10 @@ func NewPublicKeyCertificateWithClient(wsmanMessageCreator *message.WSManMessage
 }
 
 // Get retrieves the representation of the instance
-func (certificate Certificate) Get(handle int) (response Response, err error) {
+func (certificate Certificate) Get(instanceID string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
-		Value: fmt.Sprintf("Intel(r) AMT Certificate: Handle: %d", handle),
+		Value: instanceID,
 	}
 	response = Response{
 		Message: &client.Message{
@@ -92,10 +92,10 @@ func (certificate Certificate) Pull(enumerationContext string) (response Respons
 }
 
 // Put will change properties of the selected instance
-func (certificate Certificate) Put(handle int, cert string) (response Response, err error) {
+func (certificate Certificate) Put(instanceId string, cert string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
-		Value: fmt.Sprintf("Intel(r) AMT Certificate: Handle: %d", handle),
+		Value: instanceId,
 	}
 	publicKeyCertificate := PublicKeyCertificateRequest{}
 	publicKeyCertificate.X509Certificate = cert
