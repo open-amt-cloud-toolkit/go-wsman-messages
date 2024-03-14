@@ -88,7 +88,7 @@ func (s Settings) Pull(enumerationContext string) (response Response, err error)
 }
 
 // Put will change properties of the selected instance
-func (s Settings) Put(ethernetPortSettings SettingsRequest, instanceId string) (response Response, err error) {
+func (s Settings) Put(instanceId string, ethernetPortSettings SettingsRequest) (response Response, err error) {
 	ethernetPortSettings.H = fmt.Sprintf("%s%s", message.AMTSchema, AMT_EthernetPortSettings)
 	selector := message.Selector{
 		Name:  "InstanceID",

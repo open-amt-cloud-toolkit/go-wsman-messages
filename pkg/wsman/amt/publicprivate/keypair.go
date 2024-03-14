@@ -10,7 +10,6 @@ package publicprivate
 
 import (
 	"encoding/xml"
-	"fmt"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
@@ -24,10 +23,10 @@ func NewPublicPrivateKeyPairWithClient(wsmanMessageCreator *message.WSManMessage
 }
 
 // Get retrieves the representation of the instance
-func (keyPair KeyPair) Get(handle int) (response Response, err error) {
+func (keyPair KeyPair) Get(instanceID string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
-		Value: fmt.Sprintf("Intel(r) AMT Key: Handle: %d", handle),
+		Value: instanceID,
 	}
 	response = Response{
 		Message: &client.Message{
