@@ -43,19 +43,19 @@ func TestHashWithHash(t *testing.T) {
 }
 
 func TestAuthChallenge_HashCredentials(t *testing.T) {
-	c := &authChallenge{
+	c := &AuthChallenge{
 		Username: "test",
 		Realm:    "realm",
 		Password: "pass",
 	}
 
 	expected := "cccddec7bd6f77524ddac0e981fe5ba8"
-	actual := c.hashCredentials()
+	actual := c.HashCredentials()
 	assert.Equal(t, expected, actual)
 }
 
 func TestAuthChallenge_HashURI(t *testing.T) {
-	c := &authChallenge{}
+	c := &AuthChallenge{}
 	testCases := []struct {
 		method   string
 		uri      string
@@ -72,7 +72,7 @@ func TestAuthChallenge_HashURI(t *testing.T) {
 }
 
 func TestResponse(t *testing.T) {
-	c := &authChallenge{}
+	c := &AuthChallenge{}
 	testCases := []struct {
 		method   string
 		uri      string
@@ -89,7 +89,7 @@ func TestResponse(t *testing.T) {
 }
 
 func TestResponse_Qop(t *testing.T) {
-	c := &authChallenge{}
+	c := &AuthChallenge{}
 	testCases := []struct {
 		method   string
 		uri      string
@@ -107,7 +107,7 @@ func TestResponse_Qop(t *testing.T) {
 }
 
 func TestAuthorize(t *testing.T) {
-	c := &authChallenge{}
+	c := &AuthChallenge{}
 	testCases := []struct {
 		method   string
 		uri      string
@@ -123,7 +123,7 @@ func TestAuthorize(t *testing.T) {
 }
 
 func TestAuthorize_Full(t *testing.T) {
-	c := &authChallenge{}
+	c := &AuthChallenge{}
 	testCases := []struct {
 		method   string
 		uri      string
