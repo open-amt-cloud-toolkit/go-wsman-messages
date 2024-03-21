@@ -70,7 +70,6 @@ type (
 		Name                    string       `xml:"h:Name,omitempty"`                    // The Name property uniquely identifies the Service and provides an indication of the functionality that is managed. This functionality is described in more detail in the Description property of the object.
 		SystemCreationClassName string       `xml:"h:SystemCreationClassName,omitempty"` // The CreationClassName of the scoping System.
 		SystemName              string       `xml:"h:SystemName,omitempty"`              // The Name of the scoping System.
-		AccessLog               []string     `xml:"AccessLog,omitempty"`                 // Read only. A list of string elements, describing recent IDE redirection operations. The format of each element is: 'Date (MM/DD/YYYY), Time (hh:mm:ss), IP:Port'
 	}
 )
 

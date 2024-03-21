@@ -81,7 +81,6 @@ type SettingsRequest struct {
 	LinkPreference               LinkPreference               `xml:"h:LinkPreference,omitempty"`               // Determines whether the link is preferred to be owned by ME or host
 	LinkControl                  LinkControl                  `xml:"h:LinkControl,omitempty"`                  // Determines whether the link is owned by ME or host.  Additional Notes: This property is read-only.
 	SharedStaticIp               bool                         `xml:"h:SharedStaticIp"`                         // Indicates whether the static host IP is shared with ME.
-	SharedDynamicIP              bool                         `xml:"h:SharedDynamicIP,omitempty"`              // Indicates whether the dynamic host IP is shared with ME. This property is read only.
 	IpSyncEnabled                bool                         `xml:"h:IpSyncEnabled"`                          // Indicates whether the IP synchronization between host and ME is enabled.
 	DHCPEnabled                  bool                         `xml:"h:DHCPEnabled"`                            // Indicates whether DHCP is in use. Additional Notes: 'DHCPEnabled' is a required field for the Put command.
 	IPAddress                    string                       `xml:"h:IPAddress,omitempty"`                    // String representation of IP address. Get operation - reports the acquired IP address (whether in static or DHCP mode). Put operation - sets the IP address (in static mode only).
@@ -90,7 +89,6 @@ type SettingsRequest struct {
 	PrimaryDNS                   string                       `xml:"h:PrimaryDNS,omitempty"`                   // Primary DNS in a string format. For example: 10.12.232.1
 	SecondaryDNS                 string                       `xml:"h:SecondaryDNS,omitempty"`                 // Secondary DNS in a string format. For example: 10.12.232.1
 	ConsoleTcpMaxRetransmissions ConsoleTcpMaxRetransmissions `xml:"h:ConsoleTcpMaxRetransmissions,omitempty"` // Indicates the number of retransmissions host TCP SW tries ifno ack is accepted
-	WLANLinkProtectionLevel      WLANLinkProtectionLevel      `xml:"h:WLANLinkProtectionLevel,omitempty"`      // Defines the level of the link protection feature activation. Read only property.
 	PhysicalConnectionType       PhysicalConnectionType       `xml:"h:PhysicalConnectionType,omitempty"`       // Indicates the physical connection type of this network interface. Note: Applicable in Intel AMT 15.0 and later.
 	PhysicalNicMedium            PhysicalNicMedium            `xml:"h:PhysicalNicMedium,omitempty"`            // Indicates which medium is currently used by Intel® AMT to communicate with the NIC. Note: Applicable in Intel AMT 15.0 and later.
 }
