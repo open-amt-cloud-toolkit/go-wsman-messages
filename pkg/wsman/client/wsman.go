@@ -43,7 +43,7 @@ type Target struct {
 	useDigest      bool
 	OptimizeEnum   bool
 	logAMTMessages bool
-	challenge      *authChallenge
+	challenge      *AuthChallenge
 }
 
 func NewWsman(cp Parameters) *Target {
@@ -69,7 +69,7 @@ func NewWsman(cp Parameters) *Target {
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: cp.SelfSignedAllowed},
 	}
 	if res.useDigest {
-		res.challenge = &authChallenge{Username: res.username, Password: res.password}
+		res.challenge = &AuthChallenge{Username: res.username, Password: res.password}
 	}
 	return res
 }

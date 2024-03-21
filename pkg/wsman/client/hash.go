@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-type authChallenge struct {
+type AuthChallenge struct {
 	Username   string
 	Password   string
 	Realm      string
@@ -42,15 +42,15 @@ func hashWithHash(secret, data string) string {
 	return hashWithMD5(fmt.Sprintf("%s:%s", secret, data))
 }
 
-func (c *authChallenge) hashCredentials() string {
+func (c *AuthChallenge) HashCredentials() string {
 	return hashWithMD5(fmt.Sprintf("%s:%s:%s", c.Username, c.Realm, c.Password))
 }
 
-func (c *authChallenge) hashURI(method, uri string) string {
+func (c *AuthChallenge) hashURI(method, uri string) string {
 	return hashWithMD5(fmt.Sprintf("%s:%s", method, uri))
 }
 
-func (c *authChallenge) response(method, uri, cnonce string) (string, error) {
+func (c *AuthChallenge) response(method, uri, cnonce string) (string, error) {
 	c.NonceCount++
 
 	if strings.Contains(c.Qop, "auth") || c.Qop == "" {
@@ -69,7 +69,7 @@ func (c *authChallenge) response(method, uri, cnonce string) (string, error) {
 			nonceData = fmt.Sprintf("%s:%08x:%s:%s", nonceData, c.NonceCount, c.CNonce, c.Qop)
 		}
 
-		hashedCredentials := c.hashCredentials()
+		hashedCredentials := c.HashCredentials()
 		hashedURI := c.hashURI(method, uri)
 		response := hashWithHash(hashedCredentials, fmt.Sprintf("%s:%s", nonceData, hashedURI))
 
@@ -79,7 +79,7 @@ func (c *authChallenge) response(method, uri, cnonce string) (string, error) {
 	return "", fmt.Errorf("not implemented")
 }
 
-func (c *authChallenge) authorize(method, uri string) (string, error) {
+func (c *AuthChallenge) authorize(method, uri string) (string, error) {
 
 	if !strings.Contains(c.Qop, "auth") && c.Qop != "" {
 		return "", fmt.Errorf("qop not implemented")
@@ -125,7 +125,7 @@ func (c *authChallenge) authorize(method, uri string) (string, error) {
 	return sb.String(), nil
 }
 
-func (c *authChallenge) parseChallenge(input string) error {
+func (c *AuthChallenge) parseChallenge(input string) error {
 	const ws = " \n\r\t"
 	const qs = "\""
 	s := strings.Trim(input, ws)
