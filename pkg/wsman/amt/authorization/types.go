@@ -31,8 +31,11 @@ type (
 		GetResponse       AuthorizationOccurrence
 		EnumerateResponse common.EnumerateResponse
 		PullResponse      PullResponse
+		SetAdminResponse  SetAdminAclEntryEx_OUTPUT
 	}
-
+	SetAdminAclEntryEx_OUTPUT struct {
+		ReturnValue int
+	}
 	AuthorizationOccurrence struct {
 		XMLName                 xml.Name       `xml:"AMT_AuthorizationService"`
 		AllowHttpQopAuthOnly    int            `xml:"AllowHttpQopAuthOnly"`    // Indicates whether using the http "quality of protection" (qop) directive with value auth is allowed
@@ -161,8 +164,8 @@ type (
 		Enabled bool     `xml:"h:Enabled"` // Specifies the state of the ACL entry
 	}
 
-	SetAdminACLEntryEx_INPUT struct {
-		XMLName        xml.Name `xml:"h:SetAdminACLEntryEx_INPUT"`
+	SetAdminAclEntryEx_INPUT struct {
+		XMLName        xml.Name `xml:"h:SetAdminAclEntryEx_INPUT"`
 		H              string   `xml:"xmlns:h,attr"`
 		Username       string   `xml:"h:Username"`       // Username for access control. Contains 7-bit ASCII characters. String length is limited to 16 characters. Username cannot be an empty string.
 		DigestPassword string   `xml:"h:DigestPassword"` // An MD5 Hash of these parameters concatenated together (Username + ":" + DigestRealm + ":" + Password). The DigestRealm is a field in AMT_GeneralSettings

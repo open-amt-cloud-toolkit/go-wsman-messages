@@ -21,7 +21,7 @@ func TestJson(t *testing.T) {
 			GetResponse: AuthorizationOccurrence{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"AllowHttpQopAuthOnly\":0,\"CreationClassName\":\"\",\"ElementName\":\"\",\"EnabledState\":0,\"Name\":\"\",\"RequestedState\":0,\"SystemCreationClassName\":\"\",\"SystemName\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"AuthorizationOccurrenceItems\":null}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"AllowHttpQopAuthOnly\":0,\"CreationClassName\":\"\",\"ElementName\":\"\",\"EnabledState\":0,\"Name\":\"\",\"RequestedState\":0,\"SystemCreationClassName\":\"\",\"SystemName\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"AuthorizationOccurrenceItems\":null},\"SetAdminResponse\":{\"ReturnValue\":0}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -32,7 +32,7 @@ func TestYaml(t *testing.T) {
 			GetResponse: AuthorizationOccurrence{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    allowhttpqopauthonly: 0\n    creationclassname: \"\"\n    elementname: \"\"\n    enabledstate: 0\n    name: \"\"\n    requestedstate: 0\n    systemcreationclassname: \"\"\n    systemname: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    authorizationoccurrenceitems: []\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    allowhttpqopauthonly: 0\n    creationclassname: \"\"\n    elementname: \"\"\n    enabledstate: 0\n    name: \"\"\n    requestedstate: 0\n    systemcreationclassname: \"\"\n    systemname: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    authorizationoccurrenceitems: []\nsetadminresponse:\n    returnvalue: 0\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
@@ -184,6 +184,24 @@ func TestPositiveAMT_AuthorizationService(t *testing.T) {
 			// {"should return a valid amt_AuthorizationService GetAclEnabledState wsman message", AMT_AuthorizationService, `http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService/GetAclEnabledState`, `<h:GetAclEnabledState_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService"><h:Handle>1</h:Handle></h:GetAclEnabledState_INPUT>`, func() string {
 			// 	return elementUnderTest.GetAclEnabledState(1)
 			// }},
+
+			// SET ADMIN ACL ENTRY
+			{
+				"should return a valid amt_AuthorizationService SetAdminAclEntryEx wsman message",
+				AMT_AuthorizationService,
+				`http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService/SetAdminAclEntryEx`,
+				`<h:SetAdminAclEntryEx_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService"><h:Username>admin</h:Username><h:DigestPassword>AMviB05zT+twP2E9Tn/hPA==</h:DigestPassword></h:SetAdminAclEntryEx_INPUT>`,
+				func() (Response, error) {
+					client.CurrentMessage = "SetAdminAclEntryEx"
+					return elementUnderTest.SetAdminAclEntryEx("admin", "AMviB05zT+twP2E9Tn/hPA==")
+				},
+				Body{
+					XMLName: xml.Name{Space: "http://www.w3.org/2003/05/soap-envelope", Local: "Body"},
+					SetAdminResponse: SetAdminAclEntryEx_OUTPUT{
+						ReturnValue: 0,
+					},
+				},
+			},
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {

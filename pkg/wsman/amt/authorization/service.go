@@ -269,9 +269,9 @@ func (as AuthorizationService) SetAclEnabledState(handle int, enabled bool) (res
 }
 
 // Updates an Admin entry in the Intel® AMT device.
-func (as AuthorizationService) SetAdminACLEntryEx(username, digestPassword string) (response Response, err error) {
+func (as AuthorizationService) SetAdminAclEntryEx(username, digestPassword string) (response Response, err error) {
 	header := as.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuthorizationService, SetAdminAclEntryEx), AMT_AuthorizationService, nil, "", "")
-	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetAdminAclEntryEx), AMT_AuthorizationService, &SetAdminACLEntryEx_INPUT{Username: username, DigestPassword: digestPassword})
+	body := as.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetAdminAclEntryEx), AMT_AuthorizationService, &SetAdminAclEntryEx_INPUT{Username: username, DigestPassword: digestPassword})
 	response = Response{
 		Message: &client.Message{
 			XMLInput: as.base.WSManMessageCreator.CreateXML(header, body),
