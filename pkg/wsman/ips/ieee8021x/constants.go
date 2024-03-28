@@ -12,13 +12,13 @@ const (
 )
 
 const (
-	EnabledWithCertificates    IEEE8021xSettingsEnabled = 2
-	Disabled                   IEEE8021xSettingsEnabled = 3
-	EnabledWithoutCertificates IEEE8021xSettingsEnabled = 6
+	EnabledWithCertificates    int = 2
+	Disabled                   int = 3
+	EnabledWithoutCertificates int = 6
 )
 
 const (
-	AuthenticationProtocolEAPTLS AuthenticationProtocol = iota
+	AuthenticationProtocolEAPTLS int = iota
 	AuthenticationProtocolEAPTTLS_MSCHAPv2
 	AuthenticationProtocolPEAPv0_EAPMSCHAPv2
 	AuthenticationProtocolPEAPv1_EAPGTC
