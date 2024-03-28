@@ -7,6 +7,7 @@ package ieee8021x
 
 import (
 	"encoding/xml"
+	"fmt"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
@@ -76,6 +77,7 @@ func (settings Settings) Pull(enumerationContext string) (response Response, err
 
 // Put will change properties of the selected instance
 func (settings Settings) Put(ieee8021xSettings IEEE8021xSettingsRequest) (response Response, err error) {
+	ieee8021xSettings.H = fmt.Sprintf("%s%s", message.IPSSchema, IPS_IEEE8021xSettings)
 	response = Response{
 		Message: &client.Message{
 			XMLInput: settings.base.Put(ieee8021xSettings, false, nil),
@@ -94,11 +96,35 @@ func (settings Settings) Put(ieee8021xSettings IEEE8021xSettingsRequest) (respon
 
 func (settings Settings) SetCertificates(serverCertificateIssuer, clientCertificate string) (response Response, err error) {
 	header := settings.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(IPS_IEEE8021xSettings, SetCertificates), IPS_IEEE8021xSettings, nil, "", "")
+	serverCert := ServerCertificateIssuer{
+		Address: "default",
+		ReferenceParameters: ReferenceParameters{
+			ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
+			SelectorSet: SelectorSet{
+				Selector: Selector{
+					Name:  "InstanceID",
+					Value: serverCertificateIssuer,
+				},
+			},
+		},
+	}
+	clientCert := ClientCertificateIssuer{
+		Address: "default",
+		ReferenceParameters: ReferenceParameters{
+			ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
+			SelectorSet: SelectorSet{
+				Selector: Selector{
+					Name:  "InstanceID",
+					Value: clientCertificate,
+				},
+			},
+		},
+	}
 	body := settings.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetCertificates), IPS_IEEE8021xSettings,
 		Certificate{
 			H:                       "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_IEEE8021xSettings",
-			ServerCertificateIssuer: serverCertificateIssuer,
-			ClientCertificate:       clientCertificate,
+			ServerCertificateIssuer: serverCert,
+			ClientCertificate:       clientCert,
 		},
 	)
 	response = Response{
