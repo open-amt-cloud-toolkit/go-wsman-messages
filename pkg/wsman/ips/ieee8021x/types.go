@@ -64,33 +64,52 @@ type (
 // Request Types
 type (
 	IEEE8021xSettingsRequest struct {
-		XMLName                         xml.Name                        `xml:"h:IEEE8021xSettingsInput,omitempty"`
-		H                               string                          `xml:"xmlns:q,attr"`
-		ElementName                     string                          `xml:"q:ElementName,omitempty"`
-		InstanceID                      string                          `xml:"q:InstanceID,omitempty"`
-		AuthenticationProtocol          AuthenticationProtocol          `xml:"q:AuthenticationProtocol"`
-		RoamingIdentity                 string                          `xml:"q:RoamingIdentity,omitempty"`
-		ServerCertificateName           string                          `xml:"q:ServerCertificateName,omitempty"`
-		ServerCertificateNameComparison ServerCertificateNameComparison `xml:"q:ServerCertificateNameComparison,omitempty"`
-		Username                        string                          `xml:"q:Username,omitempty"`
-		Password                        string                          `xml:"q:Password,omitempty"`
-		Domain                          string                          `xml:"q:Domain,omitempty"`
-		ProtectedAccessCredential       string                          `xml:"q:ProtectedAccessCredential,omitempty"`
-		PACPassword                     string                          `xml:"q:PACPassword,omitempty"`
-		PSK                             string                          `xml:"q:PSK,omitempty"`
-		Enabled                         IEEE8021xSettingsEnabled        `json:"Enabled,omitempty"`
-		PxeTimeout                      int                             `json:"PxeTimeout,omitempty"`
-		AvailableInS0                   bool                            `json:"AvailableInS0,omitempty"`
+		XMLName                         xml.Name `xml:"h:IPS_IEEE8021xSettings,omitempty"`
+		H                               string   `xml:"xmlns:h,attr"`
+		ElementName                     string   `xml:"h:ElementName,omitempty"`
+		InstanceID                      string   `xml:"h:InstanceID,omitempty"`
+		AuthenticationProtocol          int      `xml:"h:AuthenticationProtocol"`
+		RoamingIdentity                 string   `xml:"h:RoamingIdentity,omitempty"`
+		ServerCertificateName           string   `xml:"h:ServerCertificateName,omitempty"`
+		ServerCertificateNameComparison int      `xml:"h:ServerCertificateNameComparison,omitempty"`
+		Username                        string   `xml:"h:Username,omitempty"`
+		Password                        string   `xml:"h:Password,omitempty"`
+		Domain                          string   `xml:"h:Domain,omitempty"`
+		ProtectedAccessCredential       string   `xml:"h:ProtectedAccessCredential,omitempty"`
+		PACPassword                     string   `xml:"h:PACPassword,omitempty"`
+		PSK                             string   `xml:"h:PSK,omitempty"`
+		Enabled                         int      `xml:"h:Enabled,omitempty"`
+		PxeTimeout                      int      `xml:"h:PxeTimeout,omitempty"`
+		AvailableInS0                   bool     `xml:"h:AvailableInS0,omitempty"`
 	}
 	Certificate struct {
 		XMLName                 xml.Name `xml:"h:SetCertificates_INPUT"`
 		H                       string   `xml:"xmlns:h,attr"`
-		ServerCertificateIssuer string   `xml:"h:ServerCertificateIssuer"`
-		ClientCertificate       string   `xml:"h:ClientCertificate"`
+		ServerCertificateIssuer ServerCertificateIssuer
+		ClientCertificate       ClientCertificateIssuer
+	}
+	ServerCertificateIssuer struct {
+		XMLName             xml.Name            `xml:"h:ServerCertificateIssuer"`
+		Address             string              `xml:"a:Address"`
+		ReferenceParameters ReferenceParameters `xml:"a:ReferenceParameters"`
+	}
+	ClientCertificateIssuer struct {
+		XMLName             xml.Name            `xml:"h:ClientCertificate"`
+		Address             string              `xml:"a:Address"`
+		ReferenceParameters ReferenceParameters `xml:"a:ReferenceParameters"`
+	}
+	ReferenceParameters struct {
+		XMLName     xml.Name    `xml:"a:ReferenceParameters"`
+		ResourceURI string      `xml:"w:ResourceURI"`
+		SelectorSet SelectorSet `xml:"w:SelectorSet"`
+	}
+	SelectorSet struct {
+		XMLName  xml.Name `xml:"w:SelectorSet"`
+		Selector Selector `xml:"w:Selector"`
+	}
+	Selector struct {
+		XMLName xml.Name `xml:"w:Selector"`
+		Name    string   `xml:"Name,attr"`
+		Value   string   `xml:",chardata"`
 	}
 )
-
-// ServerCertificateNameComparison represents the ServerCertificateNameComparison type for IEEE8021xProfile.
-type ServerCertificateNameComparison int
-type IEEE8021xSettingsEnabled int
-type AuthenticationProtocol int
