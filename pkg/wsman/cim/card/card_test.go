@@ -21,7 +21,7 @@ func TestJson(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"CardItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PackageResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"CanBeFRUed\":false,\"CreationClassName\":\"\",\"ElementName\":\"\",\"Manufacturer\":\"\",\"Model\":\"\",\"OperationalStatus\":0,\"PackageType\":0,\"SerialNumber\":\"\",\"Tag\":\"\",\"Version\":\"\"}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"CardItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PackageResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"CanBeFRUed\":false,\"CreationClassName\":\"\",\"ElementName\":\"\",\"Manufacturer\":\"\",\"Model\":\"\",\"OperationalStatus\":null,\"PackageType\":0,\"SerialNumber\":\"\",\"Tag\":\"\",\"Version\":\"\"}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -32,7 +32,7 @@ func TestYaml(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    carditems: []\nenumerateresponse:\n    enumerationcontext: \"\"\npackageresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    canbefrued: false\n    creationclassname: \"\"\n    elementname: \"\"\n    manufacturer: \"\"\n    model: \"\"\n    operationalstatus: 0\n    packagetype: 0\n    serialnumber: \"\"\n    tag: \"\"\n    version: \"\"\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    carditems: []\nenumerateresponse:\n    enumerationcontext: \"\"\npackageresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    canbefrued: false\n    creationclassname: \"\"\n    elementname: \"\"\n    manufacturer: \"\"\n    model: \"\"\n    operationalstatus: []\n    packagetype: 0\n    serialnumber: \"\"\n    tag: \"\"\n    version: \"\"\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
@@ -74,7 +74,7 @@ func TestPositiveCIMCard(t *testing.T) {
 						ElementName:       "Managed System Base Board",
 						Manufacturer:      "Intel Corporation",
 						Model:             "NUC9V7QNB",
-						OperationalStatus: 0,
+						OperationalStatus: []OperationalStatus{0},
 						PackageType:       9,
 						SerialNumber:      "KNQN0221020W",
 						Tag:               "CIM_Card",
@@ -121,7 +121,7 @@ func TestPositiveCIMCard(t *testing.T) {
 								ElementName:       "Managed System Base Board",
 								Manufacturer:      "Intel Corporation",
 								Model:             "NUC9V7QNB",
-								OperationalStatus: 0,
+								OperationalStatus: []OperationalStatus{0},
 								PackageType:       9,
 								SerialNumber:      "KNQN0221020W",
 								Tag:               "CIM_Card",
@@ -183,7 +183,7 @@ func TestNegativeCIMCard(t *testing.T) {
 						ElementName:       "Managed System Base Board",
 						Manufacturer:      "Intel Corporation",
 						Model:             "NUC9V7QNB",
-						OperationalStatus: 0,
+						OperationalStatus: []OperationalStatus{0},
 						PackageType:       9,
 						SerialNumber:      "KNQN0221020W",
 						Tag:               "CIM_Card",
@@ -230,7 +230,7 @@ func TestNegativeCIMCard(t *testing.T) {
 								ElementName:       "Managed System Base Board",
 								Manufacturer:      "Intel Corporation",
 								Model:             "NUC9V7QNB",
-								OperationalStatus: 0,
+								OperationalStatus: []OperationalStatus{0},
 								PackageType:       9,
 								SerialNumber:      "KNQN0221020W",
 								Tag:               "CIM_Card",

@@ -22,7 +22,7 @@ func TestJson(t *testing.T) {
 			GetResponse: BiosElement{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"TargetOperatingSystem\":0,\"SoftwareElementID\":\"\",\"SoftwareElementState\":0,\"Name\":\"\",\"OperationalStatus\":0,\"ElementName\":\"\",\"Version\":\"\",\"Manufacturer\":\"\",\"PrimaryBIOS\":false,\"ReleaseDate\":{\"DateTime\":\"\"}},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"BiosElementItems\":null}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"TargetOperatingSystem\":0,\"SoftwareElementID\":\"\",\"SoftwareElementState\":0,\"Name\":\"\",\"OperationalStatus\":null,\"ElementName\":\"\",\"Version\":\"\",\"Manufacturer\":\"\",\"PrimaryBIOS\":false,\"ReleaseDate\":{\"DateTime\":\"\"}},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"BiosElementItems\":null}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -33,7 +33,7 @@ func TestYaml(t *testing.T) {
 			GetResponse: BiosElement{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    targetoperatingsystem: 0\n    softwareelementid: \"\"\n    softwareelementstate: 0\n    name: \"\"\n    operationalstatus: 0\n    elementname: \"\"\n    version: \"\"\n    manufacturer: \"\"\n    primarybios: false\n    releasedate:\n        datetime: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    bioselementitems: []\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    targetoperatingsystem: 0\n    softwareelementid: \"\"\n    softwareelementstate: 0\n    name: \"\"\n    operationalstatus: []\n    elementname: \"\"\n    version: \"\"\n    manufacturer: \"\"\n    primarybios: false\n    releasedate:\n        datetime: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    bioselementitems: []\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
@@ -74,7 +74,7 @@ func TestPositiveCIMBIOSElement(t *testing.T) {
 						SoftwareElementID:     "QNCFLX70.0054.2020.0810.2227",
 						SoftwareElementState:  2,
 						Name:                  "Primary BIOS",
-						OperationalStatus:     0,
+						OperationalStatus:     []OperationalStatus{0},
 						ElementName:           "Primary BIOS",
 						Version:               "QNCFLX70.0054.2020.0810.2227",
 						Manufacturer:          "Intel Corp.",
@@ -121,7 +121,7 @@ func TestPositiveCIMBIOSElement(t *testing.T) {
 								SoftwareElementID:     "QNCFLX70.0054.2020.0810.2227",
 								SoftwareElementState:  2,
 								Name:                  "Primary BIOS",
-								OperationalStatus:     0,
+								OperationalStatus:     []OperationalStatus{0},
 								ElementName:           "Primary BIOS",
 								Version:               "QNCFLX70.0054.2020.0810.2227",
 								Manufacturer:          "Intel Corp.",
@@ -183,7 +183,7 @@ func TestNegativeCIMBIOSElement(t *testing.T) {
 						SoftwareElementID:     "QNCFLX70.0054.2020.0810.2227",
 						SoftwareElementState:  2,
 						Name:                  "Primary BIOS",
-						OperationalStatus:     0,
+						OperationalStatus:     []OperationalStatus{0},
 						ElementName:           "Primary BIOS",
 						Version:               "QNCFLX70.0054.2020.0810.2227",
 						Manufacturer:          "Intel Corp.",
@@ -230,7 +230,7 @@ func TestNegativeCIMBIOSElement(t *testing.T) {
 								SoftwareElementID:     "QNCFLX70.0054.2020.0810.2227",
 								SoftwareElementState:  2,
 								Name:                  "Primary BIOS",
-								OperationalStatus:     0,
+								OperationalStatus:     []OperationalStatus{0},
 								ElementName:           "Primary BIOS",
 								Version:               "QNCFLX70.0054.2020.0810.2227",
 								Manufacturer:          "Intel Corp.",

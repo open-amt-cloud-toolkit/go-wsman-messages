@@ -31,41 +31,34 @@ type Collection struct {
 type Role struct {
 	XMLName xml.Name `xml:"CIM_Role"`
 	Collection
-	CreationClassName   string                `xml:"CreationClassName,omitempty"`
-	Name                string                `xml:"Name,omitempty"`
-	CommonName          string                `xml:"CommonName,omitempty"`
-	RoleCharacteristics []RoleCharacteristics `xml:"RoleCharacteristics,omitempty"`
+	CreationClassName   string `xml:"CreationClassName,omitempty"`
+	Name                string `xml:"Name,omitempty"`
+	CommonName          string `xml:"CommonName,omitempty"`
+	RoleCharacteristics []int  `xml:"RoleCharacteristics,omitempty"`
 }
-
-type RoleCharacteristics int
 
 type LogicalPort struct {
 	LogicalDevice
-	Speed            int              `xml:"Speed,omitempty"`
-	MaxSpeed         int              `xml:"MaxSpeed,omitempty"`
-	RequestedSpeed   int              `xml:"RequestedSpeed,omitempty"`
-	UsageRestriction UsageRestriction `xml:"UsageRestriction,omitempty"`
-	PortType         PortType         `xml:"PortType,omitempty"`
-	OtherPortType    string           `xml:"OtherPortType,omitempty"`
+	Speed            int    `xml:"Speed,omitempty"`
+	MaxSpeed         int    `xml:"MaxSpeed,omitempty"`
+	RequestedSpeed   int    `xml:"RequestedSpeed,omitempty"`
+	UsageRestriction int    `xml:"UsageRestriction,omitempty"`
+	PortType         int    `xml:"PortType,omitempty"`
+	OtherPortType    string `xml:"OtherPortType,omitempty"`
 }
-type UsageRestriction int
-
-type PortType int
 
 type NetworkPort struct {
 	LogicalPort
 	PortNumber                       int
-	LinkTechnology                   LinkTechnology `xml:"LinkTechnology,omitempty"`
-	OtherLinkTechnology              string         `xml:"OtherLinkTechnology,omitempty"`
-	PermanentAddress                 string         `xml:"PermanentAddress,omitempty"`
-	NetworkAddresses                 []string       `xml:"NetworkAddresses,omitempty"`
-	FullDuplex                       bool           `xml:"FullDuplex,omitempty"`
-	AutoSense                        bool           `xml:"AutoSense,omitempty"`
-	SupportedMaximumTransmissionUnit int            `xml:"SupportedMaximumTransmissionUnit,omitempty"`
-	ActiveMaximumTransmissionUnit    int            `xml:"OtherActiveMaximumTransmissionUnitPortType,omitempty"`
+	LinkTechnology                   int      `xml:"LinkTechnology,omitempty"`
+	OtherLinkTechnology              string   `xml:"OtherLinkTechnology,omitempty"`
+	PermanentAddress                 string   `xml:"PermanentAddress,omitempty"`
+	NetworkAddresses                 []string `xml:"NetworkAddresses,omitempty"`
+	FullDuplex                       bool     `xml:"FullDuplex,omitempty"`
+	AutoSense                        bool     `xml:"AutoSense,omitempty"`
+	SupportedMaximumTransmissionUnit int      `xml:"SupportedMaximumTransmissionUnit,omitempty"`
+	ActiveMaximumTransmissionUnit    int      `xml:"OtherActiveMaximumTransmissionUnitPortType,omitempty"`
 }
-
-type LinkTechnology int
 
 type EthernetPort struct {
 	NetworkPort
@@ -113,10 +106,10 @@ type PhysicalElement struct {
 
 type PhysicalComponent struct {
 	PhysicalElement
-	RemovalConditions RemovalConditions `xml:"RemovalConditions,omitempty"`
-	Removable         bool              `xml:"Removable,omitempty"`
-	Replaceable       bool              `xml:"Replaceable,omitempty"`
-	HotSwappable      bool              `xml:"HotSwappable,omitempty"`
+	RemovalConditions int  `xml:"RemovalConditions,omitempty"`
+	Removable         bool `xml:"Removable,omitempty"`
+	Replaceable       bool `xml:"Replaceable,omitempty"`
+	HotSwappable      bool `xml:"HotSwappable,omitempty"`
 }
 type Chip struct {
 	PhysicalComponent
@@ -124,7 +117,7 @@ type Chip struct {
 
 type PhysicalPackage struct {
 	PhysicalElement
-	PackageType PackageType `xml:"PackageType,omitempty"`
+	PackageType int `xml:"PackageType,omitempty"`
 }
 
 /**
@@ -133,30 +126,30 @@ type PhysicalPackage struct {
 type Enabled int
 type PhysicalFrame struct {
 	PhysicalPackage
-	VendorCompatibilityStrings []string          `xml:"VendorCompatibilityStrings,omitempty"`
-	OtherPackageType           string            `xml:"OtherPackageType,omitempty"`
-	Weight                     int               `xml:"Weight,omitempty"`
-	Width                      int               `xml:"Width,omitempty"`
-	Depth                      int               `xml:"Depth,omitempty"`
-	Height                     int               `xml:"Height,omitempty"`
-	RemovalConditions          RemovalConditions `xml:"RemovalConditions,omitempty"`
-	Removable                  bool              `xml:"Removable,omitempty"`
-	Replaceable                bool              `xml:"Replaceable,omitempty"`
-	HotSwappable               bool              `xml:"HotSwappable,omitempty"`
-	CableManagementStrategy    string            `xml:"CableManagementStrategy,omitempty"`
-	ServicePhilosophy          ServicePhilosophy `xml:"ServicePhilosophy,omitempty"`
-	ServiceDescriptions        []string          `xml:"ServiceDescriptions,omitempty"`
-	LockPresent                bool              `xml:"LockPresent,omitempty"`
-	AudibleAlarm               bool              `xml:"AudibleAlarm,omitempty"`
-	VisibleAlarm               bool              `xml:"VisibleAlarm,omitempty"`
-	SecurityBreach             SecurityBreach    `xml:"SecurityBreach,omitempty"`
-	BreachDescription          string            `xml:"BreachDescription,omitempty"`
-	IsLocked                   bool              `xml:"IsLocked,omitempty"`
+	VendorCompatibilityStrings []string `xml:"VendorCompatibilityStrings,omitempty"`
+	OtherPackageType           string   `xml:"OtherPackageType,omitempty"`
+	Weight                     int      `xml:"Weight,omitempty"`
+	Width                      int      `xml:"Width,omitempty"`
+	Depth                      int      `xml:"Depth,omitempty"`
+	Height                     int      `xml:"Height,omitempty"`
+	RemovalConditions          int      `xml:"RemovalConditions,omitempty"`
+	Removable                  bool     `xml:"Removable,omitempty"`
+	Replaceable                bool     `xml:"Replaceable,omitempty"`
+	HotSwappable               bool     `xml:"HotSwappable,omitempty"`
+	CableManagementStrategy    string   `xml:"CableManagementStrategy,omitempty"`
+	ServicePhilosophy          int      `xml:"ServicePhilosophy,omitempty"`
+	ServiceDescriptions        []string `xml:"ServiceDescriptions,omitempty"`
+	LockPresent                bool     `xml:"LockPresent,omitempty"`
+	AudibleAlarm               bool     `xml:"AudibleAlarm,omitempty"`
+	VisibleAlarm               bool     `xml:"VisibleAlarm,omitempty"`
+	SecurityBreach             int      `xml:"SecurityBreach,omitempty"`
+	BreachDescription          string   `xml:"BreachDescription,omitempty"`
+	IsLocked                   bool     `xml:"IsLocked,omitempty"`
 }
 
 type Chassis struct {
 	PhysicalFrame
-	ChassisPackageType ChassisPackageType `xml:"ChassisPackageType,omitempty"`
+	ChassisPackageType int `xml:"ChassisPackageType,omitempty"`
 }
 
 type LogicalElement struct {
@@ -166,7 +159,7 @@ type LogicalElement struct {
 type SoftwareElement struct {
 	LogicalElement
 	Version               string                `xml:"Version,omitempty"`
-	SoftwareElementState  SoftwareElementState  `xml:"SoftwareElementState,omitempty"`
+	SoftwareElementState  int                   `xml:"SoftwareElementState,omitempty"`
 	SoftwareElementId     string                `xml:"SoftwareElementId,omitempty"`
 	TargetOperatingSystem TargetOperatingSystem `xml:"TargetOperatingSystem,omitempty"`
 	OtherTargetOs         string                `xml:"OtherTargetOs,omitempty"`

@@ -60,13 +60,16 @@ type (
 		AMTAlarmClockInterval   string   // Specifies the alarm time interval
 	}
 	AddAlarmOutput struct {
-		XMLName     xml.Name   `xml:"AddAlarm_OUTPUT"`
-		AlarmClock  AlarmClock // A reference to the created instance of IPS_AlarmClockOccurrence.
-		ReturnValue int        // Return code. 0 indicates success
+		XMLName     xml.Name    `xml:"AddAlarm_OUTPUT"`
+		AlarmClock  AlarmClock  // A reference to the created instance of IPS_AlarmClockOccurrence.
+		ReturnValue ReturnValue // Return code. 0 indicates success
 	}
 	AlarmClock struct {
 		// Reference address to the created instance of IPS_AlarmClockOccurrence
 		Address             string
 		ReferenceParameters models.ReferenceParameters_OUTPUT
 	}
+
+	// ReturnValue is a return code. 0 indicates success
+	ReturnValue int
 )

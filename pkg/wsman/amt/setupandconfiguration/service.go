@@ -17,7 +17,6 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/amt/methods"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 )
 
 // DecodeUUID formats the returned AMT base64 encoded UUID into a human readable UUID
@@ -171,7 +170,7 @@ func (s Service) CommitChanges() (response Response, err error) {
 	if err != nil {
 		return
 	}
-	err = checkReturnValue(response.Body.SetMEBxPassword_OUTPUT.ReturnValue, "Commit Changes")
+	err = checkReturnValue(int(response.Body.SetMEBxPassword_OUTPUT.ReturnValue), "Commit Changes")
 	return
 }
 
@@ -242,7 +241,7 @@ func (s Service) SetMEBXPassword(password string) (response Response, err error)
 	if err != nil {
 		return
 	}
-	err = checkReturnValue(response.Body.SetMEBxPassword_OUTPUT.ReturnValue, "MEBx Password")
+	err = checkReturnValue(int(response.Body.SetMEBxPassword_OUTPUT.ReturnValue), "MEBx Password")
 	return
 }
 
@@ -288,10 +287,10 @@ func (s Service) Unprovision(provisioningMode ProvisioningModeValue) (response R
 }
 
 func checkReturnValue(rc int, item string) (err error) {
-	if rc != common.PT_STATUS_SUCCESS {
-		if rc == common.PT_STATUS_DUPLICATE {
-			return errors.New(item + " already exists and must be removed before continuing")
-		} else if rc == common.PT_STATUS_INVALID_CERT {
+	if rc != int(ReturnValueSuccess) {
+		if rc == int(ReturnValueNotPermitted) {
+			return errors.New(item + " is not permitted")
+		} else if rc == int(ReturnValueInvalidPassword) {
 			return errors.New(item + " is invalid")
 		} else {
 			return errors.New(item + " non-zero return code: " + strconv.Itoa(rc))

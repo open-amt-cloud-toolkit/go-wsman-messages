@@ -33,6 +33,7 @@ type (
 		EnumerateResponse              common.EnumerateResponse
 		PullResponse                   PullResponse
 		GetCredentialCacheState_OUTPUT GetCredentialCacheState_OUTPUT
+		SetCredentialCacheState_OUTPUT SetCredentialCacheState_OUTPUT
 	}
 
 	PullResponse struct {
@@ -58,9 +59,14 @@ type (
 		ConfiguredEncryptionAlgorithms []ConfiguredEncryptionAlgorithms `xml:"ConfiguredEncryptionAlgorithms"`  // A 16-bit enumeration values that identifier the configured encryption algorithms used in Kerberos authentication.
 	}
 	GetCredentialCacheState_OUTPUT struct {
-		XMLName     xml.Name `xml:"GetCredentialCacheState_OUTPUT"`
-		Enabled     bool     `xml:"Enabled"`
-		ReturnValue int      `xml:"ReturnValue"`
+		XMLName     xml.Name    `xml:"GetCredentialCacheState_OUTPUT"`
+		Enabled     bool        `xml:"Enabled"`
+		ReturnValue ReturnValue `xml:"ReturnValue"`
+	}
+
+	SetCredentialCacheState_OUTPUT struct {
+		XMLName     xml.Name    `xml:"SetCredentialCacheState_OUTPUT"`
+		ReturnValue ReturnValue `xml:"ReturnValue"`
 	}
 )
 
@@ -101,3 +107,6 @@ type ConfiguredEncryptionAlgorithms int
 //
 // Values={RC4 encryption and HMAC authentication}
 type EncryptionAlgorithm int
+
+// ReturnValue is a 16-bit enumeration value that indicates the success or failure of an operation.
+type ReturnValue int

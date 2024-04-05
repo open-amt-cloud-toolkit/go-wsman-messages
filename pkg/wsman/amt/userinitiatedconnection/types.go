@@ -17,7 +17,18 @@ type Service struct {
 	base message.Base
 }
 
+// The state requested for the element. The valid input values for userinitiatedconnection request state change are: 32768, 32769, 32770, 32771.
+//
+// ValueMap={32768, 32769, 32770, 32771}
+//
+// Values={All Interfaces disabled, BIOS Interface enabled, OS Interface enabled, BIOS and OS Interfaces enabled}
 type RequestedState int
+
+// EnabledState is an integer enumeration that indicates the enabled and disabled states of an element.
+type EnabledState int
+
+// ReturnValue is a 32-bit unsigned integer indicating the success or failure of the operation.
+type ReturnValue int
 
 // OUTPUTS
 // Response Types
@@ -49,38 +60,8 @@ type (
 		UserItems []UserResponse `xml:"Items>AMT_UserInitiatedConnectionService"`
 	}
 
-	// The state requested for the element. This information will be placed into the RequestedState property of the instance if the return code of the RequestStateChange method is 0 ('Completed with No Error'), 3 ('Timeout'), or 4096 (0x1000) ('Job Started'). Refer to the description of the EnabledState and RequestedState properties for the detailed explanations of the RequestedState values.
-	//
-	// ValueMap={2, 3, 4, 6, 7, 8, 9, 10, 11, .., 32768, 32769, 32770, 32771, 32772..65535}
-	//
-	// Values={Enabled, Disabled, Shut Down, Offline, Test, Defer, Quiesce, Reboot, Reset, DMTF Reserved, All Interfaces disabled, BIOS Interface enabled, OS Interface enabled, BIOS and OS Interfaces enabled, Vendor Reserved}
 	RequestStateChange_OUTPUT struct {
-		XMLName     xml.Name `xml:"RequestStateChange_OUTPUT"`
-		ReturnValue int      `xml:"ReturnValue"`
+		XMLName     xml.Name    `xml:"RequestStateChange_OUTPUT"`
+		ReturnValue ReturnValue `xml:"ReturnValue"`
 	}
-	//EnabledState is an integer enumeration that indicates the enabled and disabled states of an element. It can also indicate the transitions between these requested states. For example, shutting down (value=4) and starting (value=10) are transient states between enabled and disabled. The following text briefly summarizes the various enabled and disabled states:
-	// Enabled (2) indicates that the element is or could be executing commands, will process any queued commands, and queues new requests.
-	//
-	// Disabled (3) indicates that the element will not execute commands and will drop any new requests.
-	//
-	// Shutting Down (4) indicates that the element is in the process of going to a Disabled state.
-	//
-	// Not Applicable (5) indicates the element does not support being enabled or disabled.
-	//
-	// Enabled but Offline (6) indicates that the element might be completing commands, and will drop any new requests.
-	//
-	// Test (7) indicates that the element is in a test state.
-	//
-	// Deferred (8) indicates that the element might be completing commands, but will queue any new requests.
-	//
-	// Quiesce (9) indicates that the element is enabled but in a restricted mode. The behavior of the element is similar to the Enabled state, but it processes only a restricted set of commands. All other requests are queued.
-	//
-	// Starting (10) indicates that the element is in the process of going to an Enabled state. New requests are queued.
-	//
-	// The supported values are 32768-32771.
-	//
-	// ValueMap={0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11..32767, 32768, 32769, 32770, 32771, 32772..65535}
-	//
-	// Values={Unknown, Other, Enabled, Disabled, Shutting Down, Not Applicable, Enabled but Offline, In Test, Deferred, Quiesce, Starting, DMTF Reserved, All Interfaces disabled, BIOS Interface enabled, OS Interface enabled, BIOS and OS Interfaces enabled, Vendor Reserved}
-	EnabledState int
 )
