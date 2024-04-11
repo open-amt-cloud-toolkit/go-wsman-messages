@@ -121,7 +121,7 @@ func TestPositiveConfigSetting(t *testing.T) {
 				"should create and parse a valid cim_BootConfigSetting ChangeBootOrder call",
 				CIM_BootConfigSetting,
 				methods.GenerateAction(CIM_BootConfigSetting, ChangeBootOrder),
-				"<h:ChangeBootOrder_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting\"><h:Source><Address xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\"><ResourceURI xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting</ResourceURI><SelectorSet xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\"><Selector Name=\"InstanceID\">CIM:Hard-Disk:1</Selector></SelectorSet></ReferenceParameters></h:Source></h:ChangeBootOrder_INPUT>",
+				"<h:ChangeBootOrder_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting\"><h:Source><Address xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\"><ResourceURI xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting</ResourceURI><SelectorSet xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\"><Selector Name=\"InstanceID\">Intel(r) AMT: Force Hard-drive Boot</Selector></SelectorSet></ReferenceParameters></h:Source></h:ChangeBootOrder_INPUT>",
 				func() (Response, error) {
 					client.CurrentMessage = "ChangeBootOrder"
 					return elementUnderTest.ChangeBootOrder(HardDrive)
@@ -230,7 +230,7 @@ func TestNegativeConfigSetting(t *testing.T) {
 				"should handle error when cim_BootConfigSetting ChangeBootOrder call",
 				CIM_BootConfigSetting,
 				methods.GenerateAction(CIM_BootConfigSetting, ChangeBootOrder),
-				"<h:ChangeBootOrder_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting\"><h:Source><Address xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\"><ResourceURI xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting</ResourceURI><SelectorSet xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\"><Selector Name=\"InstanceID\">CIM:Hard-Disk:1</Selector></SelectorSet></ReferenceParameters></h:Source></h:ChangeBootOrder_INPUT>",
+				"<h:ChangeBootOrder_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting\"><h:Source><Address xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\"><ResourceURI xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting</ResourceURI><SelectorSet xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\"><Selector Name=\"InstanceID\">Intel(r) AMT: Force Hard-drive Boot</Selector></SelectorSet></ReferenceParameters></h:Source></h:ChangeBootOrder_INPUT>",
 				func() (Response, error) {
 					client.CurrentMessage = "Error"
 					return elementUnderTest.ChangeBootOrder(HardDrive)
