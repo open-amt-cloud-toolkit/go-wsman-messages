@@ -13,20 +13,20 @@ const (
 )
 
 const (
-	HardDrive           Source = "CIM:Hard-Disk:1"
-	CD                  Source = "CIM:CD/DVD:1"
-	PXE                 Source = "CIM:Network:1"
-	OCRUEFIHTTPS        Source = "Intel(r)AMT:OCR-UEFI-Boot-Option-HTTPS:1"
-	OCRUEFIBootOption1  Source = "Intel(r)AMT:OCR-UEFI-Boot-Option:1"
-	OCRUEFIBootOption2  Source = "Intel(r)AMT:OCR-UEFI-Boot-Option:2"
-	OCRUEFIBootOption3  Source = "Intel(r)AMT:OCR-UEFI-Boot-Option:3"
-	OCRUEFIBootOption4  Source = "Intel(r)AMT:OCR-UEFI-Boot-Option:4"
-	OCRUEFIBootOption5  Source = "Intel(r)AMT:OCR-UEFI-Boot-Option:5"
-	OCRUEFIBootOption6  Source = "Intel(r)AMT:OCR-UEFI-Boot-Option:6"
-	OCRUEFIBootOption7  Source = "Intel(r)AMT:OCR-UEFI-Boot-Option:7"
-	OCRUEFIBootOption8  Source = "Intel(r)AMT:OCR-UEFI-Boot-Option:8"
-	OCRUEFIBootOption9  Source = "Intel(r)AMT:OCR-UEFI-Boot-Option:9"
-	OCRUEFIBootOption10 Source = "Intel(r)AMT:OCR-UEFI-Boot-Option:10"
+	HardDrive             Source = "Intel(r) AMT: Force Hard-drive Boot"
+	CD                    Source = "Intel(r) AMT: Force CD/DVD Boot"
+	PXE                   Source = "Intel(r) AMT: Force PXE Boot"
+	OCR_UEFI_HTTPS        Source = "Intel(r) AMT: Force OCR UEFI HTTPS Boot"
+	OCR_UEFI_BootOption1  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 1"
+	OCR_UEFI_BootOption2  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 2"
+	OCR_UEFI_BootOption3  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 3"
+	OCR_UEFI_BootOption4  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 4"
+	OCR_UEFI_BootOption5  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 5"
+	OCR_UEFI_BootOption6  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 6"
+	OCR_UEFI_BootOption7  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 7"
+	OCR_UEFI_BootOption8  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 8"
+	OCR_UEFI_BootOption9  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 9"
+	OCR_UEFI_BootOption10 Source = "Intel(r) AMT: Force OCR UEFI Boot Option 10"
 )
 
 const (
