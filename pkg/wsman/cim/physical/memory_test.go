@@ -22,7 +22,7 @@ func TestJson(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"EnumerationContext\":\"\",\"MemoryItems\":null,\"PhysicalPackage\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"MemoryResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PartNumber\":\"\",\"SerialNumber\":\"\",\"Manufacturer\":\"\",\"ElementName\":\"\",\"CreationClassName\":\"\",\"Tag\":\"\",\"OperationalStatus\":0,\"FormFactor\":0,\"MemoryType\":0,\"Speed\":0,\"Capacity\":0,\"BankLabel\":\"\",\"ConfiguredMemoryClockSpeed\":0,\"IsSpeedInMhz\":false,\"MaxMemorySpeed\":0}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"EnumerationContext\":\"\",\"MemoryItems\":null,\"PhysicalPackage\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"MemoryResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PartNumber\":\"\",\"SerialNumber\":\"\",\"Manufacturer\":\"\",\"ElementName\":\"\",\"CreationClassName\":\"\",\"Tag\":\"\",\"OperationalStatus\":null,\"FormFactor\":0,\"MemoryType\":0,\"Speed\":0,\"Capacity\":0,\"BankLabel\":\"\",\"ConfiguredMemoryClockSpeed\":0,\"IsSpeedInMhz\":false,\"MaxMemorySpeed\":0}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -33,7 +33,7 @@ func TestYaml(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    enumerateresponse:\n        enumerationcontext: \"\"\n    memoryitems: []\n    physicalpackage: []\nenumerateresponse:\n    enumerationcontext: \"\"\nmemoryresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    partnumber: \"\"\n    serialnumber: \"\"\n    manufacturer: \"\"\n    elementname: \"\"\n    creationclassname: \"\"\n    tag: \"\"\n    operationalstatus: 0\n    formfactor: 0\n    memorytype: 0\n    speed: 0\n    capacity: 0\n    banklabel: \"\"\n    configuredmemoryclockspeed: 0\n    isspeedinmhz: false\n    maxmemoryspeed: 0\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    enumerateresponse:\n        enumerationcontext: \"\"\n    memoryitems: []\n    physicalpackage: []\nenumerateresponse:\n    enumerationcontext: \"\"\nmemoryresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    partnumber: \"\"\n    serialnumber: \"\"\n    manufacturer: \"\"\n    elementname: \"\"\n    creationclassname: \"\"\n    tag: \"\"\n    operationalstatus: []\n    formfactor: 0\n    memorytype: 0\n    speed: 0\n    capacity: 0\n    banklabel: \"\"\n    configuredmemoryclockspeed: 0\n    isspeedinmhz: false\n    maxmemoryspeed: 0\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }

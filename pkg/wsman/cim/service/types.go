@@ -37,10 +37,10 @@ type (
 		AssociatedPowerManagementService []CIM_AssociatedPowerManagementService `xml:"Items>CIM_AssociatedPowerManagementService"`
 	}
 	CIM_AssociatedPowerManagementService struct {
-		AvailableRequestedPowerStates int             `xml:"AvailableRequestedPowerStates,omitempty"` // AvailableRequestedPowerStates indicates the possible values for the PowerState parameter of the method RequestPowerStateChange, used to initiate a power state change.The values listed shall be a subset of the values contained in the RequestedPowerStatesSupported property of the CIM_PowerManagementCapabilities where the values selected are a function of the current power state of the system. This property shall be non-null if an implementation supports the advertisement of the set of possible values as a function of the current state. This property shall be null if an implementation does not support the advertisement of the set of possible values as a function of the current state.
-		PowerState                    int             `xml:"PowerState,omitempty"`                    // The current power state of the associated Managed System Element.
-		ServiceProvided               ServiceProvided // The Service that is available.
-		UserOfService                 UserOfService   // The ManagedElement that can use the Service.
+		AvailableRequestedPowerStates []AvailableRequestedPowerStates `xml:"AvailableRequestedPowerStates,omitempty"` // AvailableRequestedPowerStates indicates the possible values for the PowerState parameter of the method RequestPowerStateChange, used to initiate a power state change.The values listed shall be a subset of the values contained in the RequestedPowerStatesSupported property of the CIM_PowerManagementCapabilities where the values selected are a function of the current power state of the system. This property shall be non-null if an implementation supports the advertisement of the set of possible values as a function of the current state. This property shall be null if an implementation does not support the advertisement of the set of possible values as a function of the current state.
+		PowerState                    PowerState                      `xml:"PowerState,omitempty"`                    // The current power state of the associated Managed System Element.
+		ServiceProvided               ServiceProvided                 // The Service that is available.
+		UserOfService                 UserOfService                   // The ManagedElement that can use the Service.
 	}
 	ServiceProvided struct {
 		XMLName             xml.Name `xml:"ServiceProvided,omitempty"`
@@ -53,8 +53,13 @@ type (
 		ReferenceParameters ReferenceParameters
 	}
 	ReferenceParameters struct {
-		XMLName      xml.Name `xml:"ReferenceParameters,omitempty"`
-		ResourceURI  string   `xml:"ResourceURI,omitempty"`
-		SelelctorSet message.SelectorSet
+		XMLName     xml.Name `xml:"ReferenceParameters,omitempty"`
+		ResourceURI string   `xml:"ResourceURI,omitempty"`
+		SelectorSet message.SelectorSet
 	}
+
+	// AvailableRequestedPowerStates indicates the possible values for the PowerState parameter of the method RequestPowerStateChange, used to initiate a power state change.
+	AvailableRequestedPowerStates int
+	// PowerState indicates the current power state of the associated Managed System Element.
+	PowerState int
 )

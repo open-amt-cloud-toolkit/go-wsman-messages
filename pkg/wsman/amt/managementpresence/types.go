@@ -52,12 +52,5 @@ type (
 		SystemName              string     `xml:"SystemName,omitempty"`              // The Name of the scoping System.
 	}
 
-	// An enumerated integer that describes the format and interpretation of the AccessInfo property. 206'Parameterized URL'- a URL containing ${parameterName} strings. Those strings are intended to be replaced in their entirety by the value of the named parameter. The interpretation of such parameters is not defined by this subclass. As an example use: If a parameter named 'CompanyURL' has a value of 'www.DMTF.org' and the value of AccessInfo was 'http:\${CompanyURL}', then the resultant URL is intended to be 'http:\www.dmtf.org'.
-	//
-	// The supported values are 3 (IPv4 address), 4 (IPv6 address) ,201 (FQDN).
-	//
-	// ValueMap={1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 100, 101, 102, 103, 104, 200, 201, 202, 203, 204, 205, 206, .., 32768..65535}
-	//
-	// Values={Other, Host Name, IPv4 Address, IPv6 Address, IPX Address, DECnet Address, SNA Address, Autonomous System Number, MPLS Label, IPv4 Subnet Address, IPv6 Subnet Address, IPv4 Address Range, IPv6 Address Range, Dial String, Ethernet Address, Token Ring Address, ATM Address, Frame Relay Address, URL, FQDN, User FQDN, DER ASN1 DN, DER ASN1 GN, Key ID, Parameterized URL, DMTF Reserved, Vendor Reserved}
 	InfoFormat int
 )

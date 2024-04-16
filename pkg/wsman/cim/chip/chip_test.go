@@ -22,7 +22,7 @@ func TestJson(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ChipItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PackageResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"CanBeFRUed\":false,\"CreationClassName\":\"\",\"ElementName\":\"\",\"Manufacturer\":\"\",\"OperationalStatus\":0,\"Tag\":\"\",\"Version\":\"\"}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ChipItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PackageResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"CanBeFRUed\":false,\"CreationClassName\":\"\",\"ElementName\":\"\",\"Manufacturer\":\"\",\"OperationalStatus\":null,\"Tag\":\"\",\"Version\":\"\"}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -33,7 +33,7 @@ func TestYaml(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    chipitems: []\nenumerateresponse:\n    enumerationcontext: \"\"\npackageresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    canbefrued: false\n    creationclassname: \"\"\n    elementname: \"\"\n    manufacturer: \"\"\n    operationalstatus: 0\n    tag: \"\"\n    version: \"\"\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    chipitems: []\nenumerateresponse:\n    enumerationcontext: \"\"\npackageresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    canbefrued: false\n    creationclassname: \"\"\n    elementname: \"\"\n    manufacturer: \"\"\n    operationalstatus: []\n    tag: \"\"\n    version: \"\"\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
@@ -72,7 +72,7 @@ func TestPositiveCIMChip(t *testing.T) {
 						CreationClassName: "CIM_Chip",
 						ElementName:       "Managed System Processor Chip",
 						Manufacturer:      "Intel(R) Corporation",
-						OperationalStatus: 0,
+						OperationalStatus: []OperationalStatus{0},
 						Tag:               "CPU 0",
 						Version:           "Intel(R) Core(TM) i7-9850H CPU @ 2.60GHz",
 					},
@@ -113,7 +113,7 @@ func TestPositiveCIMChip(t *testing.T) {
 								CreationClassName: "CIM_Chip",
 								ElementName:       "Managed System Processor Chip",
 								Manufacturer:      "Intel(R) Corporation",
-								OperationalStatus: 0,
+								OperationalStatus: []OperationalStatus{0},
 								Tag:               "CPU 0",
 								Version:           "Intel(R) Core(TM) i7-9850H CPU @ 2.60GHz",
 							},
@@ -169,7 +169,7 @@ func TestNegativeCIMChip(t *testing.T) {
 						CreationClassName: "CIM_Chip",
 						ElementName:       "Managed System Processor Chip",
 						Manufacturer:      "Intel(R) Corporation",
-						OperationalStatus: 0,
+						OperationalStatus: []OperationalStatus{0},
 						Tag:               "CPU 0",
 						Version:           "Intel(R) Core(TM) i7-9850H CPU @ 2.60GHz",
 					},
@@ -210,7 +210,7 @@ func TestNegativeCIMChip(t *testing.T) {
 								CreationClassName: "CIM_Chip",
 								ElementName:       "Managed System Processor Chip",
 								Manufacturer:      "Intel(R) Corporation",
-								OperationalStatus: 0,
+								OperationalStatus: []OperationalStatus{0},
 								Tag:               "CPU 0",
 								Version:           "Intel(R) Core(TM) i7-9850H CPU @ 2.60GHz",
 							},

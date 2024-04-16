@@ -22,7 +22,7 @@ func TestJson(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PackageItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PackageResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Version\":\"\",\"SerialNumber\":\"\",\"Model\":\"\",\"Manufacturer\":\"\",\"ElementName\":\"\",\"CreationClassName\":\"\",\"Tag\":\"\",\"OperationalStatus\":0,\"PackageType\":0,\"ChassisPackageType\":0}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PackageItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PackageResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Version\":\"\",\"SerialNumber\":\"\",\"Model\":\"\",\"Manufacturer\":\"\",\"ElementName\":\"\",\"CreationClassName\":\"\",\"Tag\":\"\",\"OperationalStatus\":null,\"PackageType\":0,\"ChassisPackageType\":0}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -33,7 +33,7 @@ func TestYaml(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    packageitems: []\nenumerateresponse:\n    enumerationcontext: \"\"\npackageresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    version: \"\"\n    serialnumber: \"\"\n    model: \"\"\n    manufacturer: \"\"\n    elementname: \"\"\n    creationclassname: \"\"\n    tag: \"\"\n    operationalstatus: 0\n    packagetype: 0\n    chassispackagetype: 0\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    packageitems: []\nenumerateresponse:\n    enumerationcontext: \"\"\npackageresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    version: \"\"\n    serialnumber: \"\"\n    model: \"\"\n    manufacturer: \"\"\n    elementname: \"\"\n    creationclassname: \"\"\n    tag: \"\"\n    operationalstatus: []\n    packagetype: 0\n    chassispackagetype: 0\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
@@ -74,7 +74,7 @@ func TestPositiveCIMChassis(t *testing.T) {
 						ElementName:        "Managed System Chassis",
 						Manufacturer:       "Intel(R) Client Systems",
 						Model:              "NUC9V7QNX",
-						OperationalStatus:  0,
+						OperationalStatus:  []OperationalStatus{0},
 						PackageType:        3,
 						SerialNumber:       "JRQN0243007J",
 						Tag:                "CIM_Chassis",
@@ -120,7 +120,7 @@ func TestPositiveCIMChassis(t *testing.T) {
 								ElementName:        "Managed System Chassis",
 								Manufacturer:       "Intel(R) Client Systems",
 								Model:              "NUC9V7QNX",
-								OperationalStatus:  0,
+								OperationalStatus:  []OperationalStatus{0},
 								PackageType:        3,
 								SerialNumber:       "JRQN0243007J",
 								Tag:                "CIM_Chassis",
@@ -181,7 +181,7 @@ func TestNegativeCIMChassis(t *testing.T) {
 						ElementName:        "Managed System Chassis",
 						Manufacturer:       "Intel(R) Client Systems",
 						Model:              "NUC9V7QNX",
-						OperationalStatus:  0,
+						OperationalStatus:  []OperationalStatus{0},
 						PackageType:        3,
 						SerialNumber:       "JRQN0243007J",
 						Tag:                "CIM_Chassis",
@@ -227,7 +227,7 @@ func TestNegativeCIMChassis(t *testing.T) {
 								ElementName:        "Managed System Chassis",
 								Manufacturer:       "Intel(R) Client Systems",
 								Model:              "NUC9V7QNX",
-								OperationalStatus:  0,
+								OperationalStatus:  []OperationalStatus{0},
 								PackageType:        3,
 								SerialNumber:       "JRQN0243007J",
 								Tag:                "CIM_Chassis",

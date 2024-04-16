@@ -79,13 +79,14 @@ type (
 		PolicyAppliesItems    []RemoteAccessPolicyAppliesToMPSResponse `xml:"Items>AMT_RemoteAccessPolicyAppliesToMPS"`
 	}
 	AddMpServerResponse struct {
-		XMLName  xml.Name `xml:"AddMpServer_OUTPUT"`
-		MpServer MpServer `xml:"MpServer"` // A reference to the created MPS if the operation succeeded.
+		XMLName     xml.Name    `xml:"AddMpServer_OUTPUT"`
+		MpServer    MpServer    `xml:"MpServer"` // A reference to the created MPS if the operation succeeded.
+		ReturnValue ReturnValue `xml:"ReturnValue,omitempty"`
 	}
 	AddRemoteAccessPolicyRuleResponse struct {
 		XMLName            xml.Name           `xml:"AddRemoteAccessPolicyRule_OUTPUT"`
 		PolicyRuleResponse PolicyRuleResponse `xml:"PolicyRule"`
-		ReturnValue        int                `xml:"ReturnValue"` // ValueMap={0, 1, 36, 38, 2058} Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_INVALID_PARAMETER, PT_STATUS_FLASH_WRITE_LIMIT_EXCEEDED, PT_STATUS_DUPLICATE}
+		ReturnValue        ReturnValue        `xml:"ReturnValue"` // ValueMap={0, 1, 36, 38, 2058} Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_INVALID_PARAMETER, PT_STATUS_FLASH_WRITE_LIMIT_EXCEEDED, PT_STATUS_DUPLICATE}
 
 	}
 	MpServer struct {
@@ -206,4 +207,7 @@ type (
 	//
 	// Values={External MPS, Internal MPS, Both}
 	MPSType int
+
+	// ReturnValue is an integer enumeration that indicates the completion status of the method. A value of 0 indicates success. A non-zero value indicates an error.
+	ReturnValue int
 )

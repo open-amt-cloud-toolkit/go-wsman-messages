@@ -55,21 +55,21 @@ type (
 	}
 	AddNextCertInChain_OUTPUT struct {
 		XMLName     xml.Name `xml:"AddNextCertInChain_OUTPUT"`
-		ReturnValue ReturnValue
+		ReturnValue SetupReturnValue
 	}
 
 	AdminSetup_OUTPUT struct {
 		XMLName     xml.Name `xml:"AdminSetup_OUTPUT"`
-		ReturnValue ReturnValue
+		ReturnValue SetupReturnValue
 	}
 
 	Setup_OUTPUT struct {
 		XMLName     xml.Name `xml:"Setup_OUTPUT"`
-		ReturnValue ReturnValue
+		ReturnValue SetupReturnValue
 	}
 	UpgradeClientToAdmin_OUTPUT struct {
 		XMLName     xml.Name `xml:"UpgradeClientToAdmin_OUTPUT"`
-		ReturnValue ReturnValue
+		ReturnValue SetupReturnValue
 	}
 )
 
@@ -107,9 +107,26 @@ type (
 	}
 )
 
+// AdminPassEncryptionType is the encryption type for the network admin password
 type AdminPassEncryptionType int
+
+// SigningAlgorithm is the algorithm used to sign the setup operation
 type SigningAlgorithm int
+
+// CurrentControlMode is an enumeration value that indicates the current control mode of the Intel(r) AMT subsystem after provisioning
 type CurrentControlMode int
+
+// CertChainStatus is an enumeration value that indicates the status of "AddNextCertInChain" progress
 type CertChainStatus int
+
+// AllowedControlModes is an array of values that indicates the allowed control modes for the Intel(r) AMT subsystem
 type AllowedControlModes int
-type ReturnValue int
+
+// SetupReturnValue is an enumeration value that indicates the status of the operation
+type SetupReturnValue int
+
+// AddNextCertInChainReturnValue is an enumeration value that indicates the status of the operation
+type AddNextCertInChainReturnValue int
+
+// AdminSetupReturnValue is an enumeration value that indicates the status of the operation
+type AdminSetupReturnValue int

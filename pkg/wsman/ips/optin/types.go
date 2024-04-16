@@ -38,17 +38,17 @@ type (
 	}
 
 	OptInServiceResponse struct {
-		XMLName                 xml.Name `xml:"IPS_OptInService"`
-		Name                    string   `xml:"Name,omitempty"`
-		CreationClassName       string   `xml:"CreationClassName,omitempty"`
-		SystemName              string   `xml:"SystemName,omitempty"`
-		SystemCreationClassName string   `xml:"SystemCreationClassName,omitempty"`
-		ElementName             string   `xml:"ElementName,omitempty"`
-		OptInCodeTimeout        int      `xml:"OptInCodeTimeout,omitempty"`
-		OptInRequired           int      `xml:"OptInRequired"`
-		OptInState              int      `xml:"OptInState"`
-		CanModifyOptInPolicy    int      `xml:"CanModifyOptInPolicy,omitempty"`
-		OptInDisplayTimeout     int      `xml:"OptInDisplayTimeout,omitempty"`
+		XMLName                 xml.Name             `xml:"IPS_OptInService"`
+		Name                    string               `xml:"Name,omitempty"`
+		CreationClassName       string               `xml:"CreationClassName,omitempty"`
+		SystemName              string               `xml:"SystemName,omitempty"`
+		SystemCreationClassName string               `xml:"SystemCreationClassName,omitempty"`
+		ElementName             string               `xml:"ElementName,omitempty"`
+		OptInCodeTimeout        int                  `xml:"OptInCodeTimeout,omitempty"`
+		OptInRequired           OptInRequired        `xml:"OptInRequired"`
+		OptInState              OptInState           `xml:"OptInState"`
+		CanModifyOptInPolicy    CanModifyOptInPolicy `xml:"CanModifyOptInPolicy,omitempty"`
+		OptInDisplayTimeout     int                  `xml:"OptInDisplayTimeout,omitempty"`
 	}
 
 	PullResponse struct {
@@ -69,6 +69,15 @@ type (
 		XMLName     xml.Name `xml:"SendOptInCode_OUTPUT"`
 		ReturnValue int
 	}
+
+	// OptInRequired indicates the OptIn (user consent) policy for redirection operations.
+	OptInRequired int
+	// OptInState indicates the current state of the OptIn (user consent) policy.
+	OptInState int
+	// CanModifyOptInPolicy indicates whether the OptIn policy can be modified.
+	CanModifyOptInPolicy int
+	// ReturnValue indicates the status of the operation.
+	ReturnValue int
 )
 
 // INPUT
