@@ -91,24 +91,34 @@ func TestPositiveCIMCredentialContext(t *testing.T) {
 							{
 								ElementInContext: models.AssociationReference{
 									Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
-									ReferenceParameters: models.ReferenceParmetersNoNamespace{
+									ReferenceParameters: models.ReferenceParametersNoNamespace{
+										XMLName:     xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing", Local: "ReferenceParameters"},
 										ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
-										SelectorSet: []models.SelectorNoNamespace{
-											{
-												Name:  "InstanceID",
-												Value: "Intel(r) AMT Certificate: Handle: 0",
+										SelectorSet: models.SelectorNoNamespace{
+											XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "SelectorSet"},
+											Selectors: []models.SelectorResponse{
+												{
+													XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "Selector"},
+													Name:    "InstanceID",
+													Text:    "Intel(r) AMT Certificate: Handle: 0",
+												},
 											},
 										},
 									},
 								},
 								ElementProvidingContext: models.AssociationReference{
 									Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
-									ReferenceParameters: models.ReferenceParmetersNoNamespace{
-										ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSProtocolEndpointCollection",
-										SelectorSet: []models.SelectorNoNamespace{
-											{
-												Name:  "ElementName",
-												Value: "TLSProtocolEndpoint Instances Collection",
+									ReferenceParameters: models.ReferenceParametersNoNamespace{
+										XMLName:     xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing", Local: "ReferenceParameters"},
+										ResourceURI: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_IEEE8021xSettings",
+										SelectorSet: models.SelectorNoNamespace{
+											XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "SelectorSet"},
+											Selectors: []models.SelectorResponse{
+												{
+													XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "Selector"},
+													Name:    "InstanceID",
+													Text:    "Intel(r) AMT:IEEE 802.1x Settings",
+												},
 											},
 										},
 									},
@@ -186,24 +196,28 @@ func TestNegativeCIMCredentialContext(t *testing.T) {
 							{
 								ElementInContext: models.AssociationReference{
 									Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
-									ReferenceParameters: models.ReferenceParmetersNoNamespace{
+									ReferenceParameters: models.ReferenceParametersNoNamespace{
 										ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
-										SelectorSet: []models.SelectorNoNamespace{
-											{
-												Name:  "InstanceID",
-												Value: "Intel(r) AMT Certificate: Handle: 0",
+										SelectorSet: models.SelectorNoNamespace{
+											Selectors: []models.SelectorResponse{
+												{
+													Name: "InstanceID",
+													Text: "Intel(r) AMT Certificate: Handle: 0",
+												},
 											},
 										},
 									},
 								},
 								ElementProvidingContext: models.AssociationReference{
 									Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
-									ReferenceParameters: models.ReferenceParmetersNoNamespace{
+									ReferenceParameters: models.ReferenceParametersNoNamespace{
 										ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSProtocolEndpointCollection",
-										SelectorSet: []models.SelectorNoNamespace{
-											{
-												Name:  "ElementName",
-												Value: "TLSProtocolEndpoint Instances Collection",
+										SelectorSet: models.SelectorNoNamespace{
+											Selectors: []models.SelectorResponse{
+												{
+													Name: "ElementName",
+													Text: "TLSProtocolEndpoint Instances Collection",
+												},
 											},
 										},
 									},
