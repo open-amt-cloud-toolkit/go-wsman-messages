@@ -40,4 +40,4 @@ jobs:
       with:
         semantic_version: 19.0.5
       env:
-        token: ${{ secrets.ROSIE_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.ROSIE_TOKEN }}
