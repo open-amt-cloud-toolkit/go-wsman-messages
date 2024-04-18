@@ -36,7 +36,7 @@ type (
 
 	PullResponse struct {
 		XMLName xml.Name            `xml:"PullResponse"`
-		Items   []CredentialContext `xml:"Items>AMT_TLSCredentialContext"`
+		Items   []CredentialContext `xml:"Items>CIM_CredentialContext"`
 	}
 
 	CredentialContext struct {

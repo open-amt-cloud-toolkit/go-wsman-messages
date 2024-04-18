@@ -94,28 +94,39 @@ func TestPositiveCIMConcreteDependency(t *testing.T) {
 							{
 								Antecedent: models.AssociationReference{
 									Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
-									ReferenceParameters: models.ReferenceParmetersNoNamespace{
+									ReferenceParameters: models.ReferenceParametersNoNamespace{
+										XMLName:     xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing", Local: "ReferenceParameters"},
 										ResourceURI: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Identity",
-										SelectorSet: []models.SelectorNoNamespace{
-											{
-												Name:  "InstanceID",
-												Value: "Intel(r) AMT:$$OsAdmin",
+										SelectorSet: models.SelectorNoNamespace{
+											XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "SelectorSet"},
+											Selectors: []models.SelectorResponse{
+												{
+													XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "Selector"},
+													Name:    "InstanceID",
+													Text:    "Intel(r) AMT:$$OsAdmin",
+												},
 											},
 										},
 									},
 								},
 								Dependent: models.AssociationReference{
 									Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
-									ReferenceParameters: models.ReferenceParmetersNoNamespace{
+									ReferenceParameters: models.ReferenceParametersNoNamespace{
+										XMLName:     xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing", Local: "ReferenceParameters"},
 										ResourceURI: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Role",
-										SelectorSet: []models.SelectorNoNamespace{
-											{
-												Name:  "CreationClassName",
-												Value: "CIM_Role",
-											},
-											{
-												Name:  "Name",
-												Value: "Intel(r) AMT:$$OsAdmin",
+										SelectorSet: models.SelectorNoNamespace{
+											XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "SelectorSet"},
+											Selectors: []models.SelectorResponse{
+												{
+													XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "Selector"},
+													Name:    "CreationClassName",
+													Text:    "CIM_Role",
+												},
+												{
+													XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "Selector"},
+													Name:    "Name",
+													Text:    "Intel(r) AMT:$$OsAdmin",
+												},
 											},
 										},
 									},
@@ -196,28 +207,32 @@ func TestNegativeCIMConcreteDependency(t *testing.T) {
 							{
 								Antecedent: models.AssociationReference{
 									Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
-									ReferenceParameters: models.ReferenceParmetersNoNamespace{
+									ReferenceParameters: models.ReferenceParametersNoNamespace{
 										ResourceURI: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Identity",
-										SelectorSet: []models.SelectorNoNamespace{
-											{
-												Name:  "InstanceID",
-												Value: "Intel(r) AMT:$$OsAdmin",
+										SelectorSet: models.SelectorNoNamespace{
+											Selectors: []models.SelectorResponse{
+												{
+													Name: "InstanceID",
+													Text: "Intel(r) AMT:$$OsAdmin",
+												},
 											},
 										},
 									},
 								},
 								Dependent: models.AssociationReference{
 									Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
-									ReferenceParameters: models.ReferenceParmetersNoNamespace{
+									ReferenceParameters: models.ReferenceParametersNoNamespace{
 										ResourceURI: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Role",
-										SelectorSet: []models.SelectorNoNamespace{
-											{
-												Name:  "CreationClassName",
-												Value: "CIM_Role",
-											},
-											{
-												Name:  "Name",
-												Value: "Intel(r) AMT:$$OsAdmin",
+										SelectorSet: models.SelectorNoNamespace{
+											Selectors: []models.SelectorResponse{
+												{
+													Name: "CreationClassName",
+													Text: "CIM_Role",
+												},
+												{
+													Name: "Name",
+													Text: "Intel(r) AMT:$$OsAdmin",
+												},
 											},
 										},
 									},
