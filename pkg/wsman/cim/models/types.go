@@ -368,18 +368,23 @@ type ServiceAvailableToElement struct {
 
 type AssociationReference struct {
 	Address             string `xml:"Address,omitempty"`
-	ReferenceParameters ReferenceParmetersNoNamespace
+	ReferenceParameters ReferenceParametersNoNamespace
 }
 
-type ReferenceParmetersNoNamespace struct {
-	ResourceURI string                `xml:"ResourceURI,omitempty"`
-	SelectorSet []SelectorNoNamespace `xml:"SelectorSet>Selector,omitempty"`
+type ReferenceParametersNoNamespace struct {
+	XMLName     xml.Name            `xml:"ReferenceParameters,omitempty"`
+	ResourceURI string              `xml:"ResourceURI,omitempty"`
+	SelectorSet SelectorNoNamespace `xml:"SelectorSet,omitempty"`
 }
-
 type SelectorNoNamespace struct {
-	//XMLName xml.Name `xml:"Selector,omitempty"`
-	Name  string `xml:"Name,attr"`
-	Value string `xml:",chardata"`
+	XMLName   xml.Name           `xml:"SelectorSet,omitempty"`
+	Selectors []SelectorResponse `xml:"Selector,omitempty"`
+}
+
+type SelectorResponse struct {
+	XMLName xml.Name `xml:"Selector,omitempty"`
+	Name    string   `xml:"Name,attr"`
+	Text    string   `xml:",chardata"`
 }
 
 type ServiceProvider struct {
