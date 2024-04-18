@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package methods provides utility functions used across the cim packages
 package methods
 
 import (

@@ -23,7 +23,7 @@ func NewKVMRedirectionSAPWithClient(wsmanMessageCreator *message.WSManMessageCre
 }
 
 // RequestStateChange requests that the state of the element be changed to the value specified in the RequestedState parameter . . .
-func (redirectionSAP RedirectionSAP) RequestStateChange(requestedState KVMRedirectionSAPRequestedStateInputs) (response Response, err error) {
+func (redirectionSAP RedirectionSAP) RequestStateChange(requestedState KVMRedirectionSAPRequestStateChangeInput) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: redirectionSAP.base.RequestStateChange(methods.RequestStateChange(CIM_KVMRedirectionSAP), int(requestedState)),

@@ -22,7 +22,7 @@ func TestJson(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"AssociatedPowerManagementService\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"AssociatedPowerManagementService\":{\"AvailableRequestedPowerStates\":0,\"PowerState\":0,\"ServiceProvided\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Address\":\"\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ResourceURI\":\"\",\"SelelctorSet\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Selector\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Name\":\"\",\"Value\":\"\"}}}},\"UserOfService\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Address\":\"\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ResourceURI\":\"\",\"SelelctorSet\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Selector\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Name\":\"\",\"Value\":\"\"}}}}}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"AssociatedPowerManagementService\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"AssociatedPowerManagementService\":{\"AvailableRequestedPowerStates\":null,\"PowerState\":0,\"ServiceProvided\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Address\":\"\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ResourceURI\":\"\",\"SelectorSet\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Selector\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Name\":\"\",\"Value\":\"\"}}}},\"UserOfService\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Address\":\"\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ResourceURI\":\"\",\"SelectorSet\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Selector\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Name\":\"\",\"Value\":\"\"}}}}}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -33,7 +33,7 @@ func TestYaml(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    associatedpowermanagementservice: []\nenumerateresponse:\n    enumerationcontext: \"\"\nassociatedpowermanagementservice:\n    availablerequestedpowerstates: 0\n    powerstate: 0\n    serviceprovided:\n        xmlname:\n            space: \"\"\n            local: \"\"\n        address: \"\"\n        referenceparameters:\n            xmlname:\n                space: \"\"\n                local: \"\"\n            resourceuri: \"\"\n            selelctorset:\n                xmlname:\n                    space: \"\"\n                    local: \"\"\n                selector:\n                    xmlname:\n                        space: \"\"\n                        local: \"\"\n                    name: \"\"\n                    value: \"\"\n    userofservice:\n        xmlname:\n            space: \"\"\n            local: \"\"\n        address: \"\"\n        referenceparameters:\n            xmlname:\n                space: \"\"\n                local: \"\"\n            resourceuri: \"\"\n            selelctorset:\n                xmlname:\n                    space: \"\"\n                    local: \"\"\n                selector:\n                    xmlname:\n                        space: \"\"\n                        local: \"\"\n                    name: \"\"\n                    value: \"\"\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    associatedpowermanagementservice: []\nenumerateresponse:\n    enumerationcontext: \"\"\nassociatedpowermanagementservice:\n    availablerequestedpowerstates: []\n    powerstate: 0\n    serviceprovided:\n        xmlname:\n            space: \"\"\n            local: \"\"\n        address: \"\"\n        referenceparameters:\n            xmlname:\n                space: \"\"\n                local: \"\"\n            resourceuri: \"\"\n            selectorset:\n                xmlname:\n                    space: \"\"\n                    local: \"\"\n                selector:\n                    xmlname:\n                        space: \"\"\n                        local: \"\"\n                    name: \"\"\n                    value: \"\"\n    userofservice:\n        xmlname:\n            space: \"\"\n            local: \"\"\n        address: \"\"\n        referenceparameters:\n            xmlname:\n                space: \"\"\n                local: \"\"\n            resourceuri: \"\"\n            selectorset:\n                xmlname:\n                    space: \"\"\n                    local: \"\"\n                selector:\n                    xmlname:\n                        space: \"\"\n                        local: \"\"\n                    name: \"\"\n                    value: \"\"\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
@@ -89,7 +89,7 @@ func TestNegativeAvailableToElement(t *testing.T) {
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
 						AssociatedPowerManagementService: []CIM_AssociatedPowerManagementService{
 							{
-								AvailableRequestedPowerStates: 10,
+								AvailableRequestedPowerStates: []AvailableRequestedPowerStates{10},
 								PowerState:                    2,
 								ServiceProvided: ServiceProvided{
 									XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing", Local: "ServiceProvided"},
@@ -97,7 +97,7 @@ func TestNegativeAvailableToElement(t *testing.T) {
 									ReferenceParameters: ReferenceParameters{
 										XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "ReferenceParameters"},
 										ResourceURI: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_PowerManagementService",
-										SelelctorSet: message.SelectorSet{
+										SelectorSet: message.SelectorSet{
 											Selector: message.Selector{
 												Name:  "CreationClassName",
 												Value: "CIM_PowerManagementService",

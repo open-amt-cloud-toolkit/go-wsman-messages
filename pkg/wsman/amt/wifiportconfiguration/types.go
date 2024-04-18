@@ -65,7 +65,7 @@ type (
 		//IEEE8021xSettings    *models.IEEE8021xSettings `xml:"g:IEEE8021xSettingsInput,omitempty"`
 		//ClientCredential     *ClientCredential         `xml:"g:ClientCredential,omitempty"`
 		//CACredential         *CACredential             `xml:"g:CACredential,omitempty"`
-		ReturnValue int `xml:"ReturnValue"`
+		ReturnValue ReturnValue `xml:"ReturnValue"`
 	}
 )
 
@@ -146,6 +146,8 @@ type (
 	//
 	// Values={Unknown, OK, Degraded/Warning, Minor failure, Major failure, Critical failure, Non-recoverable error, DMTF Reserved, Vendor Specific}
 	HealthState int
+	// ReturnValue is an integer enumeration that indicates the completion status of the method. This value shall be 0 if the method was completed successfully. A non-zero value indicates an error condition.
+	ReturnValue int
 )
 
 // INPUT

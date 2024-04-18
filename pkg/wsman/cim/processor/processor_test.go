@@ -22,7 +22,7 @@ func TestJson(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PackageItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PackageResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"DeviceID\":\"\",\"CreationClassName\":\"\",\"SystemName\":\"\",\"SystemCreationClassName\":\"\",\"ElementName\":\"\",\"OperationalStatus\":0,\"HealthState\":0,\"EnabledState\":0,\"RequestedState\":0,\"Role\":\"\",\"Family\":0,\"OtherFamilyDescription\":\"\",\"UpgradeMethod\":0,\"MaxClockSpeed\":0,\"CurrentClockSpeed\":0,\"Stepping\":\"\",\"CPUStatus\":0,\"ExternalBusClockSpeed\":0}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PackageItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PackageResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"DeviceID\":\"\",\"CreationClassName\":\"\",\"SystemName\":\"\",\"SystemCreationClassName\":\"\",\"ElementName\":\"\",\"OperationalStatus\":null,\"HealthState\":0,\"EnabledState\":0,\"RequestedState\":0,\"Role\":\"\",\"Family\":0,\"OtherFamilyDescription\":\"\",\"UpgradeMethod\":0,\"MaxClockSpeed\":0,\"CurrentClockSpeed\":0,\"Stepping\":\"\",\"CPUStatus\":0,\"ExternalBusClockSpeed\":0}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -33,7 +33,7 @@ func TestYaml(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    packageitems: []\nenumerateresponse:\n    enumerationcontext: \"\"\npackageresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    deviceid: \"\"\n    creationclassname: \"\"\n    systemname: \"\"\n    systemcreationclassname: \"\"\n    elementname: \"\"\n    operationalstatus: 0\n    healthstate: 0\n    enabledstate: 0\n    requestedstate: 0\n    role: \"\"\n    family: 0\n    otherfamilydescription: \"\"\n    upgrademethod: 0\n    maxclockspeed: 0\n    currentclockspeed: 0\n    stepping: \"\"\n    cpustatus: 0\n    externalbusclockspeed: 0\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    packageitems: []\nenumerateresponse:\n    enumerationcontext: \"\"\npackageresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    deviceid: \"\"\n    creationclassname: \"\"\n    systemname: \"\"\n    systemcreationclassname: \"\"\n    elementname: \"\"\n    operationalstatus: []\n    healthstate: 0\n    enabledstate: 0\n    requestedstate: 0\n    role: \"\"\n    family: 0\n    otherfamilydescription: \"\"\n    upgrademethod: 0\n    maxclockspeed: 0\n    currentclockspeed: 0\n    stepping: \"\"\n    cpustatus: 0\n    externalbusclockspeed: 0\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
@@ -79,7 +79,7 @@ func TestPositiveCIMProcessor(t *testing.T) {
 						Family:                  198,
 						HealthState:             0,
 						MaxClockSpeed:           8300,
-						OperationalStatus:       0,
+						OperationalStatus:       []OperationalStatus{0},
 						OtherFamilyDescription:  "",
 						RequestedState:          12,
 						Role:                    "Central",
@@ -133,7 +133,7 @@ func TestPositiveCIMProcessor(t *testing.T) {
 								Family:                  198,
 								HealthState:             0,
 								MaxClockSpeed:           8300,
-								OperationalStatus:       0,
+								OperationalStatus:       []OperationalStatus{0},
 								OtherFamilyDescription:  "",
 								RequestedState:          12,
 								Role:                    "Central",
@@ -201,7 +201,7 @@ func TestNegativeCIMProcessor(t *testing.T) {
 						Family:                  198,
 						HealthState:             0,
 						MaxClockSpeed:           8300,
-						OperationalStatus:       0,
+						OperationalStatus:       []OperationalStatus{0},
 						OtherFamilyDescription:  "",
 						RequestedState:          12,
 						Role:                    "Central",
@@ -255,7 +255,7 @@ func TestNegativeCIMProcessor(t *testing.T) {
 								Family:                  198,
 								HealthState:             0,
 								MaxClockSpeed:           8300,
-								OperationalStatus:       0,
+								OperationalStatus:       []OperationalStatus{0},
 								OtherFamilyDescription:  "",
 								RequestedState:          12,
 								Role:                    "Central",

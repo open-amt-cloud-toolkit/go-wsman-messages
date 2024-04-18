@@ -45,7 +45,7 @@ type (
 		XMLName       xml.Name `xml:"IPS_IEEE8021xSettings"`
 		ElementName   string   `xml:"ElementName"`
 		InstanceID    string   `xml:"InstanceID"`
-		Enabled       int      `xml:"Enabled"`
+		Enabled       Enabled  `xml:"Enabled"`
 		AvailableInS0 bool     `xml:"AvailableInS0"`
 		PxeTimeout    int      `xml:"PxeTimeout"`
 	}
@@ -56,8 +56,14 @@ type (
 	}
 	SetCertificates_OUTPUT struct {
 		XMLName     xml.Name `xml:"SetCertificates_OUTPUT"`
-		ReturnValue int
+		ReturnValue ReturnValue
 	}
+
+	// Enabled indicates whether the IEEE 802.1x settings are enabled or disabled.
+	Enabled int
+
+	// ReturnValue indicates the status of the operation.
+	ReturnValue int
 )
 
 // INPUT

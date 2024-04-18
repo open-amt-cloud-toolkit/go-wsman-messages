@@ -14,7 +14,6 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/amt/methods"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
-	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 )
 
 // NewPublicKeyManagementServiceWithClient instantiates a new ManagementService
@@ -127,10 +126,10 @@ func (managementService ManagementService) Delete(instanceID string) (response R
 //		}
 //	}
 func checkReturnValue(rc int, item string) (err error) {
-	if rc != common.PT_STATUS_SUCCESS {
-		if rc == common.PT_STATUS_DUPLICATE {
+	if rc != int(ReturnValueSuccess) {
+		if rc == int(ReturnValueDuplicate) {
 			return errors.New(item + " already exists and must be removed before continuing")
-		} else if rc == common.PT_STATUS_INVALID_CERT {
+		} else if rc == int(ReturnValueInvalidCert) {
 			return errors.New(item + " is invalid")
 		} else {
 			return errors.New(item + " non-zero return code: " + strconv.Itoa(rc))
@@ -162,7 +161,7 @@ func (managementService ManagementService) AddCertificate(certificateBlob string
 	if err != nil {
 		return
 	}
-	err = checkReturnValue(response.Body.AddCertificate_OUTPUT.ReturnValue, "Client Certificate")
+	err = checkReturnValue(int(response.Body.AddCertificate_OUTPUT.ReturnValue), "Client Certificate")
 	return
 }
 
@@ -190,7 +189,7 @@ func (managementService ManagementService) AddTrustedRootCertificate(certificate
 	if err != nil {
 		return
 	}
-	err = checkReturnValue(response.Body.AddTrustedRootCertificate_OUTPUT.ReturnValue, "Root Certificate")
+	err = checkReturnValue(int(response.Body.AddTrustedRootCertificate_OUTPUT.ReturnValue), "Root Certificate")
 
 	return
 }
@@ -219,7 +218,7 @@ func (managementService ManagementService) GenerateKeyPair(keyAlgorithm KeyAlgor
 	if err != nil {
 		return
 	}
-	err = checkReturnValue(response.Body.AddKey_OUTPUT.ReturnValue, "Private Key")
+	err = checkReturnValue(int(response.Body.AddKey_OUTPUT.ReturnValue), "Private Key")
 
 	return
 }

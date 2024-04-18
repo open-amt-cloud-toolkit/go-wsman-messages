@@ -14,7 +14,6 @@
 // This association may also be used to indicate that a Credential is valid in some other environment.
 //
 // For instance associating the Credential to a RemoteServiceAccessPoint would indicate that the Credential is used to access the remote service.
-
 package credential
 
 import (
