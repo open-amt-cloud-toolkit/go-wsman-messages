@@ -100,5 +100,7 @@ func (service Service) ReadRecords(startIndex int) (response Response, err error
 	if err != nil {
 		return
 	}
+
+	response.Body.DecodedRecordsResponse = convertToAuditLogResult(response.Body.ReadRecordsResponse.EventRecords)
 	return
 }

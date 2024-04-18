@@ -7,6 +7,7 @@ package auditlog
 
 import (
 	"encoding/xml"
+	"time"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
@@ -35,11 +36,12 @@ type (
 		Body    Body           `xml:"Body"`
 	}
 	Body struct {
-		XMLName             xml.Name `xml:"Body"`
-		EnumerateResponse   common.EnumerateResponse
-		GetResponse         AuditLog
-		PullResponse        PullResponse
-		ReadRecordsResponse ReadRecords_OUTPUT
+		XMLName                xml.Name `xml:"Body"`
+		EnumerateResponse      common.EnumerateResponse
+		GetResponse            AuditLog
+		PullResponse           PullResponse
+		ReadRecordsResponse    ReadRecords_OUTPUT
+		DecodedRecordsResponse []AuditLogRecord
 	}
 	PullResponse struct {
 		XMLName       xml.Name   `xml:"PullResponse"`
@@ -75,9 +77,29 @@ type (
 		ReturnValue      int      `xml:"ReturnValue,omitempty"`      // ValueMap={0, 1, 2, 35} Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_NOT_READY, PT_STATUS_INVALID_INDEX}
 	}
 
+	AuditLogRecord struct {
+		AuditAppID     int       `json:"AuditAppId" binding:"required" example:"0"`
+		EventID        int       `json:"EventId" binding:"required" example:"0"`
+		InitiatorType  uint8     `json:"InitiatorType" binding:"required" example:"0"`
+		AuditApp       string    `json:"AuditApp" binding:"required" example:"Security Admin"`
+		Event          string    `json:"Event" binding:"required" example:"Provisioning Started"`
+		Initiator      string    `json:"Initiator" binding:"required" example:"Local"`
+		Time           time.Time `json:"Time" binding:"required" example:"2023-04-19T20:38:20.000Z"`
+		MCLocationType uint8     `json:"MCLocationType" binding:"required" example:"0"`
+		NetAddress     string    `json:"NetAddress" binding:"required" example:"127.0.0.1"`
+		Ex             string    `json:"Ex" binding:"required" example:""`
+		ExStr          string    `json:"ExStr" binding:"required" example:"Remote WSAMN"`
+	}
+
 	// OverwritePolicy is an integer enumeration that indicates whether the log, represented by the CIM_Log subclasses, can overwrite its entries.
 	OverwritePolicy int
 
 	// StoragePolicy is an integer enumeration that indicates the storage policy of the log.
 	StoragePolicy int
+
+	// EnabledState is an integer enumeration that indicates the enabled and disabled states of an element.
+	EnabledState int
+
+	// RequestedState is an integer enumeration that indicates the last requested or desired state for the element, irrespective of the mechanism through which it was requested.
+	RequestedState int
 )
