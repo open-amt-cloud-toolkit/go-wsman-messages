@@ -8,6 +8,7 @@ package auditlog
 import (
 	"encoding/xml"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -22,7 +23,7 @@ func TestJson(t *testing.T) {
 			GetResponse: AuditLog{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"OverwritePolicy\":0,\"CurrentNumberOfRecords\":0,\"MaxNumberOfRecords\":0,\"ElementName\":\"\",\"EnabledState\":0,\"RequestedState\":0,\"PercentageFree\":0,\"Name\":\"\",\"TimeOfLastRecord\":{\"Datetime\":\"\"},\"AuditState\":0,\"MaxAllowedAuditors\":0,\"StoragePolicy\":0,\"MinDaysToKeep\":0},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"AuditLogItems\":null},\"ReadRecordsResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"TotalRecordCount\":0,\"RecordsReturned\":0,\"EventRecords\":null,\"ReturnValue\":0}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"OverwritePolicy\":0,\"CurrentNumberOfRecords\":0,\"MaxNumberOfRecords\":0,\"ElementName\":\"\",\"EnabledState\":0,\"RequestedState\":0,\"PercentageFree\":0,\"Name\":\"\",\"TimeOfLastRecord\":{\"Datetime\":\"\"},\"AuditState\":0,\"MaxAllowedAuditors\":0,\"StoragePolicy\":0,\"MinDaysToKeep\":0},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"AuditLogItems\":null},\"ReadRecordsResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"TotalRecordCount\":0,\"RecordsReturned\":0,\"EventRecords\":null,\"ReturnValue\":0},\"DecodedRecordsResponse\":null}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -33,7 +34,7 @@ func TestYaml(t *testing.T) {
 			GetResponse: AuditLog{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    overwritepolicy: 0\n    currentnumberofrecords: 0\n    maxnumberofrecords: 0\n    elementname: \"\"\n    enabledstate: 0\n    requestedstate: 0\n    percentagefree: 0\n    name: \"\"\n    timeoflastrecord:\n        datetime: \"\"\n    auditstate: 0\n    maxallowedauditors: 0\n    storagepolicy: 0\n    mindaystokeep: 0\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    auditlogitems: []\nreadrecordsresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    totalrecordcount: 0\n    recordsreturned: 0\n    eventrecords: []\n    returnvalue: 0\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    overwritepolicy: 0\n    currentnumberofrecords: 0\n    maxnumberofrecords: 0\n    elementname: \"\"\n    enabledstate: 0\n    requestedstate: 0\n    percentagefree: 0\n    name: \"\"\n    timeoflastrecord:\n        datetime: \"\"\n    auditstate: 0\n    maxallowedauditors: 0\n    storagepolicy: 0\n    mindaystokeep: 0\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    auditlogitems: []\nreadrecordsresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    totalrecordcount: 0\n    recordsreturned: 0\n    eventrecords: []\n    returnvalue: 0\ndecodedrecordsresponse: []\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
@@ -158,6 +159,34 @@ func TestPositiveAMT_AuditLog(t *testing.T) {
 						RecordsReturned:  2,
 						EventRecords:     []string{"ABMAAAI/9M1uAgAQAAwAAAAoBZkADAAAACQFlA==", "ABMAAAI/9M1vAgAQAAwAAAAoBZkADAAAACQFlA=="},
 						ReturnValue:      0,
+					},
+					DecodedRecordsResponse: []AuditLogRecord{
+						{
+							AuditAppID:     19,
+							EventID:        0,
+							InitiatorType:  0x2,
+							AuditApp:       "Firmware Update Manager",
+							Event:          "Firmware Updated",
+							Initiator:      "Local",
+							Time:           time.Unix(int64(1073007983), 0),
+							MCLocationType: 0x2,
+							NetAddress:     "",
+							Ex:             "\x00\f\x00\x00\x00(\x05\x99\x00\f\x00\x00\x00$\x05\x94",
+							ExStr:          "",
+						},
+						{
+							AuditAppID:     19,
+							EventID:        0,
+							InitiatorType:  0x2,
+							AuditApp:       "Firmware Update Manager",
+							Event:          "Firmware Updated",
+							Initiator:      "Local",
+							Time:           time.Unix(int64(1073007982), 0),
+							MCLocationType: 0x2,
+							NetAddress:     "",
+							Ex:             "\x00\f\x00\x00\x00(\x05\x99\x00\f\x00\x00\x00$\x05\x94",
+							ExStr:          "",
+						},
 					},
 				},
 			},
