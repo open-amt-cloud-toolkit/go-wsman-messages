@@ -71,7 +71,7 @@ type (
 	}
 
 	// OptInRequired indicates the OptIn (user consent) policy for redirection operations.
-	OptInRequired int
+	OptInRequired uint32
 	// OptInState indicates the current state of the OptIn (user consent) policy.
 	OptInState int
 	// CanModifyOptInPolicy indicates whether the OptIn policy can be modified.
