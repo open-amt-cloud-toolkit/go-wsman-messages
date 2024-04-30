@@ -52,10 +52,11 @@ jobs:
         run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
       - name: Run go vet
         run: go vet ./...
-      - name: Run go lint
-        uses: golangci/golangci-lint-action@82d40c283aeb1f2b6595839195e95c2d6a49081b # v3.7.1
+      - name: golangci-lint
+        uses: reviewdog/action-golangci-lint@v2
         with:
-          version: latest
+          fail_on_error: true
+          golangci_lint_flags: "--config=.github/.golangci.yml ./..."
       - uses: codecov/codecov-action@84508663e988701840491b86de86b666e8a86bed # v4.3.0
         name: Upload Coverage Results
       - name: GitHub Upload Release Artifacts
