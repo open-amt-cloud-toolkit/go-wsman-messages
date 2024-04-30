@@ -36,3 +36,7 @@ func (c *MockClient) Post(msg string) ([]byte, error) {
 	// Simulate a successful response for testing.
 	return []byte(xmlData), nil
 }
+func (c *MockClient) Send(data []byte) error   { return nil }
+func (c *MockClient) Receive() ([]byte, error) { return nil, nil }
+func (c *MockClient) CloseConnection() error   { return nil }
+func (c *MockClient) Connect() error           { return nil }

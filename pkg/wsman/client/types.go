@@ -9,4 +9,5 @@ type Parameters struct {
 	UseTLS            bool
 	SelfSignedAllowed bool
 	LogAMTMessages    bool
+	IsRedirection     bool
 }

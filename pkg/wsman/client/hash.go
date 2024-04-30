@@ -49,6 +49,16 @@ func (c *AuthChallenge) HashCredentials() string {
 func (c *AuthChallenge) hashURI(method, uri string) string {
 	return hashWithMD5(fmt.Sprintf("%s:%s", method, uri))
 }
+func (c *AuthChallenge) GetFormattedNonceData(nonceData string) string {
+	nonceData = fmt.Sprintf("%s:%08x:%s:%s", nonceData, c.NonceCount, c.CNonce, c.Qop)
+	return nonceData
+}
+func (c *AuthChallenge) ComputeDigestHash(method, uri, nonceData string) string {
+	hashedCredentials := c.HashCredentials()
+	hashedURI := c.hashURI(method, uri)
+	response := hashWithHash(hashedCredentials, fmt.Sprintf("%s:%s", nonceData, hashedURI))
+	return response
+}
 
 func (c *AuthChallenge) response(method, uri, cnonce string) (string, error) {
 	c.NonceCount++
@@ -66,14 +76,10 @@ func (c *AuthChallenge) response(method, uri, cnonce string) (string, error) {
 				c.CNonce = fmt.Sprintf("%x", b)[:16]
 			}
 			c.Qop = "auth"
-			nonceData = fmt.Sprintf("%s:%08x:%s:%s", nonceData, c.NonceCount, c.CNonce, c.Qop)
+			nonceData = c.GetFormattedNonceData(nonceData)
 		}
 
-		hashedCredentials := c.HashCredentials()
-		hashedURI := c.hashURI(method, uri)
-		response := hashWithHash(hashedCredentials, fmt.Sprintf("%s:%s", nonceData, hashedURI))
-
-		return response, nil
+		return c.ComputeDigestHash(method, uri, nonceData), nil
 	}
 
 	return "", fmt.Errorf("not implemented")
