@@ -11,8 +11,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/url"
+	"sync"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -23,6 +25,8 @@ const NS_WSMAN = "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"
 const NS_WSMID = "http://schemas.dmtf.org/wbem/wsman/identity/1/wsmanidentity.xsd"
 const TLSPort = "16993"
 const NonTLSPort = "16992"
+const RedirectionTLSPort = "16995"
+const RedirectionNonTLSPort = "16994"
 
 type Message struct {
 	XMLInput  string
@@ -31,7 +35,13 @@ type Message struct {
 
 // WSMan is an interface for the wsman.Client.
 type WSMan interface {
+	// HTTP Methods
 	Post(msg string) (response []byte, err error)
+	// TCP Methods
+	Connect() error
+	Send(data []byte) error
+	Receive() ([]byte, error)
+	CloseConnection() error
 }
 
 // Target is a thin wrapper around http.Target.
@@ -41,9 +51,10 @@ type Target struct {
 	username       string
 	password       string
 	useDigest      bool
-	OptimizeEnum   bool
 	logAMTMessages bool
 	challenge      *AuthChallenge
+	conn           net.Conn
+	bufferPool     sync.Pool
 }
 
 func NewWsman(cp Parameters) *Target {

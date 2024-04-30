@@ -15,12 +15,17 @@ import (
 
 // NewMessages instantiates a new Messages class with client connection parameters
 func NewMessages(cp client.Parameters) Messages {
-	client := client.NewWsman(cp)
-	m := Messages{
-		client: client,
+	var client1 *client.Target
+	if cp.IsRedirection {
+		client1 = client.NewWsmanTCP(cp)
+	} else {
+		client1 = client.NewWsman(cp)
 	}
-	m.AMT = amt.NewMessages(client)
-	m.CIM = cim.NewMessages(client)
-	m.IPS = ips.NewMessages(client)
+	m := Messages{
+		Client: client1,
+	}
+	m.AMT = amt.NewMessages(client1)
+	m.CIM = cim.NewMessages(client1)
+	m.IPS = ips.NewMessages(client1)
 	return m
 }
