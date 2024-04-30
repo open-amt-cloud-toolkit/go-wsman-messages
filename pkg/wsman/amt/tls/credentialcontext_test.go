@@ -22,7 +22,7 @@ func TestJson(t *testing.T) {
 			CredentialContextGetResponse: CredentialContextResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"SettingDataGetAndPutResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"MutualAuthentication\":false,\"Enabled\":false,\"TrustedCN\":null,\"AcceptNonSecureConnections\":false,\"NonSecureConnectionsSupported\":false},\"CredentialContextGetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"}},\"ProtocolEndpointCollectionGetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"SettingDataItems\":null,\"ProtocolEndpointCollectionItems\":null,\"CredentialContextItems\":null}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"SettingDataGetAndPutResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"MutualAuthentication\":false,\"Enabled\":false,\"TrustedCN\":null,\"AcceptNonSecureConnections\":false,\"NonSecureConnectionsSupported\":null},\"CredentialContextGetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"}},\"ProtocolEndpointCollectionGetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"SettingDataItems\":null,\"ProtocolEndpointCollectionItems\":null,\"CredentialContextItems\":null}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -33,7 +33,7 @@ func TestYaml(t *testing.T) {
 			CredentialContextGetResponse: CredentialContextResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nsettingdatagetandputresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    mutualauthentication: false\n    enabled: false\n    trustedcn: []\n    acceptnonsecureconnections: false\n    nonsecureconnectionssupported: false\ncredentialcontextgetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\nprotocolendpointcollectiongetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    settingdataitems: []\n    protocolendpointcollectionitems: []\n    credentialcontextitems: []\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nsettingdatagetandputresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    mutualauthentication: false\n    enabled: false\n    trustedcn: []\n    acceptnonsecureconnections: false\n    nonsecureconnectionssupported: null\ncredentialcontextgetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\nprotocolendpointcollectiongetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    settingdataitems: []\n    protocolendpointcollectionitems: []\n    credentialcontextitems: []\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
