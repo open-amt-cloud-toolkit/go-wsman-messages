@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package alarmclock facilitates communication with Intel® AMT devices to represent a single alarm clock setting.
 package alarmclock
 
 import (
