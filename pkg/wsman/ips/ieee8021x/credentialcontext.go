@@ -2,7 +2,7 @@
  * Copyright (c) Intel Corporation 2023
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
-
+// Package 8021xCredentialContext facilitates communication with Intel® AMT devices to create an association between an instance of IPS_IEEE8021xSettings and an instance of AMT_PublicKeyCertificate that it uses.
 package ieee8021x
 
 import (

@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package hostbasedsetup facilitates communication with Intel® AMT devices to describe the Host Based Setup Service, which is the logic in Intel(R) AMT that responds to setup requests initiated from the host using OS Administrator credentials.
+//
+// Also provides a method to upgrade to Admin Control mode that can be initiated remotely.
 package hostbasedsetup
 
 import (

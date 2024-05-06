@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
+// Package optin facilitates communication with Intel® AMT devices to describe the user consent service.
+//
+// This service manages user opt-in options and sends a user consent code for KVM, redirection, and set boot options.
 package optin
 
 import (
