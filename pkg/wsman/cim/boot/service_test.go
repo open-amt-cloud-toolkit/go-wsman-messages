@@ -110,10 +110,10 @@ func TestPositiveService(t *testing.T) {
 				"should handle error when making cim_BootService SetBootConfigRole wsman message",
 				CIM_BootService,
 				wsmantesting.SET_BOOT_CONFIG_ROLE,
-				`<h:SetBootConfigRole_INPUT xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService"><h:BootConfigSetting><Address xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing"><ResourceURI xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting</ResourceURI><SelectorSet xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><Selector Name="InstanceID"></Selector></SelectorSet></ReferenceParameters></h:BootConfigSetting><h:Role>0</h:Role></h:SetBootConfigRole_INPUT>`,
+				`<h:SetBootConfigRole_INPUT xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService"><h:BootConfigSetting><Address xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing"><ResourceURI xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting</ResourceURI><SelectorSet xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><Selector Name="InstanceID">InstanceID</Selector></SelectorSet></ReferenceParameters></h:BootConfigSetting><h:Role>0</h:Role></h:SetBootConfigRole_INPUT>`,
 				func() (Response, error) {
 					client.CurrentMessage = "SetBootConfigRole"
-					return elementUnderTest.SetBootConfigRole(BootConfigSetting{}, 0)
+					return elementUnderTest.SetBootConfigRole("InstanceID", 0)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
@@ -231,10 +231,10 @@ func TestNegativeService(t *testing.T) {
 				"should handle error when making cim_BootService SetBootConfigRole wsman message",
 				CIM_BootService,
 				wsmantesting.SET_BOOT_CONFIG_ROLE,
-				`<h:SetBootConfigRole_INPUT xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService"><h:BootConfigSetting><Address xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing"><ResourceURI xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting</ResourceURI><SelectorSet xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><Selector Name="InstanceID"></Selector></SelectorSet></ReferenceParameters></h:BootConfigSetting><h:Role>0</h:Role></h:SetBootConfigRole_INPUT>`,
+				`<h:SetBootConfigRole_INPUT xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService"><h:BootConfigSetting><Address xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing"><ResourceURI xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting</ResourceURI><SelectorSet xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><Selector Name="InstanceID">InstanceID</Selector></SelectorSet></ReferenceParameters></h:BootConfigSetting><h:Role>0</h:Role></h:SetBootConfigRole_INPUT>`,
 				func() (Response, error) {
 					client.CurrentMessage = "Error"
-					return elementUnderTest.SetBootConfigRole(BootConfigSetting{}, 0)
+					return elementUnderTest.SetBootConfigRole("InstanceID", 0)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
