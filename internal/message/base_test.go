@@ -22,6 +22,10 @@ func (c *MockClient) Post(msg string) ([]byte, error) {
 	var response []byte = nil
 	return response, c.Err
 }
+func (c *MockClient) Send(data []byte) error   { return nil }
+func (c *MockClient) Receive() ([]byte, error) { return nil, nil }
+func (c *MockClient) CloseConnection() error   { return nil }
+func (c *MockClient) Connect() error           { return nil }
 
 func TestBaseWithClient(t *testing.T) {
 	mockWsmanMessageCreator := NewWSManMessageCreator("test-uri")

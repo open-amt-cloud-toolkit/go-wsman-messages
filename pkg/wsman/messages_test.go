@@ -27,7 +27,7 @@ func TestNewMessages(t *testing.T) {
 	}
 	m := NewMessages(clientParams)
 
-	if m.client == nil {
+	if m.Client == nil {
 		t.Error("client is not initialized")
 	}
 	if reflect.DeepEqual(m.AMT, amt.Messages{}) {

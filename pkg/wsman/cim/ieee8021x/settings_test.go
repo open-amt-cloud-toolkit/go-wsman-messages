@@ -22,7 +22,7 @@ func TestJson(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"IEEE8021xSettingsItems\":null},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"Enabled\":0,\"AvailableInS0\":false,\"PxeTimeout\":0}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"IEEE8021xSettingsItems\":null},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"AuthenticationProtocol\":0,\"RoamingIdentity\":\"\",\"ServerCertificateName\":\"\",\"ServerCertificateNameComparison\":0,\"Username\":\"\",\"Password\":\"\",\"Domain\":\"\",\"ProtectedAccessCredential\":\"\",\"PACPassword\":\"\",\"PSK\":\"\"}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -33,14 +33,14 @@ func TestYaml(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    ieee8021xsettingsitems: []\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    enabled: 0\n    availableins0: false\n    pxetimeout: 0\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    ieee8021xsettingsitems: []\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    authenticationprotocol: 0\n    roamingidentity: \"\"\n    servercertificatename: \"\"\n    servercertificatenamecomparison: 0\n    username: \"\"\n    password: \"\"\n    domain: \"\"\n    protectedaccesscredential: \"\"\n    pacpassword: \"\"\n    psk: \"\"\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
 
 func TestPositiveCIMIEEE8021xSettings(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
+	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_IEEE8021xSettings"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/ieee8021x/settings",
@@ -89,12 +89,19 @@ func TestPositiveCIMIEEE8021xSettings(t *testing.T) {
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
 						IEEE8021xSettingsItems: []IEEE8021xSettingsResponse{
 							{
-								XMLName:       xml.Name{Space: "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_IEEE8021xSettings", Local: "IPS_IEEE8021xSettings"},
-								ElementName:   "Intel(r) AMT: 8021X Settings",
-								InstanceID:    "Intel(r) AMT: 8021X Settings",
-								Enabled:       3,
-								AvailableInS0: true,
-								PxeTimeout:    0,
+								XMLName:                         xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_IEEE8021xSettings", Local: "CIM_IEEE8021xSettings"},
+								ElementName:                     "Wifi8021xTLS",
+								InstanceID:                      "Intel(r) AMT:IEEE 802.1x Settings Wifi8021xTLS",
+								AuthenticationProtocol:          0,
+								RoamingIdentity:                 "",
+								ServerCertificateName:           "",
+								ServerCertificateNameComparison: 0,
+								Username:                        "iME$amt16$",
+								Password:                        "",
+								Domain:                          "",
+								ProtectedAccessCredential:       "",
+								PACPassword:                     "",
+								PSK:                             "",
 							},
 						},
 					},
@@ -117,7 +124,7 @@ func TestPositiveCIMIEEE8021xSettings(t *testing.T) {
 
 func TestNegativeCIMIEEE8021xSettings(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
+	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_IEEE8021xSettings"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/ieee8021x/settings",
@@ -166,12 +173,19 @@ func TestNegativeCIMIEEE8021xSettings(t *testing.T) {
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
 						IEEE8021xSettingsItems: []IEEE8021xSettingsResponse{
 							{
-								XMLName:       xml.Name{Space: "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_IEEE8021xSettings", Local: "IPS_IEEE8021xSettings"},
-								ElementName:   "Intel(r) AMT: 8021X Settings",
-								InstanceID:    "Intel(r) AMT: 8021X Settings",
-								Enabled:       3,
-								AvailableInS0: true,
-								PxeTimeout:    0,
+								XMLName:                         xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_IEEE8021xSettings", Local: "CIM_IEEE8021xSettings"},
+								ElementName:                     "Wifi8021xTLS",
+								InstanceID:                      "Intel(r) AMT:IEEE 802.1x Settings Wifi8021xTLS",
+								AuthenticationProtocol:          0,
+								RoamingIdentity:                 "",
+								ServerCertificateName:           "",
+								ServerCertificateNameComparison: 0,
+								Username:                        "iME$amt16$",
+								Password:                        "",
+								Domain:                          "",
+								ProtectedAccessCredential:       "",
+								PACPassword:                     "",
+								PSK:                             "",
 							},
 						},
 					},
