@@ -10,6 +10,7 @@ const (
 	CIM_BootSourceSetting string = "CIM_BootSourceSetting"
 	CIM_BootService       string = "CIM_BootService"
 	ChangeBootOrder       string = "ChangeBootOrder"
+	SetBootConfigRole     string = "SetBootConfigRole"
 )
 
 const (

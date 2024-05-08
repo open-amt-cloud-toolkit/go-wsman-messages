@@ -45,8 +45,9 @@ type (
 		SourceSettingGetResponse BootSourceSetting `xml:"CIM_BootSourceSetting"`
 		ServiceGetResponse       BootService       `xml:"CIM_BootService"`
 		EnumerateResponse        common.EnumerateResponse
-		PullResponse             PullResponse           `xml:"PullResponse"`
-		ChangeBootOrder_OUTPUT   ChangeBootOrder_OUTPUT `xml:"ChangeBootOrder_OUTPUT"`
+		PullResponse             PullResponse             `xml:"PullResponse"`
+		ChangeBootOrder_OUTPUT   ChangeBootOrder_OUTPUT   `xml:"ChangeBootOrder_OUTPUT"`
+		SetBootConfigRole_OUTPUT SetBootConfigRole_OUTPUT `xml:"SetBootConfigRole_OUTPUT"`
 	}
 
 	BootConfigSetting struct {
@@ -84,6 +85,10 @@ type (
 	}
 
 	ChangeBootOrder_OUTPUT struct {
+		ReturnValue ReturnValue `xml:"ReturnValue"`
+	}
+
+	SetBootConfigRole_OUTPUT struct {
 		ReturnValue ReturnValue `xml:"ReturnValue"`
 	}
 

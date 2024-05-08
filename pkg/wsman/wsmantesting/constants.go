@@ -19,6 +19,7 @@ const (
 	PUT                     = "http://schemas.xmlsoap.org/ws/2004/09/transfer/Put"
 	CREATE                  = "http://schemas.xmlsoap.org/ws/2004/09/transfer/Create"
 	ENUMERATE_BODY          = "<Enumerate xmlns=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration\" />"
+	SET_BOOT_CONFIG_ROLE    = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService/SetBootConfigRole"
 	ServerCertificateIssuer = `serverCertificateIssuer`
 	ClientCertificate       = `clientCertificate`
 	DigestRealm             = "Digest:Realm"
