@@ -53,6 +53,36 @@ type (
 	PullResponse struct {
 		XMLName                xml.Name                    `xml:"PullResponse"`
 		IEEE8021xSettingsItems []IEEE8021xSettingsResponse `xml:"Items>IPS_IEEE8021xSettings"`
+		CredentialContextItems []CredentialContextResponse `xml:"Items>IPS_8021xCredentialContext"`
+	}
+	CredentialContextResponse struct {
+		XMLName                 xml.Name                        `xml:"IPS_8021xCredentialContext"`
+		ElementInContext        ElementInContextResponse        `xml:"ElementInContext"`
+		ElementProvidingContext ElementProvidingContextResponse `xml:"ElementProvidingContext"`
+	}
+	SelectorResponse struct {
+		XMLName xml.Name `xml:"Selector,omitempty"`
+		Name    string   `xml:"Name,attr"`
+		Text    string   `xml:",chardata"`
+	}
+	SelectorSetResponse struct {
+		XMLName   xml.Name           `xml:"SelectorSet,omitempty"`
+		Selectors []SelectorResponse `xml:"Selector,omitempty"`
+	}
+	ReferenceParametersResponse struct {
+		XMLName     xml.Name            `xml:"ReferenceParameters,omitempty"`
+		ResourceURI string              `xml:"ResourceURI,omitempty"`
+		SelectorSet SelectorSetResponse `xml:"SelectorSet,omitempty"`
+	}
+	ElementInContextResponse struct {
+		XMLName             xml.Name                    `xml:"ElementInContext"`
+		Address             string                      `xml:"Address,omitempty"`
+		ReferenceParameters ReferenceParametersResponse `xml:"ReferenceParameters,omitempty"`
+	}
+	ElementProvidingContextResponse struct {
+		XMLName             xml.Name                    `xml:"ElementProvidingContext"`
+		Address             string                      `xml:"Address,omitempty"`
+		ReferenceParameters ReferenceParametersResponse `xml:"ReferenceParameters,omitempty"`
 	}
 	SetCertificates_OUTPUT struct {
 		XMLName     xml.Name `xml:"SetCertificates_OUTPUT"`
