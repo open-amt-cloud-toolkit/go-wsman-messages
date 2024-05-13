@@ -19,8 +19,8 @@ import (
 
 func TestPositiveCIMWifiPort(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/wifi/port",
 	}
@@ -35,13 +35,14 @@ func TestPositiveCIMWifiPort(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create and parse a valid cim_WiFiPort Get call",
-				CIM_WiFiPort,
-				wsmantesting.GET,
+				CIMWiFiPort,
+				wsmantesting.Get,
 				"", func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -62,14 +63,15 @@ func TestPositiveCIMWifiPort(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create and parse a valid cim_WiFiPort Enumerate call",
-				CIM_WiFiPort,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMWiFiPort,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -79,14 +81,15 @@ func TestPositiveCIMWifiPort(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create and parse a valid cim_WiFiPort Pull call",
-				CIM_WiFiPort,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMWiFiPort,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -114,11 +117,12 @@ func TestPositiveCIMWifiPort(t *testing.T) {
 			},
 			{
 				"should create and parse a valid cim_WiFiPort Request State Change call",
-				CIM_WiFiPort,
-				methods.RequestStateChange(CIM_WiFiPort),
+				CIMWiFiPort,
+				methods.RequestStateChange(CIMWiFiPort),
 				"<h:RequestStateChange_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiPort\"><h:RequestedState>3</h:RequestedState></h:RequestStateChange_INPUT>",
 				func() (Response, error) {
 					client.CurrentMessage = "RequestStateChange"
+
 					return elementUnderTest.RequestStateChange(3)
 				},
 				Body{
@@ -133,7 +137,7 @@ func TestPositiveCIMWifiPort(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -143,10 +147,11 @@ func TestPositiveCIMWifiPort(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeCIMWifiPort(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/wifi/port",
 	}
@@ -161,13 +166,14 @@ func TestNegativeCIMWifiPort(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create and parse a valid cim_WiFiPort Get call",
-				CIM_WiFiPort,
-				wsmantesting.GET,
+				CIMWiFiPort,
+				wsmantesting.Get,
 				"", func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -188,14 +194,15 @@ func TestNegativeCIMWifiPort(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create and parse a valid cim_WiFiPort Enumerate call",
-				CIM_WiFiPort,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMWiFiPort,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -205,14 +212,15 @@ func TestNegativeCIMWifiPort(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create and parse a valid cim_WiFiPort Pull call",
-				CIM_WiFiPort,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMWiFiPort,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -240,11 +248,12 @@ func TestNegativeCIMWifiPort(t *testing.T) {
 			},
 			{
 				"should create and parse a valid cim_WiFiPort Request State Change call",
-				CIM_WiFiPort,
-				methods.RequestStateChange(CIM_WiFiPort),
+				CIMWiFiPort,
+				methods.RequestStateChange(CIMWiFiPort),
 				"<h:RequestStateChange_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiPort\"><h:RequestedState>3</h:RequestedState></h:RequestStateChange_INPUT>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.RequestStateChange(3)
 				},
 				Body{
@@ -259,7 +268,7 @@ func TestNegativeCIMWifiPort(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

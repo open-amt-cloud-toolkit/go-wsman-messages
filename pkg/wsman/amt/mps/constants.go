@@ -6,5 +6,5 @@
 package mps
 
 const (
-	AMT_MPSUsernamePassword string = "AMT_MPSUsernamePassword"
+	AMTMPSUsernamePassword string = "AMT_MPSUsernamePassword"
 )

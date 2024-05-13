@@ -18,6 +18,7 @@ func TestReturnValue_String(t *testing.T) {
 
 	for _, test := range tests {
 		result := test.state.String()
+
 		if result != test.expected {
 			t.Errorf("Expected %s, but got %s", test.expected, result)
 		}

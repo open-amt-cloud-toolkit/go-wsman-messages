@@ -18,7 +18,7 @@ type Service struct {
 }
 
 // OUTPUT
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -74,16 +74,16 @@ type (
 )
 
 // INPUT
-// Request Types
+// Request Types.
 type (
-	AddNextCertInChain_INPUT struct {
+	AddNextCertInChainInput struct {
 		XMLName           xml.Name `xml:"h:AddNextCertInChain_INPUT"`
 		H                 string   `xml:"xmlns:h,attr"`
 		NextCertificate   string   `xml:"h:NextCertificate"`
 		IsLeafCertificate bool     `xml:"h:IsLeafCertificate"`
 		IsRootCertificate bool     `xml:"h:IsRootCertificate"`
 	}
-	AdminSetup_INPUT struct {
+	AdminSetupInput struct {
 		XMLName                    xml.Name `xml:"h:AdminSetup_INPUT"`
 		H                          string   `xml:"xmlns:h,attr"`
 		NetAdminPassEncryptionType int      `xml:"h:NetAdminPassEncryptionType"`
@@ -92,13 +92,13 @@ type (
 		SigningAlgorithm           int      `xml:"h:SigningAlgorithm"`
 		DigitalSignature           string   `xml:"h:DigitalSignature"`
 	}
-	Setup_INPUT struct {
+	SetupInput struct {
 		XMLName                    xml.Name `xml:"h:Setup_INPUT"`
 		H                          string   `xml:"xmlns:h,attr"`
 		NetAdminPassEncryptionType int      `xml:"h:NetAdminPassEncryptionType"`
 		NetworkAdminPassword       string   `xml:"h:NetworkAdminPassword"`
 	}
-	UpgradeClientToAdmin_INPUT struct {
+	UpgradeClientToAdminInput struct {
 		XMLName          xml.Name `xml:"h:UpgradeClientToAdmin_INPUT"`
 		H                string   `xml:"xmlns:h,attr"`
 		McNonce          string   `xml:"h:McNonce"`
@@ -107,26 +107,26 @@ type (
 	}
 )
 
-// AdminPassEncryptionType is the encryption type for the network admin password
+// AdminPassEncryptionType is the encryption type for the network admin password.
 type AdminPassEncryptionType int
 
-// SigningAlgorithm is the algorithm used to sign the setup operation
+// SigningAlgorithm is the algorithm used to sign the setup operation.
 type SigningAlgorithm int
 
-// CurrentControlMode is an enumeration value that indicates the current control mode of the Intel(r) AMT subsystem after provisioning
+// CurrentControlMode is an enumeration value that indicates the current control mode of the Intel(r) AMT subsystem after provisioning.
 type CurrentControlMode int
 
-// CertChainStatus is an enumeration value that indicates the status of "AddNextCertInChain" progress
+// CertChainStatus is an enumeration value that indicates the status of "AddNextCertInChain" progress.
 type CertChainStatus int
 
-// AllowedControlModes is an array of values that indicates the allowed control modes for the Intel(r) AMT subsystem
+// AllowedControlModes is an array of values that indicates the allowed control modes for the Intel(r) AMT subsystem.
 type AllowedControlModes int
 
-// SetupReturnValue is an enumeration value that indicates the status of the operation
+// SetupReturnValue is an enumeration value that indicates the status of the operation.
 type SetupReturnValue int
 
-// AddNextCertInChainReturnValue is an enumeration value that indicates the status of the operation
+// AddNextCertInChainReturnValue is an enumeration value that indicates the status of the operation.
 type AddNextCertInChainReturnValue int
 
-// AdminSetupReturnValue is an enumeration value that indicates the status of the operation
+// AdminSetupReturnValue is an enumeration value that indicates the status of the operation.
 type AdminSetupReturnValue int

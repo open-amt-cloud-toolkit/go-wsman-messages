@@ -40,8 +40,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_MPSUsernamePassword(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/mps",
 	}
@@ -56,14 +56,15 @@ func TestPositiveAMT_MPSUsernamePassword(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_MPSUsernamePassword Get wsman message",
-				AMT_MPSUsernamePassword,
-				wsmantesting.GET,
+				AMTMPSUsernamePassword,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -75,14 +76,15 @@ func TestPositiveAMT_MPSUsernamePassword(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_MPSUsernamePassword Enumerate wsman message",
-				AMT_MPSUsernamePassword,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTMPSUsernamePassword,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -92,14 +94,15 @@ func TestPositiveAMT_MPSUsernamePassword(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_MPSUsernamePassword Pull wsman message",
-				AMT_MPSUsernamePassword,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTMPSUsernamePassword,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -118,17 +121,18 @@ func TestPositiveAMT_MPSUsernamePassword(t *testing.T) {
 			},
 			{
 				"should create a valid AMT_MPSUsernamePassword Put wsman message",
-				AMT_MPSUsernamePassword,
-				wsmantesting.PUT,
+				AMTMPSUsernamePassword,
+				wsmantesting.Put,
 				"<h:AMT_MPSUsernamePassword xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MPSUsernamePassword\"><h:InstanceID>Intel(r) AMT:MPS Username Password 0</h:InstanceID><h:RemoteID>test</h:RemoteID><h:Secret>P@ssw0rd</h:Secret></h:AMT_MPSUsernamePassword>",
 				func() (Response, error) {
-					client.CurrentMessage = "Put"
+					client.CurrentMessage = wsmantesting.CurrentMessagePut
 					mpsUsernamePassword := MPSUsernamePasswordRequest{
 						H:          "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MPSUsernamePassword",
 						InstanceID: "Intel(r) AMT:MPS Username Password 0",
 						Secret:     "P@ssw0rd",
 						RemoteID:   "test",
 					}
+
 					return elementUnderTest.Put(mpsUsernamePassword)
 				},
 				Body{
@@ -139,7 +143,7 @@ func TestPositiveAMT_MPSUsernamePassword(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -149,10 +153,11 @@ func TestPositiveAMT_MPSUsernamePassword(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_MPSUsernamePassword(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/mps",
 	}
@@ -167,14 +172,15 @@ func TestNegativeAMT_MPSUsernamePassword(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_MPSUsernamePassword Get wsman message",
-				AMT_MPSUsernamePassword,
-				wsmantesting.GET,
+				AMTMPSUsernamePassword,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -186,14 +192,15 @@ func TestNegativeAMT_MPSUsernamePassword(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_MPSUsernamePassword Enumerate wsman message",
-				AMT_MPSUsernamePassword,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTMPSUsernamePassword,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -203,14 +210,15 @@ func TestNegativeAMT_MPSUsernamePassword(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_MPSUsernamePassword Pull wsman message",
-				AMT_MPSUsernamePassword,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTMPSUsernamePassword,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -229,17 +237,18 @@ func TestNegativeAMT_MPSUsernamePassword(t *testing.T) {
 			},
 			{
 				"should create a valid AMT_MPSUsernamePassword Put wsman message",
-				AMT_MPSUsernamePassword,
-				wsmantesting.PUT,
+				AMTMPSUsernamePassword,
+				wsmantesting.Put,
 				"<h:AMT_MPSUsernamePassword xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MPSUsernamePassword\"><h:InstanceID>Intel(r) AMT:MPS Username Password 0</h:InstanceID><h:RemoteID>test</h:RemoteID><h:Secret>P@ssw0rd</h:Secret></h:AMT_MPSUsernamePassword>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
 					mpsUsernamePassword := MPSUsernamePasswordRequest{
 						H:          "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MPSUsernamePassword",
 						InstanceID: "Intel(r) AMT:MPS Username Password 0",
 						Secret:     "P@ssw0rd",
 						RemoteID:   "test",
 					}
+
 					return elementUnderTest.Put(mpsUsernamePassword)
 				},
 				Body{
@@ -250,7 +259,7 @@ func TestNegativeAMT_MPSUsernamePassword(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

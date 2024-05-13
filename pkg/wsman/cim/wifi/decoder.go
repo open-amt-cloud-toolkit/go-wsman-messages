@@ -6,9 +6,10 @@
 package wifi
 
 const (
-	CIM_WiFiEndpoint         string = "CIM_WiFiEndpoint"
-	CIM_WiFiEndpointSettings string = "CIM_WiFiEndpointSettings"
-	CIM_WiFiPort             string = "CIM_WiFiPort"
+	CIMWiFiEndpoint         string = "CIM_WiFiEndpoint"
+	CIMWiFiEndpointSettings string = "CIM_WiFiEndpointSettings"
+	CIMWiFiPort             string = "CIM_WiFiPort"
+	ValueNotFound           string = "Value not found in map"
 )
 
 const (
@@ -23,7 +24,7 @@ const (
 	AuthenticationMethodWPA3OWE AuthenticationMethod = 32769
 )
 
-// authenticationMethodMap is a map of the AuthenticationMethod enumeration
+// authenticationMethodMap is a map of the AuthenticationMethod enumeration.
 var authenticationMethodMap = map[AuthenticationMethod]string{
 	AuthenticationMethodOther:         "Other",
 	AuthenticationMethodOpenSystem:    "OpenSystem",
@@ -36,33 +37,35 @@ var authenticationMethodMap = map[AuthenticationMethod]string{
 	AuthenticationMethodWPA3OWE:       "WPA3OWE",
 }
 
-// String returns a human-readable string representation of the AuthenticationMethod enumeration
+// String returns a human-readable string representation of the AuthenticationMethod enumeration.
 func (e AuthenticationMethod) String() string {
 	if s, ok := authenticationMethodMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
-	BSSType_Unknown        BSSType = 0
-	BSSType_Independent    BSSType = 2
-	BSSType_Infrastructure BSSType = 3
+	BSSTypeUnknown        BSSType = 0
+	BSSTypeIndependent    BSSType = 2
+	BSSTypeInfrastructure BSSType = 3
 )
 
-// bssTypeMap is a map of the BSSType enumeration
+// bssTypeMap is a map of the BSSType enumeration.
 var bssTypeMap = map[BSSType]string{
-	BSSType_Unknown:        "Unknown",
-	BSSType_Independent:    "Independent",
-	BSSType_Infrastructure: "Infrastructure",
+	BSSTypeUnknown:        "Unknown",
+	BSSTypeIndependent:    "Independent",
+	BSSTypeInfrastructure: "Infrastructure",
 }
 
-// String returns a human-readable string representation of the BSSType enumeration
+// String returns a human-readable string representation of the BSSType enumeration.
 func (e BSSType) String() string {
 	if s, ok := bssTypeMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -71,19 +74,20 @@ const (
 	EnabledStateWifiEnabledS0SxAC EnabledState = 32769
 )
 
-// enabledStateMap is a map of the EnabledState enumeration
+// enabledStateMap is a map of the EnabledState enumeration.
 var enabledStateMap = map[EnabledState]string{
 	EnabledStateWifiDisabled:      "WifiDisabled",
 	EnabledStateWifiEnabledS0:     "WifiEnabledS0",
 	EnabledStateWifiEnabledS0SxAC: "WifiEnabledS0SxAC",
 }
 
-// String returns a human-readable string representation of the EnabledState enumeration
+// String returns a human-readable string representation of the EnabledState enumeration.
 func (e EnabledState) String() string {
 	if s, ok := enabledStateMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -94,7 +98,7 @@ const (
 	EncryptionMethod_None
 )
 
-// encryptionMethodMap is a map of the EncryptionMethod enumeration
+// encryptionMethodMap is a map of the EncryptionMethod enumeration.
 var encryptionMethodMap = map[EncryptionMethod]string{
 	EncryptionMethod_Other: "Other",
 	EncryptionMethod_WEP:   "WEP",
@@ -103,12 +107,13 @@ var encryptionMethodMap = map[EncryptionMethod]string{
 	EncryptionMethod_None:  "None",
 }
 
-// String returns a human-readable string representation of the EncryptionMethod enumeration
+// String returns a human-readable string representation of the EncryptionMethod enumeration.
 func (e EncryptionMethod) String() string {
 	if s, ok := encryptionMethodMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -121,7 +126,7 @@ const (
 	HealthStateNonRecoverableError HealthState = 30
 )
 
-// healthStateMap is a map of the HealthState enumeration
+// healthStateMap is a map of the HealthState enumeration.
 var healthStateMap = map[HealthState]string{
 	HealthStateOK:                  "OK",
 	HealthStateDegraded:            "Degraded",
@@ -131,12 +136,13 @@ var healthStateMap = map[HealthState]string{
 	HealthStateNonRecoverableError: "NonRecoverableError",
 }
 
-// String returns a human-readable string representation of the HealthState enumeration
+// String returns a human-readable string representation of the HealthState enumeration.
 func (e HealthState) String() string {
 	if s, ok := healthStateMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -154,7 +160,7 @@ const (
 	LinkTechnologyWirelessLAN
 )
 
-// linkTechnologyMap is a map of the LinkTechnology enumeration
+// linkTechnologyMap is a map of the LinkTechnology enumeration.
 var linkTechnologyMap = map[LinkTechnology]string{
 	LinkTechnologyUnknown:     "Unknown",
 	LinkTechnologyOther:       "Other",
@@ -170,12 +176,13 @@ var linkTechnologyMap = map[LinkTechnology]string{
 	LinkTechnologyWirelessLAN: "WirelessLAN",
 }
 
-// String returns a human-readable string representation of the LinkTechnology enumeration
+// String returns a human-readable string representation of the LinkTechnology enumeration.
 func (e LinkTechnology) String() string {
 	if s, ok := linkTechnologyMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -184,19 +191,20 @@ const (
 	RequestedStateWifiEnabledS0SxAC RequestedState = 32769
 )
 
-// requestedStateMap is a map of the RequestedState enumeration
+// requestedStateMap is a map of the RequestedState enumeration.
 var requestedStateMap = map[RequestedState]string{
 	RequestedStateWifiDisabled:      "WifiDisabled",
 	RequestedStateWifiEnabledS0:     "WifiEnabledS0",
 	RequestedStateWifiEnabledS0SxAC: "WifiEnabledS0SxAC",
 }
 
-// String returns a human-readable string representation of the RequestedState enumeration
+// String returns a human-readable string representation of the RequestedState enumeration.
 func (e RequestedState) String() string {
 	if s, ok := requestedStateMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -213,7 +221,7 @@ const (
 	Busy                              ReturnValue = 4099
 )
 
-// returnValueMap is a map of the ReturnValue enumeration
+// returnValueMap is a map of the ReturnValue enumeration.
 var returnValueMap = map[ReturnValue]string{
 	CompletedWithNoError:              "CompletedWithNoError",
 	NotSupported:                      "NotSupported",
@@ -228,12 +236,13 @@ var returnValueMap = map[ReturnValue]string{
 	Busy:                              "Busy",
 }
 
-// String returns a human-readable string representation of the ReturnValue enumeration
+// String returns a human-readable string representation of the ReturnValue enumeration.
 func (e ReturnValue) String() string {
 	if s, ok := returnValueMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -245,7 +254,7 @@ const (
 	PortType80211n  PortType = 73
 )
 
-// portTypeMap is a map of the PortType enumeration
+// portTypeMap is a map of the PortType enumeration.
 var portTypeMap = map[PortType]string{
 	PortTypeUnknown: "Unknown",
 	PortTypeOther:   "Other",
@@ -255,10 +264,11 @@ var portTypeMap = map[PortType]string{
 	PortType80211n:  "802.11n",
 }
 
-// String returns a human-readable string representation of the PortType enumeration
+// String returns a human-readable string representation of the PortType enumeration.
 func (e PortType) String() string {
 	if s, ok := portTypeMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

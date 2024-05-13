@@ -5,14 +5,17 @@
 
 package kvm
 
-const CIM_KVMRedirectionSAP string = "CIM_KVMRedirectionSAP"
-
 const (
-	RedirectionSAP_Enable  KVMRedirectionSAPRequestStateChangeInput = 2
-	RedirectionSAP_Disable KVMRedirectionSAPRequestStateChangeInput = 3
+	CIMKVMRedirectionSAP string = "CIM_KVMRedirectionSAP"
+	ValueNotFound        string = "Value not found in map"
 )
 
-// KVMProtocol constants
+const (
+	RedirectionSAPEnable  KVMRedirectionSAPRequestStateChangeInput = 2
+	RedirectionSAPDisable KVMRedirectionSAPRequestStateChangeInput = 3
+)
+
+// KVMProtocol constants.
 const (
 	KVMProtocolUnknown KVMProtocol = iota
 	KVMProtocolOther
@@ -21,7 +24,7 @@ const (
 	KVMProtocolVNCRFB
 )
 
-// kvmProtocolToString is a map of KVMProtocol value to string
+// kvmProtocolToString is a map of KVMProtocol value to string.
 var kvmProtocolToString = map[KVMProtocol]string{
 	KVMProtocolUnknown: "Unknown",
 	KVMProtocolOther:   "Other",
@@ -30,15 +33,16 @@ var kvmProtocolToString = map[KVMProtocol]string{
 	KVMProtocolVNCRFB:  "VNC-RFB",
 }
 
-// String returns a human-readable string representation of the KVMProtocol enumeration
+// String returns a human-readable string representation of the KVMProtocol enumeration.
 func (e KVMProtocol) String() string {
 	if s, ok := kvmProtocolToString[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// ReturnValue constants
+// ReturnValue constants.
 const (
 	ReturnValueCompletedNoError ReturnValue = iota
 	ReturnValueNotSupported
@@ -53,7 +57,7 @@ const (
 	ReturnValueBusy                         ReturnValue = 4099
 )
 
-// returnValueToString is a map of ReturnValue value to string
+// returnValueToString is a map of ReturnValue value to string.
 var returnValueToString = map[ReturnValue]string{
 	ReturnValueCompletedNoError:             "CompletedWithNoError",
 	ReturnValueNotSupported:                 "NotSupported",
@@ -68,15 +72,16 @@ var returnValueToString = map[ReturnValue]string{
 	ReturnValueBusy:                         "Busy",
 }
 
-// String returns a human-readable string representation of the ReturnValue enumeration
+// String returns a human-readable string representation of the ReturnValue enumeration.
 func (e ReturnValue) String() string {
 	if s, ok := returnValueToString[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// EnabledState constants
+// EnabledState constants.
 const (
 	EnabledStateUnknown EnabledState = iota
 	EnabledStateOther
@@ -91,7 +96,7 @@ const (
 	EnabledStateStarting
 )
 
-// enabledStateToString is a map of EnabledState value to string
+// enabledStateToString is a map of EnabledState value to string.
 var enabledStateToString = map[EnabledState]string{
 	EnabledStateUnknown:           "Unknown",
 	EnabledStateOther:             "Other",
@@ -106,15 +111,16 @@ var enabledStateToString = map[EnabledState]string{
 	EnabledStateStarting:          "Starting",
 }
 
-// String returns a human-readable string representation of the EnabledState enumeration
+// String returns a human-readable string representation of the EnabledState enumeration.
 func (e EnabledState) String() string {
 	if s, ok := enabledStateToString[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// RequestedState constants
+// RequestedState constants.
 const (
 	RequestedStateUnknown       RequestedState = 0
 	RequestedStateEnabled       RequestedState = 2
@@ -130,7 +136,7 @@ const (
 	RequestedStateNotApplicable RequestedState = 12
 )
 
-// requestedStateToString is a map of RequestedState value to string
+// requestedStateToString is a map of RequestedState value to string.
 var requestedStateToString = map[RequestedState]string{
 	RequestedStateUnknown:       "Unknown",
 	RequestedStateEnabled:       "Enabled",
@@ -146,10 +152,11 @@ var requestedStateToString = map[RequestedState]string{
 	RequestedStateNotApplicable: "NotApplicable",
 }
 
-// String returns a human-readable string representation of the RequestedState enumeration
+// String returns a human-readable string representation of the RequestedState enumeration.
 func (e RequestedState) String() string {
 	if s, ok := requestedStateToString[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

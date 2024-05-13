@@ -16,11 +16,11 @@ import (
 
 func NewUserInitiatedConnectionServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
 	return Service{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_UserInitiatedConnectionService, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTUserInitiatedConnectionService, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (service Service) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -37,10 +37,11 @@ func (service Service) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (service Service) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -57,6 +58,7 @@ func (service Service) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -77,6 +79,7 @@ func (service Service) Pull(enumerationContext string) (response Response, err e
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -97,11 +100,11 @@ func (service Service) Pull(enumerationContext string) (response Response, err e
 //
 // ValueMap={0, 1, 2, 3, 4, 5, 6, .., 4096, 4097, 4098, 4099, 4100..32767, 32768..65535}
 //
-// Values={Completed with No Error, Not Supported, Unknown or Unspecified Error, Cannot complete within Timeout Period, Failed, Invalid Parameter, In Use, DMTF Reserved, Method Parameters Checked - Job Started, Invalid State Transition, Use of Timeout Parameter Not Supported, Busy, Method Reserved, Vendor Specific}
+// Values={Completed with No Error, Not Supported, Unknown or Unspecified Error, Cannot complete within Timeout Period, Failed, Invalid Parameter, In Use, DMTF Reserved, Method Parameters Checked - Job Started, Invalid State Transition, Use of Timeout Parameter Not Supported, Busy, Method Reserved, Vendor Specific}.
 func (service Service) RequestStateChange(requestedState RequestedState) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
-			XMLInput: service.base.RequestStateChange(methods.RequestStateChange(AMT_UserInitiatedConnectionService), int(requestedState)),
+			XMLInput: service.base.RequestStateChange(methods.RequestStateChange(AMTUserInitiatedConnectionService), int(requestedState)),
 		},
 	}
 	// send the message to AMT
@@ -114,6 +117,6 @@ func (service Service) RequestStateChange(requestedState RequestedState) (respon
 	if err != nil {
 		return
 	}
-	return
 
+	return
 }

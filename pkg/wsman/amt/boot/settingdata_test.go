@@ -18,11 +18,13 @@ import (
 
 func TestPositiveAMT_BootSettingData(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
+
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/boot/settingdata",
 	}
+
 	elementUnderTest := NewBootSettingDataWithClient(wsmanMessageCreator, &client)
 
 	t.Run("amt_BootSettingData Tests", func(t *testing.T) {
@@ -34,14 +36,15 @@ func TestPositiveAMT_BootSettingData(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_BootSettingData Get wsman message",
-				AMT_BootSettingData,
-				wsmantesting.GET,
+				AMTBootSettingData,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -83,14 +86,15 @@ func TestPositiveAMT_BootSettingData(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_BootSettingData Enumerate wsman message",
-				AMT_BootSettingData,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTBootSettingData,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -100,14 +104,15 @@ func TestPositiveAMT_BootSettingData(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_BootSettingData Pull wsman message",
-				AMT_BootSettingData,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTBootSettingData,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -158,7 +163,7 @@ func TestPositiveAMT_BootSettingData(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -171,8 +176,8 @@ func TestPositiveAMT_BootSettingData(t *testing.T) {
 
 func TestNegativeAMT_BootSettingData(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/boot/settingdata",
 	}
@@ -187,14 +192,15 @@ func TestNegativeAMT_BootSettingData(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_BootSettingData Get wsman message",
-				AMT_BootSettingData,
-				wsmantesting.GET,
+				AMTBootSettingData,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -237,14 +243,15 @@ func TestNegativeAMT_BootSettingData(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_BootSettingData Enumerate wsman message",
-				AMT_BootSettingData,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTBootSettingData,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -254,14 +261,15 @@ func TestNegativeAMT_BootSettingData(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_BootSettingData Pull wsman message",
-				AMT_BootSettingData,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTBootSettingData,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -303,7 +311,8 @@ func TestNegativeAMT_BootSettingData(t *testing.T) {
 								UEFIBootParametersArray:  []int{0},
 								UEFIBootNumberOfParams:   0,
 								RPEEnabled:               false,
-								PlatformErase:            false},
+								PlatformErase:            false,
+							},
 						},
 					},
 				},
@@ -312,7 +321,7 @@ func TestNegativeAMT_BootSettingData(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

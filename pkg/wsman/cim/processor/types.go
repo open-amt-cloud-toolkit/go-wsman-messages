@@ -14,8 +14,7 @@ import (
 )
 
 type Package struct {
-	base   message.Base
-	client client.WSMan
+	base message.Base
 }
 
 type (

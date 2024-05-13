@@ -5,7 +5,10 @@
 
 package service
 
-const CIM_ServiceAvailableToElement string = "CIM_ServiceAvailableToElement"
+const (
+	CIMServiceAvailableToElement string = "CIM_ServiceAvailableToElement"
+	ValueNotFound                string = "Value not found in map"
+)
 
 const (
 	AvailableRequestedPowerStatesOther AvailableRequestedPowerStates = iota + 1
@@ -26,7 +29,7 @@ const (
 	AvailableRequestedPowerStatesPowerCycleHardGraceful
 )
 
-// availableRequestedPowerStatesMap is a map of the AvailableRequestedPowerStates enumeration
+// availableRequestedPowerStatesMap is a map of the AvailableRequestedPowerStates enumeration.
 var availableRequestedPowerStatesMap = map[AvailableRequestedPowerStates]string{
 	AvailableRequestedPowerStatesOther:                  "Other",
 	AvailableRequestedPowerStatesOn:                     "On",
@@ -46,12 +49,13 @@ var availableRequestedPowerStatesMap = map[AvailableRequestedPowerStates]string{
 	AvailableRequestedPowerStatesPowerCycleHardGraceful: "PowerCycleHardGraceful",
 }
 
-// String returns a human-readable string representation of the AvailableRequestedPowerStates enumeration
+// String returns a human-readable string representation of the AvailableRequestedPowerStates enumeration.
 func (e AvailableRequestedPowerStates) String() string {
 	if s, ok := availableRequestedPowerStatesMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -74,7 +78,7 @@ const (
 	PowerStateDiagnosticInterruptINIT
 )
 
-// powerStateMap is a map of the PowerState enumeration
+// powerStateMap is a map of the PowerState enumeration.
 var powerStateMap = map[PowerState]string{
 	PowerStateOther:                   "Other",
 	PowerStateOn:                      "On",
@@ -95,10 +99,11 @@ var powerStateMap = map[PowerState]string{
 	PowerStateDiagnosticInterruptINIT: "DiagnosticInterruptINIT",
 }
 
-// String returns a human-readable string representation of the PowerState enumeration
+// String returns a human-readable string representation of the PowerState enumeration.
 func (e PowerState) String() string {
 	if s, ok := powerStateMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

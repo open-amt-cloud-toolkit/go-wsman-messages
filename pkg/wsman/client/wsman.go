@@ -20,13 +20,15 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const ContentType = "application/soap+xml; charset=utf-8"
-const NS_WSMAN = "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"
-const NS_WSMID = "http://schemas.dmtf.org/wbem/wsman/identity/1/wsmanidentity.xsd"
-const TLSPort = "16993"
-const NonTLSPort = "16992"
-const RedirectionTLSPort = "16995"
-const RedirectionNonTLSPort = "16994"
+const (
+	ContentType           = "application/soap+xml; charset=utf-8"
+	NSWSMAN               = "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"
+	NSWSMID               = "http://schemas.dmtf.org/wbem/wsman/identity/1/wsmanidentity.xsd"
+	TLSPort               = "16993"
+	NonTLSPort            = "16992"
+	RedirectionTLSPort    = "16995"
+	RedirectionNonTLSPort = "16994"
+)
 
 type Message struct {
 	XMLInput  string
@@ -57,16 +59,21 @@ type Target struct {
 	bufferPool     sync.Pool
 }
 
+const timeout = 10 * time.Second
+
 func NewWsman(cp Parameters) *Target {
 	path := "/wsman"
 	port := NonTLSPort
+
 	if cp.UseTLS {
 		port = TLSPort
 	}
+
 	protocol := "http"
 	if port == TLSPort {
 		protocol = "https"
 	}
+
 	res := &Target{
 		endpoint:       protocol + "://" + cp.Target + ":" + port + path,
 		username:       cp.Username,
@@ -75,66 +82,83 @@ func NewWsman(cp Parameters) *Target {
 		logAMTMessages: cp.LogAMTMessages,
 	}
 
-	res.Timeout = 10 * time.Second
+	res.Timeout = timeout
 	res.Transport = &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: cp.SelfSignedAllowed},
 	}
+
 	if res.useDigest {
 		res.challenge = &AuthChallenge{Username: res.username, Password: res.password}
 	}
+
 	return res
 }
 
-// Post overrides http.Client's Post method
-func (c *Target) Post(msg string) (response []byte, err error) {
+// Post overrides http.Client's Post method.
+func (t *Target) Post(msg string) (response []byte, err error) {
 	msgBody := []byte(msg)
+
+	var auth string
+
 	bodyReader := bytes.NewReader(msgBody)
-	req, err := http.NewRequest("POST", c.endpoint, bodyReader)
+
+	req, err := http.NewRequest("POST", t.endpoint, bodyReader)
 	if err != nil {
 		return nil, err
 	}
 
-	if c.username != "" && c.password != "" {
-		if c.useDigest {
-
-			auth, err := c.challenge.authorize("POST", "/wsman")
+	if t.username != "" && t.password != "" {
+		if t.useDigest {
+			auth, err = t.challenge.authorize("POST", "/wsman")
 			if err != nil {
-				return nil, fmt.Errorf("failed digest auth %v", err)
+				return nil, fmt.Errorf("failed digest auth %w", err)
 			}
-			if c.challenge.Realm != "" {
+
+			if t.challenge.Realm != "" {
 				req.Header.Set("Authorization", auth)
 			}
 		} else {
-			req.SetBasicAuth(c.username, c.password)
+			req.SetBasicAuth(t.username, t.password)
 		}
 	}
+
 	req.Header.Add("content-type", ContentType)
 
-	if c.logAMTMessages {
+	if t.logAMTMessages {
 		logrus.Trace(msg)
 	}
-	res, err := c.Do(req)
+
+	res, err := t.Do(req)
 	if err != nil {
+		res.Body.Close()
+
 		return nil, err
 	}
-	if c.useDigest && res.StatusCode == 401 {
 
-		if err := c.challenge.parseChallenge(res.Header.Get("WWW-Authenticate")); err != nil {
+	if t.useDigest && res.StatusCode == 401 {
+		if err := t.challenge.parseChallenge(res.Header.Get("WWW-Authenticate")); err != nil {
 			return nil, err
 		}
-		auth, err := c.challenge.authorize("POST", "/wsman")
+
+		auth, err = t.challenge.authorize("POST", "/wsman")
 		if err != nil {
-			return nil, fmt.Errorf("failed digest auth %v", err)
+			return nil, fmt.Errorf("failed digest auth %w", err)
 		}
+
 		bodyReader = bytes.NewReader(msgBody)
-		req, err = http.NewRequest("POST", c.endpoint, bodyReader)
+
+		req, err = http.NewRequest("POST", t.endpoint, bodyReader)
 		if err != nil {
 			return nil, err
 		}
+
 		req.Header.Set("Authorization", auth)
 		req.Header.Add("content-type", ContentType)
-		res, err = c.Do(req)
+
+		res, err = t.Do(req)
 		if err != nil && err.Error() != io.EOF.Error() {
+			res.Body.Close()
+
 			return nil, err
 		}
 	}
@@ -142,15 +166,23 @@ func (c *Target) Post(msg string) (response []byte, err error) {
 	defer res.Body.Close()
 
 	if res.StatusCode >= 400 {
-		b, _ := io.ReadAll(res.Body)
-		if c.logAMTMessages {
+		b, err := io.ReadAll(res.Body)
+		if err != nil {
+			return nil, err
+		}
+
+		if t.logAMTMessages {
 			logrus.Trace(string(b))
 		}
-		return nil, fmt.Errorf("wsman.Client: post received %v\n'%v'", res.Status, string(b))
+
+		errPostResponse := errors.New("wsman.Client post received")
+
+		return nil, fmt.Errorf("%w: %v\n%v", errPostResponse, res.Status, string(b))
 	}
 
 	response, err = io.ReadAll(res.Body)
-	if c.logAMTMessages {
+
+	if t.logAMTMessages {
 		logrus.Trace(string(response))
 	}
 
@@ -161,18 +193,21 @@ func (c *Target) Post(msg string) (response []byte, err error) {
 	return response, nil
 }
 
-// ProxyUrl sets proxy address for the underlying Transport if supported
-func (c *Target) ProxyUrl(proxy_str string) (err error) {
-	//check if c.Transport is *http.Transport, otherwise currently it is not supported
-	_, ok := c.Transport.(*http.Transport)
+// ProxyURL sets proxy address for the underlying Transport if supported.
+func (t *Target) ProxyURL(proxyStr string) (err error) {
+	// check if c.Transport is *http.Transport, otherwise currently it is not supported
+	_, ok := t.Transport.(*http.Transport)
 	if !ok {
 		return errors.New("transport does not support proxy")
 	}
+
 	// check if proxy parsing failed or check if scheme is not nil
-	proxyUrl, err := url.Parse(proxy_str)
-	if err != nil || (proxyUrl != nil && proxyUrl.Scheme == "") {
+	proxyURL, err := url.Parse(proxyStr)
+	if err != nil || (proxyURL != nil && proxyURL.Scheme == "") {
 		return errors.New("unknown URL Scheme")
 	}
-	c.Transport.(*http.Transport).Proxy = http.ProxyURL(proxyUrl)
+
+	t.Transport.(*http.Transport).Proxy = http.ProxyURL(proxyURL)
+
 	return nil
 }

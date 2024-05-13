@@ -17,14 +17,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewBootCapabilitiesWithClient instantiates a new Boot Capabilities service
+// NewBootCapabilitiesWithClient instantiates a new Boot Capabilities service.
 func NewBootCapabilitiesWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Capabilities {
 	return Capabilities{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_BootCapabilities, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTBootCapabilities, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (bootCapabilities Capabilities) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -41,10 +41,11 @@ func (bootCapabilities Capabilities) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (bootCapabilities Capabilities) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -61,6 +62,7 @@ func (bootCapabilities Capabilities) Enumerate() (response Response, err error) 
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -81,5 +83,6 @@ func (bootCapabilities Capabilities) Pull(enumerationContext string) (response R
 	if err != nil {
 		return
 	}
+
 	return
 }

@@ -41,8 +41,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_TimeSynchronizationService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/timesynchronization",
 	}
@@ -57,14 +57,15 @@ func TestPositiveAMT_TimeSynchronizationService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_TimeSynchronizationService Get wsman message",
-				AMT_TimeSynchronizationService,
-				wsmantesting.GET,
+				AMTTimeSynchronizationService,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -83,14 +84,15 @@ func TestPositiveAMT_TimeSynchronizationService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_TimeSynchronizationService Enumerate wsman message",
-				AMT_TimeSynchronizationService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTTimeSynchronizationService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -100,14 +102,15 @@ func TestPositiveAMT_TimeSynchronizationService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_TimeSynchronizationService Pull wsman message",
-				AMT_TimeSynchronizationService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTTimeSynchronizationService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -132,13 +135,14 @@ func TestPositiveAMT_TimeSynchronizationService(t *testing.T) {
 				},
 			},
 			{
-				//GetLowAccuracyTimeSynch
+				// GetLowAccuracyTimeSynch
 				"should create a valid AMT_TimeSynchronizationService GetLowAccuracyTimeSynch wsman message",
-				AMT_TimeSynchronizationService,
-				methods.GenerateAction(AMT_TimeSynchronizationService, GetLowAccuracyTimeSynch),
+				AMTTimeSynchronizationService,
+				methods.GenerateAction(AMTTimeSynchronizationService, GetLowAccuracyTimeSynch),
 				`<h:GetLowAccuracyTimeSynch_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TimeSynchronizationService"></h:GetLowAccuracyTimeSynch_INPUT>`,
 				func() (Response, error) {
 					client.CurrentMessage = "GetLowAccuracyTimeSynch"
+
 					return elementUnderTest.GetLowAccuracyTimeSynch()
 				},
 				Body{
@@ -151,13 +155,14 @@ func TestPositiveAMT_TimeSynchronizationService(t *testing.T) {
 				},
 			},
 			{
-				//SetHighAccuracyTimeSynch
+				// SetHighAccuracyTimeSynch
 				"should create a valid AMT_TimeSynchronizationService SetHighAccuracyTimeSynch wsman message",
-				AMT_TimeSynchronizationService,
-				methods.GenerateAction(AMT_TimeSynchronizationService, SetHighAccuracyTimeSynch),
+				AMTTimeSynchronizationService,
+				methods.GenerateAction(AMTTimeSynchronizationService, SetHighAccuracyTimeSynch),
 				"<h:SetHighAccuracyTimeSynch_INPUT xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TimeSynchronizationService\"><h:Ta0>1644240911</h:Ta0><h:Tm1>1644240943</h:Tm1><h:Tm2>1644240943</h:Tm2></h:SetHighAccuracyTimeSynch_INPUT>",
 				func() (Response, error) {
 					client.CurrentMessage = "SetHighAccuracyTimeSynch"
+
 					return elementUnderTest.SetHighAccuracyTimeSynch(1644240911, 1644240943, 1644240943)
 				},
 				Body{
@@ -172,7 +177,7 @@ func TestPositiveAMT_TimeSynchronizationService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -182,10 +187,11 @@ func TestPositiveAMT_TimeSynchronizationService(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_TimeSynchronizationService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/timesynchronization",
 	}
@@ -200,14 +206,15 @@ func TestNegativeAMT_TimeSynchronizationService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_TimeSynchronizationService Get wsman message",
-				AMT_TimeSynchronizationService,
-				wsmantesting.GET,
+				AMTTimeSynchronizationService,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -226,14 +233,15 @@ func TestNegativeAMT_TimeSynchronizationService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_TimeSynchronizationService Enumerate wsman message",
-				AMT_TimeSynchronizationService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTTimeSynchronizationService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -243,14 +251,15 @@ func TestNegativeAMT_TimeSynchronizationService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_TimeSynchronizationService Pull wsman message",
-				AMT_TimeSynchronizationService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTTimeSynchronizationService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -275,13 +284,14 @@ func TestNegativeAMT_TimeSynchronizationService(t *testing.T) {
 				},
 			},
 			{
-				//GetLowAccuracyTimeSynch
+				// GetLowAccuracyTimeSynch
 				"should create a valid AMT_TimeSynchronizationService GetLowAccuracyTimeSynch wsman message",
-				AMT_TimeSynchronizationService,
-				methods.GenerateAction(AMT_TimeSynchronizationService, GetLowAccuracyTimeSynch),
+				AMTTimeSynchronizationService,
+				methods.GenerateAction(AMTTimeSynchronizationService, GetLowAccuracyTimeSynch),
 				`<h:GetLowAccuracyTimeSynch_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TimeSynchronizationService"></h:GetLowAccuracyTimeSynch_INPUT>`,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.GetLowAccuracyTimeSynch()
 				},
 				Body{
@@ -294,13 +304,14 @@ func TestNegativeAMT_TimeSynchronizationService(t *testing.T) {
 				},
 			},
 			{
-				//SetHighAccuracyTimeSynch
+				// SetHighAccuracyTimeSynch
 				"should create a valid AMT_TimeSynchronizationService SetHighAccuracyTimeSynch wsman message",
-				AMT_TimeSynchronizationService,
-				methods.GenerateAction(AMT_TimeSynchronizationService, SetHighAccuracyTimeSynch),
+				AMTTimeSynchronizationService,
+				methods.GenerateAction(AMTTimeSynchronizationService, SetHighAccuracyTimeSynch),
 				"<h:SetHighAccuracyTimeSynch_INPUT xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TimeSynchronizationService\"><h:Ta0>1644240911</h:Ta0><h:Tm1>1644240943</h:Tm1><h:Tm2>1644240943</h:Tm2></h:SetHighAccuracyTimeSynch_INPUT>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.SetHighAccuracyTimeSynch(1644240911, 1644240943, 1644240943)
 				},
 				Body{
@@ -315,7 +326,7 @@ func TestNegativeAMT_TimeSynchronizationService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

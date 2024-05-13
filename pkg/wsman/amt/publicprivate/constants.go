@@ -6,5 +6,5 @@
 package publicprivate
 
 const (
-	AMT_PublicPrivateKeyPair string = "AMT_PublicPrivateKeyPair"
+	AMTPublicPrivateKeyPair string = "AMT_PublicPrivateKeyPair"
 )

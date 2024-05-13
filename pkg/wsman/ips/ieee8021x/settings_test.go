@@ -19,8 +19,8 @@ import (
 
 func TestPositiveIPS_IEEE8021xSettings(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/ips-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.IPSResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "ips/ieee8021x/settings",
 	}
@@ -36,21 +36,22 @@ func TestPositiveIPS_IEEE8021xSettings(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid IPS_IEEE8021xSettings Get wsman message",
 				"IPS_IEEE8021xSettings",
-				wsmantesting.GET,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					IEEE8021xSettingsResponse: IEEE8021xSettingsResponse{
-						XMLName:       xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_IEEE8021xSettings), Local: IPS_IEEE8021xSettings},
+						XMLName:       xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSIEEE8021xSettings), Local: IPSIEEE8021xSettings},
 						ElementName:   "Intel(r) AMT: 8021X Settings",
 						InstanceID:    "Intel(r) AMT: 8021X Settings",
 						Enabled:       3,
@@ -59,15 +60,16 @@ func TestPositiveIPS_IEEE8021xSettings(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid IPS_IEEE8021xSettings Enumerate wsman message",
 				"IPS_IEEE8021xSettings",
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -77,15 +79,16 @@ func TestPositiveIPS_IEEE8021xSettings(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid IPS_IEEE8021xSettings Pull wsman message",
 				"IPS_IEEE8021xSettings",
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -94,7 +97,7 @@ func TestPositiveIPS_IEEE8021xSettings(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						IEEE8021xSettingsItems: []IEEE8021xSettingsResponse{
 							{
-								XMLName:       xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_IEEE8021xSettings), Local: IPS_IEEE8021xSettings},
+								XMLName:       xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSIEEE8021xSettings), Local: IPSIEEE8021xSettings},
 								ElementName:   "Intel(r) AMT: 8021X Settings",
 								InstanceID:    "Intel(r) AMT: 8021X Settings",
 								Enabled:       3,
@@ -109,17 +112,18 @@ func TestPositiveIPS_IEEE8021xSettings(t *testing.T) {
 			{
 				"should create a valid ips_IEEE8021xSettings set certificates wsman message",
 				"IPS_IEEE8021xSettings",
-				wsmantesting.SET_CERTIFICATES,
+				wsmantesting.SetCertificates,
 				fmt.Sprintf(`<h:SetCertificates_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_IEEE8021xSettings"><h:ServerCertificateIssuer><a:Address>default</a:Address><a:ReferenceParameters><w:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ServerCertificateIssuer><h:ClientCertificate><a:Address>default</a:Address><a:ReferenceParameters><w:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ClientCertificate></h:SetCertificates_INPUT>`, wsmantesting.ServerCertificateIssuer, wsmantesting.ClientCertificate),
 				"",
 				func() (Response, error) {
 					client.CurrentMessage = "SetCertificates"
+
 					return elementUnderTest.SetCertificates(wsmantesting.ServerCertificateIssuer, wsmantesting.ClientCertificate)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					SetCertificatesResponse: SetCertificates_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_IEEE8021xSettings), Local: "SetCertificates_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSIEEE8021xSettings), Local: "SetCertificates_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
@@ -128,7 +132,7 @@ func TestPositiveIPS_IEEE8021xSettings(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -138,10 +142,11 @@ func TestPositiveIPS_IEEE8021xSettings(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeIPS_IEEE8021xSettings(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/ips-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.IPSResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "ips/ieee8021x/settings",
 	}
@@ -157,21 +162,22 @@ func TestNegativeIPS_IEEE8021xSettings(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid IPS_IEEE8021xSettings Get wsman message",
 				"IPS_IEEE8021xSettings",
-				wsmantesting.GET,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					IEEE8021xSettingsResponse: IEEE8021xSettingsResponse{
-						XMLName:       xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_IEEE8021xSettings), Local: IPS_IEEE8021xSettings},
+						XMLName:       xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSIEEE8021xSettings), Local: IPSIEEE8021xSettings},
 						ElementName:   "Intel(r) AMT: 8021X Settings",
 						InstanceID:    "Intel(r) AMT: 8021X Settings",
 						Enabled:       3,
@@ -180,15 +186,16 @@ func TestNegativeIPS_IEEE8021xSettings(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid IPS_IEEE8021xSettings Enumerate wsman message",
 				"IPS_IEEE8021xSettings",
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -198,15 +205,16 @@ func TestNegativeIPS_IEEE8021xSettings(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid IPS_IEEE8021xSettings Pull wsman message",
 				"IPS_IEEE8021xSettings",
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -215,7 +223,7 @@ func TestNegativeIPS_IEEE8021xSettings(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						IEEE8021xSettingsItems: []IEEE8021xSettingsResponse{
 							{
-								XMLName:       xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_IEEE8021xSettings), Local: IPS_IEEE8021xSettings},
+								XMLName:       xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSIEEE8021xSettings), Local: IPSIEEE8021xSettings},
 								ElementName:   "Intel(r) AMT: 8021X Settings",
 								InstanceID:    "Intel(r) AMT: 8021X Settings",
 								Enabled:       3,
@@ -230,17 +238,18 @@ func TestNegativeIPS_IEEE8021xSettings(t *testing.T) {
 			{
 				"should create a valid ips_IEEE8021xSettings set certificates wsman message",
 				"IPS_IEEE8021xSettings",
-				wsmantesting.SET_CERTIFICATES,
+				wsmantesting.SetCertificates,
 				fmt.Sprintf(`<h:SetCertificates_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_IEEE8021xSettings"><h:ServerCertificateIssuer><a:Address>default</a:Address><a:ReferenceParameters><w:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ServerCertificateIssuer><h:ClientCertificate><a:Address>default</a:Address><a:ReferenceParameters><w:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ClientCertificate></h:SetCertificates_INPUT>`, wsmantesting.ServerCertificateIssuer, wsmantesting.ClientCertificate),
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.SetCertificates(wsmantesting.ServerCertificateIssuer, wsmantesting.ClientCertificate)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					SetCertificatesResponse: SetCertificates_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_IEEE8021xSettings), Local: "SetCertificates_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSIEEE8021xSettings), Local: "SetCertificates_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
@@ -249,7 +258,7 @@ func TestNegativeIPS_IEEE8021xSettings(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

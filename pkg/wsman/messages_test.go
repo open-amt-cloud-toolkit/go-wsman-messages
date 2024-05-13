@@ -16,6 +16,8 @@ import (
 )
 
 func TestNewMessages(t *testing.T) {
+	t.Parallel()
+
 	clientParams := client.Parameters{
 		Target:            "test",
 		Username:          "username",
@@ -30,12 +32,15 @@ func TestNewMessages(t *testing.T) {
 	if m.Client == nil {
 		t.Error("client is not initialized")
 	}
+
 	if reflect.DeepEqual(m.AMT, amt.Messages{}) {
 		t.Error("AMT is not initialized")
 	}
+
 	if reflect.DeepEqual(m.CIM, cim.Messages{}) {
 		t.Error("CIM is not initialized")
 	}
+
 	if reflect.DeepEqual(m.IPS, ips.Messages{}) {
 		t.Error("IPS is not initialized")
 	}

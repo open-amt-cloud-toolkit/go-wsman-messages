@@ -40,8 +40,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveIPS_8021xCredentialContext(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/ips-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.IPSResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "ips/ieee8021x/credentialcontext",
 	}
@@ -57,7 +57,7 @@ func TestPositiveIPS_8021xCredentialContext(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			// {
 			// 	"should create a valid IPS_8021xCredentialContext Get wsman message",
 			// 	"IPS_8021xCredentialContext",
@@ -65,20 +65,22 @@ func TestPositiveIPS_8021xCredentialContext(t *testing.T) {
 			// 	"",
 			// 	"",
 			// 	func() (Response, error) {
-			// 		client.CurrentMessage = "Get"
+			// 		 client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 			// 		return elementUnderTest.Get()
 			// 	},
 			// 	Body{},
 			// },
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid IPS_8021xCredentialContext Enumerate wsman message",
 				"IPS_8021xCredentialContext",
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -88,7 +90,7 @@ func TestPositiveIPS_8021xCredentialContext(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			// {
 			// 	"should create a valid IPS_8021xCredentialContext Pull wsman message",
 			// 	"IPS_8021xCredentialContext",
@@ -96,7 +98,8 @@ func TestPositiveIPS_8021xCredentialContext(t *testing.T) {
 			// 	wsmantesting.PULL_BODY,
 			// 	"",
 			// 	func() (Response, error) {
-			// 		client.CurrentMessage = "Pull"
+			// 		 client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 			// 		return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 			// 	},
 			// 	Body{},
@@ -105,7 +108,7 @@ func TestPositiveIPS_8021xCredentialContext(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)

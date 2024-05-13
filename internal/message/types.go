@@ -54,8 +54,8 @@ type ReturnValue struct {
 }
 type WSManMessageCreator struct {
 	MessageID        int
-	XmlCommonPrefix  string
-	XmlCommonEnd     string
+	XMLCommonPrefix  string
+	XMLCommonEnd     string
 	AnonymousAddress string
 	DefaultTimeout   string
 	ResourceURIBase  string

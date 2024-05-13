@@ -9,10 +9,12 @@ import (
 	"encoding/xml"
 	"testing"
 
+	"github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestJson(t *testing.T) {
@@ -39,12 +41,13 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_EnvironmentDetectionSettingData(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/environmentdetection",
 	}
 	elementUnderTest := NewEnvironmentDetectionSettingDataWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_EnvironmentDetectionSettingData Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -55,15 +58,16 @@ func TestPositiveAMT_EnvironmentDetectionSettingData(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_EnvironmentDetectionSettingData Get wsman message",
-				AMT_EnvironmentDetectionSettingData,
-				wsmantesting.GET,
+				AMTEnvironmentDetectionSettingData,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -77,18 +81,19 @@ func TestPositiveAMT_EnvironmentDetectionSettingData(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_EnvironmentDetectionSettingData Enumerate wsman message",
-				AMT_EnvironmentDetectionSettingData,
-				wsmantesting.ENUMERATE,
+				AMTEnvironmentDetectionSettingData,
+				wsmantesting.Enumerate,
 				"",
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
 					if elementUnderTest.base.WSManMessageCreator == nil {
-						print("Error")
+						logrus.Println("Error")
 					}
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -98,15 +103,16 @@ func TestPositiveAMT_EnvironmentDetectionSettingData(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_EnvironmentDetectionSettingData Pull wsman message",
-				AMT_EnvironmentDetectionSettingData,
-				wsmantesting.PULL,
+				AMTEnvironmentDetectionSettingData,
+				wsmantesting.Pull,
 				"",
-				wsmantesting.PULL_BODY,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -125,15 +131,15 @@ func TestPositiveAMT_EnvironmentDetectionSettingData(t *testing.T) {
 					},
 				},
 			},
-			//PUT
+			// PUT
 			{
 				"should create a valid AMT_EnvironmentDetectionSettingData Put wsman message",
-				AMT_EnvironmentDetectionSettingData,
-				wsmantesting.PUT,
+				AMTEnvironmentDetectionSettingData,
+				wsmantesting.Put,
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Environment Detection Settings</w:Selector></w:SelectorSet>",
 				"<h:AMT_EnvironmentDetectionSettingData xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EnvironmentDetectionSettingData\"><h:ElementName>Intel(r) AMT Environment Detection Settings</h:ElementName><h:InstanceID>Intel(r) AMT Environment Detection Settings</h:InstanceID><h:DetectionAlgorithm>0</h:DetectionAlgorithm><h:DetectionStrings>2b14eacc-7f20-4a11-99bc-fdc6a162160b.com</h:DetectionStrings></h:AMT_EnvironmentDetectionSettingData>",
 				func() (Response, error) {
-					client.CurrentMessage = "Put"
+					client.CurrentMessage = wsmantesting.CurrentMessagePut
 					edsd := EnvironmentDetectionSettingDataRequest{
 						H:                  "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EnvironmentDetectionSettingData",
 						ElementName:        "Intel(r) AMT Environment Detection Settings",
@@ -141,6 +147,7 @@ func TestPositiveAMT_EnvironmentDetectionSettingData(t *testing.T) {
 						DetectionAlgorithm: 0,
 						DetectionStrings:   []string{"2b14eacc-7f20-4a11-99bc-fdc6a162160b.com"},
 					}
+
 					return elementUnderTest.Put(edsd)
 				},
 				Body{
@@ -157,7 +164,7 @@ func TestPositiveAMT_EnvironmentDetectionSettingData(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -167,14 +174,16 @@ func TestPositiveAMT_EnvironmentDetectionSettingData(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_EnvironmentDetectionSettingData(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/environmentdetection",
 	}
 	elementUnderTest := NewEnvironmentDetectionSettingDataWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_EnvironmentDetectionSettingData Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -185,15 +194,16 @@ func TestNegativeAMT_EnvironmentDetectionSettingData(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_EnvironmentDetectionSettingData Get wsman message",
-				AMT_EnvironmentDetectionSettingData,
-				wsmantesting.GET,
+				AMTEnvironmentDetectionSettingData,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -207,18 +217,19 @@ func TestNegativeAMT_EnvironmentDetectionSettingData(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_EnvironmentDetectionSettingData Enumerate wsman message",
-				AMT_EnvironmentDetectionSettingData,
-				wsmantesting.ENUMERATE,
+				AMTEnvironmentDetectionSettingData,
+				wsmantesting.Enumerate,
 				"",
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
 					if elementUnderTest.base.WSManMessageCreator == nil {
-						print("Error")
+						logrus.Print("Error")
 					}
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -228,15 +239,16 @@ func TestNegativeAMT_EnvironmentDetectionSettingData(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_EnvironmentDetectionSettingData Pull wsman message",
-				AMT_EnvironmentDetectionSettingData,
-				wsmantesting.PULL,
+				AMTEnvironmentDetectionSettingData,
+				wsmantesting.Pull,
 				"",
-				wsmantesting.PULL_BODY,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -255,15 +267,15 @@ func TestNegativeAMT_EnvironmentDetectionSettingData(t *testing.T) {
 					},
 				},
 			},
-			//PUT
+			// PUT
 			{
 				"should create a valid AMT_EnvironmentDetectionSettingData Put wsman message",
-				AMT_EnvironmentDetectionSettingData,
-				wsmantesting.PUT,
+				AMTEnvironmentDetectionSettingData,
+				wsmantesting.Put,
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Environment Detection Settings</w:Selector></w:SelectorSet>",
 				"<h:AMT_EnvironmentDetectionSettingData xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EnvironmentDetectionSettingData\"><h:ElementName>Intel(r) AMT Environment Detection Settings</h:ElementName><h:InstanceID>Intel(r) AMT Environment Detection Settings</h:InstanceID><h:DetectionAlgorithm>0</h:DetectionAlgorithm><h:DetectionStrings>2b14eacc-7f20-4a11-99bc-fdc6a162160b.com</h:DetectionStrings></h:AMT_EnvironmentDetectionSettingData>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
 					edsd := EnvironmentDetectionSettingDataRequest{
 						H:                  "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EnvironmentDetectionSettingData",
 						ElementName:        "Intel(r) AMT Environment Detection Settings",
@@ -271,6 +283,7 @@ func TestNegativeAMT_EnvironmentDetectionSettingData(t *testing.T) {
 						DetectionAlgorithm: 0,
 						DetectionStrings:   []string{"2b14eacc-7f20-4a11-99bc-fdc6a162160b.com"},
 					}
+
 					return elementUnderTest.Put(edsd)
 				},
 				Body{
@@ -287,7 +300,7 @@ func TestNegativeAMT_EnvironmentDetectionSettingData(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

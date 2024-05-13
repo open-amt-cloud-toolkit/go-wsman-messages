@@ -23,14 +23,14 @@ import (
 // NewWiFiEndpointSettings returns a new instance of the WiFiEndpointSettings struct.
 func NewWiFiEndpointSettingsWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) EndpointSettings {
 	return EndpointSettings{
-		base: message.NewBaseWithClient(wsmanMessageCreator, CIM_WiFiEndpointSettings, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, CIMWiFiEndpointSettings, client),
 	}
 }
 
 // TODO: Figure out how to call GET requiring resourceURIs and Selectors
 // Get retrieves the representation of the instance
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (endpointSettings EndpointSettings) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -47,8 +47,8 @@ func (endpointSettings EndpointSettings) Enumerate() (response Response, err err
 	if err != nil {
 		return
 	}
-	return
 
+	return
 }
 
 // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
@@ -58,18 +58,21 @@ func (endpointSettings EndpointSettings) Pull(enumerationContext string) (respon
 			XMLInput: endpointSettings.base.Pull(enumerationContext),
 		},
 	}
+
 	err = endpointSettings.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Delete removes a the specified instance
+// Delete removes a the specified instance.
 func (endpointSettings EndpointSettings) Delete(handle string) (response Response, err error) {
 	selector := message.Selector{Name: "InstanceID", Value: handle}
 	response = Response{
@@ -87,5 +90,6 @@ func (endpointSettings EndpointSettings) Delete(handle string) (response Respons
 	if err != nil {
 		return
 	}
+
 	return
 }

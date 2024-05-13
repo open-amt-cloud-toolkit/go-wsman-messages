@@ -18,12 +18,11 @@ import (
 // NewComputerSystemPackage returns a new instance of the ComputerSystemPackage struct.
 func NewComputerSystemPackageWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) SystemPackage {
 	return SystemPackage{
-		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_ComputerSystemPackage, client),
-		client: client,
+		base: message.NewBaseWithClient(wsmanMessageCreator, CIMComputerSystemPackage, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (systemPackage SystemPackage) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -40,11 +39,11 @@ func (systemPackage SystemPackage) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
-	return
 
+	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (systemPackage SystemPackage) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -61,8 +60,8 @@ func (systemPackage SystemPackage) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
-	return
 
+	return
 }
 
 // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
@@ -72,13 +71,16 @@ func (systemPackage SystemPackage) Pull(enumerationContext string) (response Res
 			XMLInput: systemPackage.base.Pull(enumerationContext),
 		},
 	}
+
 	err = systemPackage.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }

@@ -41,8 +41,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveIPS_HostBasedSetupService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/ips-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.IPSResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "ips/hostbasedsetup",
 	}
@@ -58,25 +58,26 @@ func TestPositiveIPS_HostBasedSetupService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid IPS_HostBasedSetupService Get wsman message",
-				IPS_HostBasedSetupService,
-				wsmantesting.GET,
+				IPSHostBasedSetupService,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: HostBasedSetupService{
-						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: IPS_HostBasedSetupService},
+						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSHostBasedSetupService), Local: IPSHostBasedSetupService},
 						AllowedControlModes:     []AllowedControlModes{AllowedControlModesAdmin, AllowedControlModesClient},
 						CertChainStatus:         CertChainStatusNotStarted,
 						ConfigurationNonce:      "4P3sY7swlhjkhJNxDkEBIUcmpHE=",
-						CreationClassName:       IPS_HostBasedSetupService,
+						CreationClassName:       IPSHostBasedSetupService,
 						CurrentControlMode:      Admin,
 						ElementName:             "Intel(r) AMT Host Based Setup Service",
 						Name:                    "Intel(r) AMT Host Based Setup Service",
@@ -85,15 +86,16 @@ func TestPositiveIPS_HostBasedSetupService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid IPS_HostBasedSetupService Enumerate wsman message",
-				IPS_HostBasedSetupService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				IPSHostBasedSetupService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -103,15 +105,16 @@ func TestPositiveIPS_HostBasedSetupService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid IPS_HostBasedSetupService Pull wsman message",
-				IPS_HostBasedSetupService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				IPSHostBasedSetupService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -120,11 +123,11 @@ func TestPositiveIPS_HostBasedSetupService(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						HostBasedSetupServiceItems: []HostBasedSetupService{
 							{
-								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: IPS_HostBasedSetupService},
+								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSHostBasedSetupService), Local: IPSHostBasedSetupService},
 								AllowedControlModes:     []AllowedControlModes{AllowedControlModesAdmin, AllowedControlModesClient},
 								CertChainStatus:         CertChainStatusNotStarted,
 								ConfigurationNonce:      "4P3sY7swlhjkhJNxDkEBIUcmpHE=",
-								CreationClassName:       IPS_HostBasedSetupService,
+								CreationClassName:       IPSHostBasedSetupService,
 								CurrentControlMode:      Admin,
 								ElementName:             "Intel(r) AMT Host Based Setup Service",
 								Name:                    "Intel(r) AMT Host Based Setup Service",
@@ -140,17 +143,18 @@ func TestPositiveIPS_HostBasedSetupService(t *testing.T) {
 			{
 				"should create a valid IPS_HostBasedSetupService AddNextCertInChain wsman message",
 				"IPS_HostBasedSetupService",
-				wsmantesting.ADD_NEXT_CERT_IN_CHAIN,
+				wsmantesting.AddNextCertInChain,
 				fmt.Sprintf(`<h:AddNextCertInChain_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService"><h:NextCertificate>%s</h:NextCertificate><h:IsLeafCertificate>true</h:IsLeafCertificate><h:IsRootCertificate>false</h:IsRootCertificate></h:AddNextCertInChain_INPUT>`, wsmantesting.ClientCertificate),
 				"",
 				func() (Response, error) {
 					client.CurrentMessage = "AddNextCertInChain"
+
 					return elementUnderTest.AddNextCertInChain(wsmantesting.ClientCertificate, true, false)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					AddNextCertInChain_OUTPUT: AddNextCertInChain_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: "AddNextCertInChain_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSHostBasedSetupService), Local: "AddNextCertInChain_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
@@ -160,17 +164,18 @@ func TestPositiveIPS_HostBasedSetupService(t *testing.T) {
 			{
 				"should create a valid IPS_HostBasedSetupService AdminSetup wsman message",
 				"IPS_HostBasedSetupService",
-				wsmantesting.ADMIN_SETUP,
+				wsmantesting.AdminSetup,
 				fmt.Sprintf(`<h:AdminSetup_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService"><h:NetAdminPassEncryptionType>%d</h:NetAdminPassEncryptionType><h:NetworkAdminPassword>%s</h:NetworkAdminPassword><h:McNonce>%s</h:McNonce><h:SigningAlgorithm>%d</h:SigningAlgorithm><h:DigitalSignature>%s</h:DigitalSignature></h:AdminSetup_INPUT>`, wsmantesting.AdminPassEncryptionType, "f73b2c17b1ecbd7a235ec37d66cbed71", wsmantesting.MCNonce, wsmantesting.SigningAlgorithm, wsmantesting.DigitalSignature),
 				"",
 				func() (Response, error) {
 					client.CurrentMessage = "AdminSetup"
+
 					return elementUnderTest.AdminSetup(wsmantesting.AdminPassEncryptionType, wsmantesting.DigestRealm, wsmantesting.AdminPassword, wsmantesting.MCNonce, wsmantesting.SigningAlgorithm, wsmantesting.DigitalSignature)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					AdminSetup_OUTPUT: AdminSetup_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: "AdminSetup_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSHostBasedSetupService), Local: "AdminSetup_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
@@ -180,37 +185,39 @@ func TestPositiveIPS_HostBasedSetupService(t *testing.T) {
 			{
 				"should create a valid IPS_HostBasedSetupService UpgradeToAdminSetup wsman message",
 				"IPS_HostBasedSetupService",
-				wsmantesting.UPGRADE_CLIENT_TO_ADMIN,
+				wsmantesting.UpgradeClientToAdmin,
 				fmt.Sprintf(`<h:UpgradeClientToAdmin_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService"><h:McNonce>%s</h:McNonce><h:SigningAlgorithm>%d</h:SigningAlgorithm><h:DigitalSignature>%s</h:DigitalSignature></h:UpgradeClientToAdmin_INPUT>`, wsmantesting.MCNonce, wsmantesting.SigningAlgorithm, wsmantesting.DigitalSignature),
 				"",
 				func() (Response, error) {
 					client.CurrentMessage = "UpgradeClientToAdmin"
+
 					return elementUnderTest.UpgradeClientToAdmin(wsmantesting.MCNonce, wsmantesting.SigningAlgorithm, wsmantesting.DigitalSignature)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					UpgradeClientToAdmin_OUTPUT: UpgradeClientToAdmin_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: "UpgradeClientToAdmin_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSHostBasedSetupService), Local: "UpgradeClientToAdmin_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
 			},
 
-			//Setup
+			// Setup
 			{
 				"should create a valid IPS_HostBasedSetupService Setup wsman message",
 				"IPS_HostBasedSetupService",
-				wsmantesting.SETUP,
+				wsmantesting.Setup,
 				fmt.Sprintf(`<h:Setup_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService"><h:NetAdminPassEncryptionType>%d</h:NetAdminPassEncryptionType><h:NetworkAdminPassword>%s</h:NetworkAdminPassword></h:Setup_INPUT>`, wsmantesting.AdminPassEncryptionType, "f73b2c17b1ecbd7a235ec37d66cbed71"),
 				"",
 				func() (Response, error) {
 					client.CurrentMessage = "Setup"
+
 					return elementUnderTest.Setup(wsmantesting.AdminPassEncryptionType, wsmantesting.DigestRealm, wsmantesting.AdminPassword)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					Setup_OUTPUT: Setup_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: "Setup_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSHostBasedSetupService), Local: "Setup_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
@@ -219,7 +226,7 @@ func TestPositiveIPS_HostBasedSetupService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -229,10 +236,11 @@ func TestPositiveIPS_HostBasedSetupService(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeIPS_HostBasedSetupService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/ips-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.IPSResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "ips/hostbasedsetup",
 	}
@@ -248,25 +256,26 @@ func TestNegativeIPS_HostBasedSetupService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid IPS_HostBasedSetupService Get wsman message",
-				IPS_HostBasedSetupService,
-				wsmantesting.GET,
+				IPSHostBasedSetupService,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: HostBasedSetupService{
-						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: IPS_HostBasedSetupService},
+						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSHostBasedSetupService), Local: IPSHostBasedSetupService},
 						AllowedControlModes:     []AllowedControlModes{AllowedControlModesAdmin, AllowedControlModesClient},
 						CertChainStatus:         CertChainStatusNotStarted,
 						ConfigurationNonce:      "4P3sY7swlhjkhJNxDkEBIUcmpHE=",
-						CreationClassName:       IPS_HostBasedSetupService,
+						CreationClassName:       IPSHostBasedSetupService,
 						CurrentControlMode:      Admin,
 						ElementName:             "Intel(r) AMT Host Based Setup Service",
 						Name:                    "Intel(r) AMT Host Based Setup Service",
@@ -275,15 +284,16 @@ func TestNegativeIPS_HostBasedSetupService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid IPS_HostBasedSetupService Enumerate wsman message",
-				IPS_HostBasedSetupService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				IPSHostBasedSetupService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -293,15 +303,16 @@ func TestNegativeIPS_HostBasedSetupService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid IPS_HostBasedSetupService Pull wsman message",
-				IPS_HostBasedSetupService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				IPSHostBasedSetupService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -310,11 +321,11 @@ func TestNegativeIPS_HostBasedSetupService(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						HostBasedSetupServiceItems: []HostBasedSetupService{
 							{
-								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: IPS_HostBasedSetupService},
+								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSHostBasedSetupService), Local: IPSHostBasedSetupService},
 								AllowedControlModes:     []AllowedControlModes{AllowedControlModesAdmin, AllowedControlModesClient},
 								CertChainStatus:         CertChainStatusNotStarted,
 								ConfigurationNonce:      "4P3sY7swlhjkhJNxDkEBIUcmpHE=",
-								CreationClassName:       IPS_HostBasedSetupService,
+								CreationClassName:       IPSHostBasedSetupService,
 								CurrentControlMode:      Admin,
 								ElementName:             "Intel(r) AMT Host Based Setup Service",
 								Name:                    "Intel(r) AMT Host Based Setup Service",
@@ -330,17 +341,18 @@ func TestNegativeIPS_HostBasedSetupService(t *testing.T) {
 			{
 				"should create a valid IPS_HostBasedSetupService AddNextCertInChain wsman message",
 				"IPS_HostBasedSetupService",
-				wsmantesting.ADD_NEXT_CERT_IN_CHAIN,
+				wsmantesting.AddNextCertInChain,
 				fmt.Sprintf(`<h:AddNextCertInChain_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService"><h:NextCertificate>%s</h:NextCertificate><h:IsLeafCertificate>true</h:IsLeafCertificate><h:IsRootCertificate>false</h:IsRootCertificate></h:AddNextCertInChain_INPUT>`, wsmantesting.ClientCertificate),
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.AddNextCertInChain(wsmantesting.ClientCertificate, true, false)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					AddNextCertInChain_OUTPUT: AddNextCertInChain_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: "AddNextCertInChain_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSHostBasedSetupService), Local: "AddNextCertInChain_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
@@ -350,17 +362,18 @@ func TestNegativeIPS_HostBasedSetupService(t *testing.T) {
 			{
 				"should create a valid IPS_HostBasedSetupService AdminSetup wsman message",
 				"IPS_HostBasedSetupService",
-				wsmantesting.ADMIN_SETUP,
+				wsmantesting.AdminSetup,
 				fmt.Sprintf(`<h:AdminSetup_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService"><h:NetAdminPassEncryptionType>%d</h:NetAdminPassEncryptionType><h:NetworkAdminPassword>%s</h:NetworkAdminPassword><h:McNonce>%s</h:McNonce><h:SigningAlgorithm>%d</h:SigningAlgorithm><h:DigitalSignature>%s</h:DigitalSignature></h:AdminSetup_INPUT>`, wsmantesting.AdminPassEncryptionType, "f73b2c17b1ecbd7a235ec37d66cbed71", wsmantesting.MCNonce, wsmantesting.SigningAlgorithm, wsmantesting.DigitalSignature),
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.AdminSetup(wsmantesting.AdminPassEncryptionType, wsmantesting.DigestRealm, wsmantesting.AdminPassword, wsmantesting.MCNonce, wsmantesting.SigningAlgorithm, wsmantesting.DigitalSignature)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					AdminSetup_OUTPUT: AdminSetup_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: "AdminSetup_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSHostBasedSetupService), Local: "AdminSetup_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
@@ -370,37 +383,39 @@ func TestNegativeIPS_HostBasedSetupService(t *testing.T) {
 			{
 				"should create a valid IPS_HostBasedSetupService UpgradeToAdminSetup wsman message",
 				"IPS_HostBasedSetupService",
-				wsmantesting.UPGRADE_CLIENT_TO_ADMIN,
+				wsmantesting.UpgradeClientToAdmin,
 				fmt.Sprintf(`<h:UpgradeClientToAdmin_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService"><h:McNonce>%s</h:McNonce><h:SigningAlgorithm>%d</h:SigningAlgorithm><h:DigitalSignature>%s</h:DigitalSignature></h:UpgradeClientToAdmin_INPUT>`, wsmantesting.MCNonce, wsmantesting.SigningAlgorithm, wsmantesting.DigitalSignature),
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.UpgradeClientToAdmin(wsmantesting.MCNonce, wsmantesting.SigningAlgorithm, wsmantesting.DigitalSignature)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					UpgradeClientToAdmin_OUTPUT: UpgradeClientToAdmin_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: "UpgradeClientToAdmin_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSHostBasedSetupService), Local: "UpgradeClientToAdmin_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
 			},
 
-			//Setup
+			// Setup
 			{
 				"should create a valid IPS_HostBasedSetupService Setup wsman message",
 				"IPS_HostBasedSetupService",
-				wsmantesting.SETUP,
+				wsmantesting.Setup,
 				fmt.Sprintf(`<h:Setup_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_HostBasedSetupService"><h:NetAdminPassEncryptionType>%d</h:NetAdminPassEncryptionType><h:NetworkAdminPassword>%s</h:NetworkAdminPassword></h:Setup_INPUT>`, wsmantesting.AdminPassEncryptionType, "f73b2c17b1ecbd7a235ec37d66cbed71"),
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Setup(wsmantesting.AdminPassEncryptionType, wsmantesting.DigestRealm, wsmantesting.AdminPassword)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					Setup_OUTPUT: Setup_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_HostBasedSetupService), Local: "Setup_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSHostBasedSetupService), Local: "Setup_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
@@ -409,7 +424,7 @@ func TestNegativeIPS_HostBasedSetupService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

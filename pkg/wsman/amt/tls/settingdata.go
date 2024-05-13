@@ -13,14 +13,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewTLSSettingDataWithClient instantiates a new SettingData
+// NewTLSSettingDataWithClient instantiates a new SettingData.
 func NewTLSSettingDataWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) SettingData {
 	return SettingData{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_TLSSettingData, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTTLSSettingData, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (settingData SettingData) Get(instanceID string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
@@ -41,10 +41,11 @@ func (settingData SettingData) Get(instanceID string) (response Response, err er
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (settingData SettingData) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -61,6 +62,7 @@ func (settingData SettingData) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -81,6 +83,7 @@ func (settingData SettingData) Pull(enumerationContext string) (response Respons
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -95,7 +98,7 @@ func (settingData SettingData) Pull(enumerationContext string) (response Respons
 //
 // This method will not modify the flash ("Enabled" property) until setupandconfiguration.CommitChanges() is issued and performed successfully.
 func (settingData SettingData) Put(instanceID string, tlsSettingData SettingDataRequest) (response Response, err error) {
-	tlsSettingData.H = fmt.Sprintf("%s%s", message.AMTSchema, AMT_TLSSettingData)
+	tlsSettingData.H = fmt.Sprintf("%s%s", message.AMTSchema, AMTTLSSettingData)
 	selector := message.Selector{
 		Name:  "InstanceID",
 		Value: instanceID,
@@ -115,5 +118,6 @@ func (settingData SettingData) Put(instanceID string, tlsSettingData SettingData
 	if err != nil {
 		return
 	}
+
 	return
 }

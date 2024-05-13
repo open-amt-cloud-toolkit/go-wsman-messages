@@ -18,7 +18,7 @@ type SettingData struct {
 }
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -71,9 +71,9 @@ type (
 )
 
 // INPUTS
-// Request Types
+// Request Types.
 type (
-	SetCredentialCacheState_INPUT struct {
+	SetCredentialCacheStateInput struct {
 		XMLName xml.Name `xml:"h:SetCredentialCacheState_INPUT"`
 		H       string   `xml:"xmlns:h,attr"`
 		Enabled bool     `xml:"h:Enabled"`
@@ -84,28 +84,28 @@ type (
 //
 // ValueMap={0, 1, 2, 3}
 //
-// Values={HTTP Protocol definition, HTTPS Protocol definition, SOL&IDER protocol definition, SOL&IDER protocol definition (using SSL)}
+// Values={HTTP Protocol definition, HTTPS Protocol definition, SOL&IDER protocol definition, SOL&IDER protocol definition (using SSL)}.
 type ServicePrincipalProtocol int
 
 // A 16-bit enumeration values that identifier the supported encryption algorithms used in Kerberos authentication. Note: While RC4-HMAC is supported, Intel recommends using AES256-CTS-HMAC-SHA1-96.
 //
 // ValueMap={0, 1, 2, ..}
 //
-// Values={RC4-HMAC, AES128-CTS-HMAC-SHA1-96, AES256-CTS-HMAC-SHA1-96, Reserved}
+// Values={RC4-HMAC, AES128-CTS-HMAC-SHA1-96, AES256-CTS-HMAC-SHA1-96, Reserved}.
 type SupportedEncryptionAlgorithms int
 
 // A 16-bit enumeration values that identifier the configured encryption algorithms used in Kerberos authentication. Note: While RC4-HMAC is supported, Intel recommends using AES256-CTS-HMAC-SHA1-96. Note: Intel AMT does not choose the encryption algorithm to configure based on the values specified by the user. Intel AMT attempts to enable RC4. If a Passphrase and Salt are provided, the AES suites are also configured.
 //
 // ValueMap={0, 1, 2, ..}
 //
-// Values={RC4-HMAC, AES128-CTS-HMAC-SHA1-96, AES256-CTS-HMAC-SHA1-96, Reserved}
+// Values={RC4-HMAC, AES128-CTS-HMAC-SHA1-96, AES256-CTS-HMAC-SHA1-96, Reserved}.
 type ConfiguredEncryptionAlgorithms int
 
 // A 16-bit enumeration value that identifiers the encryption algorithm used in Kerberos authentication.
 //
 // ValueMap={0}
 //
-// Values={RC4 encryption and HMAC authentication}
+// Values={RC4 encryption and HMAC authentication}.
 type EncryptionAlgorithm int
 
 // ReturnValue is a 16-bit enumeration value that indicates the success or failure of an operation.

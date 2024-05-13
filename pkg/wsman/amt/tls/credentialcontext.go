@@ -26,14 +26,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewTLSCredentialContextWithClient instantiates a new CredentialContext
+// NewTLSCredentialContextWithClient instantiates a new CredentialContext.
 func NewTLSCredentialContextWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) CredentialContext {
 	return CredentialContext{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_TLSCredentialContext, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTTLSCredentialContext, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (credentialContext CredentialContext) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -50,10 +50,11 @@ func (credentialContext CredentialContext) Get() (response Response, err error) 
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (credentialContext CredentialContext) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -70,6 +71,7 @@ func (credentialContext CredentialContext) Enumerate() (response Response, err e
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -90,10 +92,11 @@ func (credentialContext CredentialContext) Pull(enumerationContext string) (resp
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Delete removes a the specified instance
+// Delete removes a the specified instance.
 func (credentialContext CredentialContext) Delete(handle string) (response Response, err error) {
 	selector := message.Selector{Name: "Name", Value: handle}
 	response = Response{
@@ -111,13 +114,13 @@ func (credentialContext CredentialContext) Delete(handle string) (response Respo
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Creates a new instance of this class
+// Creates a new instance of this class.
 func (credentialContext CredentialContext) Create(certHandle string) (response Response, err error) {
-
-	header := credentialContext.base.WSManMessageCreator.CreateHeader(message.BaseActionsCreate, AMT_TLSCredentialContext, nil, "", "")
+	header := credentialContext.base.WSManMessageCreator.CreateHeader(message.BaseActionsCreate, AMTTLSCredentialContext, nil, "", "")
 	body := fmt.Sprintf(`<Body><h:AMT_TLSCredentialContext xmlns:h="%sAMT_TLSCredentialContext"><h:ElementInContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementInContext><h:ElementProvidingContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_TLSProtocolEndpointCollection</w:ResourceURI><w:SelectorSet><w:Selector Name="ElementName">TLSProtocolEndpointInstances Collection</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementProvidingContext></h:AMT_TLSCredentialContext></Body>`, credentialContext.base.WSManMessageCreator.ResourceURIBase, credentialContext.base.WSManMessageCreator.ResourceURIBase, certHandle, credentialContext.base.WSManMessageCreator.ResourceURIBase)
 	response = Response{
 		Message: &client.Message{
@@ -134,5 +137,6 @@ func (credentialContext CredentialContext) Create(certHandle string) (response R
 	if err != nil {
 		return
 	}
+
 	return
 }

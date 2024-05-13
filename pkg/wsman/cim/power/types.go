@@ -14,13 +14,12 @@ import (
 )
 
 type ManagementService struct {
-	base   message.Base
-	client client.WSMan
+	base message.Base
 }
 
 type PowerState int
 
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message

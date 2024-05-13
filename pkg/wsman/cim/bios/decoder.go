@@ -6,7 +6,8 @@
 package bios
 
 const (
-	CIM_BIOSElement string = "CIM_BIOSElement"
+	CIMBIOSElement string = "CIM_BIOSElement"
+	ValueNotFound  string = "Value not found in map"
 )
 
 const (
@@ -126,7 +127,7 @@ const (
 	MicrosoftWindowsServer8
 )
 
-// targetOperatingSystemToString is a mapping of the TargetOperatingSystem value to a string
+// targetOperatingSystemToString is a mapping of the TargetOperatingSystem value to a string.
 var targetOperatingSystemToString = map[TargetOperatingSystem]string{
 	Unknown:                          "Unknown",
 	Other:                            "Other",
@@ -244,12 +245,13 @@ var targetOperatingSystemToString = map[TargetOperatingSystem]string{
 	MicrosoftWindowsServer8:          "MicrosoftWindowsServer8",
 }
 
-// String returns the string representation of the TargetOperatingSystem value
+// String returns the string representation of the TargetOperatingSystem value.
 func (t TargetOperatingSystem) String() string {
 	if value, exists := targetOperatingSystemToString[t]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -259,7 +261,7 @@ const (
 	SoftwareElementStateRunning
 )
 
-// SoftwareElementStateToString is a mapping of the SoftwareElementState value to a string
+// SoftwareElementStateToString is a mapping of the SoftwareElementState value to a string.
 var SoftwareElementStateToString = map[SoftwareElementState]string{
 	SoftwareElementStateDeployable:  "Deployable",
 	SoftwareElementStateInstallable: "Installable",
@@ -267,12 +269,13 @@ var SoftwareElementStateToString = map[SoftwareElementState]string{
 	SoftwareElementStateRunning:     "Running",
 }
 
-// String returns the string representation of the SoftwareElementState value
+// String returns the string representation of the SoftwareElementState value.
 func (s SoftwareElementState) String() string {
 	if value, exists := SoftwareElementStateToString[s]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -298,7 +301,7 @@ const (
 	OperationalStatusRelocating
 )
 
-// operationalStatusToString is a mapping of the OperationalStatus value to a string
+// operationalStatusToString is a mapping of the OperationalStatus value to a string.
 var operationalStatusToString = map[OperationalStatus]string{
 	OperationalStatusUnknown:                 "Unknown",
 	OperationalStatusOther:                   "Other",
@@ -322,10 +325,11 @@ var operationalStatusToString = map[OperationalStatus]string{
 	OperationalStatusRelocating:              "Relocating",
 }
 
-// String returns the string representation of the OperationalStatus value
+// String returns the string representation of the OperationalStatus value.
 func (o OperationalStatus) String() string {
 	if value, exists := operationalStatusToString[o]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

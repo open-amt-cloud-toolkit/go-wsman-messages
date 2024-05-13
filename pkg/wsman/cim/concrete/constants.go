@@ -5,4 +5,4 @@
 
 package concrete
 
-const CIM_ConcreteDependency string = "CIM_ConcreteDependency"
+const CIMConcreteDependency string = "CIM_ConcreteDependency"

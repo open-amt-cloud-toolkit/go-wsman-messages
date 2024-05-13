@@ -41,12 +41,13 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_UserInitiatedConnectionService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/userinitiatedconnection",
 	}
 	elementUnderTest := NewUserInitiatedConnectionServiceWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_UserInitiatedConnectionService Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -56,21 +57,22 @@ func TestPositiveAMT_UserInitiatedConnectionService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_UserInitiatedConnectionService Get wsman message",
-				AMT_UserInitiatedConnectionService,
-				wsmantesting.GET,
+				AMTUserInitiatedConnectionService,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: UserResponse{
-						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_UserInitiatedConnectionService), Local: AMT_UserInitiatedConnectionService},
-						CreationClassName:       AMT_UserInitiatedConnectionService,
+						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTUserInitiatedConnectionService), Local: AMTUserInitiatedConnectionService},
+						CreationClassName:       AMTUserInitiatedConnectionService,
 						ElementName:             "Intel(r) AMT User Initiated Connection Service",
 						EnabledState:            32771,
 						Name:                    "Intel(r) AMT User Initiated Connection Service",
@@ -79,14 +81,15 @@ func TestPositiveAMT_UserInitiatedConnectionService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_UserInitiatedConnectionService Enumerate wsman message",
-				AMT_UserInitiatedConnectionService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTUserInitiatedConnectionService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -96,14 +99,15 @@ func TestPositiveAMT_UserInitiatedConnectionService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_UserInitiatedConnectionService Pull wsman message",
-				AMT_UserInitiatedConnectionService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTUserInitiatedConnectionService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -112,8 +116,8 @@ func TestPositiveAMT_UserInitiatedConnectionService(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						UserItems: []UserResponse{
 							{
-								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_UserInitiatedConnectionService), Local: AMT_UserInitiatedConnectionService},
-								CreationClassName:       AMT_UserInitiatedConnectionService,
+								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTUserInitiatedConnectionService), Local: AMTUserInitiatedConnectionService},
+								CreationClassName:       AMTUserInitiatedConnectionService,
 								ElementName:             "Intel(r) AMT User Initiated Connection Service",
 								EnabledState:            32771,
 								Name:                    "Intel(r) AMT User Initiated Connection Service",
@@ -124,20 +128,21 @@ func TestPositiveAMT_UserInitiatedConnectionService(t *testing.T) {
 					},
 				},
 			},
-			//REQUEST STATE CHANGE
+			// REQUEST STATE CHANGE
 			{
 				"should create a valid AMT_UserInitiatedConnectionService RequestStateChange wsman message",
-				AMT_UserInitiatedConnectionService,
-				fmt.Sprintf("%s%s/%s", message.AMTSchema, AMT_UserInitiatedConnectionService, "RequestStateChange"),
+				AMTUserInitiatedConnectionService,
+				fmt.Sprintf("%s%s/%s", message.AMTSchema, AMTUserInitiatedConnectionService, "RequestStateChange"),
 				"<h:RequestStateChange_INPUT xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_UserInitiatedConnectionService\"><h:RequestedState>32771</h:RequestedState></h:RequestStateChange_INPUT>",
 				func() (Response, error) {
 					client.CurrentMessage = "Request"
+
 					return elementUnderTest.RequestStateChange(32771)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					RequestStateChange_OUTPUT: RequestStateChange_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_UserInitiatedConnectionService), Local: "RequestStateChange_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTUserInitiatedConnectionService), Local: "RequestStateChange_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
@@ -146,7 +151,7 @@ func TestPositiveAMT_UserInitiatedConnectionService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -156,14 +161,16 @@ func TestPositiveAMT_UserInitiatedConnectionService(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_UserInitiatedConnectionService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/userinitiatedconnection",
 	}
 	elementUnderTest := NewUserInitiatedConnectionServiceWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_UserInitiatedConnectionService Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -173,21 +180,22 @@ func TestNegativeAMT_UserInitiatedConnectionService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_UserInitiatedConnectionService Get wsman message",
-				AMT_UserInitiatedConnectionService,
-				wsmantesting.GET,
+				AMTUserInitiatedConnectionService,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: UserResponse{
-						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_UserInitiatedConnectionService), Local: AMT_UserInitiatedConnectionService},
-						CreationClassName:       AMT_UserInitiatedConnectionService,
+						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTUserInitiatedConnectionService), Local: AMTUserInitiatedConnectionService},
+						CreationClassName:       AMTUserInitiatedConnectionService,
 						ElementName:             "Intel(r) AMT User Initiated Connection Service",
 						EnabledState:            32771,
 						Name:                    "Intel(r) AMT User Initiated Connection Service",
@@ -196,14 +204,15 @@ func TestNegativeAMT_UserInitiatedConnectionService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_UserInitiatedConnectionService Enumerate wsman message",
-				AMT_UserInitiatedConnectionService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTUserInitiatedConnectionService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -213,14 +222,15 @@ func TestNegativeAMT_UserInitiatedConnectionService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_UserInitiatedConnectionService Pull wsman message",
-				AMT_UserInitiatedConnectionService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTUserInitiatedConnectionService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -229,8 +239,8 @@ func TestNegativeAMT_UserInitiatedConnectionService(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						UserItems: []UserResponse{
 							{
-								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_UserInitiatedConnectionService), Local: AMT_UserInitiatedConnectionService},
-								CreationClassName:       AMT_UserInitiatedConnectionService,
+								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTUserInitiatedConnectionService), Local: AMTUserInitiatedConnectionService},
+								CreationClassName:       AMTUserInitiatedConnectionService,
 								ElementName:             "Intel(r) AMT User Initiated Connection Service",
 								EnabledState:            32771,
 								Name:                    "Intel(r) AMT User Initiated Connection Service",
@@ -241,20 +251,21 @@ func TestNegativeAMT_UserInitiatedConnectionService(t *testing.T) {
 					},
 				},
 			},
-			//REQUEST STATE CHANGE
+			// REQUEST STATE CHANGE
 			{
 				"should create a valid AMT_UserInitiatedConnectionService RequestStateChange wsman message",
-				AMT_UserInitiatedConnectionService,
-				fmt.Sprintf("%s%s/%s", message.AMTSchema, AMT_UserInitiatedConnectionService, "RequestStateChange"),
+				AMTUserInitiatedConnectionService,
+				fmt.Sprintf("%s%s/%s", message.AMTSchema, AMTUserInitiatedConnectionService, "RequestStateChange"),
 				"<h:RequestStateChange_INPUT xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_UserInitiatedConnectionService\"><h:RequestedState>32771</h:RequestedState></h:RequestStateChange_INPUT>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.RequestStateChange(32771)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					RequestStateChange_OUTPUT: RequestStateChange_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_UserInitiatedConnectionService), Local: "RequestStateChange_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTUserInitiatedConnectionService), Local: "RequestStateChange_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
@@ -263,7 +274,7 @@ func TestNegativeAMT_UserInitiatedConnectionService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

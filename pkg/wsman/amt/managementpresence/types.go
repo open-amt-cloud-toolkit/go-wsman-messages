@@ -18,7 +18,7 @@ type RemoteSAP struct {
 }
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message

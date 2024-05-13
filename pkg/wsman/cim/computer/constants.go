@@ -5,4 +5,4 @@
 
 package computer
 
-const CIM_ComputerSystemPackage string = "CIM_ComputerSystemPackage"
+const CIMComputerSystemPackage string = "CIM_ComputerSystemPackage"

@@ -19,8 +19,8 @@ import (
 
 func TestPositiveAMT_TLSProtocolEndpointCollection(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/tls/protocolendpointcollection",
 	}
@@ -36,34 +36,36 @@ func TestPositiveAMT_TLSProtocolEndpointCollection(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_TLSProtocolEndpointCollection Get wsman message",
-				AMT_TLSProtocolEndpointCollection,
-				wsmantesting.GET,
+				AMTTLSProtocolEndpointCollection,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					ProtocolEndpointCollectionGetResponse: ProtocolEndpointCollectionResponse{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_TLSProtocolEndpointCollection), Local: AMT_TLSProtocolEndpointCollection},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTTLSProtocolEndpointCollection), Local: AMTTLSProtocolEndpointCollection},
 						ElementName: "TLSProtocolEndpoint Instances Collection",
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_TLSProtocolEndpointCollection Enumerate wsman message",
-				AMT_TLSProtocolEndpointCollection,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTTLSProtocolEndpointCollection,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -73,15 +75,16 @@ func TestPositiveAMT_TLSProtocolEndpointCollection(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_TLSProtocolEndpointCollection Pull wsman message",
-				AMT_TLSProtocolEndpointCollection,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTTLSProtocolEndpointCollection,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -90,7 +93,7 @@ func TestPositiveAMT_TLSProtocolEndpointCollection(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						ProtocolEndpointCollectionItems: []ProtocolEndpointCollectionResponse{
 							{
-								XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_TLSProtocolEndpointCollection), Local: AMT_TLSProtocolEndpointCollection},
+								XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTTLSProtocolEndpointCollection), Local: AMTTLSProtocolEndpointCollection},
 								ElementName: "TLSProtocolEndpoint Instances Collection",
 							},
 						},
@@ -100,7 +103,7 @@ func TestPositiveAMT_TLSProtocolEndpointCollection(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -110,10 +113,11 @@ func TestPositiveAMT_TLSProtocolEndpointCollection(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_TLSProtocolEndpointCollection(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/tls/protocolendpointcollection",
 	}
@@ -129,34 +133,36 @@ func TestNegativeAMT_TLSProtocolEndpointCollection(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_TLSProtocolEndpointCollection Get wsman message",
-				AMT_TLSProtocolEndpointCollection,
-				wsmantesting.GET,
+				AMTTLSProtocolEndpointCollection,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					ProtocolEndpointCollectionGetResponse: ProtocolEndpointCollectionResponse{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_TLSProtocolEndpointCollection), Local: AMT_TLSProtocolEndpointCollection},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTTLSProtocolEndpointCollection), Local: AMTTLSProtocolEndpointCollection},
 						ElementName: "TLSProtocolEndpoint Instances Collection",
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_TLSProtocolEndpointCollection Enumerate wsman message",
-				AMT_TLSProtocolEndpointCollection,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTTLSProtocolEndpointCollection,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -166,15 +172,16 @@ func TestNegativeAMT_TLSProtocolEndpointCollection(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_TLSProtocolEndpointCollection Pull wsman message",
-				AMT_TLSProtocolEndpointCollection,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTTLSProtocolEndpointCollection,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -183,7 +190,7 @@ func TestNegativeAMT_TLSProtocolEndpointCollection(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						ProtocolEndpointCollectionItems: []ProtocolEndpointCollectionResponse{
 							{
-								XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_TLSProtocolEndpointCollection), Local: AMT_TLSProtocolEndpointCollection},
+								XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTTLSProtocolEndpointCollection), Local: AMTTLSProtocolEndpointCollection},
 								ElementName: "TLSProtocolEndpoint Instances Collection",
 							},
 						},
@@ -193,7 +200,7 @@ func TestNegativeAMT_TLSProtocolEndpointCollection(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

@@ -13,14 +13,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewManagementPresenceRemoteSAPWithClient instantiates a new RemoteSAP
+// NewManagementPresenceRemoteSAPWithClient instantiates a new RemoteSAP.
 func NewManagementPresenceRemoteSAPWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) RemoteSAP {
 	return RemoteSAP{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_ManagementPresenceRemoteSAP, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTManagementPresenceRemoteSAP, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (remoteSAP RemoteSAP) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -37,10 +37,11 @@ func (remoteSAP RemoteSAP) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (remoteSAP RemoteSAP) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -57,6 +58,7 @@ func (remoteSAP RemoteSAP) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -77,10 +79,11 @@ func (remoteSAP RemoteSAP) Pull(enumerationContext string) (response Response, e
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Delete removes a the specified instance
+// Delete removes a the specified instance.
 func (remoteSAP RemoteSAP) Delete(handle string) (response Response, err error) {
 	selector := message.Selector{Name: "Name", Value: handle}
 	response = Response{
@@ -98,5 +101,6 @@ func (remoteSAP RemoteSAP) Delete(handle string) (response Response, err error) 
 	if err != nil {
 		return
 	}
+
 	return
 }

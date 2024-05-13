@@ -16,33 +16,37 @@ import (
 // NewAlarmClockOccurrence returns a new instance of the AlarmClockOccurrence struct.
 func NewAlarmClockOccurrenceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Occurrence {
 	return Occurrence{
-		base: message.NewBaseWithClient(wsmanMessageCreator, IPS_AlarmClockOccurrence, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, IPSAlarmClockOccurrence, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (occurrence Occurrence) Get(alarmName string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "Name",
 		Value: alarmName,
 	}
+
 	response = Response{
 		Message: &client.Message{
 			XMLInput: occurrence.base.Get(&selector),
 		},
 	}
+
 	err = occurrence.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Delete removes a the specified instance
+// Delete removes a the specified instance.
 func (occurrence Occurrence) Delete(handle string) (response Response, err error) {
 	selector := message.Selector{Name: "Name", Value: handle}
 	response = Response{
@@ -50,32 +54,38 @@ func (occurrence Occurrence) Delete(handle string) (response Response, err error
 			XMLInput: occurrence.base.Delete(selector),
 		},
 	}
+
 	err = occurrence.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (occurrence Occurrence) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: occurrence.base.Enumerate(),
 		},
 	}
+
 	err = occurrence.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -86,13 +96,16 @@ func (occurrence Occurrence) Pull(enumerationContext string) (response Response,
 			XMLInput: occurrence.base.Pull(enumerationContext),
 		},
 	}
+
 	err = occurrence.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }

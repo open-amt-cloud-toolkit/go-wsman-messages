@@ -6,13 +6,14 @@
 package ethernetport
 
 const (
-	AMT_EthernetPortSettings string = "AMT_EthernetPortSettings"
+	AMTEthernetPortSettings string = "AMT_EthernetPortSettings"
+	ValueNotFound           string = "Value not found in map"
 )
 
 const (
-	ConsoleTcpMaxRetransmissions_5 ConsoleTcpMaxRetransmissions = iota + 5
-	ConsoleTcpMaxRetransmissions_6
-	ConsoleTcpMaxRetransmissions_7
+	ConsoleTCPMaxRetransmissions5 ConsoleTCPMaxRetransmissions = iota + 5
+	ConsoleTCPMaxRetransmissions6
+	ConsoleTCPMaxRetransmissions7
 )
 
 const (
@@ -22,7 +23,7 @@ const (
 	LinkPolicySxDC LinkPolicy = 224 // available on Sx DC
 )
 
-// linkPolicyToString is a map of LinkPolicy values to their string representations
+// linkPolicyToString is a map of LinkPolicy values to their string representations.
 var linkPolicyToString = map[LinkPolicy]string{
 	LinkPolicyS0AC: "LinkPolicyS0AC",
 	LinkPolicySxAC: "LinkPolicySxAC",
@@ -30,13 +31,13 @@ var linkPolicyToString = map[LinkPolicy]string{
 	LinkPolicySxDC: "LinkPolicySxDC",
 }
 
-// String returns the string representation of the LinkPolicy value
+// String returns the string representation of the LinkPolicy value.
 func (l LinkPolicy) String() string {
 	if value, exists := linkPolicyToString[l]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -44,19 +45,19 @@ const (
 	LinkPreferenceHOST
 )
 
-// linkPreferenceToString is a map of LinkPreference values to their string representations
+// linkPreferenceToString is a map of LinkPreference values to their string representations.
 var linkPreferenceToString = map[LinkPreference]string{
 	LinkPreferenceME:   "LinkPreferenceME",
 	LinkPreferenceHOST: "LinkPreferenceHOST",
 }
 
-// String returns the string representation of the LinkPreference value
+// String returns the string representation of the LinkPreference value.
 func (l LinkPreference) String() string {
 	if value, exists := linkPreferenceToString[l]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -64,19 +65,19 @@ const (
 	LinkControlHOST
 )
 
-// linkControlToString is a map of LinkControl values to their string representations
+// linkControlToString is a map of LinkControl values to their string representations.
 var linkControlToString = map[LinkControl]string{
 	LinkControlME:   "LinkControlME",
 	LinkControlHOST: "LinkControlHOST",
 }
 
-// String returns the string representation of the LinkControl value
+// String returns the string representation of the LinkControl value.
 func (l LinkControl) String() string {
 	if value, exists := linkControlToString[l]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -86,7 +87,7 @@ const (
 	WLANLinkProtectionLevelHigh
 )
 
-// wlanLinkProtectionLevelToString is a map of WLANLinkProtectionLevel values to their string representations
+// wlanLinkProtectionLevelToString is a map of WLANLinkProtectionLevel values to their string representations.
 var wlanLinkProtectionLevelToString = map[WLANLinkProtectionLevel]string{
 	WLANLinkProtectionLevelOverride: "WLANLinkProtectionLevelOverride",
 	WLANLinkProtectionLevelNone:     "WLANLinkProtectionLevelNone",
@@ -94,13 +95,13 @@ var wlanLinkProtectionLevelToString = map[WLANLinkProtectionLevel]string{
 	WLANLinkProtectionLevelHigh:     "WLANLinkProtectionLevelHigh",
 }
 
-// String returns the string representation of the WLANLinkProtectionLevel value
+// String returns the string representation of the WLANLinkProtectionLevel value.
 func (w WLANLinkProtectionLevel) String() string {
 	if value, exists := wlanLinkProtectionLevelToString[w]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -110,7 +111,7 @@ const (
 	PhysicalConnectionWirelessLAN
 )
 
-// PhysicalConnectionTypeToString is a map of PhysicalConnectionType values to their string representations
+// PhysicalConnectionTypeToString is a map of PhysicalConnectionType values to their string representations.
 var PhysicalConnectionTypeToString = map[PhysicalConnectionType]string{
 	PhysicalConnectionIntegratedLANNIC:      "PhysicalConnectionIntegratedLANNIC",
 	PhysicalConnectionDiscreteLANNIC:        "PhysicalConnectionDiscreteLANNIC",
@@ -118,13 +119,13 @@ var PhysicalConnectionTypeToString = map[PhysicalConnectionType]string{
 	PhysicalConnectionWirelessLAN:           "PhysicalConnectionWirelessLAN",
 }
 
-// String returns the string representation of the PhysicalConnectionType value
+// String returns the string representation of the PhysicalConnectionType value.
 func (p PhysicalConnectionType) String() string {
 	if value, exists := PhysicalConnectionTypeToString[p]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -132,17 +133,17 @@ const (
 	PhysicalNicMediumPCIe
 )
 
-// PhysicalNicMediumToString is a map of PhysicalNicMedium values to their string representations
+// PhysicalNicMediumToString is a map of PhysicalNicMedium values to their string representations.
 var PhysicalNicMediumToString = map[PhysicalNicMedium]string{
 	PhysicalNicMediumSMBUS: "PhysicalNicMediumSMBUS",
 	PhysicalNicMediumPCIe:  "PhysicalNicMediumPCIe",
 }
 
-// String returns the string representation of the PhysicalNicMedium value
+// String returns the string representation of the PhysicalNicMedium value.
 func (p PhysicalNicMedium) String() string {
 	if value, exists := PhysicalNicMediumToString[p]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }

@@ -18,8 +18,7 @@ import (
 // NewWiFiPort returns a new instance of the WiFiPort struct.
 func NewWiFiPortWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Port {
 	return Port{
-		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_WiFiPort, client),
-		client: client,
+		base: message.NewBaseWithClient(wsmanMessageCreator, CIMWiFiPort, client),
 	}
 }
 
@@ -27,26 +26,28 @@ func NewWiFiPortWithClient(wsmanMessageCreator *message.WSManMessageCreator, cli
 func (port Port) RequestStateChange(requestedState int) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
-			XMLInput: port.base.RequestStateChange(methods.GenerateAction(CIM_WiFiPort, "RequestStateChange"), requestedState),
+			XMLInput: port.base.RequestStateChange(methods.GenerateAction(CIMWiFiPort, "RequestStateChange"), requestedState),
 		},
 	}
 
 	err = port.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
 
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
+
 	if response.Body.RequestStateChange_OUTPUT.ReturnValue != 0 {
 		err = errors.New("RequestStateChange failed with return code " + strconv.Itoa(response.Body.RequestStateChange_OUTPUT.ReturnValue))
 	}
-	return
+
+	return response, err
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (port Port) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -56,18 +57,18 @@ func (port Port) Get() (response Response, err error) {
 
 	err = port.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
 
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
-	return
 
+	return response, err
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (port Port) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -77,15 +78,15 @@ func (port Port) Enumerate() (response Response, err error) {
 
 	err = port.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
 
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
-	return
 
+	return response, err
 }
 
 // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
@@ -95,13 +96,16 @@ func (port Port) Pull(enumerationContext string) (response Response, err error) 
 			XMLInput: port.base.Pull(enumerationContext),
 		},
 	}
+
 	err = port.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
-	return
+
+	return response, err
 }

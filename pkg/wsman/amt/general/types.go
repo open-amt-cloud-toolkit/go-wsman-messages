@@ -18,7 +18,7 @@ type Settings struct {
 }
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -68,12 +68,11 @@ type (
 		DHCPSyncRequiresHostname      DHCPSyncRequiresHostname `xml:"DHCPSyncRequiresHostname,omitempty"`      // When set to Enabled, the Intel AMT device will require the client to provide a hostname when requesting an IP address from a DHCP server. This setting is only applicable when DHCP is enabled. Values: 0=Disabled, 1=Enabled. Default: Disabled.
 	}
 
-	PutResponse struct {
-	}
+	PutResponse struct{}
 )
 
 // INPUTS
-// Request Types
+// Request Types.
 type (
 	GeneralSettingsRequest struct {
 		XMLName                       xml.Name               `xml:"h:AMT_GeneralSettings"`
@@ -106,14 +105,14 @@ type (
 //
 // ValueMap={0, 1, 2..}
 //
-// Values={IPv4, IPv6, Reserved}
+// Values={IPv4, IPv6, Reserved}.
 type PreferredAddressFamily int
 
 // When set to Disabled, the AMT OOB network interfaces (LAN and WLAN) are disabled including AMT user initiated applications, Environment Detection and RMCPPing. Since OOB networking is disabled, there will not be an option to enable it back remotely.
 //
 // ValueMap={0, 1, 2..}
 //
-// Values={Disabled, Enabled, Reserved}
+// Values={Disabled, Enabled, Reserved}.
 type AMTNetwork int
 
 // When set to Disabled, a management console cannot communicate with Intel AMT via a Thunderbolt dock. Available in Release 15.0 and later releases.
@@ -130,7 +129,7 @@ type ThunderboltDock int
 // Extreme: SOL enabled = false, IDER enabled = false, KVM enabled = false, Opt-in can be disabled = false, opt-in configurable remotely = false. From Intel ME 8: Also Client Control Mode allowed=false and RCFG enabled = false.
 type PrivacyLevel int
 
-// The system current power source
+// The system current power source.
 type PowerSource int
 
 // When set to Enabled, the Intel AMT device will require the client to provide a hostname when requesting an IP address from a DHCP server. This setting is only applicable when DHCP is enabled. Values: 0=Disabled, 1=Enabled. Default: Disabled.

@@ -40,8 +40,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveCIMSoftwareIdentity(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/software/identity",
 	}
@@ -57,15 +57,16 @@ func TestPositiveCIMSoftwareIdentity(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create and parse a valid cim_SoftwareIdentity Get call",
-				CIM_SoftwareIdentity,
-				wsmantesting.GET,
+				CIMSoftwareIdentity,
+				wsmantesting.Get,
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">AMTApps</w:Selector></w:SelectorSet>",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get("AMTApps")
 				},
 				Body{
@@ -78,15 +79,16 @@ func TestPositiveCIMSoftwareIdentity(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create and parse a valid cim_SoftwareIdentity Enumerate call",
-				CIM_SoftwareIdentity,
-				wsmantesting.ENUMERATE,
+				CIMSoftwareIdentity,
+				wsmantesting.Enumerate,
 				"",
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -96,15 +98,16 @@ func TestPositiveCIMSoftwareIdentity(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create and parse a valid cim_SoftwareIdentity Pull call",
-				CIM_SoftwareIdentity,
-				wsmantesting.PULL,
+				CIMSoftwareIdentity,
+				wsmantesting.Pull,
 				"",
-				wsmantesting.PULL_BODY,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -186,7 +189,7 @@ func TestPositiveCIMSoftwareIdentity(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeaders, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeaders, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -196,10 +199,11 @@ func TestPositiveCIMSoftwareIdentity(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeCIMSoftwareIdentity(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/software/identity",
 	}
@@ -215,15 +219,16 @@ func TestNegativeCIMSoftwareIdentity(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create and parse a valid cim_SoftwareIdentity Get call",
-				CIM_SoftwareIdentity,
-				wsmantesting.GET,
+				CIMSoftwareIdentity,
+				wsmantesting.Get,
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">AMTApps</w:Selector></w:SelectorSet>",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get("AMTApps")
 				},
 				Body{
@@ -236,15 +241,16 @@ func TestNegativeCIMSoftwareIdentity(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create and parse a valid cim_SoftwareIdentity Enumerate call",
-				CIM_SoftwareIdentity,
-				wsmantesting.ENUMERATE,
+				CIMSoftwareIdentity,
+				wsmantesting.Enumerate,
 				"",
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -254,15 +260,16 @@ func TestNegativeCIMSoftwareIdentity(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create and parse a valid cim_SoftwareIdentity Pull call",
-				CIM_SoftwareIdentity,
-				wsmantesting.PULL,
+				CIMSoftwareIdentity,
+				wsmantesting.Pull,
 				"",
-				wsmantesting.PULL_BODY,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -344,7 +351,7 @@ func TestNegativeCIMSoftwareIdentity(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeaders, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeaders, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

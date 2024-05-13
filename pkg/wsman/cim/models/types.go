@@ -121,31 +121,33 @@ type PhysicalPackage struct {
 }
 
 /**
- * Enabled:1 | Disabled:2 | Enabled For Debug:3
+ * Enabled:1 | Disabled:2 | Enabled For Debug:3.
  */
-type Enabled int
-type PhysicalFrame struct {
-	PhysicalPackage
-	VendorCompatibilityStrings []string `xml:"VendorCompatibilityStrings,omitempty"`
-	OtherPackageType           string   `xml:"OtherPackageType,omitempty"`
-	Weight                     int      `xml:"Weight,omitempty"`
-	Width                      int      `xml:"Width,omitempty"`
-	Depth                      int      `xml:"Depth,omitempty"`
-	Height                     int      `xml:"Height,omitempty"`
-	RemovalConditions          int      `xml:"RemovalConditions,omitempty"`
-	Removable                  bool     `xml:"Removable,omitempty"`
-	Replaceable                bool     `xml:"Replaceable,omitempty"`
-	HotSwappable               bool     `xml:"HotSwappable,omitempty"`
-	CableManagementStrategy    string   `xml:"CableManagementStrategy,omitempty"`
-	ServicePhilosophy          int      `xml:"ServicePhilosophy,omitempty"`
-	ServiceDescriptions        []string `xml:"ServiceDescriptions,omitempty"`
-	LockPresent                bool     `xml:"LockPresent,omitempty"`
-	AudibleAlarm               bool     `xml:"AudibleAlarm,omitempty"`
-	VisibleAlarm               bool     `xml:"VisibleAlarm,omitempty"`
-	SecurityBreach             int      `xml:"SecurityBreach,omitempty"`
-	BreachDescription          string   `xml:"BreachDescription,omitempty"`
-	IsLocked                   bool     `xml:"IsLocked,omitempty"`
-}
+type (
+	Enabled       int
+	PhysicalFrame struct {
+		PhysicalPackage
+		VendorCompatibilityStrings []string `xml:"VendorCompatibilityStrings,omitempty"`
+		OtherPackageType           string   `xml:"OtherPackageType,omitempty"`
+		Weight                     int      `xml:"Weight,omitempty"`
+		Width                      int      `xml:"Width,omitempty"`
+		Depth                      int      `xml:"Depth,omitempty"`
+		Height                     int      `xml:"Height,omitempty"`
+		RemovalConditions          int      `xml:"RemovalConditions,omitempty"`
+		Removable                  bool     `xml:"Removable,omitempty"`
+		Replaceable                bool     `xml:"Replaceable,omitempty"`
+		HotSwappable               bool     `xml:"HotSwappable,omitempty"`
+		CableManagementStrategy    string   `xml:"CableManagementStrategy,omitempty"`
+		ServicePhilosophy          int      `xml:"ServicePhilosophy,omitempty"`
+		ServiceDescriptions        []string `xml:"ServiceDescriptions,omitempty"`
+		LockPresent                bool     `xml:"LockPresent,omitempty"`
+		AudibleAlarm               bool     `xml:"AudibleAlarm,omitempty"`
+		VisibleAlarm               bool     `xml:"VisibleAlarm,omitempty"`
+		SecurityBreach             int      `xml:"SecurityBreach,omitempty"`
+		BreachDescription          string   `xml:"BreachDescription,omitempty"`
+		IsLocked                   bool     `xml:"IsLocked,omitempty"`
+	}
+)
 
 type Chassis struct {
 	PhysicalFrame
@@ -485,30 +487,34 @@ type ServiceAccessPoint struct {
 	CreationClassName       string `xml:"CreationClassName,omitempty"`
 }
 
-type OverwritePolicy int
-type LogState int
-type CapabilitiesValues int
-type LastChange int
-type CharacterSet int
-type BootConfigSettingInstanceID string
-type FailThroughSupported int
-type RemovalConditions int
-type PackageType int
-type ServicePhilosophy int
-type SecurityBreach int
-type ChassisPackageType int
-type SoftwareElementState int
-type TargetOperatingSystem int
+type (
+	OverwritePolicy             int
+	LogState                    int
+	CapabilitiesValues          int
+	LastChange                  int
+	CharacterSet                int
+	BootConfigSettingInstanceID string
+	FailThroughSupported        int
+	RemovalConditions           int
+	PackageType                 int
+	ServicePhilosophy           int
+	SecurityBreach              int
+	ChassisPackageType          int
+	SoftwareElementState        int
+	TargetOperatingSystem       int
+)
 
 // ServerCertificateNameComparison represents the ServerCertificateNameComparison type for IEEE8021xProfile.
 type ServerCertificateNameComparison int
 
 // PowerState represents the PowerState type in the PowerManagementService namespace.
 
-type UpgradeMethod int
-type CPUStatus int
-type OperationalStatus int
-type HealthState int
-type EnabledState int
-type RequestedState int
-type EnabledDefault int
+type (
+	UpgradeMethod     int
+	CPUStatus         int
+	OperationalStatus int
+	HealthState       int
+	EnabledState      int
+	RequestedState    int
+	EnabledDefault    int
+)

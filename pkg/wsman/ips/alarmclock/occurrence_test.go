@@ -41,8 +41,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveIPS_AlarmClockOccurrence(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/ips-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.IPSResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "ips/alarmclock",
 	}
@@ -58,21 +58,22 @@ func TestPositiveIPS_AlarmClockOccurrence(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid ips_AlarmClockOccurrence Get wsman message",
 				"IPS_AlarmClockOccurrence",
-				wsmantesting.GET,
+				wsmantesting.Get,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"Name\">testalarm</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get("testalarm")
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: AlarmClockOccurrence{
-						XMLName:            xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_AlarmClockOccurrence), Local: IPS_AlarmClockOccurrence},
+						XMLName:            xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSAlarmClockOccurrence), Local: IPSAlarmClockOccurrence},
 						ElementName:        "testalarm",
 						InstanceID:         "testalarm",
 						StartTime:          "testdatetime",
@@ -81,15 +82,16 @@ func TestPositiveIPS_AlarmClockOccurrence(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid IPS_AlarmClockOccurrence Enumerate wsman message",
 				"IPS_AlarmClockOccurrence",
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -99,15 +101,16 @@ func TestPositiveIPS_AlarmClockOccurrence(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid IPS_AlarmClockOccurrence Pull wsman message",
 				"IPS_AlarmClockOccurrence",
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -116,7 +119,7 @@ func TestPositiveIPS_AlarmClockOccurrence(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						Items: []AlarmClockOccurrence{
 							{
-								XMLName:            xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_AlarmClockOccurrence), Local: IPS_AlarmClockOccurrence},
+								XMLName:            xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSAlarmClockOccurrence), Local: IPSAlarmClockOccurrence},
 								ElementName:        "testalarm",
 								InstanceID:         "testalarm",
 								StartTime:          "testdatetime",
@@ -131,11 +134,12 @@ func TestPositiveIPS_AlarmClockOccurrence(t *testing.T) {
 			{
 				"should create a valid ips_AlarmClockOccurrence Delete wsman message",
 				"IPS_AlarmClockOccurrence",
-				wsmantesting.DELETE,
+				wsmantesting.Delete,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"Name\">testalarm</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Delete"
+					client.CurrentMessage = wsmantesting.CurrentMessageDelete
+
 					return elementUnderTest.Delete("testalarm")
 				},
 				Body{XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"}},
@@ -144,7 +148,7 @@ func TestPositiveIPS_AlarmClockOccurrence(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -154,10 +158,11 @@ func TestPositiveIPS_AlarmClockOccurrence(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeIPS_AlarmClockOccurrence(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/ips-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.IPSResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "ips/alarmclock",
 	}
@@ -173,21 +178,22 @@ func TestNegativeIPS_AlarmClockOccurrence(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid ips_AlarmClockOccurrence Get wsman message",
 				"IPS_AlarmClockOccurrence",
-				wsmantesting.GET,
+				wsmantesting.Get,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"Name\">testalarm</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get("testalarm")
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: AlarmClockOccurrence{
-						XMLName:            xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_AlarmClockOccurrence), Local: IPS_AlarmClockOccurrence},
+						XMLName:            xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSAlarmClockOccurrence), Local: IPSAlarmClockOccurrence},
 						ElementName:        "testalarm",
 						InstanceID:         "testalarm",
 						StartTime:          "testdatetime",
@@ -196,15 +202,16 @@ func TestNegativeIPS_AlarmClockOccurrence(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid IPS_AlarmClockOccurrence Enumerate wsman message",
 				"IPS_AlarmClockOccurrence",
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -214,15 +221,16 @@ func TestNegativeIPS_AlarmClockOccurrence(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid IPS_AlarmClockOccurrence Pull wsman message",
 				"IPS_AlarmClockOccurrence",
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -231,7 +239,7 @@ func TestNegativeIPS_AlarmClockOccurrence(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						Items: []AlarmClockOccurrence{
 							{
-								XMLName:            xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_AlarmClockOccurrence), Local: IPS_AlarmClockOccurrence},
+								XMLName:            xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSAlarmClockOccurrence), Local: IPSAlarmClockOccurrence},
 								ElementName:        "testalarm",
 								InstanceID:         "testalarm",
 								StartTime:          "testdatetime",
@@ -246,11 +254,12 @@ func TestNegativeIPS_AlarmClockOccurrence(t *testing.T) {
 			{
 				"should create a valid ips_AlarmClockOccurrence Delete wsman message",
 				"IPS_AlarmClockOccurrence",
-				wsmantesting.DELETE,
+				wsmantesting.Delete,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"Name\">testalarm</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Delete("testalarm")
 				},
 				Body{XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"}},
@@ -259,7 +268,7 @@ func TestNegativeIPS_AlarmClockOccurrence(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

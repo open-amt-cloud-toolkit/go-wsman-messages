@@ -18,8 +18,8 @@ import (
 
 func TestPositiveService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/boot/service",
 	}
@@ -34,20 +34,21 @@ func TestPositiveService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create and parse a valid cim_BootService Get call",
-				CIM_BootService,
-				wsmantesting.GET,
+				CIMBootService,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					ServiceGetResponse: BootService{
-						XMLName:                 xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService", Local: CIM_BootService},
+						XMLName:                 xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService", Local: CIMBootService},
 						Name:                    "Intel(r) AMT Boot Service",
 						CreationClassName:       "CIM_BootService",
 						SystemName:              "Intel(r) AMT",
@@ -59,14 +60,15 @@ func TestPositiveService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create and parse a valid cim_BootService Enumerate call",
-				CIM_BootService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMBootService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -76,14 +78,15 @@ func TestPositiveService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create and parse a valid cim_BootService Pull call",
-				CIM_BootService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMBootService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -91,7 +94,7 @@ func TestPositiveService(t *testing.T) {
 					PullResponse: PullResponse{
 						BootServiceItems: []BootService{
 							{
-								XMLName:                 xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService", Local: CIM_BootService},
+								XMLName:                 xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService", Local: CIMBootService},
 								Name:                    "Intel(r) AMT Boot Service",
 								CreationClassName:       "CIM_BootService",
 								SystemName:              "Intel(r) AMT",
@@ -108,11 +111,12 @@ func TestPositiveService(t *testing.T) {
 			// SetBootConfigRole
 			{
 				"should handle error when making cim_BootService SetBootConfigRole wsman message",
-				CIM_BootService,
-				wsmantesting.SET_BOOT_CONFIG_ROLE,
+				CIMBootService,
+				wsmantesting.SetBootConfigRole,
 				`<h:SetBootConfigRole_INPUT xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService"><h:BootConfigSetting><Address xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing"><ResourceURI xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting</ResourceURI><SelectorSet xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><Selector Name="InstanceID">InstanceID</Selector></SelectorSet></ReferenceParameters></h:BootConfigSetting><h:Role>0</h:Role></h:SetBootConfigRole_INPUT>`,
 				func() (Response, error) {
 					client.CurrentMessage = "SetBootConfigRole"
+
 					return elementUnderTest.SetBootConfigRole("InstanceID", 0)
 				},
 				Body{
@@ -126,7 +130,7 @@ func TestPositiveService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -139,8 +143,8 @@ func TestPositiveService(t *testing.T) {
 
 func TestNegativeService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/boot/service",
 	}
@@ -155,20 +159,21 @@ func TestNegativeService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should handle error when making cim_BootService Get call",
-				CIM_BootService,
-				wsmantesting.GET,
+				CIMBootService,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					ServiceGetResponse: BootService{
-						XMLName:                 xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService", Local: CIM_BootService},
+						XMLName:                 xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService", Local: CIMBootService},
 						Name:                    "Intel(r) AMT Boot Service",
 						CreationClassName:       "CIM_BootService",
 						SystemName:              "Intel(r) AMT",
@@ -180,14 +185,15 @@ func TestNegativeService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should handle error when making cim_BootService Enumerate call",
-				CIM_BootService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMBootService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -197,14 +203,15 @@ func TestNegativeService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should handle error when making cim_BootService Pull wsman message",
-				CIM_BootService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMBootService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -212,7 +219,7 @@ func TestNegativeService(t *testing.T) {
 					PullResponse: PullResponse{
 						BootServiceItems: []BootService{
 							{
-								XMLName:                 xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService", Local: CIM_BootService},
+								XMLName:                 xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService", Local: CIMBootService},
 								Name:                    "Intel(r) AMT Boot Service",
 								CreationClassName:       "CIM_BootService",
 								SystemName:              "Intel(r) AMT",
@@ -229,11 +236,12 @@ func TestNegativeService(t *testing.T) {
 			// SetBootConfigRole
 			{
 				"should handle error when making cim_BootService SetBootConfigRole wsman message",
-				CIM_BootService,
-				wsmantesting.SET_BOOT_CONFIG_ROLE,
+				CIMBootService,
+				wsmantesting.SetBootConfigRole,
 				`<h:SetBootConfigRole_INPUT xmlns:h="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService"><h:BootConfigSetting><Address xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing"><ResourceURI xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting</ResourceURI><SelectorSet xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><Selector Name="InstanceID">InstanceID</Selector></SelectorSet></ReferenceParameters></h:BootConfigSetting><h:Role>0</h:Role></h:SetBootConfigRole_INPUT>`,
 				func() (Response, error) {
 					client.CurrentMessage = "Error"
+
 					return elementUnderTest.SetBootConfigRole("InstanceID", 0)
 				},
 				Body{
@@ -247,7 +255,7 @@ func TestNegativeService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

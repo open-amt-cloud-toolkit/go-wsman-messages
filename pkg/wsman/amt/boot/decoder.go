@@ -5,10 +5,11 @@
 
 package boot
 
-// INPUTS Constants
+// INPUTS Constants.
 const (
-	AMT_BootSettingData  string = "AMT_BootSettingData"
-	AMT_BootCapabilities string = "AMT_BootCapabilities"
+	AMTBootSettingData  string = "AMT_BootSettingData"
+	AMTBootCapabilities string = "AMT_BootCapabilities"
+	ValueNotFound       string = "Value not found in map"
 )
 
 const (
@@ -23,7 +24,7 @@ const (
 	CDBoot
 )
 
-// FirmwareVerbosityToString is a map of FirmwareVerbosity values to their string representations
+// FirmwareVerbosityToString is a map of FirmwareVerbosity values to their string representations.
 var firmwareVerbosityToString = map[FirmwareVerbosity]string{
 	SystemDefault: "SystemDefault",
 	QuietMinimal:  "QuietMinimal",
@@ -31,26 +32,26 @@ var firmwareVerbosityToString = map[FirmwareVerbosity]string{
 	ScreenBlank:   "ScreenBlank",
 }
 
-// String returns the string representation of the FirmwareVerbosity value
+// String returns the string representation of the FirmwareVerbosity value.
 func (f FirmwareVerbosity) String() string {
 	if value, exists := firmwareVerbosityToString[f]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
-// iderBootDeviceToString is a map of IDERBootDevice values to their string representations
+// iderBootDeviceToString is a map of IDERBootDevice values to their string representations.
 var iderBootDeviceToString = map[IDERBootDevice]string{
 	FloppyBoot: "FloppyBoot",
 	CDBoot:     "CDBoot",
 }
 
-// String returns the string representation of the IDERBootDevice value
+// String returns the string representation of the IDERBootDevice value.
 func (i IDERBootDevice) String() string {
 	if value, exists := iderBootDeviceToString[i]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }

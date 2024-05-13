@@ -22,7 +22,7 @@ type Capabilities struct {
 }
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -116,7 +116,7 @@ type (
 )
 
 // INPUTS
-// Request Types
+// Request Types.
 type BootSettingDataRequest struct {
 	XMLName                 xml.Name          `xml:"h:AMT_BootSettingData"`
 	H                       string            `xml:"xmlns:h,attr"`
@@ -151,12 +151,12 @@ type BootSettingDataRequest struct {
 //
 // ValueMap={0, 1, 2, 3}
 //
-// Values={System default, Quiet - minimal screen activity, Verbose - all messages appear on the screen, Screen blank - no messages appear on the screen}
+// Values={System default, Quiet - minimal screen activity, Verbose - all messages appear on the screen, Screen blank - no messages appear on the screen}.
 type FirmwareVerbosity int
 
 // Specifies the device to use when UseIder is set. 0 - Floppy Boot, 1- CD Boot.
 //
 // ValueMap={0, 1}
 //
-// Values={Floppy Boot, CD Boot}
+// Values={Floppy Boot, CD Boot}.
 type IDERBootDevice int

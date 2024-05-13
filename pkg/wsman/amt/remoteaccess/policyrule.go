@@ -13,14 +13,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewPolicyRuleWithClient instantiates a new PolicyRule
+// NewPolicyRuleWithClient instantiates a new PolicyRule.
 func NewPolicyRuleWithClient(wsmanMessageCreator *message.WSManMessageCreator, clientPolicy client.WSMan) PolicyRule {
 	return PolicyRule{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_RemoteAccessPolicyRule, clientPolicy),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTRemoteAccessPolicyRule, clientPolicy),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (policyRule PolicyRule) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -38,10 +38,11 @@ func (policyRule PolicyRule) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (policyRule PolicyRule) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -85,9 +86,9 @@ func (policyRule PolicyRule) Pull(enumerationContext string) (response Response,
 	return
 }
 
-// Put will change properties of the selected instance
+// Put will change properties of the selected instance.
 func (policyRule PolicyRule) Put(remoteAccessPolicyRule RemoteAccessPolicyRuleRequest) (response Response, err error) {
-	remoteAccessPolicyRule.H = fmt.Sprintf("%s%s", message.AMTSchema, AMT_RemoteAccessPolicyRule)
+	remoteAccessPolicyRule.H = fmt.Sprintf("%s%s", message.AMTSchema, AMTRemoteAccessPolicyRule)
 	response = Response{
 		Message: &client.Message{
 			XMLInput: policyRule.base.Put(remoteAccessPolicyRule, false, nil),
@@ -103,10 +104,11 @@ func (policyRule PolicyRule) Put(remoteAccessPolicyRule RemoteAccessPolicyRuleRe
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Delete removes a the specified instance
+// Delete removes a the specified instance.
 func (policyRule PolicyRule) Delete(handle string) (response Response, err error) {
 	selector := message.Selector{Name: "PolicyRuleName", Value: handle}
 	response = Response{
@@ -124,5 +126,6 @@ func (policyRule PolicyRule) Delete(handle string) (response Response, err error
 	if err != nil {
 		return
 	}
+
 	return
 }

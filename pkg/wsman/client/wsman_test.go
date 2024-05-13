@@ -6,11 +6,15 @@
 package client
 
 import (
-	"strings"
-	"testing"
-
 	"net/http"
 	"net/http/httptest"
+	"strings"
+	"testing"
+)
+
+const (
+	testMsg      = "<SampleRequest>Request</SampleRequest>"
+	testResponse = "<SampleResponse>OK</SampleResponse>"
 )
 
 func TestNewClient(t *testing.T) {
@@ -30,12 +34,15 @@ func TestNewClient(t *testing.T) {
 	if client.endpoint != expectedTarget {
 		t.Errorf("Expected endpoint to be %s, but got %s", cp.Target, client.endpoint)
 	}
+
 	if client.username != cp.Username {
 		t.Errorf("Expected username to be %s, but got %s", cp.Username, client.username)
 	}
+
 	if client.password != cp.Password {
 		t.Errorf("Expected password to be %s, but got %s", cp.Password, client.password)
 	}
+
 	if client.useDigest != cp.UseDigest {
 		t.Errorf("Expected useDigest to be %v, but got %v", cp.UseDigest, client.useDigest)
 	}
@@ -58,12 +65,15 @@ func TestNewClient_TLS(t *testing.T) {
 	if client.endpoint != expectedTarget {
 		t.Errorf("Expected endpoint to be %s, but got %s", cp.Target, client.endpoint)
 	}
+
 	if client.username != cp.Username {
 		t.Errorf("Expected username to be %s, but got %s", cp.Username, client.username)
 	}
+
 	if client.password != cp.Password {
 		t.Errorf("Expected password to be %s, but got %s", cp.Password, client.password)
 	}
+
 	if client.useDigest != cp.UseDigest {
 		t.Errorf("Expected useDigest to be %v, but got %v", cp.UseDigest, client.useDigest)
 	}
@@ -73,7 +83,11 @@ func TestClient_Post(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", ContentType)
 		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write([]byte("<SampleResponse>OK</SampleResponse>"))
+
+		_, err := w.Write([]byte(testResponse))
+		if err != nil {
+			t.Errorf("Unexpected error during write: %v", err)
+		}
 	}))
 	defer ts.Close()
 
@@ -88,7 +102,7 @@ func TestClient_Post(t *testing.T) {
 	}
 
 	client := NewWsman(cp)
-	msg := "<SampleRequest>Request</SampleRequest>"
+	msg := testMsg
 
 	client.endpoint = ts.URL
 
@@ -97,11 +111,12 @@ func TestClient_Post(t *testing.T) {
 		t.Errorf("Unexpected error during POST: %v", err)
 	}
 
-	expectedResponse := "<SampleResponse>OK</SampleResponse>"
+	expectedResponse := testResponse
 	if string(response) != expectedResponse {
 		t.Errorf("Expected response to be %s, but got %s", expectedResponse, response)
 	}
 }
+
 func newMockDigestAuthHandler(username, password string, handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
@@ -119,14 +134,19 @@ func newMockDigestAuthHandler(username, password string, handler http.Handler) h
 		}
 	})
 }
+
 func TestClient_PostWithDigestAuth(t *testing.T) {
 	// Use a simple digest auth implementation for testing purposes
-
 	ts := httptest.NewServer(newMockDigestAuthHandler("user", "password", http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", ContentType)
 		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write([]byte("<SampleResponse>OK</SampleResponse>"))
+
+		_, err := w.Write([]byte(testResponse))
+		if err != nil {
+			t.Errorf("Unexpected error during write: %v", err)
+		}
 	}))))
+
 	defer ts.Close()
 
 	cp := Parameters{
@@ -140,15 +160,16 @@ func TestClient_PostWithDigestAuth(t *testing.T) {
 	}
 
 	client := NewWsman(cp)
-	msg := "<SampleRequest>Request</SampleRequest>"
+	msg := testMsg
 
 	client.endpoint = ts.URL
+
 	response, err := client.Post(msg)
 	if err != nil {
 		t.Errorf("Unexpected error during POST with digest auth: %v", err)
 	}
 
-	expectedResponse := "<SampleResponse>OK</SampleResponse>"
+	expectedResponse := testResponse
 	if string(response) != expectedResponse {
 		t.Errorf("Expected response to be %s, but got %s", expectedResponse, response)
 	}
@@ -159,6 +180,7 @@ func TestClient_PostWithDigestAuthUnauthorized(t *testing.T) {
 		w.Header().Set("Content-Type", ContentType)
 		w.WriteHeader(http.StatusOK)
 	})))
+
 	defer ts.Close()
 
 	cp := Parameters{
@@ -172,9 +194,10 @@ func TestClient_PostWithDigestAuthUnauthorized(t *testing.T) {
 	}
 
 	client := NewWsman(cp)
-	msg := "<SampleRequest>Request</SampleRequest>"
+	msg := testMsg
 
 	client.endpoint = ts.URL
+
 	_, err := client.Post(msg)
 	if err == nil {
 		t.Error("Expected error during POST with wrong digest auth credentials, but got nil")
@@ -186,13 +209,19 @@ func TestClient_PostWithBasicAuth(t *testing.T) {
 		username, password, ok := r.BasicAuth()
 		if !ok || username != "user" || password != "password" {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+
 			return
 		}
 
 		w.Header().Set("Content-Type", ContentType)
 		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write([]byte("<SampleResponse>OK</SampleResponse>"))
+
+		_, err := w.Write([]byte(testResponse))
+		if err != nil {
+			t.Errorf("Unexpected error during write: %v", err)
+		}
 	}))
+
 	defer ts.Close()
 
 	cp := Parameters{
@@ -206,23 +235,27 @@ func TestClient_PostWithBasicAuth(t *testing.T) {
 	}
 
 	client := NewWsman(cp)
-	msg := "<SampleRequest>Request</SampleRequest>"
+	msg := testMsg
 
 	client.endpoint = ts.URL
+
 	response, err := client.Post(msg)
 	if err != nil {
 		t.Errorf("Unexpected error during POST with basic auth: %v", err)
 	}
 
-	expectedResponse := "<SampleResponse>OK</SampleResponse>"
+	expectedResponse := testResponse
+
 	if string(response) != expectedResponse {
 		t.Errorf("Expected response to be %s, but got %s", expectedResponse, response)
 	}
 }
+
 func TestClient_PostUnauthorized(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 	}))
+
 	defer ts.Close()
 
 	cp := Parameters{
@@ -235,9 +268,10 @@ func TestClient_PostUnauthorized(t *testing.T) {
 		LogAMTMessages:    false,
 	}
 	client := NewWsman(cp)
-	msg := "<SampleRequest>Request</SampleRequest>"
+	msg := testMsg
 
 	client.endpoint = ts.URL
+
 	_, err := client.Post(msg)
 	if err == nil {
 		t.Error("Expected error during POST with wrong credentials, but got nil")
@@ -248,8 +282,13 @@ func TestClient_PostInvalidResponse(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", ContentType)
 		w.WriteHeader(http.StatusInternalServerError)
-		_, _ = w.Write([]byte("Internal Server Error"))
+
+		_, err := w.Write([]byte("Internal Server Error"))
+		if err != nil {
+			t.Errorf("Unexpected error during write: %v", err)
+		}
 	}))
+
 	defer ts.Close()
 
 	cp := Parameters{
@@ -263,9 +302,10 @@ func TestClient_PostInvalidResponse(t *testing.T) {
 	}
 
 	client := NewWsman(cp)
-	msg := "<SampleRequest>Request</SampleRequest>"
+	msg := testMsg
 
 	client.endpoint = ts.URL
+
 	_, err := client.Post(msg)
 	if err == nil {
 		t.Error("Expected error during POST with invalid response, but got nil")
@@ -276,7 +316,7 @@ func TestClient_PostWithDigestBlankRealm(t *testing.T) {
 	ts := httptest.NewServer(newMockDigestAuthHandler("user", "password", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
 		if strings.HasPrefix(authHeader, "Digest ") {
-			//Simulate internal server error
+			// Simulate internal server error
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
 			// Simulate a server requesting digest authentication with required fields
@@ -298,21 +338,21 @@ func TestClient_PostWithDigestBlankRealm(t *testing.T) {
 
 	client := NewWsman(cp)
 	client.challenge.Realm = ""
-	msg := "<SampleRequest>Request</SampleRequest>"
+	msg := testMsg
 
 	client.endpoint = ts.URL
+
 	_, err := client.Post(msg)
 	if err == nil {
 		t.Error("Expected error during POST with wrong digest auth credentials, but got nil")
 	}
+
 	if !strings.Contains(err.Error(), "500 Internal Server Error") {
 		t.Error("Wsman client should not send digest on initial challenges")
 	}
-
 }
 
 func TestClient_ProxyUrlTransport(t *testing.T) {
-
 	cp := Parameters{
 		Target:            "example.com",
 		Username:          "user",
@@ -324,7 +364,8 @@ func TestClient_ProxyUrlTransport(t *testing.T) {
 	}
 
 	client := NewWsman(cp)
-	err := client.ProxyUrl("http://localhost:3128")
+
+	err := client.ProxyURL("http://localhost:3128")
 	if err != nil {
 		t.Error("Failed to set proxy on proper Transport")
 	}
@@ -342,13 +383,14 @@ func TestClient_InvalidProxyUrlGoodTransport(t *testing.T) {
 	}
 
 	client := NewWsman(cp)
-	err := client.ProxyUrl("localhost")
+
+	err := client.ProxyURL("localhost")
 	if err == nil {
 		t.Error("Failed to detect invalid proxy url")
 	}
 }
 
-// inline struct for mock roundtripper
+// inline struct for mock roundtripper.
 type rt struct{}
 
 func (*rt) RoundTrip(r *http.Request) (*http.Response, error) {
@@ -369,7 +411,8 @@ func TestClient_SimpleRountripper(t *testing.T) {
 	mockrt := rt{}
 	client := NewWsman(cp)
 	client.Transport = &mockrt
-	err := client.ProxyUrl("http://localhost:3128")
+
+	err := client.ProxyURL("http://localhost:3128")
 	if err == nil {
 		t.Error("Failed to detect proper transport")
 	}

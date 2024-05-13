@@ -5,22 +5,22 @@
 
 package alarmclock
 
-// INPUTS Constants
+// INPUTS Constants.
 const (
-	AMT_AlarmClockService string = "AMT_AlarmClockService"
-	AddAlarm              string = "AddAlarm"
+	AMTAlarmClockService string = "AMT_AlarmClockService"
+	AddAlarm             string = "AddAlarm"
 )
 
 const (
 	Success ReturnValue = iota
 )
 
-// returnValueToString is a map of ReturnValue values to their string representations
+// returnValueToString is a map of ReturnValue values to their string representations.
 var returnValueToString = map[ReturnValue]string{
 	Success: "Success",
 }
 
-// String returns the string representation of the ReturnValue value
+// String returns the string representation of the ReturnValue value.
 func (r ReturnValue) String() string {
 	if value, exists := returnValueToString[r]; exists {
 		return value

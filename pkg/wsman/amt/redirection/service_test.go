@@ -10,10 +10,12 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestJson(t *testing.T) {
@@ -40,8 +42,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_RedirectionService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/redirectionservice",
 	}
@@ -56,21 +58,22 @@ func TestPositiveAMT_RedirectionService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_RedirectionService Get wsman message",
-				AMT_RedirectionService,
-				wsmantesting.GET,
+				AMTRedirectionService,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetAndPutResponse: RedirectionResponse{
-						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_RedirectionService), Local: AMT_RedirectionService},
-						CreationClassName:       AMT_RedirectionService,
+						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTRedirectionService), Local: AMTRedirectionService},
+						CreationClassName:       AMTRedirectionService,
 						ElementName:             "Intel(r) AMT Redirection Service",
 						EnabledState:            32771,
 						ListenerEnabled:         true,
@@ -80,17 +83,18 @@ func TestPositiveAMT_RedirectionService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_RedirectionService Enumerate wsman message",
-				AMT_RedirectionService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTRedirectionService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
 					if elementUnderTest.base.WSManMessageCreator == nil {
-						print("Error")
+						logrus.Println("Error")
 					}
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -100,14 +104,15 @@ func TestPositiveAMT_RedirectionService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_RedirectionService Pull wsman message",
-				AMT_RedirectionService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTRedirectionService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -116,8 +121,8 @@ func TestPositiveAMT_RedirectionService(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						RedirectionItems: []RedirectionResponse{
 							{
-								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_RedirectionService), Local: AMT_RedirectionService},
-								CreationClassName:       AMT_RedirectionService,
+								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTRedirectionService), Local: AMTRedirectionService},
+								CreationClassName:       AMTRedirectionService,
 								ElementName:             "Intel(r) AMT Redirection Service",
 								EnabledState:            32771,
 								ListenerEnabled:         true,
@@ -129,16 +134,16 @@ func TestPositiveAMT_RedirectionService(t *testing.T) {
 					},
 				},
 			},
-			//PUTS
+			// PUTS
 			{
 				"should create a valid AMT_RedirectionService Put wsman message",
-				AMT_RedirectionService,
-				wsmantesting.PUT,
+				AMTRedirectionService,
+				wsmantesting.Put,
 				"<h:AMT_RedirectionService xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RedirectionService\"><h:CreationClassName>AMT_RedirectionService</h:CreationClassName><h:ElementName>Intel(r) AMT Redirection Service</h:ElementName><h:EnabledState>32771</h:EnabledState><h:ListenerEnabled>true</h:ListenerEnabled><h:Name>Intel(r) AMT Redirection Service</h:Name><h:SystemCreationClassName>CIM_ComputerSystem</h:SystemCreationClassName><h:SystemName>Intel(r) AMT</h:SystemName></h:AMT_RedirectionService>",
 				func() (Response, error) {
-					client.CurrentMessage = "Put"
+					client.CurrentMessage = wsmantesting.CurrentMessagePut
 					redirectionRequest := RedirectionRequest{
-						CreationClassName:       AMT_RedirectionService,
+						CreationClassName:       AMTRedirectionService,
 						ElementName:             "Intel(r) AMT Redirection Service",
 						EnabledState:            32771,
 						ListenerEnabled:         true,
@@ -146,13 +151,14 @@ func TestPositiveAMT_RedirectionService(t *testing.T) {
 						SystemCreationClassName: "CIM_ComputerSystem",
 						SystemName:              "Intel(r) AMT",
 					}
+
 					return elementUnderTest.Put(redirectionRequest)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetAndPutResponse: RedirectionResponse{
-						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_RedirectionService), Local: AMT_RedirectionService},
-						CreationClassName:       AMT_RedirectionService,
+						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTRedirectionService), Local: AMTRedirectionService},
+						CreationClassName:       AMTRedirectionService,
 						ElementName:             "Intel(r) AMT Redirection Service",
 						EnabledState:            32771,
 						ListenerEnabled:         true,
@@ -162,20 +168,21 @@ func TestPositiveAMT_RedirectionService(t *testing.T) {
 					},
 				},
 			},
-			//REQUEST STATE CHANGE
+			// REQUEST STATE CHANGE
 			{
 				"should create a valid AMT_RedirectionService Request State Change wsman message",
-				AMT_RedirectionService,
-				fmt.Sprintf("%s%s/%s", message.AMTSchema, AMT_RedirectionService, "RequestStateChange"),
+				AMTRedirectionService,
+				fmt.Sprintf("%s%s/%s", message.AMTSchema, AMTRedirectionService, "RequestStateChange"),
 				"<h:RequestStateChange_INPUT xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RedirectionService\"><h:RequestedState>32771</h:RequestedState></h:RequestStateChange_INPUT>",
 				func() (Response, error) {
 					client.CurrentMessage = "RequestStateChange"
+
 					return elementUnderTest.RequestStateChange(EnableIDERAndSOL)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					RequestStateChange_OUTPUT: RequestStateChange_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_RedirectionService), Local: "RequestStateChange_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTRedirectionService), Local: "RequestStateChange_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
@@ -183,22 +190,21 @@ func TestPositiveAMT_RedirectionService(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.Body)
-
 			})
 		}
-
 	})
 }
+
 func TestNegativeAMT_RedirectionService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/redirectionservice",
 	}
@@ -213,21 +219,22 @@ func TestNegativeAMT_RedirectionService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_RedirectionService Get wsman message",
-				AMT_RedirectionService,
-				wsmantesting.GET,
+				AMTRedirectionService,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetAndPutResponse: RedirectionResponse{
-						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_RedirectionService), Local: AMT_RedirectionService},
-						CreationClassName:       AMT_RedirectionService,
+						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTRedirectionService), Local: AMTRedirectionService},
+						CreationClassName:       AMTRedirectionService,
 						ElementName:             "Intel(r) AMT Redirection Service",
 						EnabledState:            32771,
 						ListenerEnabled:         true,
@@ -237,17 +244,18 @@ func TestNegativeAMT_RedirectionService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_RedirectionService Enumerate wsman message",
-				AMT_RedirectionService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTRedirectionService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
 					if elementUnderTest.base.WSManMessageCreator == nil {
-						print("Error")
+						logrus.Println("Error")
 					}
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -257,14 +265,15 @@ func TestNegativeAMT_RedirectionService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_RedirectionService Pull wsman message",
-				AMT_RedirectionService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTRedirectionService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -273,8 +282,8 @@ func TestNegativeAMT_RedirectionService(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						RedirectionItems: []RedirectionResponse{
 							{
-								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_RedirectionService), Local: AMT_RedirectionService},
-								CreationClassName:       AMT_RedirectionService,
+								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTRedirectionService), Local: AMTRedirectionService},
+								CreationClassName:       AMTRedirectionService,
 								ElementName:             "Intel(r) AMT Redirection Service",
 								EnabledState:            32771,
 								ListenerEnabled:         true,
@@ -286,16 +295,16 @@ func TestNegativeAMT_RedirectionService(t *testing.T) {
 					},
 				},
 			},
-			//PUTS
+			// PUTS
 			{
 				"should create a valid AMT_RedirectionService Put wsman message",
-				AMT_RedirectionService,
-				wsmantesting.PUT,
+				AMTRedirectionService,
+				wsmantesting.Put,
 				"<h:AMT_RedirectionService xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RedirectionService\"><h:CreationClassName>AMT_RedirectionService</h:CreationClassName><h:ElementName>Intel(r) AMT Redirection Service</h:ElementName><h:EnabledState>32771</h:EnabledState><h:ListenerEnabled>true</h:ListenerEnabled><h:Name>Intel(r) AMT Redirection Service</h:Name><h:SystemCreationClassName>CIM_ComputerSystem</h:SystemCreationClassName><h:SystemName>Intel(r) AMT</h:SystemName></h:AMT_RedirectionService>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
 					redirectionRequest := RedirectionRequest{
-						CreationClassName:       AMT_RedirectionService,
+						CreationClassName:       AMTRedirectionService,
 						ElementName:             "Intel(r) AMT Redirection Service",
 						EnabledState:            32771,
 						ListenerEnabled:         true,
@@ -303,13 +312,14 @@ func TestNegativeAMT_RedirectionService(t *testing.T) {
 						SystemCreationClassName: "CIM_ComputerSystem",
 						SystemName:              "Intel(r) AMT",
 					}
+
 					return elementUnderTest.Put(redirectionRequest)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetAndPutResponse: RedirectionResponse{
-						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_RedirectionService), Local: AMT_RedirectionService},
-						CreationClassName:       AMT_RedirectionService,
+						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTRedirectionService), Local: AMTRedirectionService},
+						CreationClassName:       AMTRedirectionService,
 						ElementName:             "Intel(r) AMT Redirection Service",
 						EnabledState:            32771,
 						ListenerEnabled:         true,
@@ -319,20 +329,21 @@ func TestNegativeAMT_RedirectionService(t *testing.T) {
 					},
 				},
 			},
-			//REQUEST STATE CHANGE
+			// REQUEST STATE CHANGE
 			{
 				"should create a valid AMT_RedirectionService Request State Change wsman message",
-				AMT_RedirectionService,
-				fmt.Sprintf("%s%s/%s", message.AMTSchema, AMT_RedirectionService, "RequestStateChange"),
+				AMTRedirectionService,
+				fmt.Sprintf("%s%s/%s", message.AMTSchema, AMTRedirectionService, "RequestStateChange"),
 				"<h:RequestStateChange_INPUT xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RedirectionService\"><h:RequestedState>32771</h:RequestedState></h:RequestStateChange_INPUT>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.RequestStateChange(EnableIDERAndSOL)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					RequestStateChange_OUTPUT: RequestStateChange_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_RedirectionService), Local: "RequestStateChange_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTRedirectionService), Local: "RequestStateChange_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
@@ -340,15 +351,13 @@ func TestNegativeAMT_RedirectionService(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.NotEqual(t, test.expectedResponse, response.Body)
-
 			})
 		}
-
 	})
 }

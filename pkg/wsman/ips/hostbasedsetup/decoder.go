@@ -6,11 +6,12 @@
 package hostbasedsetup
 
 const (
-	IPS_HostBasedSetupService string = "IPS_HostBasedSetupService"
-	Setup                     string = "Setup"
-	AdminSetup                string = "AdminSetup"
-	AddNextCertInChain        string = "AddNextCertInChain"
-	UpgradeClientToAdmin      string = "UpgradeClientToAdmin"
+	IPSHostBasedSetupService string = "IPS_HostBasedSetupService"
+	Setup                    string = "Setup"
+	AdminSetup               string = "AdminSetup"
+	AddNextCertInChain       string = "AddNextCertInChain"
+	UpgradeClientToAdmin     string = "UpgradeClientToAdmin"
+	ValueNotFound            string = "Value not found in map"
 )
 
 const (
@@ -19,19 +20,20 @@ const (
 	AdminPassEncryptionTypeHTTPDigestMD5A1
 )
 
-// adminPassEncryptionTypeToString is a map of AdminPassEncryptionType value to string
+// adminPassEncryptionTypeToString is a map of AdminPassEncryptionType value to string.
 var adminPassEncryptionTypeToString = map[AdminPassEncryptionType]string{
 	AdminPassEncryptionTypeNone:            "None",
 	AdminPassEncryptionTypeOther:           "Other",
 	AdminPassEncryptionTypeHTTPDigestMD5A1: "HTTPDigestMD5A1",
 }
 
-// String returns a human-readable string representation of the AdminPassEncryptionType enumeration
+// String returns a human-readable string representation of the AdminPassEncryptionType enumeration.
 func (a AdminPassEncryptionType) String() string {
 	if s, ok := adminPassEncryptionTypeToString[a]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -40,19 +42,20 @@ const (
 	SigningAlgorithmRSASHA2256
 )
 
-// signingAlgorithmToString is a map of SigningAlgorithm value to string
+// signingAlgorithmToString is a map of SigningAlgorithm value to string.
 var signingAlgorithmToString = map[SigningAlgorithm]string{
 	SigningAlgorithmNone:       "None",
 	SigningAlgorithmOther:      "Other",
 	SigningAlgorithmRSASHA2256: "RSASHA2256",
 }
 
-// String returns a human-readable string representation of the SigningAlgorithm enumeration
+// String returns a human-readable string representation of the SigningAlgorithm enumeration.
 func (s SigningAlgorithm) String() string {
 	if s, ok := signingAlgorithmToString[s]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -61,19 +64,20 @@ const (
 	Admin
 )
 
-// currentControlModeToString is a map of CurrentControlMode value to string
+// currentControlModeToString is a map of CurrentControlMode value to string.
 var currentControlModeToString = map[CurrentControlMode]string{
 	NotProvisioned: "NotProvisioned",
 	Client:         "Client",
 	Admin:          "Admin",
 }
 
-// String returns a human-readable string representation of the CurrentControlMode enumeration
+// String returns a human-readable string representation of the CurrentControlMode enumeration.
 func (c CurrentControlMode) String() string {
 	if s, ok := currentControlModeToString[c]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -82,19 +86,20 @@ const (
 	CertChainStatusChainComplete
 )
 
-// certChainStatusToString is a map of CertChainStatus value to string
+// certChainStatusToString is a map of CertChainStatus value to string.
 var certChainStatusToString = map[CertChainStatus]string{
 	CertChainStatusNotStarted:      "NotStarted",
 	CertChainStatusChainInProgress: "ChainInProgress",
 	CertChainStatusChainComplete:   "ChainComplete",
 }
 
-// String returns a human-readable string representation of the CertChainStatus enumeration
+// String returns a human-readable string representation of the CertChainStatus enumeration.
 func (c CertChainStatus) String() string {
 	if s, ok := certChainStatusToString[c]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -103,19 +108,20 @@ const (
 	AllowedControlModesAdmin
 )
 
-// allowedControlModesToString is a map of AllowedControlModes value to string
+// allowedControlModesToString is a map of AllowedControlModes value to string.
 var allowedControlModesToString = map[AllowedControlModes]string{
 	AllowedControlModesNotProvisioned: "NotProvisioned",
 	AllowedControlModesClient:         "Client",
 	AllowedControlModesAdmin:          "Admin",
 }
 
-// String returns a human-readable string representation of the AllowedControlModes enumeration
+// String returns a human-readable string representation of the AllowedControlModes enumeration.
 func (a AllowedControlModes) String() string {
 	if s, ok := allowedControlModesToString[a]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -128,7 +134,7 @@ const (
 	SetupReturnValueFlashWriteLimitExceeded
 )
 
-// setupReturnValueToString is a map of ReturnValue value to string
+// setupReturnValueToString is a map of ReturnValue value to string.
 var setupReturnValueToString = map[SetupReturnValue]string{
 	SetupReturnValueSuccess:                 "Success",
 	SetupReturnValueInternalError:           "InternalError",
@@ -139,12 +145,13 @@ var setupReturnValueToString = map[SetupReturnValue]string{
 	SetupReturnValueFlashWriteLimitExceeded: "FlashWriteLimitExceeded",
 }
 
-// String returns a human-readable string representation of the ReturnValue enumeration
+// String returns a human-readable string representation of the ReturnValue enumeration.
 func (s SetupReturnValue) String() string {
 	if s, ok := setupReturnValueToString[s]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -156,7 +163,7 @@ const (
 	AddNextCertInChainReturnValueCertChainLengthExceeded
 )
 
-// addNextCertInChainReturnValueToString is a map of ReturnValue value to string
+// addNextCertInChainReturnValueToString is a map of ReturnValue value to string.
 var addNextCertInChainReturnValueToString = map[AddNextCertInChainReturnValue]string{
 	AddNextCertInChainReturnValueSuccess:                 "Success",
 	AddNextCertInChainReturnValueInvalidParam:            "InvalidParam",
@@ -166,12 +173,13 @@ var addNextCertInChainReturnValueToString = map[AddNextCertInChainReturnValue]st
 	AddNextCertInChainReturnValueCertChainLengthExceeded: "CertChainLengthExceeded",
 }
 
-// String returns a human-readable string representation of the ReturnValue enumeration
+// String returns a human-readable string representation of the ReturnValue enumeration.
 func (a AddNextCertInChainReturnValue) String() string {
 	if s, ok := addNextCertInChainReturnValueToString[a]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -184,7 +192,7 @@ const (
 	AdminSetupReturnValueFlashWriteLimitExceeded
 )
 
-// adminSetupReturnValueToString is a map of ReturnValue value to string
+// adminSetupReturnValueToString is a map of ReturnValue value to string.
 var adminSetupReturnValueToString = map[AdminSetupReturnValue]string{
 	AdminSetupReturnValueSuccess:                 "Success",
 	AdminSetupReturnValueInternalError:           "InternalError",
@@ -194,10 +202,11 @@ var adminSetupReturnValueToString = map[AdminSetupReturnValue]string{
 	AdminSetupReturnValueFlashWriteLimitExceeded: "FlashWriteLimitExceeded",
 }
 
-// String returns a human-readable string representation of the ReturnValue enumeration
+// String returns a human-readable string representation of the ReturnValue enumeration.
 func (a AdminSetupReturnValue) String() string {
 	if s, ok := adminSetupReturnValueToString[a]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

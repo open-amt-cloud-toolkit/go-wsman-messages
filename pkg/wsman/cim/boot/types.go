@@ -14,23 +14,20 @@ import (
 )
 
 type ConfigSetting struct {
-	base   message.Base
-	client client.WSMan
+	base message.Base
 }
 
 type SourceSetting struct {
-	base   message.Base
-	client client.WSMan
+	base message.Base
 }
 
 type Service struct {
-	base   message.Base
-	client client.WSMan
+	base message.Base
 }
 
 type Source string
 
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message

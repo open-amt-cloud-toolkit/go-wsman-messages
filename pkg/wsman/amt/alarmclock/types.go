@@ -20,7 +20,7 @@ type Service struct {
 }
 
 // INPUTS
-// AlarmClockOccurrence represents a single alarm clock setting
+// AlarmClockOccurrence represents a single alarm clock setting.
 type AlarmClockOccurrence struct {
 	ElementName        string    `json:"ElementName"`        // Elementname is a user-friendly name for the object
 	InstanceID         string    `json:"InstanceID"`         // InstanceID is the instance key, set by the caller of AMT_AlarmClockService.AddAlarm.
@@ -30,7 +30,7 @@ type AlarmClockOccurrence struct {
 }
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -65,11 +65,11 @@ type (
 		ReturnValue ReturnValue // Return code. 0 indicates success
 	}
 	AlarmClock struct {
-		// Reference address to the created instance of IPS_AlarmClockOccurrence
+		// Reference address to the created instance of IPS_AlarmClockOccurrence.
 		Address             string
 		ReferenceParameters models.ReferenceParameters_OUTPUT
 	}
 
-	// ReturnValue is a return code. 0 indicates success
+	// ReturnValue is a return code. 0 indicates success.
 	ReturnValue int
 )

@@ -83,7 +83,8 @@ func TestResponse(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		actual, _ := c.response(tc.method, tc.uri, tc.cnonce)
+		actual, err := c.response(tc.method, tc.uri, tc.cnonce)
+		assert.Nil(t, err)
 		assert.Equal(t, tc.expected, actual)
 	}
 }
@@ -101,7 +102,8 @@ func TestResponse_Qop(t *testing.T) {
 
 	for _, tc := range testCases {
 		c.Qop = "auth,auth-int, auth"
-		actual, _ := c.response(tc.method, tc.uri, tc.cnonce)
+		actual, err := c.response(tc.method, tc.uri, tc.cnonce)
+		assert.Nil(t, err)
 		assert.Equal(t, tc.expected, actual)
 	}
 }
@@ -117,7 +119,8 @@ func TestAuthorize(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		actual, _ := c.authorize(tc.method, tc.uri)
+		actual, err := c.authorize(tc.method, tc.uri)
+		assert.Nil(t, err)
 		assert.Equal(t, tc.expected, actual)
 	}
 }
@@ -136,7 +139,8 @@ func TestAuthorize_Full(t *testing.T) {
 		c.Username = "admin"
 		c.Realm = "test"
 		c.Nonce = "00000001"
-		actual, _ := c.authorize(tc.method, tc.uri)
+		actual, err := c.authorize(tc.method, tc.uri)
+		assert.Nil(t, err)
 		assert.Equal(t, tc.expected, actual)
 	}
 }

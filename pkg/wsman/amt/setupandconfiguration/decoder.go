@@ -6,11 +6,12 @@
 package setupandconfiguration
 
 const (
-	AMT_SetupAndConfigurationService string = "AMT_SetupAndConfigurationService"
-	CommitChanges                    string = "CommitChanges"
-	Unprovision                      string = "Unprovision"
-	SetMEBxPassword                  string = "SetMEBxPassword"
-	GetUuid                          string = "GetUuid"
+	AMTSetupAndConfigurationService string = "AMT_SetupAndConfigurationService"
+	CommitChanges                   string = "CommitChanges"
+	Unprovision                     string = "Unprovision"
+	SetMEBxPassword                 string = "SetMEBxPassword"
+	GetUUID                         string = "GetUuid"
+	ValueNotFound                   string = "Value not found in map"
 )
 
 const (
@@ -28,7 +29,7 @@ const (
 	RequestedStateUnknown RequestedState = 0
 )
 
-// requestedStateToString is a map of RequestedState values to their string representations
+// requestedStateToString is a map of RequestedState values to their string representations.
 var requestedStateToString = map[RequestedState]string{
 	RequestedStateEnabled:       "RequestedStateEnabled",
 	RequestedStateDisabled:      "RequestedStateDisabled",
@@ -44,12 +45,13 @@ var requestedStateToString = map[RequestedState]string{
 	RequestedStateUnknown:       "RequestedStateUnknown",
 }
 
-// String returns the string representation of the RequestedState value
+// String returns the string representation of the RequestedState value.
 func (r RequestedState) String() string {
 	if value, exists := requestedStateToString[r]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -66,7 +68,7 @@ const (
 	EnabledStateStarting
 )
 
-// enabledStateToString is a map of EnabledState values to their string representations
+// enabledStateToString is a map of EnabledState values to their string representations.
 var enabledStateToString = map[EnabledState]string{
 	EnabledStateUnknown:           "EnabledStateUnknown",
 	EnabledStateOther:             "EnabledStateOther",
@@ -81,12 +83,13 @@ var enabledStateToString = map[EnabledState]string{
 	EnabledStateStarting:          "EnabledStateStarting",
 }
 
-// String returns the string representation of the EnabledState value
+// String returns the string representation of the EnabledState value.
 func (e EnabledState) String() string {
 	if value, exists := enabledStateToString[e]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -97,33 +100,35 @@ const (
 	PostProvisioning  ProvisioningStateValue = 2
 )
 
-// provisioningModeToString is a map of ProvisioningMode values to their string representations
+// provisioningModeToString is a map of ProvisioningMode values to their string representations.
 var provisioningModeToString = map[ProvisioningModeValue]string{
 	AdminControlMode:  "AdminControlMode",
 	ClientControlMode: "ClientControlMode",
 }
 
-// String returns the string representation of the ProvisioningMode value
+// String returns the string representation of the ProvisioningMode value.
 func (p ProvisioningModeValue) String() string {
 	if value, exists := provisioningModeToString[p]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// provisioningStateToString is a map of ProvisioningState values to their string representations
+// provisioningStateToString is a map of ProvisioningState values to their string representations.
 var provisioningStateToString = map[ProvisioningStateValue]string{
 	PreProvisioning:  "PreProvisioning",
 	InProvisioning:   "InProvisioning",
 	PostProvisioning: "PostProvisioning",
 }
 
-// String returns the string representation of the ProvisioningState value
+// String returns the string representation of the ProvisioningState value.
 func (p ProvisioningStateValue) String() string {
 	if value, exists := provisioningStateToString[p]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -132,19 +137,20 @@ const (
 	SeparateHashPasswordModel
 )
 
-// PasswordModelToString is a map of PasswordModel values to their string representations
+// PasswordModelToString is a map of PasswordModel values to their string representations.
 var PasswordModelToString = map[PasswordModelValue]string{
 	CoupledPasswordModel:      "CoupledPasswordModel",
 	SeparatePasswordModel:     "SeparatePasswordModel",
 	SeparateHashPasswordModel: "SeparateHashPasswordModel",
 }
 
-// String returns the string representation of the PasswordModel value
+// String returns the string representation of the PasswordModel value.
 func (p PasswordModelValue) String() string {
 	if value, exists := PasswordModelToString[p]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -167,10 +173,11 @@ var returnValueToString = map[ReturnValue]string{
 	ReturnValueBlockingComponent:       "ReturnValueBlockingComponent",
 }
 
-// String returns the string representation of the ReturnValue value
+// String returns the string representation of the ReturnValue value.
 func (r ReturnValue) String() string {
 	if value, exists := returnValueToString[r]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

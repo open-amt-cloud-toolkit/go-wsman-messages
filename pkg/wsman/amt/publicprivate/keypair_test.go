@@ -39,14 +39,20 @@ func TestYaml(t *testing.T) {
 	assert.Equal(t, expectedResult, result)
 }
 
-func TestPositiveAMT_PublicPrivateKeyPair(t *testing.T) {
-	messageID := 0
-	resourceUriBase := message.AMTSchema
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := wsmantesting.MockClient{
+func testSetup() (messageID int, resourceURIBase string, client *wsmantesting.MockClient, elementUnderTest KeyPair) {
+	messageID = 0
+	resourceURIBase = message.AMTSchema
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
+	client = &wsmantesting.MockClient{
 		PackageUnderTest: "amt/publicprivate",
 	}
-	elementUnderTest := NewPublicPrivateKeyPairWithClient(wsmanMessageCreator, &client)
+	elementUnderTest = NewPublicPrivateKeyPairWithClient(wsmanMessageCreator, client)
+
+	return messageID, resourceURIBase, client, elementUnderTest
+}
+
+func TestPositiveAMT_PublicPrivateKeyPair(t *testing.T) {
+	messageID, resourceURIBase, client, elementUnderTest := testSetup()
 
 	t.Run("amt_PublicPrivateKeyPair Tests", func(t *testing.T) {
 		tests := []struct {
@@ -58,35 +64,37 @@ func TestPositiveAMT_PublicPrivateKeyPair(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_PublicPrivateKeyPair Get wsman message",
-				AMT_PublicPrivateKeyPair, wsmantesting.GET,
+				AMTPublicPrivateKeyPair, wsmantesting.Get,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Key: Handle: 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get("Intel(r) AMT Key: Handle: 0")
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: PublicPrivateKeyPair{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_PublicPrivateKeyPair), Local: AMT_PublicPrivateKeyPair},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTPublicPrivateKeyPair), Local: AMTPublicPrivateKeyPair},
 						ElementName: "Intel(r) AMT Key",
 						InstanceID:  "Intel(r) AMT Key: Handle: 0",
 						DERKey:      "MIIBCgKCAQEA4y00wezZ1XwsSITMvqeYf61tgfVhlGbBVwq9Au0BaEgofPFCLuWMnKaTnMhUlJEGaeB2y6F8qjId0xMwLtNY6XWhmMoCP0R+ymgClT0treqtYp2zL1QPK1R04KTgF0KZh247oQpPGnB2nIe7PKCjPaY8BfOyBC6eNLeWUVIOA5TLL0gSTuk8y3iaadKo+LoWBaH/WDrIJ21Dzn6yU3zGueA8tphPH7yXaOJuNiijOUYZjVT7J0Ia8qMxUv1CrbfL2+N0lrcCG/E4f0QF1XgoCJnwIHdYaNhWzKVhfh2TTZIxJo8bXngckNOLzdYM35hUq98CxPiMSO8+G7J8RZaobQIDAQAB",
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_PublicPrivateKeyPair Enumerate wsman message",
-				AMT_PublicPrivateKeyPair,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTPublicPrivateKeyPair,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -96,15 +104,16 @@ func TestPositiveAMT_PublicPrivateKeyPair(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_PublicPrivateKeyPair Pull wsman message",
-				AMT_PublicPrivateKeyPair,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTPublicPrivateKeyPair,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -113,13 +122,13 @@ func TestPositiveAMT_PublicPrivateKeyPair(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						PublicPrivateKeyPairItems: []PublicPrivateKeyPair{
 							{
-								XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_PublicPrivateKeyPair), Local: AMT_PublicPrivateKeyPair},
+								XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTPublicPrivateKeyPair), Local: AMTPublicPrivateKeyPair},
 								ElementName: "Intel(r) AMT Key",
 								InstanceID:  "Intel(r) AMT Key: Handle: 0",
 								DERKey:      "MIIBCgKCAQEA4y00wezZ1XwsSITMvqeYf61tgfVhlGbBVwq9Au0BaEgofPFCLuWMnKaTnMhUlJEGaeB2y6F8qjId0xMwLtNY6XWhmMoCP0R+ymgClT0treqtYp2zL1QPK1R04KTgF0KZh247oQpPGnB2nIe7PKCjPaY8BfOyBC6eNLeWUVIOA5TLL0gSTuk8y3iaadKo+LoWBaH/WDrIJ21Dzn6yU3zGueA8tphPH7yXaOJuNiijOUYZjVT7J0Ia8qMxUv1CrbfL2+N0lrcCG/E4f0QF1XgoCJnwIHdYaNhWzKVhfh2TTZIxJo8bXngckNOLzdYM35hUq98CxPiMSO8+G7J8RZaobQIDAQAB",
 							},
 							{
-								XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_PublicPrivateKeyPair), Local: AMT_PublicPrivateKeyPair},
+								XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTPublicPrivateKeyPair), Local: AMTPublicPrivateKeyPair},
 								ElementName: "Intel(r) AMT Key",
 								InstanceID:  "Intel(r) AMT Key: Handle: 1",
 								DERKey:      "MIIBCgKCAQEAvMgYL2FyGuHOVvwYgjABqRlJ8j8LhMo2OCU1HU2WvDN3NoLmjAh2XmBS6ic5IjIc4VtjL7S8ImKP8+PSye9nxf+lv33AqcGsvQFcUuJ5gLTnYzrmqVk6XTcHf1qtvHEmVoykTV6bN7BQx0eTejTjhw3Ro6HZBMyStaTGIKjC9HLQySV6SnFGbrjdNZZoCYsaT8dVetn23npeses9f6dZT5K3IgpA13NcdJioS71uppjIcg8dXpcxA4QKgHLmmELPN9JLbywMvcCuU+xMDceWQlFld9ohmr8NiwgebLyVCh/Q+O+jkQT43snNolyTGLRWQFR4M6DT5fdgXivoFhzMcwIDAQAB",
@@ -128,15 +137,16 @@ func TestPositiveAMT_PublicPrivateKeyPair(t *testing.T) {
 					},
 				},
 			},
-			//DELETE
+			// DELETE
 			{
 				"should create a valid AMT_PublicPrivateKeyPair Delete wsman message",
-				AMT_PublicPrivateKeyPair,
-				wsmantesting.DELETE,
+				AMTPublicPrivateKeyPair,
+				wsmantesting.Delete,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Key: Handle: 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Delete"
+					client.CurrentMessage = wsmantesting.CurrentMessageDelete
+
 					return elementUnderTest.Delete("Intel(r) AMT Key: Handle: 0")
 				},
 				Body{XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"}},
@@ -145,7 +155,7 @@ func TestPositiveAMT_PublicPrivateKeyPair(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -155,14 +165,9 @@ func TestPositiveAMT_PublicPrivateKeyPair(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_PublicPrivateKeyPair(t *testing.T) {
-	messageID := 0
-	resourceUriBase := message.AMTSchema
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
-	client := wsmantesting.MockClient{
-		PackageUnderTest: "amt/publicprivate",
-	}
-	elementUnderTest := NewPublicPrivateKeyPairWithClient(wsmanMessageCreator, &client)
+	messageID, resourceURIBase, client, elementUnderTest := testSetup()
 
 	t.Run("amt_PublicPrivateKeyPair Tests", func(t *testing.T) {
 		tests := []struct {
@@ -174,35 +179,37 @@ func TestNegativeAMT_PublicPrivateKeyPair(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_PublicPrivateKeyPair Get wsman message",
-				AMT_PublicPrivateKeyPair, wsmantesting.GET,
+				AMTPublicPrivateKeyPair, wsmantesting.Get,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Key: Handle: 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get("Intel(r) AMT Key: Handle: 0")
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: PublicPrivateKeyPair{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_PublicPrivateKeyPair), Local: AMT_PublicPrivateKeyPair},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTPublicPrivateKeyPair), Local: AMTPublicPrivateKeyPair},
 						ElementName: "Intel(r) AMT Key",
 						InstanceID:  "Intel(r) AMT Key: Handle: 0",
 						DERKey:      "MIIBCgKCAQEA4y00wezZ1XwsSITMvqeYf61tgfVhlGbBVwq9Au0BaEgofPFCLuWMnKaTnMhUlJEGaeB2y6F8qjId0xMwLtNY6XWhmMoCP0R+ymgClT0treqtYp2zL1QPK1R04KTgF0KZh247oQpPGnB2nIe7PKCjPaY8BfOyBC6eNLeWUVIOA5TLL0gSTuk8y3iaadKo+LoWBaH/WDrIJ21Dzn6yU3zGueA8tphPH7yXaOJuNiijOUYZjVT7J0Ia8qMxUv1CrbfL2+N0lrcCG/E4f0QF1XgoCJnwIHdYaNhWzKVhfh2TTZIxJo8bXngckNOLzdYM35hUq98CxPiMSO8+G7J8RZaobQIDAQAB",
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_PublicPrivateKeyPair Enumerate wsman message",
-				AMT_PublicPrivateKeyPair,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTPublicPrivateKeyPair,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -212,15 +219,16 @@ func TestNegativeAMT_PublicPrivateKeyPair(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_PublicPrivateKeyPair Pull wsman message",
-				AMT_PublicPrivateKeyPair,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTPublicPrivateKeyPair,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -229,13 +237,13 @@ func TestNegativeAMT_PublicPrivateKeyPair(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						PublicPrivateKeyPairItems: []PublicPrivateKeyPair{
 							{
-								XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_PublicPrivateKeyPair), Local: AMT_PublicPrivateKeyPair},
+								XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTPublicPrivateKeyPair), Local: AMTPublicPrivateKeyPair},
 								ElementName: "Intel(r) AMT Key",
 								InstanceID:  "Intel(r) AMT Key: Handle: 0",
 								DERKey:      "MIIBCgKCAQEA4y00wezZ1XwsSITMvqeYf61tgfVhlGbBVwq9Au0BaEgofPFCLuWMnKaTnMhUlJEGaeB2y6F8qjId0xMwLtNY6XWhmMoCP0R+ymgClT0treqtYp2zL1QPK1R04KTgF0KZh247oQpPGnB2nIe7PKCjPaY8BfOyBC6eNLeWUVIOA5TLL0gSTuk8y3iaadKo+LoWBaH/WDrIJ21Dzn6yU3zGueA8tphPH7yXaOJuNiijOUYZjVT7J0Ia8qMxUv1CrbfL2+N0lrcCG/E4f0QF1XgoCJnwIHdYaNhWzKVhfh2TTZIxJo8bXngckNOLzdYM35hUq98CxPiMSO8+G7J8RZaobQIDAQAB",
 							},
 							{
-								XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_PublicPrivateKeyPair), Local: AMT_PublicPrivateKeyPair},
+								XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTPublicPrivateKeyPair), Local: AMTPublicPrivateKeyPair},
 								ElementName: "Intel(r) AMT Key",
 								InstanceID:  "Intel(r) AMT Key: Handle: 1",
 								DERKey:      "MIIBCgKCAQEAvMgYL2FyGuHOVvwYgjABqRlJ8j8LhMo2OCU1HU2WvDN3NoLmjAh2XmBS6ic5IjIc4VtjL7S8ImKP8+PSye9nxf+lv33AqcGsvQFcUuJ5gLTnYzrmqVk6XTcHf1qtvHEmVoykTV6bN7BQx0eTejTjhw3Ro6HZBMyStaTGIKjC9HLQySV6SnFGbrjdNZZoCYsaT8dVetn23npeses9f6dZT5K3IgpA13NcdJioS71uppjIcg8dXpcxA4QKgHLmmELPN9JLbywMvcCuU+xMDceWQlFld9ohmr8NiwgebLyVCh/Q+O+jkQT43snNolyTGLRWQFR4M6DT5fdgXivoFhzMcwIDAQAB",
@@ -244,15 +252,16 @@ func TestNegativeAMT_PublicPrivateKeyPair(t *testing.T) {
 					},
 				},
 			},
-			//DELETE
+			// DELETE
 			{
 				"should create a valid AMT_PublicPrivateKeyPair Delete wsman message",
-				AMT_PublicPrivateKeyPair,
-				wsmantesting.DELETE,
+				AMTPublicPrivateKeyPair,
+				wsmantesting.Delete,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Key: Handle: 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Delete("Intel(r) AMT Key: Handle: 0")
 				},
 				Body{XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"}},
@@ -261,7 +270,7 @@ func TestNegativeAMT_PublicPrivateKeyPair(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

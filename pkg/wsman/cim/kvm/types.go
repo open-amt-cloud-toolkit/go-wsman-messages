@@ -14,11 +14,10 @@ import (
 )
 
 type RedirectionSAP struct {
-	base   message.Base
-	client client.WSMan
+	base message.Base
 }
 
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -73,7 +72,7 @@ type (
 	RequestedState int
 )
 
-// Request Types
+// Request Types.
 type (
 	KVMRedirectionSAPRequestStateChangeInput int
 )

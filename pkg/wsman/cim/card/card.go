@@ -18,12 +18,11 @@ import (
 // NewCard returns a new instance of the Card struct.
 func NewCardWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Package {
 	return Package{
-		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_Card, client),
-		client: client,
+		base: message.NewBaseWithClient(wsmanMessageCreator, CIMCard, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (card Package) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -40,11 +39,11 @@ func (card Package) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
-	return
 
+	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (card Package) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -61,8 +60,8 @@ func (card Package) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
-	return
 
+	return
 }
 
 // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
@@ -72,13 +71,16 @@ func (card Package) Pull(enumerationContext string) (response Response, err erro
 			XMLInput: card.base.Pull(enumerationContext),
 		},
 	}
+
 	err = card.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }

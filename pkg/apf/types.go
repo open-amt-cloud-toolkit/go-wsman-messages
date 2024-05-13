@@ -6,69 +6,85 @@ package apf
 
 import "time"
 
-const LMS_PROTOCOL_VERSION = 4
-const LME_RX_WINDOW_SIZE = 4096
+const (
+	LMS_PROTOCOL_VERSION = 4
+	LME_RX_WINDOW_SIZE   = 4096
+)
 
-// message op codes
-const APF_DISCONNECT = 1
-const APF_SERVICE_REQUEST = 5
-const APF_SERVICE_ACCEPT = 6
-const APF_USERAUTH_REQUEST = 50
-const APF_USERAUTH_FAILURE = 51
-const APF_USERAUTH_SUCCESS = 52
-const APF_GLOBAL_REQUEST = 80
-const APF_REQUEST_SUCCESS = 81
-const APF_REQUEST_FAILURE = 82
-const APF_CHANNEL_OPEN = 90
-const APF_CHANNEL_OPEN_CONFIRMATION = 91
-const APF_CHANNEL_OPEN_FAILURE = 92
-const APF_CHANNEL_WINDOW_ADJUST = 93
-const APF_CHANNEL_DATA = 94
-const APF_CHANNEL_CLOSE = 97
-const APF_PROTOCOLVERSION = 192
+// message op codes.
+const (
+	APF_DISCONNECT                = 1
+	APF_SERVICE_REQUEST           = 5
+	APF_SERVICE_ACCEPT            = 6
+	APF_USERAUTH_REQUEST          = 50
+	APF_USERAUTH_FAILURE          = 51
+	APF_USERAUTH_SUCCESS          = 52
+	APF_GLOBAL_REQUEST            = 80
+	APF_REQUEST_SUCCESS           = 81
+	APF_REQUEST_FAILURE           = 82
+	APF_CHANNEL_OPEN              = 90
+	APF_CHANNEL_OPEN_CONFIRMATION = 91
+	APF_CHANNEL_OPEN_FAILURE      = 92
+	APF_CHANNEL_WINDOW_ADJUST     = 93
+	APF_CHANNEL_DATA              = 94
+	APF_CHANNEL_CLOSE             = 97
+	APF_PROTOCOLVERSION           = 192
+)
 
-// disconnect reason codes
-const APF_DISCONNECT_HOST_NOT_ALLOWED_TO_CONNECT = 1
-const APF_DISCONNECT_PROTOCOL_ERROR = 2
-const APF_DISCONNECT_KEY_EXCHANGE_FAILED = 3
-const APF_DISCONNECT_RESERVED = 4
-const APF_DISCONNECT_MAC_ERROR = 5
-const APF_DISCONNECT_COMPRESSION_ERROR = 6
-const APF_DISCONNECT_SERVICE_NOT_AVAILABLE = 7
-const APF_DISCONNECT_PROTOCOL_VERSION_NOT_SUPPORTED = 8
-const APF_DISCONNECT_HOST_KEY_NOT_VERIFIABLE = 9
-const APF_DISCONNECT_CONNECTION_LOST = 10
-const APF_DISCONNECT_BY_APPLICATION = 11
-const APF_DISCONNECT_TOO_MANY_CONNECTIONS = 12
-const APF_DISCONNECT_AUTH_CANCELLED_BY_USER = 13
-const APF_DISCONNECT_NO_MORE_AUTH_METHODS_AVAILABLE = 14
-const APF_DISCONNECT_ILLEGAL_USER_NAME = 15
+// disconnect reason codes.
+const (
+	APF_DISCONNECT_HOST_NOT_ALLOWED_TO_CONNECT    = 1
+	APF_DISCONNECT_PROTOCOL_ERROR                 = 2
+	APF_DISCONNECT_KEY_EXCHANGE_FAILED            = 3
+	APF_DISCONNECT_RESERVED                       = 4
+	APF_DISCONNECT_MAC_ERROR                      = 5
+	APF_DISCONNECT_COMPRESSION_ERROR              = 6
+	APF_DISCONNECT_SERVICE_NOT_AVAILABLE          = 7
+	APF_DISCONNECT_PROTOCOL_VERSION_NOT_SUPPORTED = 8
+	APF_DISCONNECT_HOST_KEY_NOT_VERIFIABLE        = 9
+	APF_DISCONNECT_CONNECTION_LOST                = 10
+	APF_DISCONNECT_BY_APPLICATION                 = 11
+	APF_DISCONNECT_TOO_MANY_CONNECTIONS           = 12
+	APF_DISCONNECT_AUTH_CANCELLED_BY_USER         = 13
+	APF_DISCONNECT_NO_MORE_AUTH_METHODS_AVAILABLE = 14
+	APF_DISCONNECT_ILLEGAL_USER_NAME              = 15
+)
 
-// strings used in global messages
-const APF_GLOBAL_REQUEST_STR_TCP_FORWARD_REQUEST = "tcpip-forward"
-const APF_GLOBAL_REQUEST_STR_TCP_FORWARD_CANCEL_REQUEST = "cancel-tcpip-forward"
-const APF_GLOBAL_REQUEST_STR_UDP_SEND_TO = "udp-send-to@amt.intel.com"
-const APF_OPEN_CHANNEL_REQUEST_FORWARDED = "forwarded-tcpip"
-const APF_OPEN_CHANNEL_REQUEST_DIRECT = "direct-tcpip"
+// strings used in global messages.
+const (
+	APF_GLOBAL_REQUEST_STR_TCP_FORWARD_REQUEST        = "tcpip-forward"
+	APF_GLOBAL_REQUEST_STR_TCP_FORWARD_CANCEL_REQUEST = "cancel-tcpip-forward"
+	APF_GLOBAL_REQUEST_STR_UDP_SEND_TO                = "udp-send-to@amt.intel.com"
+	APF_OPEN_CHANNEL_REQUEST_FORWARDED                = "forwarded-tcpip"
+	APF_OPEN_CHANNEL_REQUEST_DIRECT                   = "direct-tcpip"
+)
 
-// APF service names
-const APF_SERVICE_PFWD = "pfwd@amt.intel.com"
-const APF_SERVICE_AUTH = "auth@amt.intel.com"
+// APF service names.
+const (
+	APF_SERVICE_PFWD = "pfwd@amt.intel.com"
+	APF_SERVICE_AUTH = "auth@amt.intel.com"
+)
 
-// APF Authentication method
-const APF_AUTH_NONE = "none"
-const APF_AUTH_PASSWORD = "password"
+// APF Authentication method.
+const (
+	APF_AUTH_NONE     = "none"
+	APF_AUTH_PASSWORD = "password"
+)
 
-const APF_TRIGGER_REASON_USER_INITIATED_REQUEST = 1
-const APF_TRIGGER_REASON_ALERT_REQUEST = 2
-const APF_TRIGGER_REASON_HIT_PROVISIONING_REQUEST = 3
-const APF_TRIGGER_REASON_PERIODIC_REQUEST = 4
-const APF_TRIGGER_REASON_LME_REQUEST = 254
+const (
+	APF_TRIGGER_REASON_USER_INITIATED_REQUEST   = 1
+	APF_TRIGGER_REASON_ALERT_REQUEST            = 2
+	APF_TRIGGER_REASON_HIT_PROVISIONING_REQUEST = 3
+	APF_TRIGGER_REASON_PERIODIC_REQUEST         = 4
+	APF_TRIGGER_REASON_LME_REQUEST              = 254
+)
 
-const OPEN_FAILURE_REASON_ADMINISTRATIVELY_PROHIBITED = 1
-const OPEN_FAILURE_REASON_CONNECT_FAILED = 2
-const OPEN_FAILURE_REASON_UNKNOWN_CHANNEL_TYPE = 3
-const OPEN_FAILURE_REASON_RESOURCE_SHORTAGE = 4
+const (
+	OPEN_FAILURE_REASON_ADMINISTRATIVELY_PROHIBITED = 1
+	OPEN_FAILURE_REASON_CONNECT_FAILED              = 2
+	OPEN_FAILURE_REASON_UNKNOWN_CHANNEL_TYPE        = 3
+	OPEN_FAILURE_REASON_RESOURCE_SHORTAGE           = 4
+)
 
 type APF_MESSAGE_HEADER struct {
 	MessageType byte
@@ -79,8 +95,8 @@ type APF_MESSAGE_HEADER struct {
  *
  * @MessageType:
  * @RequestStringLength: length of the string identifies the request
- * @RequestString: the string that identifies the request
- **/
+ * @RequestString: the string that identifies the request.
+ *.*/
 
 type APF_GENERIC_HEADER struct {
 	MessageType  byte
@@ -97,8 +113,8 @@ type APF_TCP_FORWARD_REQUEST struct {
 /**
  * TCP forward reply message
  * @MessageType - Protocol's Major version
- * @PortBound - the TCP port was bound on the server
- **/
+ * @PortBound - the TCP port was bound on the server.
+ *.*/
 type APF_TCP_FORWARD_REPLY_MESSAGE struct {
 	MessageType byte
 	PortBound   uint32
@@ -110,8 +126,8 @@ type APF_TCP_FORWARD_REPLY_MESSAGE struct {
  * @RecipientChannel - channel number given in the open request
  * @SenderChannel - channel number assigned by the sender
  * @InitialWindowSize - Number of bytes in the window
- * @Reserved - Reserved
- **/
+ * @Reserved - Reserved.
+ *.*/
 type APF_CHANNEL_OPEN_CONFIRMATION_MESSAGE struct {
 	MessageType       byte
 	RecipientChannel  uint32
@@ -125,8 +141,8 @@ type APF_CHANNEL_OPEN_CONFIRMATION_MESSAGE struct {
  * @MessageType - APF_CHANNEL_OPEN_FAILURE
  * @RecipientChannel - channel number given in the open request
  * @ReasonCode - code for the reason channel could not be open
- * @Reserved - Reserved
- **/
+ * @Reserved - Reserved.
+ *.*/
 type APF_CHANNEL_OPEN_FAILURE_MESSAGE struct {
 	MessageType      byte
 	RecipientChannel uint32
@@ -138,8 +154,8 @@ type APF_CHANNEL_OPEN_FAILURE_MESSAGE struct {
 /**
  * close channel message
  * @MessageType - APF_CHANNEL_CLOSE
- * @RecipientChannel - channel number given in the open request
- **/
+ * @RecipientChannel - channel number given in the open request.
+ *.*/
 type APF_CHANNEL_CLOSE_MESSAGE struct {
 	MessageType      byte
 	RecipientChannel uint32
@@ -150,8 +166,8 @@ type APF_CHANNEL_CLOSE_MESSAGE struct {
  * @MessageType - APF_CHANNEL_DATA
  * @RecipientChannel - channel number given in the open request
  * @Length - Length of the data in the message
- * @Data - The data in the message
- **/
+ * @Data - The data in the message.
+ *.*/
 type APF_CHANNEL_DATA_MESSAGE struct {
 	MessageType      byte
 	RecipientChannel uint32
@@ -163,8 +179,8 @@ type APF_CHANNEL_DATA_MESSAGE struct {
  * used to adjust receive window size.
  * @MessageType - APF_WINDOW_ADJUST
  * @RecipientChannel - channel number given in the open request
- * @BytesToAdd - number of bytes to add to current window size value
- **/
+ * @BytesToAdd - number of bytes to add to current window size value.
+ *.*/
 type APF_CHANNEL_WINDOW_ADJUST_MESSAGE struct {
 	MessageType      byte
 	RecipientChannel uint32
@@ -174,19 +190,19 @@ type APF_CHANNEL_WINDOW_ADJUST_MESSAGE struct {
 /**
  * This message causes immediate termination of the connection with AMT.
  * @ReasonCode -  A Reason code for the disconnection event
- * @Reserved - Reserved must be set to 0
- **/
+ * @Reserved - Reserved must be set to 0.
+ *.*/
 type APF_DISCONNECT_MESSAGE struct {
 	MessageType byte
 	ReasonCode  uint32
-	Reserved    uint //short32
+	Reserved    uint // short32
 }
 
 /**
  * Used to request a service identified by name
  * @ServiceNameLength -  The length of the service name string.
  * @ServiceName - The name of the service being requested.
- **/
+ *.*/
 type APF_SERVICE_REQUEST_MESSAGE struct {
 	MessageType       byte
 	ServiceNameLength uint32
@@ -197,7 +213,7 @@ type APF_SERVICE_REQUEST_MESSAGE struct {
  * Used to send a service accept identified by name
  * @ServiceNameLength -  The length of the service name string.
  * @ServiceName - The name of the service being requested.
- **/
+ *.*/
 type APF_SERVICE_ACCEPT_MESSAGE struct {
 	MessageType       byte
 	ServiceNameLength uint32
@@ -209,8 +225,8 @@ type APF_SERVICE_ACCEPT_MESSAGE struct {
  * @MajorVersion - Protocol's Major version
  * @MinorVersion - Protocol's Minor version
  * @Trigger - The open session reason
- * @UUID - System Id
- **/
+ * @UUID - System Id.
+ *.*/
 type APF_PROTOCOL_VERSION_MESSAGE struct {
 	MessageType   byte
 	MajorVersion  uint32
@@ -222,7 +238,7 @@ type APF_PROTOCOL_VERSION_MESSAGE struct {
 
 /**
  * holds the user authentication request success response.
- **/
+ *.*/
 type APF_USERAUTH_SUCCESS_MESSAGE struct {
 	MessageType byte
 }

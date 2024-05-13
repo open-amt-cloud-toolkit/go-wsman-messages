@@ -6,7 +6,7 @@
 package managementpresence
 
 const (
-	AMT_ManagementPresenceRemoteSAP string = "AMT_ManagementPresenceRemoteSAP"
+	AMTManagementPresenceRemoteSAP string = "AMT_ManagementPresenceRemoteSAP"
 )
 
 const (
@@ -37,7 +37,7 @@ const (
 	InfoFormatParameterizedURL  InfoFormat = 206
 )
 
-// infoFormatString is a map of InfoFormat to their string representation
+// infoFormatString is a map of InfoFormat to their string representation.
 var infoFormatString = map[InfoFormat]string{
 	InfoFormatOther:                  "Other",
 	InfoFormatHostName:               "HostName",
@@ -71,5 +71,6 @@ func (i InfoFormat) String() string {
 	if value, exists := infoFormatString[i]; exists {
 		return value
 	}
+
 	return "Value not found in map"
 }

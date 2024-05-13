@@ -1,10 +1,11 @@
 package wsmantesting
 
 import (
-	"fmt"
 	"io"
 	"os"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 // MockClient is a mock implementation of the wsman.Client interface for testing.
@@ -14,27 +15,29 @@ type MockClient struct {
 }
 
 func (c *MockClient) Post(msg string) ([]byte, error) {
-	if strings.ToLower(c.CurrentMessage) == "error" {
+	if strings.EqualFold(c.CurrentMessage, "error") {
 		return []byte(""), nil
 	}
 	// read an xml file from disk:
 	xmlFile, err := os.Open("../../wsmantesting/responses/" + c.PackageUnderTest + "/" + strings.ToLower(c.CurrentMessage) + ".xml")
 	if err != nil {
-		fmt.Println("Error opening file:", err)
+		logrus.Print("Error opening file:", err)
+
 		return nil, err
 	}
 	defer xmlFile.Close()
 	// read file into string
 	xmlData, err := io.ReadAll(xmlFile)
 	if err != nil {
-		fmt.Println("Error reading file:", err)
+		logrus.Print("Error reading file:", err)
+
 		return nil, err
 	}
 	// strip carriage returns and new line characters
 	xmlData = []byte(strings.ReplaceAll(string(xmlData), "\r\n", ""))
 
 	// Simulate a successful response for testing.
-	return []byte(xmlData), nil
+	return xmlData, nil
 }
 func (c *MockClient) Send(data []byte) error   { return nil }
 func (c *MockClient) Receive() ([]byte, error) { return nil, nil }

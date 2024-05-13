@@ -40,8 +40,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveCIMBIOSElement(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/bios/element",
 	}
@@ -56,20 +56,21 @@ func TestPositiveCIMBIOSElement(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create and parse a valid cim_BIOSElement Get call",
-				CIM_BIOSElement,
-				wsmantesting.GET,
+				CIMBIOSElement,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: BiosElement{
-						XMLName:               xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BIOSElement", Local: CIM_BIOSElement},
+						XMLName:               xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BIOSElement", Local: CIMBIOSElement},
 						TargetOperatingSystem: 66,
 						SoftwareElementID:     "QNCFLX70.0054.2020.0810.2227",
 						SoftwareElementState:  2,
@@ -83,14 +84,15 @@ func TestPositiveCIMBIOSElement(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create and parse a valid cim_BIOSElement Enumerate call",
-				CIM_BIOSElement,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMBIOSElement,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -100,14 +102,15 @@ func TestPositiveCIMBIOSElement(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create and parse a valid cim_BIOSElement Pull call",
-				CIM_BIOSElement,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMBIOSElement,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -116,7 +119,7 @@ func TestPositiveCIMBIOSElement(t *testing.T) {
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
 						BiosElementItems: []BiosElement{
 							{
-								XMLName:               xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BIOSElement", Local: CIM_BIOSElement},
+								XMLName:               xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BIOSElement", Local: CIMBIOSElement},
 								TargetOperatingSystem: 66,
 								SoftwareElementID:     "QNCFLX70.0054.2020.0810.2227",
 								SoftwareElementState:  2,
@@ -136,7 +139,7 @@ func TestPositiveCIMBIOSElement(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -149,8 +152,8 @@ func TestPositiveCIMBIOSElement(t *testing.T) {
 
 func TestNegativeCIMBIOSElement(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/bios/element",
 	}
@@ -165,20 +168,21 @@ func TestNegativeCIMBIOSElement(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create and parse a valid cim_BIOSElement Get call",
-				CIM_BIOSElement,
-				wsmantesting.GET,
+				CIMBIOSElement,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: BiosElement{
-						XMLName:               xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BIOSElement", Local: CIM_BIOSElement},
+						XMLName:               xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BIOSElement", Local: CIMBIOSElement},
 						TargetOperatingSystem: 66,
 						SoftwareElementID:     "QNCFLX70.0054.2020.0810.2227",
 						SoftwareElementState:  2,
@@ -192,14 +196,15 @@ func TestNegativeCIMBIOSElement(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create and parse a valid cim_BIOSElement Enumerate call",
-				CIM_BIOSElement,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMBIOSElement,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -209,14 +214,15 @@ func TestNegativeCIMBIOSElement(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create and parse a valid cim_BIOSElement Pull call",
-				CIM_BIOSElement,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMBIOSElement,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -225,7 +231,7 @@ func TestNegativeCIMBIOSElement(t *testing.T) {
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
 						BiosElementItems: []BiosElement{
 							{
-								XMLName:               xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BIOSElement", Local: CIM_BIOSElement},
+								XMLName:               xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BIOSElement", Local: CIMBIOSElement},
 								TargetOperatingSystem: 66,
 								SoftwareElementID:     "QNCFLX70.0054.2020.0810.2227",
 								SoftwareElementState:  2,
@@ -245,7 +251,7 @@ func TestNegativeCIMBIOSElement(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

@@ -18,7 +18,7 @@ type Occurrence struct {
 }
 
 // OUTPUT
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message

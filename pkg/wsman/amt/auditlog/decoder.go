@@ -14,8 +14,9 @@ import (
 )
 
 const (
-	AMT_AuditLog string = "AMT_AuditLog"
-	ReadRecords  string = "ReadRecords"
+	AMTAuditLog   string = "AMT_AuditLog"
+	ReadRecords   string = "ReadRecords"
+	ValueNotFound string = "Value not found in map"
 )
 
 const (
@@ -32,13 +33,13 @@ var OverwritePolicyToString = map[OverwritePolicy]string{
 	OverwritePolicyPartialRestrictedRollover: "PartialRestrictedRollover",
 }
 
-// OverwritePolicyToString returns a string representation of a OverwritePolicy
+// OverwritePolicyToString returns a string representation of a OverwritePolicy.
 func (r OverwritePolicy) String() string {
 	if value, exists := OverwritePolicyToString[r]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -69,13 +70,13 @@ var EnabledStateToString = map[EnabledState]string{
 	EnabledStateStarting:          "Starting",
 }
 
-// EnabledStateToString returns a string representation of a EnabledState
+// EnabledStateToString returns a string representation of a EnabledState.
 func (r EnabledState) String() string {
 	if value, exists := EnabledStateToString[r]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -108,13 +109,13 @@ var RequestedStateToString = map[RequestedState]string{
 	RequestedStateNotApplicable: "NotApplicable",
 }
 
-// RequestedStateToString returns a string representation of a RequestedState
+// RequestedStateToString returns a string representation of a RequestedState.
 func (r RequestedState) String() string {
 	if value, exists := RequestedStateToString[r]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -129,20 +130,26 @@ var StoragePolicyToString = map[StoragePolicy]string{
 	StoragePolicyRestrictedRollOver: "RestrictedRollOver",
 }
 
-// StoragePolicyToString returns a string representation of a StoragePolicy
+// StoragePolicyToString returns a string representation of a StoragePolicy.
 func (r StoragePolicy) String() string {
 	if value, exists := StoragePolicyToString[r]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 func convertToAuditLogResult(auditlogdata []string) []AuditLogRecord {
 	records := []AuditLogRecord{}
+
 	for _, eventRecord := range auditlogdata {
 		ptr := 0
-		decodedEventRecord, _ := base64.StdEncoding.DecodeString(eventRecord)
+
+		decodedEventRecord, err := base64.StdEncoding.DecodeString(eventRecord)
+		if err != nil {
+			continue
+		}
+
 		decodedEventRecordStr := string(decodedEventRecord)
 		auditLogRecord := AuditLogRecord{}
 
@@ -157,7 +164,7 @@ func convertToAuditLogResult(auditlogdata []string) []AuditLogRecord {
 		// }
 
 		initiatorType, initiator, pointer := getInitiatorInfo(decodedEventRecordStr)
-		auditLogRecord.InitiatorType = uint8(initiatorType)
+		auditLogRecord.InitiatorType = initiatorType
 		auditLogRecord.Initiator = initiator
 		ptr = pointer
 
@@ -168,16 +175,16 @@ func convertToAuditLogResult(auditlogdata []string) []AuditLogRecord {
 
 		// Read network access
 
-		auditLogRecord.MCLocationType = uint8([]byte(decodedEventRecordStr[ptr : ptr+1])[0])
-		ptr = ptr + 1
-		netlen := uint8([]byte(decodedEventRecordStr[ptr : ptr+1])[0])
-		ptr = ptr + 1
-		auditLogRecord.NetAddress = strings.Replace(decodedEventRecordStr[ptr:ptr+int(netlen)], "0000:0000:0000:0000:0000:0000:0000:0001", "::1", -1)
+		auditLogRecord.MCLocationType = []byte(decodedEventRecordStr[ptr : ptr+1])[0]
+		ptr++
+		netlen := []byte(decodedEventRecordStr[ptr : ptr+1])[0]
+		ptr++
+		auditLogRecord.NetAddress = strings.ReplaceAll(decodedEventRecordStr[ptr:ptr+int(netlen)], "0000:0000:0000:0000:0000:0000:0000:0001", "::1")
 
 		// Read extended data
 		ptr += int(netlen)
-		exlen := uint8([]byte(decodedEventRecordStr[ptr : ptr+1])[0])
-		ptr = ptr + 1
+		exlen := []byte(decodedEventRecordStr[ptr : ptr+1])[0]
+		ptr++
 		auditLogRecord.Ex = decodedEventRecordStr[ptr : ptr+int(exlen)]
 		// auditLogRecord.ExStr = GetAuditLogExtendedDataString((auditLogRecord.AuditAppID*100)+auditLogRecord.EventID, auditLogRecord.Ex)
 
@@ -188,16 +195,16 @@ func convertToAuditLogResult(auditlogdata []string) []AuditLogRecord {
 }
 
 const (
-	AclEntryAdded                   = 1602
-	AclEntryModified                = 1603
-	AclEntryRemoved                 = 1604
-	AclAccessWithInvalidCredentials = 1605
-	AclEntryStateChanged            = 1606
-	TlsStateChanged                 = 1607
+	ACLEntryAdded                   = 1602
+	ACLEntryModified                = 1603
+	ACLEntryRemoved                 = 1604
+	ACLAccessWithInvalidCredentials = 1605
+	ACLEntryStateChanged            = 1606
+	TLSStateChanged                 = 1607
 	SetRealmAuthenticationMode      = 1617
-	AmtUnprovisioningStarted        = 1619
+	AMTUnprovisioningStarted        = 1619
 	FirmwareUpdate                  = 1900
-	AmtTimeSet                      = 2100
+	AMTTimeSet                      = 2100
 	OptInPolicyChange               = 3000
 	SendConsentCode                 = 3001
 )
@@ -265,26 +272,25 @@ const (
 // }
 
 const (
-	HttpDigest     byte = 0
+	HTTPDigest     byte = 0
 	Kerberos       byte = 1
 	Local          byte = 2
 	KvmDefaultPort byte = 3
 )
 
-// [initiatorType: number, initiator: string, ptr: number] need to type it
-func getInitiatorInfo(decodedEventRecord string) (byte, string, int) {
-	initiator := ""
+// [initiatorType: number, initiator: string, ptr: number] need to type it.
+func getInitiatorInfo(decodedEventRecord string) (initatorType byte, initiator string, ptr int) {
 	var userlen uint8
-	ptr := 0
+
 	initiatorType := []byte(decodedEventRecord[4:5])[0]
 
 	switch initiatorType {
-	case HttpDigest:
-		userlen = uint8([]byte(decodedEventRecord[5:6])[0])
+	case HTTPDigest:
+		userlen = []byte(decodedEventRecord[5:6])[0]
 		initiator = decodedEventRecord[6 : 6+userlen]
 		ptr = 6 + int(userlen)
 	case Kerberos:
-		userlen = uint8([]byte(decodedEventRecord[9:10])[0])
+		userlen = []byte(decodedEventRecord[9:10])[0]
 		initiator = common.GetSidString(decodedEventRecord[10 : 10+userlen])
 		ptr = 10 + int(userlen)
 	case Local:

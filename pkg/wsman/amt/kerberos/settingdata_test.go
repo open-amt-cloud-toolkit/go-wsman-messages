@@ -41,8 +41,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_KerberosSettingData(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/kerberos",
 	}
@@ -57,20 +57,21 @@ func TestPositiveAMT_KerberosSettingData(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_KerberosSettingData Get wsman message",
-				AMT_KerberosSettingData,
-				wsmantesting.GET,
+				AMTKerberosSettingData,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: KerberosSettingDataResponse{
-						XMLName:                       xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_KerberosSettingData), Local: AMT_KerberosSettingData},
+						XMLName:                       xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTKerberosSettingData), Local: AMTKerberosSettingData},
 						ElementName:                   "Intel(r) AMT: Kerberos Settings",
 						InstanceID:                    "Intel (r) AMT: Kerberos Settings",
 						KrbEnabled:                    false,
@@ -78,14 +79,15 @@ func TestPositiveAMT_KerberosSettingData(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_KerberosSettingData Enumerate wsman message",
-				AMT_KerberosSettingData,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTKerberosSettingData,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -95,14 +97,15 @@ func TestPositiveAMT_KerberosSettingData(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_KerberosSettingData Pull wsman message",
-				AMT_KerberosSettingData,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTKerberosSettingData,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -111,7 +114,7 @@ func TestPositiveAMT_KerberosSettingData(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						KerberosSettingDataItems: []KerberosSettingDataResponse{
 							{
-								XMLName:                       xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_KerberosSettingData), Local: AMT_KerberosSettingData},
+								XMLName:                       xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTKerberosSettingData), Local: AMTKerberosSettingData},
 								ElementName:                   "Intel(r) AMT: Kerberos Settings",
 								InstanceID:                    "Intel (r) AMT: Kerberos Settings",
 								KrbEnabled:                    false,
@@ -124,17 +127,18 @@ func TestPositiveAMT_KerberosSettingData(t *testing.T) {
 			// GET CREDENTIAL CACHE STATE
 			{
 				"should return a valid amt_KerberosSettingData GetCredentialCacheState wsman message",
-				AMT_KerberosSettingData,
-				fmt.Sprintf("%s%s/%s", message.AMTSchema, AMT_KerberosSettingData, "GetCredentialCacheState"),
+				AMTKerberosSettingData,
+				fmt.Sprintf("%s%s/%s", message.AMTSchema, AMTKerberosSettingData, "GetCredentialCacheState"),
 				`<h:GetCredentialCacheState_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_KerberosSettingData"></h:GetCredentialCacheState_INPUT>`,
 				func() (Response, error) {
 					client.CurrentMessage = "GetCredentialCacheState"
+
 					return elementUnderTest.GetCredentialCacheState()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetCredentialCacheState_OUTPUT: GetCredentialCacheState_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_KerberosSettingData), Local: "GetCredentialCacheState_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTKerberosSettingData), Local: "GetCredentialCacheState_OUTPUT"},
 						Enabled:     false,
 						ReturnValue: 0,
 					},
@@ -157,21 +161,21 @@ func TestPositiveAMT_KerberosSettingData(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.Body)
-
 			})
 		}
 	})
 }
+
 func TestNegativeAMT_KerberosSettingData(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/kerberos",
 	}
@@ -186,20 +190,21 @@ func TestNegativeAMT_KerberosSettingData(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_KerberosSettingData Get wsman message",
-				AMT_KerberosSettingData,
-				wsmantesting.GET,
+				AMTKerberosSettingData,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: KerberosSettingDataResponse{
-						XMLName:                       xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_KerberosSettingData), Local: AMT_KerberosSettingData},
+						XMLName:                       xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTKerberosSettingData), Local: AMTKerberosSettingData},
 						ElementName:                   "Intel(r) AMT: Kerberos Settings",
 						InstanceID:                    "Intel (r) AMT: Kerberos Settings",
 						KrbEnabled:                    false,
@@ -207,14 +212,15 @@ func TestNegativeAMT_KerberosSettingData(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_KerberosSettingData Enumerate wsman message",
-				AMT_KerberosSettingData,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTKerberosSettingData,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -224,14 +230,15 @@ func TestNegativeAMT_KerberosSettingData(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_KerberosSettingData Pull wsman message",
-				AMT_KerberosSettingData,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTKerberosSettingData,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -240,7 +247,7 @@ func TestNegativeAMT_KerberosSettingData(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						KerberosSettingDataItems: []KerberosSettingDataResponse{
 							{
-								XMLName:                       xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_KerberosSettingData), Local: AMT_KerberosSettingData},
+								XMLName:                       xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTKerberosSettingData), Local: AMTKerberosSettingData},
 								ElementName:                   "Intel(r) AMT: Kerberos Settings",
 								InstanceID:                    "Intel (r) AMT: Kerberos Settings",
 								KrbEnabled:                    false,
@@ -253,17 +260,18 @@ func TestNegativeAMT_KerberosSettingData(t *testing.T) {
 			// GET CREDENTIAL CACHE STATE
 			{
 				"should return a valid amt_KerberosSettingData GetCredentialCacheState wsman message",
-				AMT_KerberosSettingData,
-				fmt.Sprintf("%s%s/%s", message.AMTSchema, AMT_KerberosSettingData, "GetCredentialCacheState"),
+				AMTKerberosSettingData,
+				fmt.Sprintf("%s%s/%s", message.AMTSchema, AMTKerberosSettingData, "GetCredentialCacheState"),
 				`<h:GetCredentialCacheState_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_KerberosSettingData"></h:GetCredentialCacheState_INPUT>`,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.GetCredentialCacheState()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetCredentialCacheState_OUTPUT: GetCredentialCacheState_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_KerberosSettingData), Local: "GetCredentialCacheState_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTKerberosSettingData), Local: "GetCredentialCacheState_OUTPUT"},
 						Enabled:     false,
 						ReturnValue: 0,
 					},
@@ -286,13 +294,12 @@ func TestNegativeAMT_KerberosSettingData(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.NotEqual(t, test.expectedResponse, response.Body)
-
 			})
 		}
 	})

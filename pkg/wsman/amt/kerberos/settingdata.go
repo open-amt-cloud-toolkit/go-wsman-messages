@@ -15,14 +15,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewKerberosSettingDataWithClient instantiates a new kerberos SettingData
+// NewKerberosSettingDataWithClient instantiates a new kerberos SettingData.
 func NewKerberosSettingDataWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) SettingData {
 	return SettingData{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_KerberosSettingData, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTKerberosSettingData, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (settingData SettingData) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -39,10 +39,11 @@ func (settingData SettingData) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (settingData SettingData) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -59,6 +60,7 @@ func (settingData SettingData) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -79,13 +81,14 @@ func (settingData SettingData) Pull(enumerationContext string) (response Respons
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// GetCredentialCacheState gets the current state of the credential caching functionality
+// GetCredentialCacheState gets the current state of the credential caching functionality.
 func (settingData SettingData) GetCredentialCacheState() (response Response, err error) {
-	header := settingData.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_KerberosSettingData, GetCredentialCacheState), AMT_KerberosSettingData, nil, "", "")
-	body := settingData.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetCredentialCacheState), AMT_KerberosSettingData, nil)
+	header := settingData.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMTKerberosSettingData, GetCredentialCacheState), AMTKerberosSettingData, nil, "", "")
+	body := settingData.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetCredentialCacheState), AMTKerberosSettingData, nil)
 
 	response = Response{
 		Message: &client.Message{
@@ -102,18 +105,19 @@ func (settingData SettingData) GetCredentialCacheState() (response Response, err
 	if err != nil {
 		return
 	}
+
 	return
 }
 
 // SetCredentialCacheState enables/disables the credential caching functionality
-// TODO: Current gets SOAP schema violation from AMT
+// TODO: Current gets SOAP schema violation from AMT.
 func (settingData SettingData) SetCredentialCacheState(enabled bool) (response Response, err error) {
-	credentialCasheState := SetCredentialCacheState_INPUT{
-		H:       fmt.Sprintf("%s%s", message.AMTSchema, AMT_KerberosSettingData),
+	credentialCasheState := SetCredentialCacheStateInput{
+		H:       fmt.Sprintf("%s%s", message.AMTSchema, AMTKerberosSettingData),
 		Enabled: enabled,
 	}
-	header := settingData.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_KerberosSettingData, SetCredentialCacheState), AMT_KerberosSettingData, nil, "", "")
-	body := settingData.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetCredentialCacheState), AMT_KerberosSettingData, credentialCasheState)
+	header := settingData.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMTKerberosSettingData, SetCredentialCacheState), AMTKerberosSettingData, nil, "", "")
+	body := settingData.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetCredentialCacheState), AMTKerberosSettingData, credentialCasheState)
 
 	response = Response{
 		Message: &client.Message{
@@ -130,5 +134,6 @@ func (settingData SettingData) SetCredentialCacheState(enabled bool) (response R
 	if err != nil {
 		return
 	}
+
 	return
 }

@@ -19,15 +19,15 @@ type Service struct {
 }
 
 // INPUTS
-// Request Types
-type readRecords_INPUT struct {
+// Request Types.
+type ReadRecordsInput struct {
 	XMLName    xml.Name `xml:"h:ReadRecords_INPUT"`
 	H          string   `xml:"xmlns:h,attr"`
 	StartIndex int      `xml:"h:StartIndex" json:"StartIndex"`
 }
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message

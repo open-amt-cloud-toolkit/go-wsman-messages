@@ -17,7 +17,10 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
-const GetUuid_BODY = "<h:GetUuid_INPUT xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService\"></h:GetUuid_INPUT>"
+const (
+	GetUUIDBody           = "<h:GetUuid_INPUT xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService\"></h:GetUuid_INPUT>"
+	CurrentMessageGetUUID = "getuuid"
+)
 
 func TestJson(t *testing.T) {
 	response := Response{
@@ -43,8 +46,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_SetupAndConfigurationService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/setupandconfiguration",
 	}
@@ -59,20 +62,21 @@ func TestPositiveAMT_SetupAndConfigurationService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_SetupAndConfigurationService Get wsman message",
-				AMT_SetupAndConfigurationService,
-				wsmantesting.GET, "",
+				AMTSetupAndConfigurationService,
+				wsmantesting.Get, "",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: SetupAndConfigurationServiceResponse{
 						XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService", Local: "AMT_SetupAndConfigurationService"},
-						CreationClassName:             AMT_SetupAndConfigurationService,
+						CreationClassName:             AMTSetupAndConfigurationService,
 						ElementName:                   "Intel(r) AMT Setup and Configuration Service",
 						EnabledState:                  5,
 						Name:                          "Intel(r) AMT Setup and Configuration Service",
@@ -87,14 +91,15 @@ func TestPositiveAMT_SetupAndConfigurationService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_SetupAndConfigurationService Enumerate wsman message",
-				AMT_SetupAndConfigurationService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTSetupAndConfigurationService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -104,14 +109,15 @@ func TestPositiveAMT_SetupAndConfigurationService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_SetupAndConfigurationService Pull wsman message",
-				AMT_SetupAndConfigurationService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTSetupAndConfigurationService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -121,7 +127,7 @@ func TestPositiveAMT_SetupAndConfigurationService(t *testing.T) {
 						SetupAndConfigurationServiceItems: []SetupAndConfigurationServiceResponse{
 							{
 								XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService", Local: "AMT_SetupAndConfigurationService"},
-								CreationClassName:             AMT_SetupAndConfigurationService,
+								CreationClassName:             AMTSetupAndConfigurationService,
 								ElementName:                   "Intel(r) AMT Setup and Configuration Service",
 								EnabledState:                  5,
 								Name:                          "Intel(r) AMT Setup and Configuration Service",
@@ -138,15 +144,16 @@ func TestPositiveAMT_SetupAndConfigurationService(t *testing.T) {
 					},
 				},
 			},
-			//GetUuid
+			// GetUuid
 			{
 				"should return a valid AMT_GetUuid response",
-				AMT_SetupAndConfigurationService,
-				methods.GenerateAction(AMT_SetupAndConfigurationService, GetUuid),
-				GetUuid_BODY,
+				AMTSetupAndConfigurationService,
+				methods.GenerateAction(AMTSetupAndConfigurationService, GetUUID),
+				GetUUIDBody,
 				func() (Response, error) {
-					client.CurrentMessage = "getuuid"
-					return elementUnderTest.GetUuid()
+					client.CurrentMessage = CurrentMessageGetUUID
+
+					return elementUnderTest.GetUUID()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
@@ -156,14 +163,15 @@ func TestPositiveAMT_SetupAndConfigurationService(t *testing.T) {
 					},
 				},
 			},
-			//CommitChanges
+			// CommitChanges
 			{
 				"should create a valid AMT_SetupAndConfigurationService CommitChanges wsman message",
-				AMT_SetupAndConfigurationService,
-				methods.GenerateAction(AMT_SetupAndConfigurationService, CommitChanges),
+				AMTSetupAndConfigurationService,
+				methods.GenerateAction(AMTSetupAndConfigurationService, CommitChanges),
 				`<h:CommitChanges_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"></h:CommitChanges_INPUT>`,
 				func() (Response, error) {
 					client.CurrentMessage = "CommitChanges"
+
 					return elementUnderTest.CommitChanges()
 				},
 				Body{
@@ -174,14 +182,15 @@ func TestPositiveAMT_SetupAndConfigurationService(t *testing.T) {
 					},
 				},
 			},
-			//SetMEBxPassword
+			// SetMEBxPassword
 			{
 				"should create a valid AMT_SetupAndConfigurationService SetMEBxPassword wsman message",
-				AMT_SetupAndConfigurationService,
-				methods.GenerateAction(AMT_SetupAndConfigurationService, SetMEBxPassword),
+				AMTSetupAndConfigurationService,
+				methods.GenerateAction(AMTSetupAndConfigurationService, SetMEBxPassword),
 				`<h:SetMEBxPassword_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"><h:Password>P@ssw0rd</h:Password></h:SetMEBxPassword_INPUT>`,
 				func() (Response, error) {
 					client.CurrentMessage = "SetMEBxPassword"
+
 					return elementUnderTest.SetMEBXPassword("P@ssw0rd")
 				},
 				Body{
@@ -192,14 +201,15 @@ func TestPositiveAMT_SetupAndConfigurationService(t *testing.T) {
 					},
 				},
 			},
-			//Unprovision
+			// Unprovision
 			{
 				"should create a valid AMT_SetupAndConfigurationService Unprovision wsman message",
-				AMT_SetupAndConfigurationService,
-				methods.GenerateAction(AMT_SetupAndConfigurationService, Unprovision),
+				AMTSetupAndConfigurationService,
+				methods.GenerateAction(AMTSetupAndConfigurationService, Unprovision),
 				`<h:Unprovision_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"><h:ProvisioningMode>1</h:ProvisioningMode></h:Unprovision_INPUT>`,
 				func() (Response, error) {
 					client.CurrentMessage = "Unprovision"
+
 					return elementUnderTest.Unprovision(1)
 				},
 				Body{
@@ -214,7 +224,7 @@ func TestPositiveAMT_SetupAndConfigurationService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -229,16 +239,18 @@ func TestPositiveAMT_SetupAndConfigurationService(t *testing.T) {
 			name             string
 			responseFunc     func() (string, error, error)
 			expectedResponse string
-		}{{
-			"should properly decode AMT GetUuid Response to a UUID string",
-			func() (string, error, error) {
-				client.CurrentMessage = "getuuid"
-				response, err1 := elementUnderTest.GetUuid()
-				uuid, err2 := response.DecodeUUID()
-				return uuid, err1, err2
+		}{
+			{
+				"should properly decode AMT GetUuid Response to a UUID string",
+				func() (string, error, error) {
+					client.CurrentMessage = CurrentMessageGetUUID
+					response, err1 := elementUnderTest.GetUUID()
+					uuid, err2 := response.DecodeUUID()
+
+					return uuid, err1, err2
+				},
+				"55e3ae13-bfd2-61bb-17a0-88aedd7037ea",
 			},
-			"55e3ae13-bfd2-61bb-17a0-88aedd7037ea",
-		},
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
@@ -249,17 +261,17 @@ func TestPositiveAMT_SetupAndConfigurationService(t *testing.T) {
 			})
 		}
 	})
-
 }
 
 func TestNegativeAMT_SetupAndConfigurationService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/setupandconfiguration",
 	}
 	elementUnderTest := NewSetupAndConfigurationServiceWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -273,12 +285,13 @@ func TestNegativeAMT_SetupAndConfigurationService(t *testing.T) {
 			{
 				"should create an invalid AMT_SetupAndConfigurationService Pull wsman message",
 				"AMT_EthernetPortSettings",
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
 					response, err := elementUnderTest.Pull("")
+
 					return response, err
 				},
 				Body{
@@ -288,7 +301,7 @@ func TestNegativeAMT_SetupAndConfigurationService(t *testing.T) {
 						SetupAndConfigurationServiceItems: []SetupAndConfigurationServiceResponse{
 							{
 								XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService", Local: "AMT_SetupAndConfigurationService"},
-								CreationClassName:             AMT_SetupAndConfigurationService,
+								CreationClassName:             AMTSetupAndConfigurationService,
 								ElementName:                   "Intel(r) AMT Setup and Configuration Service",
 								EnabledState:                  5,
 								Name:                          "Intel(r) AMT Setup and Configuration Service",
@@ -309,7 +322,7 @@ func TestNegativeAMT_SetupAndConfigurationService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)
@@ -323,16 +336,21 @@ func TestNegativeAMT_SetupAndConfigurationService(t *testing.T) {
 			name             string
 			responseFunc     func() (string, error)
 			expectedResponse string
-		}{{
-			"should return error due to bad UUID returned",
-			func() (string, error) {
-				client.CurrentMessage = "getuuid-bad"
-				response, _ := elementUnderTest.GetUuid()
-				uuid, err := response.DecodeUUID()
-				return uuid, err
+		}{
+			{
+				"should return error due to bad UUID returned",
+				func() (string, error) {
+					client.CurrentMessage = "getuuid-bad"
+					response, err := elementUnderTest.GetUUID()
+					if err != nil {
+						return "", err
+					}
+					uuid, err := response.DecodeUUID()
+
+					return uuid, err
+				},
+				"55e3ae13-bfd2-61bb-17a0-88aedd7037ea",
 			},
-			"55e3ae13-bfd2-61bb-17a0-88aedd7037ea",
-		},
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {

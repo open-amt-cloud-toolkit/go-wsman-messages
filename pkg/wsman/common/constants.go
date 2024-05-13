@@ -7,9 +7,11 @@ package common
 
 // TODO: Review if this file is still necessary.
 
+const ValueNotFound string = "Value not found in map"
+
 // OUTPUTS Lookups
 
-// ReturnValues is a map of return values to their string representation
+// ReturnValuesToString is a map of return values to their string representation.
 var ReturnValuesToString = map[int]string{
 	0:    "PT_STATUS_SUCCESS",
 	1:    "PT_STATUS_INTERNAL_ERROR",
@@ -69,15 +71,16 @@ var ReturnValuesToString = map[int]string{
 	2082: "PT_STATUS_OPERATION_IN_PROGRESS",
 }
 
-// ConvertReturnValueToString returns the string representation of the return value
+// ConvertReturnValueToString returns the string representation of the return value.
 func ConvertReturnValueToString(value int) string {
 	if value, exists := ReturnValuesToString[value]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// EnabledStateStrings is a map of EnabledState values to their string representations
+// EnabledStateToString is a map of EnabledState values to their string representations.
 var EnabledStateToString = map[int]string{
 	0:  "Unknown",
 	1:  "Other",
@@ -92,15 +95,16 @@ var EnabledStateToString = map[int]string{
 	10: "Starting",
 }
 
-// ConvertEnabledStateToString returns the string representation of an EnabledState value
+// ConvertEnabledStateToString returns the string representation of an EnabledState value.
 func ConvertEnabledStateToString(value int) string {
 	if value, exists := EnabledStateToString[value]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// RequestedStateStrings is a map of RequestedState values to their string representations
+// RequestedStateToString is a map of RequestedState values to their string representations.
 var RequestedStateToString = map[int]string{
 	0:  "Unknown",
 	2:  "Enabled",
@@ -116,15 +120,16 @@ var RequestedStateToString = map[int]string{
 	12: "NotApplicable",
 }
 
-// ConvertRequestedStateToString returns the string representation of a RequestedState value
+// ConvertRequestedStateToString returns the string representation of a RequestedState value.
 func ConvertRequestedStateToString(value int) string {
 	if value, exists := RequestedStateToString[value]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// OperationalStatusToString is a map of OperationalStatus value to string
+// OperationalStatusToString is a map of OperationalStatus value to string.
 var OperationalStatusToString = map[int]string{
 	0:  "Unknown",
 	1:  "Other",
@@ -148,15 +153,16 @@ var OperationalStatusToString = map[int]string{
 	19: "Relocating",
 }
 
-// ConvertOperationalStatusToString returns the string representation of OperationalStatus
+// ConvertOperationalStatusToString returns the string representation of OperationalStatus.
 func ConvertOperationalStatusToString(value int) string {
 	if value, exists := OperationalStatusToString[value]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// EnabledDefaultToString is a map of EnabledDefault value to string
+// EnabledDefaultToString is a map of EnabledDefault value to string.
 var EnabledDefaultToString = map[int]string{
 	2: "Enabled",
 	3: "Disabled",
@@ -166,15 +172,16 @@ var EnabledDefaultToString = map[int]string{
 	9: "Quiesce",
 }
 
-// ConvertEnabledDefaultToString returns the string representation of EnabledDefault
+// ConvertEnabledDefaultToString returns the string representation of EnabledDefault.
 func ConvertEnabledDefaultToString(value int) string {
 	if value, exists := EnabledDefaultToString[value]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// Indicates the current health of the element.
+// HealthStateToString indicates the current health of the element.
 var HealthStateToString = map[int]string{
 	0:  "Unknown",
 	5:  "OK",
@@ -185,15 +192,16 @@ var HealthStateToString = map[int]string{
 	30: "Non-recoverable Error",
 }
 
-// ConvertHealthStateToString returns the string representation of the health state
+// ConvertHealthStateToString returns the string representation of the health state.
 func ConvertHealthStateToString(value int) string {
 	if value, exists := HealthStateToString[value]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// PackageTypeToString is a mapping of the PackageType value to a string
+// PackageTypeToString is a mapping of the PackageType value to a string.
 var PackageTypeToString = map[int]string{
 	0:  "Unknown",
 	1:  "Other",
@@ -215,11 +223,11 @@ var PackageTypeToString = map[int]string{
 	17: "Blade Expansion",
 }
 
-// ConvertPackageTypeToString returns the string representation of the PackageType value
+// ConvertPackageTypeToString returns the string representation of the PackageType value.
 func ConvertPackageTypeToString(value int) string {
 	if value, exists := PackageTypeToString[value]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }

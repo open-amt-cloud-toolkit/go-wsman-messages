@@ -45,12 +45,13 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/remoteaccess/policyappliestomps",
 	}
 	elementUnderTest := NewRemoteAccessPolicyAppliesToMPSWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_RemoteAccessPolicyAppliesToMPS Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -61,15 +62,16 @@ func TestPositiveAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Get wsman message",
-				AMT_RemoteAccessPolicyAppliesToMPS,
-				wsmantesting.GET,
+				AMTRemoteAccessPolicyAppliesToMPS,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -147,15 +149,16 @@ func TestPositiveAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Enumerate wsman message",
-				AMT_RemoteAccessPolicyAppliesToMPS,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTRemoteAccessPolicyAppliesToMPS,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -165,15 +168,16 @@ func TestPositiveAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Pull wsman message",
-				AMT_RemoteAccessPolicyAppliesToMPS,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTRemoteAccessPolicyAppliesToMPS,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -258,12 +262,12 @@ func TestPositiveAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 			},
 			{
 				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Put wsman message",
-				AMT_RemoteAccessPolicyAppliesToMPS,
-				wsmantesting.PUT,
+				AMTRemoteAccessPolicyAppliesToMPS,
+				wsmantesting.Put,
 				`<h:AMT_RemoteAccessPolicyAppliesToMPS xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS"><h:ManagedElement xmlns:b="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS"><b:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:Address><b:ReferenceParameters xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><c:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_ManagementPresenceRemoteSAP</c:ResourceURI><c:SelectorSet><c:Selector Name="CreationClassName">AMT_ManagementPresenceRemoteSAP</c:Selector><c:Selector Name="Name">Intel(r) AMT:Management Presence Server 0</c:Selector><c:Selector Name="SystemCreationClassName">CIM_ComputerSystem</c:Selector><c:Selector Name="SystemName">Intel(r) AMT</c:Selector></c:SelectorSet></b:ReferenceParameters></h:ManagedElement><h:OrderOfAccess>0</h:OrderOfAccess><h:MpsType>2</h:MpsType><h:PolicySet xmlns:b="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS"><b:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:Address><b:ReferenceParameters xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><c:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyRule</c:ResourceURI><c:SelectorSet><c:Selector Name="CreationClassName">AMT_RemoteAccessPolicyRule</c:Selector><c:Selector Name="PolicyRuleName">Periodic</c:Selector><c:Selector Name="SystemCreationClassName">CIM_ComputerSystem</c:Selector><c:Selector Name="SystemName">Intel(r) AMT</c:Selector></c:SelectorSet></b:ReferenceParameters></h:PolicySet></h:AMT_RemoteAccessPolicyAppliesToMPS>`,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Put"
+					client.CurrentMessage = wsmantesting.CurrentMessagePut
 					rapatmps := RemoteAccessPolicyAppliesToMPSRequest{
 						H: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS",
 						ManagedElement: ManagedElement{
@@ -325,16 +329,17 @@ func TestPositiveAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 							},
 						},
 					}
+
 					return elementUnderTest.Put(&rapatmps)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 				},
 			},
-			//{"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Create wsman message", AMT_RemoteAccessPolicyAppliesToMPS, wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			// {"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Create wsman message", AMT_RemoteAccessPolicyAppliesToMPS, wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 			{
 				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Delete wsman message",
-				AMT_RemoteAccessPolicyAppliesToMPS, wsmantesting.DELETE,
+				AMTRemoteAccessPolicyAppliesToMPS, wsmantesting.Delete,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"Name\">Instance</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
@@ -348,7 +353,7 @@ func TestPositiveAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -358,14 +363,16 @@ func TestPositiveAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/remoteaccess/policyappliestomps",
 	}
 	elementUnderTest := NewRemoteAccessPolicyAppliesToMPSWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_RemoteAccessPolicyAppliesToMPS Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -376,15 +383,16 @@ func TestNegativeAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Get wsman message",
-				AMT_RemoteAccessPolicyAppliesToMPS,
-				wsmantesting.GET,
+				AMTRemoteAccessPolicyAppliesToMPS,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -462,15 +470,16 @@ func TestNegativeAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Enumerate wsman message",
-				AMT_RemoteAccessPolicyAppliesToMPS,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTRemoteAccessPolicyAppliesToMPS,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -480,15 +489,16 @@ func TestNegativeAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Pull wsman message",
-				AMT_RemoteAccessPolicyAppliesToMPS,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTRemoteAccessPolicyAppliesToMPS,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -573,12 +583,12 @@ func TestNegativeAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 			},
 			{
 				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Put wsman message",
-				AMT_RemoteAccessPolicyAppliesToMPS,
-				wsmantesting.PUT,
+				AMTRemoteAccessPolicyAppliesToMPS,
+				wsmantesting.Put,
 				`<h:AMT_RemoteAccessPolicyAppliesToMPS xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS"><h:ManagedElement xmlns:b="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS"><b:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:Address><b:ReferenceParameters xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><c:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_ManagementPresenceRemoteSAP</c:ResourceURI><c:SelectorSet><c:Selector Name="CreationClassName">AMT_ManagementPresenceRemoteSAP</c:Selector><c:Selector Name="Name">Intel(r) AMT:Management Presence Server 0</c:Selector><c:Selector Name="SystemCreationClassName">CIM_ComputerSystem</c:Selector><c:Selector Name="SystemName">Intel(r) AMT</c:Selector></c:SelectorSet></b:ReferenceParameters></h:ManagedElement><h:OrderOfAccess>0</h:OrderOfAccess><h:MpsType>2</h:MpsType><h:PolicySet xmlns:b="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS"><b:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:Address><b:ReferenceParameters xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><c:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyRule</c:ResourceURI><c:SelectorSet><c:Selector Name="CreationClassName">AMT_RemoteAccessPolicyRule</c:Selector><c:Selector Name="PolicyRuleName">Periodic</c:Selector><c:Selector Name="SystemCreationClassName">CIM_ComputerSystem</c:Selector><c:Selector Name="SystemName">Intel(r) AMT</c:Selector></c:SelectorSet></b:ReferenceParameters></h:PolicySet></h:AMT_RemoteAccessPolicyAppliesToMPS>`,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
 					rapatmps := RemoteAccessPolicyAppliesToMPSRequest{
 						H: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyAppliesToMPS",
 						ManagedElement: ManagedElement{
@@ -640,20 +650,22 @@ func TestNegativeAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 							},
 						},
 					}
+
 					return elementUnderTest.Put(&rapatmps)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 				},
 			},
-			//{"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Create wsman message", AMT_RemoteAccessPolicyAppliesToMPS, wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
+			// {"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Create wsman message", AMT_RemoteAccessPolicyAppliesToMPS, wsmantesting.PULL, wsmantesting.PULL_BODY, "", func() string { return elementUnderTest.Pull(wsmantesting.EnumerationContext) }},
 			{
 				"should create a valid AMT_RemoteAccessPolicyAppliesToMPS Delete wsman message",
-				AMT_RemoteAccessPolicyAppliesToMPS, wsmantesting.DELETE,
+				AMTRemoteAccessPolicyAppliesToMPS, wsmantesting.Delete,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"Name\">Instance</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Delete("Instance")
 				},
 				Body{
@@ -664,7 +676,7 @@ func TestNegativeAMT_RemoteAccessPolicyAppliesToMPS(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

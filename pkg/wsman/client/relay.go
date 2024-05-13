@@ -14,14 +14,13 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"strconv"
-	"strings"
 	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
 )
 
-// WsTransport is an implementation of http.Transport which uses websocket relay
+// WsTransport is an implementation of http.Transport which uses websocket relay.
 type WsTransport struct {
 	wsurl     string
 	protocol  int
@@ -34,7 +33,7 @@ type WsTransport struct {
 	token     string
 	conn      *websocket.Conn
 	tlsconfig *tls.Config
-	buf_mutex sync.Mutex
+	bufMutex  sync.Mutex
 	messages  []byte
 }
 
@@ -51,24 +50,30 @@ func NewWsTransport(wsurl string, protocol int, host, username, password string,
 		tls1only:  tls1only,
 		token:     token,
 		tlsconfig: tlsconfig,
-		buf_mutex: sync.Mutex{},
+		bufMutex:  sync.Mutex{},
 	}
+
 	return t
 }
 
 func (t *WsTransport) timedReadMessage(ms int) (b []byte) {
 	timer := time.NewTimer(time.Duration(ms) * time.Millisecond)
 	<-timer.C
-	t.buf_mutex.Lock()
+	t.bufMutex.Lock()
 	b = append(b, t.messages...)
 	t.messages = []byte{}
-	t.buf_mutex.Unlock()
+	t.bufMutex.Unlock()
+
 	return b
 }
 
-func (t *WsTransport) buildUrl() string {
+func (t *WsTransport) buildURL() string {
 	// Use net/url to construct the URL
-	u, _ := url.Parse(t.wsurl)
+	u, err := url.Parse(t.wsurl)
+	if err != nil {
+		return ""
+	}
+
 	// Prepare query parameters
 	q := u.Query()
 	q.Set("p", strconv.Itoa(t.protocol))
@@ -80,36 +85,47 @@ func (t *WsTransport) buildUrl() string {
 	q.Set("tls1only", strconv.FormatBool(t.tls1only))
 	// Set query string to URL
 	u.RawQuery = q.Encode()
+
 	return u.String()
 }
 
 func (t *WsTransport) connectWebsocket() (conn *websocket.Conn, err error) {
-	url := t.buildUrl()
+	url := t.buildURL()
+
 	// Attempt to establish websocket connection
-	var hdr = http.Header{}
+	hdr := http.Header{}
 	if t.token != "" {
 		hdr.Set("Sec-Websocket-Protocol", t.token)
 	}
+
 	wsdialer := websocket.Dialer{}
 	wsdialer.TLSClientConfig = t.tlsconfig
+
 	conn, _, err = wsdialer.Dial(url, hdr)
 	if err != nil {
 		return nil, err
-	} else {
-		t.conn = conn
-		go func() {
-			for {
-				//Trying to read.
-				_, p, err := t.conn.ReadMessage()
-				if err != nil {
-					return
-				}
-				t.buf_mutex.Lock()
-				t.messages = append(t.messages, p...)
-				t.buf_mutex.Unlock()
-			}
-		}()
 	}
+
+	t.conn = conn
+
+	go func() {
+		for {
+			// Trying to read.
+			var p []byte
+
+			_, p, err = t.conn.ReadMessage()
+			if err != nil {
+				return
+			}
+
+			t.bufMutex.Lock()
+
+			t.messages = append(t.messages, p...)
+
+			t.bufMutex.Unlock()
+		}
+	}()
+
 	return conn, err
 }
 
@@ -120,58 +136,82 @@ func (t *WsTransport) disconnectWebsocket() {
 	}
 }
 
-// RoundTrip makes a low level text exchange over websocket. This is supposed to be used by high level round tripper
+// RoundTrip makes a low level text exchange over websocket. This is supposed to be used by high level round tripper.
 func (t *WsTransport) RoundTrip(r *http.Request) (resp *http.Response, err error) {
 	// Sanity check
 	if t.wsurl == "" || t.protocol == 0 || t.host == "" || t.username == "" || t.password == "" || t.port == 0 {
 		return nil, errors.New("invalid transport data")
 	}
+
 	// Check if we had already established websocket for this transport object, if not create
 	if t.conn == nil || t.conn.UnderlyingConn() == nil {
-		_, err := t.connectWebsocket()
+		_, err = t.connectWebsocket()
 		if err != nil {
 			return nil, err
 		}
 	}
+
 	// t.conn should be established
 	// be careful when working with request Body.. make a copy
-	buf, _ := io.ReadAll(r.Body)
+	buf, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, err
+	}
+
 	bd1 := io.NopCloser(bytes.NewBuffer(buf))
 	bd2 := io.NopCloser(bytes.NewBuffer(buf))
-	l, _ := io.Copy(io.Discard, bd1)
+
+	l, err := io.Copy(io.Discard, bd1)
+	if err != nil {
+		return nil, err
+	}
+
 	r.Body = bd2
 	r.Header.Add("Content-Length", strconv.FormatInt(l, 10))
 
-	bytes_to_send, _ := httputil.DumpRequest(r, true)
+	bytesToSend, err := httputil.DumpRequest(r, true)
+	if err != nil {
+		return nil, err
+	}
+
 	// write and ignore error status, proper error handling is at read go routine
-	_ = t.conn.WriteMessage(websocket.TextMessage, bytes_to_send)
+	err = t.conn.WriteMessage(websocket.TextMessage, bytesToSend)
+	if err != nil {
+		return nil, err
+	}
 
 	b := t.timedReadMessage(100)
 	bf := []byte{}
-	bf = append(bf, b[:]...)
+	bf = append(bf, b...)
 	// this is to check if we finished reading the whole body, otherwise read again
 	// this will try to read data 10 times with 300 ms delay (3 seconds) if previous read yields empty data
-	max_count := 10
+	maxCount := 10
 	count := 0
+
 	for {
 		b = t.timedReadMessage(300)
 		// how many zero read
 		if len(b) == 0 {
-			count = count + 1
-			if count >= max_count {
+			count++
+			if count >= maxCount {
 				break
 			}
 		}
-		bf = append(bf, b[:]...)
-		if strings.Index(string(bf), "</a:Envelope>") > 0 {
+
+		bf = append(bf, b...)
+		if bytes.Index(bf, []byte("</a:Envelope>")) > 0 {
 			break
 		}
-		if strings.Index(string(bf), "</html>") > 0 {
+
+		if bytes.Index(bf, []byte("</html>")) > 0 {
 			t.disconnectWebsocket()
+
 			break
 		}
 	}
-	read_buffer := bytes.NewReader(bf)
-	resp, err = http.ReadResponse(bufio.NewReader(read_buffer), r)
+
+	readBuffer := bytes.NewReader(bf)
+	resp, err = http.ReadResponse(bufio.NewReader(readBuffer), r)
+
 	return resp, err
 }

@@ -5,20 +5,22 @@
 
 package authorization
 
-// INPUTS Constants
+const ValueNotFound string = "Value not found in map"
+
+// INPUTS Constants.
 const (
-	AMT_AuthorizationService  string = "AMT_AuthorizationService"
-	EnumerateUserAclEntries   string = "EnumerateUserAclEntries"
-	GetUserAclEntryEx         string = "GetUserAclEntryEx"
-	UpdateUserAclEntryEx      string = "UpdateUserAclEntryEx"
-	RemoveUserAclEntry        string = "RemoveUserAclEntry"
-	GetAdminAclEntry          string = "GetAdminAclEntry"
-	GetAdminAclEntryStatus    string = "GetAdminAclEntryStatus"
-	GetAdminNetAclEntryStatus string = "GetAdminNetAclEntryStatus"
-	SetAclEnabledState        string = "SetAclEnabledState"
-	GetAclEnabledState        string = "GetAclEnabledState"
-	SetAdminAclEntryEx        string = "SetAdminAclEntryEx"
-	AddUserAclEntryEx         string = "AddUserAclEntryEx"
+	AMTAuthorizationService   string = "AMT_AuthorizationService"
+	EnumerateUserACLEntries   string = "EnumerateUserAclEntries"
+	GetUserACLEntryEx         string = "GetUserAclEntryEx"
+	UpdateUserACLEntryEx      string = "UpdateUserAclEntryEx"
+	RemoveUserACLEntry        string = "RemoveUserAclEntry"
+	GetAdminACLEntry          string = "GetAdminAclEntry"
+	GetAdminACLEntryStatus    string = "GetAdminAclEntryStatus"
+	GetAdminNetACLEntryStatus string = "GetAdminNetAclEntryStatus"
+	SetACLEnabledState        string = "SetAclEnabledState"
+	GetACLEnabledState        string = "GetAclEnabledState"
+	SetAdminACLEntryEx        string = "SetAdminAclEntryEx"
+	AddUserACLEntryEx         string = "AddUserAclEntryEx"
 )
 
 const (
@@ -69,7 +71,7 @@ const (
 	EnabledStateStarting
 )
 
-// enabledStateStrings is a map of EnabledState values to their string representations
+// enabledStateStrings is a map of EnabledState values to their string representations.
 var enabledStateToString = map[EnabledState]string{
 	EnabledStateUnknown:           "Unknown",
 	EnabledStateOther:             "Other",
@@ -84,12 +86,13 @@ var enabledStateToString = map[EnabledState]string{
 	EnabledStateStarting:          "Starting",
 }
 
-// String returns the string representation of an EnabledState value
+// String returns the string representation of an EnabledState value.
 func (e EnabledState) String() string {
 	if value, exists := enabledStateToString[e]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -107,7 +110,7 @@ const (
 	RequestedStateNotApplicable
 )
 
-// RequestedStateStrings is a map of RequestedState values to their string representations
+// RequestedStateStrings is a map of RequestedState values to their string representations.
 var requestedStateToString = map[RequestedState]string{
 	RequestedStateUnknown:       "Unknown",
 	RequestedStateEnabled:       "Enabled",
@@ -123,12 +126,13 @@ var requestedStateToString = map[RequestedState]string{
 	RequestedStateNotApplicable: "NotApplicable",
 }
 
-// String returns the string representation of a RequestedState value
+// String returns the string representation of a RequestedState value.
 func (r RequestedState) String() string {
 	if value, exists := requestedStateToString[r]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -147,7 +151,7 @@ const (
 	PTStatusAuditFail               ReturnValue = 2075
 )
 
-// returnValuesToString is a map of return values to their string representation
+// returnValuesToString is a map of return values to their string representation.
 var returnValuesToString = map[ReturnValue]string{
 	PTStatusSuccess:                 "Success",
 	PTStatusInternalError:           "InternalError",
@@ -164,10 +168,11 @@ var returnValuesToString = map[ReturnValue]string{
 	PTStatusAuditFail:               "AuditFail",
 }
 
-// String returns the string representation of the return value
+// String returns the string representation of the return value.
 func (r ReturnValue) String() string {
 	if value, exists := returnValuesToString[r]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

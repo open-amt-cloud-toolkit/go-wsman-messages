@@ -40,8 +40,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_BootCapabilities(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/boot/capabilities",
 	}
@@ -56,14 +56,15 @@ func TestPositiveAMT_BootCapabilities(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_BootCapabilities Get wsman message",
-				AMT_BootCapabilities,
-				wsmantesting.GET,
+				AMTBootCapabilities,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -97,14 +98,15 @@ func TestPositiveAMT_BootCapabilities(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_BootCapabilities Enumerate wsman message",
-				AMT_BootCapabilities,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTBootCapabilities,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -114,14 +116,15 @@ func TestPositiveAMT_BootCapabilities(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_BootCapabilities Pull wsman message",
-				AMT_BootCapabilities,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTBootCapabilities,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -164,7 +167,7 @@ func TestPositiveAMT_BootCapabilities(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -177,8 +180,8 @@ func TestPositiveAMT_BootCapabilities(t *testing.T) {
 
 func TestNegativeAMT_BootCapabilities(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/boot/capabilities",
 	}
@@ -193,14 +196,15 @@ func TestNegativeAMT_BootCapabilities(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_BootCapabilities Get wsman message",
-				AMT_BootCapabilities,
-				wsmantesting.GET,
+				AMTBootCapabilities,
+				wsmantesting.Get,
 				"<error></error>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -240,14 +244,15 @@ func TestNegativeAMT_BootCapabilities(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_BootCapabilities Enumerate wsman message",
-				AMT_BootCapabilities,
-				wsmantesting.ENUMERATE,
+				AMTBootCapabilities,
+				wsmantesting.Enumerate,
 				"<error></error>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -257,14 +262,15 @@ func TestNegativeAMT_BootCapabilities(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_BootCapabilities Pull wsman message",
-				AMT_BootCapabilities,
-				wsmantesting.PULL,
+				AMTBootCapabilities,
+				wsmantesting.Pull,
 				"<error></error>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -313,7 +319,7 @@ func TestNegativeAMT_BootCapabilities(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

@@ -10,10 +10,11 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
-	"github.com/stretchr/testify/assert"
 )
 
 const (
@@ -23,8 +24,8 @@ const (
 
 func TestPositiveAMT_TLSSettingData(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/tls/settingdata",
 	}
@@ -40,21 +41,22 @@ func TestPositiveAMT_TLSSettingData(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_TLSSettingData Get wsman message",
-				AMT_TLSSettingData,
-				wsmantesting.GET,
+				AMTTLSSettingData,
+				wsmantesting.Get,
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT 802.3 TLS Settings</w:Selector></w:SelectorSet>",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get("Intel(r) AMT 802.3 TLS Settings")
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					SettingDataGetAndPutResponse: SettingDataResponse{
-						XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_TLSSettingData), Local: AMT_TLSSettingData},
+						XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTTLSSettingData), Local: AMTTLSSettingData},
 						AcceptNonSecureConnections: false,
 						ElementName:                "Intel(r) AMT 802.3 TLS Settings",
 						Enabled:                    false,
@@ -64,15 +66,16 @@ func TestPositiveAMT_TLSSettingData(t *testing.T) {
 				},
 			},
 
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_TLSSettingData Enumerate wsman message",
-				AMT_TLSSettingData,
-				wsmantesting.ENUMERATE,
+				AMTTLSSettingData,
+				wsmantesting.Enumerate,
 				"",
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -82,15 +85,16 @@ func TestPositiveAMT_TLSSettingData(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_TLSSettingData Pull wsman message",
-				AMT_TLSSettingData,
-				wsmantesting.PULL,
+				AMTTLSSettingData,
+				wsmantesting.Pull,
 				"",
-				wsmantesting.PULL_BODY,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -99,7 +103,7 @@ func TestPositiveAMT_TLSSettingData(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						SettingDataItems: []SettingDataResponse{
 							{
-								XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_TLSSettingData), Local: AMT_TLSSettingData},
+								XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTTLSSettingData), Local: AMTTLSSettingData},
 								AcceptNonSecureConnections: false,
 								ElementName:                "Intel(r) AMT 802.3 TLS Settings",
 								Enabled:                    false,
@@ -107,7 +111,7 @@ func TestPositiveAMT_TLSSettingData(t *testing.T) {
 								MutualAuthentication:       false,
 							},
 							{
-								XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_TLSSettingData), Local: AMT_TLSSettingData},
+								XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTTLSSettingData), Local: AMTTLSSettingData},
 								AcceptNonSecureConnections: true,
 								ElementName:                "Intel(r) AMT LMS TLS Settings",
 								Enabled:                    false,
@@ -119,26 +123,27 @@ func TestPositiveAMT_TLSSettingData(t *testing.T) {
 				},
 			},
 
-			//PUTS
+			// PUTS
 			{
 				"should create a valid AMT_TLSSettingData Put wsman message",
-				AMT_TLSSettingData,
-				wsmantesting.PUT,
+				AMTTLSSettingData,
+				wsmantesting.Put,
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT 802.3 TLS Settings</w:Selector></w:SelectorSet>",
 				"<h:AMT_TLSSettingData xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSSettingData\"><h:ElementName>Intel(r) AMT 802.3 TLS Settings</h:ElementName><h:InstanceID>Intel(r) AMT 802.3 TLS Settings</h:InstanceID><h:MutualAuthentication>false</h:MutualAuthentication><h:Enabled>true</h:Enabled><h:AcceptNonSecureConnections>false</h:AcceptNonSecureConnections><h:NonSecureConnectionsSupported>false</h:NonSecureConnectionsSupported></h:AMT_TLSSettingData>",
 				func() (Response, error) {
-					client.CurrentMessage = "Put"
+					client.CurrentMessage = wsmantesting.CurrentMessagePut
 					tlsSettingData := SettingDataRequest{
 						ElementName: "Intel(r) AMT 802.3 TLS Settings",
 						InstanceID:  "Intel(r) AMT 802.3 TLS Settings",
 						Enabled:     true,
 					}
+
 					return elementUnderTest.Put("Intel(r) AMT 802.3 TLS Settings", tlsSettingData)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					SettingDataGetAndPutResponse: SettingDataResponse{
-						XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_TLSSettingData), Local: AMT_TLSSettingData},
+						XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTTLSSettingData), Local: AMTTLSSettingData},
 						AcceptNonSecureConnections: false,
 						ElementName:                "Intel(r) AMT 802.3 TLS Settings",
 						Enabled:                    false,
@@ -151,7 +156,7 @@ func TestPositiveAMT_TLSSettingData(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -161,10 +166,11 @@ func TestPositiveAMT_TLSSettingData(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_TLSSettingData(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/tls/settingdata",
 	}
@@ -180,21 +186,22 @@ func TestNegativeAMT_TLSSettingData(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_TLSSettingData Get wsman message",
-				AMT_TLSSettingData,
-				wsmantesting.GET,
+				AMTTLSSettingData,
+				wsmantesting.Get,
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT 802.3 TLS Settings</w:Selector></w:SelectorSet>",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get("Intel(r) AMT 802.3 TLS Settings")
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					SettingDataGetAndPutResponse: SettingDataResponse{
-						XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_TLSSettingData), Local: AMT_TLSSettingData},
+						XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTTLSSettingData), Local: AMTTLSSettingData},
 						AcceptNonSecureConnections: false,
 						ElementName:                "Intel(r) AMT 802.3 TLS Settings",
 						Enabled:                    false,
@@ -204,15 +211,16 @@ func TestNegativeAMT_TLSSettingData(t *testing.T) {
 				},
 			},
 
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_TLSSettingData Enumerate wsman message",
-				AMT_TLSSettingData,
-				wsmantesting.ENUMERATE,
+				AMTTLSSettingData,
+				wsmantesting.Enumerate,
 				"",
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -222,15 +230,16 @@ func TestNegativeAMT_TLSSettingData(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_TLSSettingData Pull wsman message",
-				AMT_TLSSettingData,
-				wsmantesting.PULL,
+				AMTTLSSettingData,
+				wsmantesting.Pull,
 				"",
-				wsmantesting.PULL_BODY,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -239,7 +248,7 @@ func TestNegativeAMT_TLSSettingData(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						SettingDataItems: []SettingDataResponse{
 							{
-								XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_TLSSettingData), Local: AMT_TLSSettingData},
+								XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTTLSSettingData), Local: AMTTLSSettingData},
 								AcceptNonSecureConnections: false,
 								ElementName:                "Intel(r) AMT 802.3 TLS Settings",
 								Enabled:                    false,
@@ -247,7 +256,7 @@ func TestNegativeAMT_TLSSettingData(t *testing.T) {
 								MutualAuthentication:       false,
 							},
 							{
-								XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_TLSSettingData), Local: AMT_TLSSettingData},
+								XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTTLSSettingData), Local: AMTTLSSettingData},
 								AcceptNonSecureConnections: true,
 								ElementName:                "Intel(r) AMT LMS TLS Settings",
 								Enabled:                    false,
@@ -259,26 +268,27 @@ func TestNegativeAMT_TLSSettingData(t *testing.T) {
 				},
 			},
 
-			//PUTS
+			// PUTS
 			{
 				"should create a valid AMT_TLSSettingData Put wsman message",
-				AMT_TLSSettingData,
-				wsmantesting.PUT,
+				AMTTLSSettingData,
+				wsmantesting.Put,
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT 802.3 TLS Settings</w:Selector></w:SelectorSet>",
 				"<h:AMT_TLSSettingData xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSSettingData\"><h:ElementName>Intel(r) AMT 802.3 TLS Settings</h:ElementName><h:InstanceID>Intel(r) AMT 802.3 TLS Settings</h:InstanceID><h:MutualAuthentication>false</h:MutualAuthentication><h:Enabled>true</h:Enabled><h:AcceptNonSecureConnections>false</h:AcceptNonSecureConnections><h:NonSecureConnectionsSupported>false</h:NonSecureConnectionsSupported></h:AMT_TLSSettingData>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
 					tlsSettingData := SettingDataRequest{
 						ElementName: "Intel(r) AMT 802.3 TLS Settings",
 						InstanceID:  "Intel(r) AMT 802.3 TLS Settings",
 						Enabled:     true,
 					}
+
 					return elementUnderTest.Put("Intel(r) AMT 802.3 TLS Settings", tlsSettingData)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					SettingDataGetAndPutResponse: SettingDataResponse{
-						XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_TLSSettingData), Local: AMT_TLSSettingData},
+						XMLName:                    xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTTLSSettingData), Local: AMTTLSSettingData},
 						AcceptNonSecureConnections: false,
 						ElementName:                "Intel(r) AMT 802.3 TLS Settings",
 						Enabled:                    false,
@@ -291,7 +301,7 @@ func TestNegativeAMT_TLSSettingData(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

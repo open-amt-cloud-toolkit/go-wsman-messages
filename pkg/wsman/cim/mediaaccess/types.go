@@ -14,11 +14,10 @@ import (
 )
 
 type Device struct {
-	base   message.Base
-	client client.WSMan
+	base message.Base
 }
 
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message

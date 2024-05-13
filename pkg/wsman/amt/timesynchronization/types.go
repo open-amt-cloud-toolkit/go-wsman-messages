@@ -17,7 +17,7 @@ type Service struct {
 	base message.Base
 }
 
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -54,7 +54,7 @@ type (
 
 	// ValueMap={0, 1}
 	//
-	// Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR}
+	// Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR}.
 	GetLowAccuracyTimeSynchResponse struct {
 		XMLName     xml.Name    `xml:"GetLowAccuracyTimeSynch_OUTPUT"`
 		Ta0         int64       `xml:"Ta0"`
@@ -63,7 +63,7 @@ type (
 
 	// ValueMap={0, 1, 36, 38}
 	//
-	// Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_INVALID_PARAMETER, PT_STATUS_FLASH_WRITE_LIMIT_EXCEEDED}
+	// Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_INVALID_PARAMETER, PT_STATUS_FLASH_WRITE_LIMIT_EXCEEDED}.
 	SetHighAccuracyTimeSynchResponse struct {
 		XMLName     xml.Name    `xml:"SetHighAccuracyTimeSynch_OUTPUT"`
 		ReturnValue ReturnValue `xml:"ReturnValue"`
@@ -81,7 +81,7 @@ type (
 	TimeSource int
 )
 
-// Request Types
+// Request Types.
 type (
 	// Ta0: The time value received from invoking GetLowAccuracyTimeSynch().
 	//

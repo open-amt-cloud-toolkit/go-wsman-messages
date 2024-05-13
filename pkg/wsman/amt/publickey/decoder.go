@@ -6,13 +6,14 @@
 package publickey
 
 const (
-	AMT_PublicKeyCertificate       string = "AMT_PublicKeyCertificate"
-	AMT_PublicKeyManagementService string = "AMT_PublicKeyManagementService"
-	GeneratePKCS10RequestEx        string = "GeneratePKCS10RequestEx"
-	AddTrustedRootCertificate      string = "AddTrustedRootCertificate"
-	AddCertificate                 string = "AddCertificate"
-	GenerateKeyPair                string = "GenerateKeyPair"
-	AddKey                         string = "AddKey"
+	AMTPublicKeyCertificate       string = "AMT_PublicKeyCertificate"
+	AMTPublicKeyManagementService string = "AMT_PublicKeyManagementService"
+	GeneratePKCS10RequestEx       string = "GeneratePKCS10RequestEx"
+	AddTrustedRootCertificate     string = "AddTrustedRootCertificate"
+	AddCertificate                string = "AddCertificate"
+	GenerateKeyPair               string = "GenerateKeyPair"
+	AddKey                        string = "AddKey"
+	ValueNotFound                 string = "Value not found in map"
 )
 
 const (
@@ -37,7 +38,7 @@ const (
 	EnabledDefaultQuiesce           EnabledDefault = 9
 )
 
-// enabledDefaultToString is a map of EnabledDefault values to their string representations
+// enabledDefaultToString is a map of EnabledDefault values to their string representations.
 var enabledDefaultToString = map[EnabledDefault]string{
 	EnabledDefaultEnabled:           "Enabled",
 	EnabledDefaultDisabled:          "Disabled",
@@ -47,13 +48,13 @@ var enabledDefaultToString = map[EnabledDefault]string{
 	EnabledDefaultQuiesce:           "Quiesce",
 }
 
-// String returns the string representation of the EnabledDefault value
+// String returns the string representation of the EnabledDefault value.
 func (e EnabledDefault) String() string {
 	if value, exists := enabledDefaultToString[e]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -70,7 +71,7 @@ const (
 	EnabledStateStarting
 )
 
-// enabledStateToString is a map of EnabledState values to their string representations
+// enabledStateToString is a map of EnabledState values to their string representations.
 var enabledStateToString = map[EnabledState]string{
 	EnabledStateUnknown:           "Unknown",
 	EnabledStateOther:             "Other",
@@ -85,13 +86,13 @@ var enabledStateToString = map[EnabledState]string{
 	EnabledStateStarting:          "Starting",
 }
 
-// String returns the string representation of the EnabledState value
+// String returns the string representation of the EnabledState value.
 func (e EnabledState) String() string {
 	if value, exists := enabledStateToString[e]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -117,7 +118,7 @@ const (
 	OperationalStatusRelocating
 )
 
-// operationalStatusToString is a map of OperationalStatus values to their string representations
+// operationalStatusToString is a map of OperationalStatus values to their string representations.
 var operationalStatusToString = map[OperationalStatus]string{
 	OperationalStatusUnknown:                 "Unknown",
 	OperationalStatusOther:                   "Other",
@@ -141,13 +142,13 @@ var operationalStatusToString = map[OperationalStatus]string{
 	OperationalStatusRelocating:              "Relocating",
 }
 
-// String returns the string representation of the OperationalStatus value
+// String returns the string representation of the OperationalStatus value.
 func (o OperationalStatus) String() string {
 	if value, exists := operationalStatusToString[o]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -165,7 +166,7 @@ const (
 	RequestedStateNotApplicable RequestedState = 12
 )
 
-// requestedStateToString is a map of RequestedState values to their string representations
+// requestedStateToString is a map of RequestedState values to their string representations.
 var requestedStateToString = map[RequestedState]string{
 	RequestedStateUnknown:       "Unknown",
 	RequestedStateEnabled:       "Enabled",
@@ -181,13 +182,13 @@ var requestedStateToString = map[RequestedState]string{
 	RequestedStateNotApplicable: "NotApplicable",
 }
 
-// String returns the string representation of the RequestedState value
+// String returns the string representation of the RequestedState value.
 func (r RequestedState) String() string {
 	if value, exists := requestedStateToString[r]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -204,7 +205,7 @@ const (
 	ReturnValueOperationInProgress     ReturnValue = 2082
 )
 
-// returnValueToString is a map of ReturnValue values to their string representations
+// returnValueToString is a map of ReturnValue values to their string representations.
 var returnValueToString = map[ReturnValue]string{
 	ReturnValueSuccess:                 "Success",
 	ReturnValueInternalError:           "InternalError",
@@ -219,11 +220,11 @@ var returnValueToString = map[ReturnValue]string{
 	ReturnValueOperationInProgress:     "OperationInProgress",
 }
 
-// String returns the string representation of the ReturnValue value
+// String returns the string representation of the ReturnValue value.
 func (p ReturnValue) String() string {
 	if value, exists := returnValueToString[p]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }

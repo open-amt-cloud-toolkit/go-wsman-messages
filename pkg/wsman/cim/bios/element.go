@@ -13,14 +13,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewBIOSElementWithClient instantiates a new Element
+// NewBIOSElementWithClient instantiates a new Element.
 func NewBIOSElementWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Element {
 	return Element{
-		base: message.NewBaseWithClient(wsmanMessageCreator, CIM_BIOSElement, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, CIMBIOSElement, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (element Element) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -37,10 +37,11 @@ func (element Element) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (element Element) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -57,6 +58,7 @@ func (element Element) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -67,13 +69,16 @@ func (element Element) Pull(enumerationContext string) (response Response, err e
 			XMLInput: element.base.Pull(enumerationContext),
 		},
 	}
+
 	err = element.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }
