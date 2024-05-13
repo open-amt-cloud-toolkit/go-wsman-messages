@@ -52,8 +52,34 @@ type (
 		AcceptNonSecureConnections    bool     `xml:"AcceptNonSecureConnections"`    // This setting defines once TLS is enabled and configured whether non-secure EOI/WSMAN connections are still accepted by FW on ports 16992 and 623. If AcceptNonSecureConnections is set to TRUE then non-secure connections are still accepted. If set to FALSE then non-secure connections are rejected. This setting may be set per interface for the local and network interfaces. AMT_TLSSettingData.AcceptNonSecureConnections may only be modified for the remote interface. It is a read-only property for the local interface instance.
 		NonSecureConnectionsSupported *bool    `xml:"NonSecureConnectionsSupported"` // Indicates the removal of support for the non-TLS WS-MAN ports for the remote interface. Available starting Intel CSME 16.1 firmware on Raptor Lake platforms. If this read-only field exists and its value is True, changing the value of the AcceptNonSecureConnections field is allowed only for the local interface. Note that this class and field can be accessed locally as well as remotely. Invoking the AMT_TLSSettingData.Put() command on the remote instance with AcceptNonSecureConnections set to True will fail with error code AMT_STATUS_NOT_PERMITTED. Setting AMT_TLSSettingData.Enabled to False will also fail for the remote interface.
 	}
+	SelectorResponse struct {
+		XMLName xml.Name `xml:"Selector,omitempty"`
+		Name    string   `xml:"Name,attr"`
+		Text    string   `xml:",chardata"`
+	}
+	SelectorSetResponse struct {
+		XMLName   xml.Name           `xml:"SelectorSet,omitempty"`
+		Selectors []SelectorResponse `xml:"Selector,omitempty"`
+	}
+	ReferenceParametersResponse struct {
+		XMLName     xml.Name            `xml:"ReferenceParameters,omitempty"`
+		ResourceURI string              `xml:"ResourceURI,omitempty"`
+		SelectorSet SelectorSetResponse `xml:"SelectorSet,omitempty"`
+	}
+	ElementInContextResponse struct {
+		XMLName             xml.Name                    `xml:"ElementInContext"`
+		Address             string                      `xml:"Address,omitempty"`
+		ReferenceParameters ReferenceParametersResponse `xml:"ReferenceParameters,omitempty"`
+	}
+	ElementProvidingContextResponse struct {
+		XMLName             xml.Name                    `xml:"ElementProvidingContext"`
+		Address             string                      `xml:"Address,omitempty"`
+		ReferenceParameters ReferenceParametersResponse `xml:"ReferenceParameters,omitempty"`
+	}
 	CredentialContextResponse struct {
-		XMLName xml.Name `xml:"AMT_TLSCredentialContext"`
+		XMLName                 xml.Name                        `xml:"AMT_TLSCredentialContext"`
+		ElementInContext        ElementInContextResponse        `xml:"ElementInContext"`
+		ElementProvidingContext ElementProvidingContextResponse `xml:"ElementProvidingContext"`
 	}
 	ProtocolEndpointCollectionResponse struct {
 		XMLName     xml.Name `xml:"AMT_TLSProtocolEndpointCollection"`
