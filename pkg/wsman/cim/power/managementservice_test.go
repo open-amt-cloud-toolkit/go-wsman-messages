@@ -9,15 +9,16 @@ import (
 	"encoding/xml"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/methods"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
-	"github.com/stretchr/testify/assert"
 )
 
 const (
-	RequestPowerStateChange_BODY = "<h:RequestPowerStateChange_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_PowerManagementService\"><h:PowerState>8</h:PowerState><h:ManagedElement><Address xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\"><ResourceURI xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ComputerSystem</ResourceURI><SelectorSet xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\"><Selector Name=\"CreationClassName\">CIM_ComputerSystem</Selector><Selector Name=\"Name\">ManagedSystem</Selector></SelectorSet></ReferenceParameters></h:ManagedElement></h:RequestPowerStateChange_INPUT>"
+	RequestPowerStateChangeBODY = "<h:RequestPowerStateChange_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_PowerManagementService\"><h:PowerState>8</h:PowerState><h:ManagedElement><Address xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\"><ResourceURI xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ComputerSystem</ResourceURI><SelectorSet xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\"><Selector Name=\"CreationClassName\">CIM_ComputerSystem</Selector><Selector Name=\"Name\">ManagedSystem</Selector></SelectorSet></ReferenceParameters></h:ManagedElement></h:RequestPowerStateChange_INPUT>"
 )
 
 func TestJson(t *testing.T) {
@@ -44,8 +45,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveCIMPowerManagementService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/power/managementservice",
 	}
@@ -62,12 +63,13 @@ func TestPositiveCIMPowerManagementService(t *testing.T) {
 		}{
 			{
 				"Should issue a valid cim_PowerManagementService RequestPowerStateChange call",
-				CIM_PowerManagementService,
-				methods.GenerateAction(CIM_PowerManagementService, RequestPowerStateChange),
-				RequestPowerStateChange_BODY,
+				CIMPowerManagementService,
+				methods.GenerateAction(CIMPowerManagementService, RequestPowerStateChange),
+				RequestPowerStateChangeBODY,
 				func() (Response, error) {
 					client.CurrentMessage = "RequestPowerStateChange"
-					var powerState PowerState = PowerOffHard
+					powerState := PowerOffHard
+
 					return elementUnderTest.RequestPowerStateChange(powerState)
 				},
 				Body{
@@ -79,11 +81,12 @@ func TestPositiveCIMPowerManagementService(t *testing.T) {
 			},
 			{
 				"Should issue a valid cim_PowerManagementService Get call",
-				CIM_PowerManagementService,
-				wsmantesting.GET,
+				CIMPowerManagementService,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -102,11 +105,12 @@ func TestPositiveCIMPowerManagementService(t *testing.T) {
 			},
 			{
 				"Should issue a valid cim_PowerManagementService Enumerate call",
-				CIM_PowerManagementService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMPowerManagementService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -118,11 +122,12 @@ func TestPositiveCIMPowerManagementService(t *testing.T) {
 			},
 			{
 				"Should issue a valid cim_PowerManagementService Pull call",
-				CIM_PowerManagementService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMPowerManagementService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -148,13 +153,12 @@ func TestPositiveCIMPowerManagementService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.Body)
-
 			})
 		}
 	})
@@ -162,8 +166,8 @@ func TestPositiveCIMPowerManagementService(t *testing.T) {
 
 func TestNegativeCIMPowerManagementService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/power/managementservice",
 	}
@@ -180,12 +184,13 @@ func TestNegativeCIMPowerManagementService(t *testing.T) {
 		}{
 			{
 				"Should issue a valid cim_PowerManagementService RequestPowerStateChange call",
-				CIM_PowerManagementService,
-				methods.GenerateAction(CIM_PowerManagementService, RequestPowerStateChange),
-				RequestPowerStateChange_BODY,
+				CIMPowerManagementService,
+				methods.GenerateAction(CIMPowerManagementService, RequestPowerStateChange),
+				RequestPowerStateChangeBODY,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
-					var powerState PowerState = PowerOffHard
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+					powerState := PowerOffHard
+
 					return elementUnderTest.RequestPowerStateChange(powerState)
 				},
 				Body{
@@ -197,11 +202,12 @@ func TestNegativeCIMPowerManagementService(t *testing.T) {
 			},
 			{
 				"Should issue a valid cim_PowerManagementService Get call",
-				CIM_PowerManagementService,
-				wsmantesting.GET,
+				CIMPowerManagementService,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -220,11 +226,12 @@ func TestNegativeCIMPowerManagementService(t *testing.T) {
 			},
 			{
 				"Should issue a valid cim_PowerManagementService Enumerate call",
-				CIM_PowerManagementService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMPowerManagementService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -236,11 +243,12 @@ func TestNegativeCIMPowerManagementService(t *testing.T) {
 			},
 			{
 				"Should issue a valid cim_PowerManagementService Pull call",
-				CIM_PowerManagementService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMPowerManagementService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -266,13 +274,12 @@ func TestNegativeCIMPowerManagementService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.NotEqual(t, test.expectedResponse, response.Body)
-
 			})
 		}
 	})

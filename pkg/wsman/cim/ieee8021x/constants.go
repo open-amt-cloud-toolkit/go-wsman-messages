@@ -5,4 +5,4 @@
 
 package ieee8021x
 
-const CIM_IEEE8021xSettings string = "CIM_IEEE8021xSettings"
+const CIMIEEE8021xSettings string = "CIM_IEEE8021xSettings"

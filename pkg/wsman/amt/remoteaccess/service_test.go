@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
@@ -25,12 +26,13 @@ const (
 
 func TestPositiveAMT_RemoteAccessService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/remoteaccess/service",
 	}
 	elementUnderTest := NewRemoteAccessServiceWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_RemoteAccessService Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -40,14 +42,15 @@ func TestPositiveAMT_RemoteAccessService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_RemoteAccessService Get wsman message",
-				AMT_RemoteAccessService,
-				wsmantesting.GET,
+				AMTRemoteAccessService,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -62,17 +65,18 @@ func TestPositiveAMT_RemoteAccessService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_RemoteAccessService Enumerate wsman message",
-				AMT_RemoteAccessService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTRemoteAccessService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
 					if elementUnderTest.base.WSManMessageCreator == nil {
-						print("Error")
+						logrus.Print("Error")
 					}
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -82,14 +86,15 @@ func TestPositiveAMT_RemoteAccessService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_RemoteAccessService Pull wsman message",
-				AMT_RemoteAccessService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTRemoteAccessService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -109,12 +114,12 @@ func TestPositiveAMT_RemoteAccessService(t *testing.T) {
 					},
 				},
 			},
-			//AddMPS
+			// AddMPS
 			{
 				"should create a valid AMT_RemoteAccessService AddMPS wsman message",
-				AMT_RemoteAccessService,
-				methods.GenerateAction(AMT_RemoteAccessService, AddMps),
-				fmt.Sprintf(`<h:AddMpServer_INPUT xmlns:h="%s%s"><h:AccessInfo>%s</h:AccessInfo><h:InfoFormat>%d</h:InfoFormat><h:Port>%d</h:Port><h:AuthMethod>%d</h:AuthMethod><h:Username>%s</h:Username><h:Password>%s</h:Password><h:CN>%s</h:CN></h:AddMpServer_INPUT>`, resourceUriBase, AMT_RemoteAccessService, "AccessInfo", 1, 2, 3, "Username", "Password", "CommonName"),
+				AMTRemoteAccessService,
+				methods.GenerateAction(AMTRemoteAccessService, AddMps),
+				fmt.Sprintf(`<h:AddMpServer_INPUT xmlns:h="%s%s"><h:AccessInfo>%s</h:AccessInfo><h:InfoFormat>%d</h:InfoFormat><h:Port>%d</h:Port><h:AuthMethod>%d</h:AuthMethod><h:Username>%s</h:Username><h:Password>%s</h:Password><h:CN>%s</h:CN></h:AddMpServer_INPUT>`, resourceURIBase, AMTRemoteAccessService, "AccessInfo", 1, 2, 3, "Username", "Password", "CommonName"),
 				func() (Response, error) {
 					client.CurrentMessage = "AddMPSServer"
 					mpsServer := AddMpServerRequest{
@@ -127,6 +132,7 @@ func TestPositiveAMT_RemoteAccessService(t *testing.T) {
 						Password:   "Password",
 						CommonName: "CommonName",
 					}
+
 					return elementUnderTest.AddMPS(mpsServer)
 				},
 				Body{
@@ -169,12 +175,12 @@ func TestPositiveAMT_RemoteAccessService(t *testing.T) {
 					},
 				},
 			},
-			//AddRemoteAccessPolicyRule
+			// AddRemoteAccessPolicyRule
 			{
 				"should create a valid AMT_RemoteAccessPolicyRule wsman message",
-				AMT_RemoteAccessService,
-				methods.GenerateAction(AMT_RemoteAccessService, AddRemoteAccessPolicyRule),
-				fmt.Sprintf(`<h:AddRemoteAccessPolicyRule_INPUT xmlns:h="%s%s"><h:Trigger>%d</h:Trigger><h:TunnelLifeTime>%d</h:TunnelLifeTime><h:ExtendedData>%s</h:ExtendedData><h:MpServer><Address xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</Address><ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing"><ResourceURI xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd">%s%s</ResourceURI><SelectorSet xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><Selector Name="Name">true</Selector></SelectorSet></ReferenceParameters></h:MpServer></h:AddRemoteAccessPolicyRule_INPUT>`, resourceUriBase, AMT_RemoteAccessService, 2, 0, "0300", "http://intel.com/wbem/wscim/1/amt-schema/1/", "AMT_ManagementPresenceRemoteSAP"),
+				AMTRemoteAccessService,
+				methods.GenerateAction(AMTRemoteAccessService, AddRemoteAccessPolicyRule),
+				fmt.Sprintf(`<h:AddRemoteAccessPolicyRule_INPUT xmlns:h="%s%s"><h:Trigger>%d</h:Trigger><h:TunnelLifeTime>%d</h:TunnelLifeTime><h:ExtendedData>%s</h:ExtendedData><h:MpServer><Address xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</Address><ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing"><ResourceURI xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd">%s%s</ResourceURI><SelectorSet xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><Selector Name="Name">true</Selector></SelectorSet></ReferenceParameters></h:MpServer></h:AddRemoteAccessPolicyRule_INPUT>`, resourceURIBase, AMTRemoteAccessService, 2, 0, "0300", "http://intel.com/wbem/wscim/1/amt-schema/1/", "AMT_ManagementPresenceRemoteSAP"),
 				func() (Response, error) {
 					client.CurrentMessage = "AddRemoteAccessService"
 					remoteAccessPolicyRule := RemoteAccessPolicyRuleRequest{
@@ -183,6 +189,7 @@ func TestPositiveAMT_RemoteAccessService(t *testing.T) {
 						TunnelLifeTime: 0,
 						ExtendedData:   "0300",
 					}
+
 					return elementUnderTest.AddRemoteAccessPolicyRule(remoteAccessPolicyRule, "true")
 				},
 				Body{
@@ -229,10 +236,10 @@ func TestPositiveAMT_RemoteAccessService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
-				println(response.XMLOutput)
+				logrus.Print(response.XMLOutput)
 				assert.NoError(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.Equal(t, test.expectedResponse, response.Body)
@@ -240,14 +247,16 @@ func TestPositiveAMT_RemoteAccessService(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_RemoteAccessService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/remoteaccess/service",
 	}
 	elementUnderTest := NewRemoteAccessServiceWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_RemoteAccessService Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -257,14 +266,15 @@ func TestNegativeAMT_RemoteAccessService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_RemoteAccessService Get wsman message",
-				AMT_RemoteAccessService,
-				wsmantesting.GET,
+				AMTRemoteAccessService,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -279,17 +289,18 @@ func TestNegativeAMT_RemoteAccessService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_RemoteAccessService Enumerate wsman message",
-				AMT_RemoteAccessService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTRemoteAccessService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
 					if elementUnderTest.base.WSManMessageCreator == nil {
-						print("Error")
+						logrus.Print("Error")
 					}
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -299,14 +310,15 @@ func TestNegativeAMT_RemoteAccessService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_RemoteAccessService Pull wsman message",
-				AMT_RemoteAccessService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTRemoteAccessService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -326,14 +338,14 @@ func TestNegativeAMT_RemoteAccessService(t *testing.T) {
 					},
 				},
 			},
-			//AddMPS
+			// AddMPS
 			{
 				"should create a valid AMT_RemoteAccessService AddMPS wsman message",
-				AMT_RemoteAccessService,
-				methods.GenerateAction(AMT_RemoteAccessService, AddMps),
-				fmt.Sprintf(`<h:AddMpServer_INPUT xmlns:h="%s%s"><h:AccessInfo>%s</h:AccessInfo><h:InfoFormat>%d</h:InfoFormat><h:Port>%d</h:Port><h:AuthMethod>%d</h:AuthMethod><h:Username>%s</h:Username><h:Password>%s</h:Password><h:CN>%s</h:CN></h:AddMpServer_INPUT>`, resourceUriBase, AMT_RemoteAccessService, "AccessInfo", 1, 2, 3, "Username", "Password", "CommonName"),
+				AMTRemoteAccessService,
+				methods.GenerateAction(AMTRemoteAccessService, AddMps),
+				fmt.Sprintf(`<h:AddMpServer_INPUT xmlns:h="%s%s"><h:AccessInfo>%s</h:AccessInfo><h:InfoFormat>%d</h:InfoFormat><h:Port>%d</h:Port><h:AuthMethod>%d</h:AuthMethod><h:Username>%s</h:Username><h:Password>%s</h:Password><h:CN>%s</h:CN></h:AddMpServer_INPUT>`, resourceURIBase, AMTRemoteAccessService, "AccessInfo", 1, 2, 3, "Username", "Password", "CommonName"),
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
 					mpsServer := AddMpServerRequest{
 						H:          "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService",
 						AccessInfo: "AccessInfo",
@@ -344,6 +356,7 @@ func TestNegativeAMT_RemoteAccessService(t *testing.T) {
 						Password:   "Password",
 						CommonName: "CommonName",
 					}
+
 					return elementUnderTest.AddMPS(mpsServer)
 				},
 				Body{
@@ -386,20 +399,21 @@ func TestNegativeAMT_RemoteAccessService(t *testing.T) {
 					},
 				},
 			},
-			//AddRemoteAccessPolicyRule
+			// AddRemoteAccessPolicyRule
 			{
 				"should create a valid AMT_RemoteAccessPolicyRule wsman message",
-				AMT_RemoteAccessService,
-				methods.GenerateAction(AMT_RemoteAccessService, AddRemoteAccessPolicyRule),
-				fmt.Sprintf(`<h:AddRemoteAccessPolicyRule_INPUT xmlns:h="%s%s"><h:Trigger>%d</h:Trigger><h:TunnelLifeTime>%d</h:TunnelLifeTime><h:ExtendedData>%s</h:ExtendedData><h:MpServer><Address xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</Address><ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing"><ResourceURI xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd">%s%s</ResourceURI><SelectorSet xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><Selector Name="Name">true</Selector></SelectorSet></ReferenceParameters></h:MpServer></h:AddRemoteAccessPolicyRule_INPUT>`, resourceUriBase, AMT_RemoteAccessService, 2, 0, "0300", "http://intel.com/wbem/wscim/1/amt-schema/1/", "AMT_ManagementPresenceRemoteSAP"),
+				AMTRemoteAccessService,
+				methods.GenerateAction(AMTRemoteAccessService, AddRemoteAccessPolicyRule),
+				fmt.Sprintf(`<h:AddRemoteAccessPolicyRule_INPUT xmlns:h="%s%s"><h:Trigger>%d</h:Trigger><h:TunnelLifeTime>%d</h:TunnelLifeTime><h:ExtendedData>%s</h:ExtendedData><h:MpServer><Address xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</Address><ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing"><ResourceURI xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd">%s%s</ResourceURI><SelectorSet xmlns="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"><Selector Name="Name">true</Selector></SelectorSet></ReferenceParameters></h:MpServer></h:AddRemoteAccessPolicyRule_INPUT>`, resourceURIBase, AMTRemoteAccessService, 2, 0, "0300", "http://intel.com/wbem/wscim/1/amt-schema/1/", "AMT_ManagementPresenceRemoteSAP"),
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
 					remoteAccessPolicyRule := RemoteAccessPolicyRuleRequest{
 						H:              "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService",
 						Trigger:        2,
 						TunnelLifeTime: 0,
 						ExtendedData:   "0300",
 					}
+
 					return elementUnderTest.AddRemoteAccessPolicyRule(remoteAccessPolicyRule, "true")
 				},
 				Body{
@@ -446,10 +460,10 @@ func TestNegativeAMT_RemoteAccessService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
-				println(response.XMLOutput)
+				logrus.Print(response.XMLOutput)
 				assert.Error(t, err)
 				assert.Equal(t, expectedXMLInput, response.XMLInput)
 				assert.NotEqual(t, test.expectedResponse, response.Body)

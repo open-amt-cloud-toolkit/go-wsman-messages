@@ -16,12 +16,11 @@ import (
 // NewProcessor returns a new instance of the Processor struct.
 func NewProcessorWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Package {
 	return Package{
-		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_Processor, client),
-		client: client,
+		base: message.NewBaseWithClient(wsmanMessageCreator, CIMProcessor, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (processor Package) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -38,11 +37,11 @@ func (processor Package) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
-	return
 
+	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (processor Package) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -59,8 +58,8 @@ func (processor Package) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
-	return
 
+	return
 }
 
 // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
@@ -70,13 +69,16 @@ func (processor Package) Pull(enumerationContext string) (response Response, err
 			XMLInput: processor.base.Pull(enumerationContext),
 		},
 	}
+
 	err = processor.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }

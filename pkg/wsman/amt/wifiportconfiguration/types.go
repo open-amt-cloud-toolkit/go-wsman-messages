@@ -20,7 +20,7 @@ type Service struct {
 }
 
 // OUTPUT
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -34,7 +34,7 @@ type (
 		WiFiPortConfigurationService WiFiPortConfigurationServiceResponse
 		PullResponse                 PullResponse
 		EnumerateResponse            common.EnumerateResponse
-		AddWiFiSettings_OUTPUT       AddWiFiSettings_OUTPUT
+		AddWiFiSettingsOutput        AddWiFiSettings_OUTPUT
 	}
 	WiFiPortConfigurationServiceResponse struct {
 		XMLName                            xml.Name                           `xml:"AMT_WiFiPortConfigurationService"`
@@ -58,13 +58,13 @@ type (
 
 	// ValueMap={0, 1, 2, 3, 4, .., 32768..65535}
 	//
-	// Values={Completed with No Error, Not Supported, Failed, Invalid Parameter, Invalid Reference, Method Reserved, Vendor Specific}
+	// Values={Completed with No Error, Not Supported, Failed, Invalid Parameter, Invalid Reference, Method Reserved, Vendor Specific}.
 	AddWiFiSettings_OUTPUT struct {
 		XMLName xml.Name `xml:"AddWiFiSettings_OUTPUT"`
 		// not concerned with these entries on OUTPUT
-		//IEEE8021xSettings    *models.IEEE8021xSettings `xml:"g:IEEE8021xSettingsInput,omitempty"`
-		//ClientCredential     *ClientCredential         `xml:"g:ClientCredential,omitempty"`
-		//CACredential         *CACredential             `xml:"g:CACredential,omitempty"`
+
+		// ClientCredential     *ClientCredential         `xml:"g:ClientCredential,omitempty"`
+		// CACredential         *CACredential             `xml:"g:CACredential,omitempty"`
 		ReturnValue ReturnValue `xml:"ReturnValue"`
 	}
 )
@@ -76,13 +76,13 @@ type (
 	//
 	// ValueMap={0, 1, 2, 3, 4..}
 	//
-	// Values={Local synchronization disabled, Local user profile synchronization enabled, Vendor Reserved, Unrestricted synchronization, Reserved}
+	// Values={Local synchronization disabled, Local user profile synchronization enabled, Vendor Reserved, Unrestricted synchronization, Reserved}.
 	LocalProfileSynchronizationEnabled int
 	// Setting Policy regarding no HOST CSME software.
 	//
 	// ValueMap={0, 1, 2}
 	//
-	// Values={NoHostCsmeSoftwareRelaxedPolicy, NoHostCsmeSoftwareAggressivePolicy, Reserved}
+	// Values={NoHostCsmeSoftwareRelaxedPolicy, NoHostCsmeSoftwareAggressivePolicy, Reserved}.
 	NoHostCsmeSoftwarePolicy int
 	// RequestedState is an integer enumeration that indicates the last requested or desired state for the element, irrespective of the mechanism through which it was requested. The actual state of the element is represented by EnabledState. This property is provided to compare the last requested and current enabled or disabled states. Note that when EnabledState is set to 5 ("Not Applicable"), then this property has no meaning. Refer to the EnabledState property description for explanations of the values in the RequestedState enumeration.
 	//
@@ -98,7 +98,7 @@ type (
 	//
 	// ValueMap={0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, .., 32768..65535}
 	//
-	// Values={Unknown, Enabled, Disabled, Shut Down, No Change, Offline, Test, Deferred, Quiesce, Reboot, Reset, Not Applicable, DMTF Reserved, Vendor Reserved}
+	// Values={Unknown, Enabled, Disabled, Shut Down, No Change, Offline, Test, Deferred, Quiesce, Reboot, Reset, Not Applicable, DMTF Reserved, Vendor Reserved}.
 	RequestedState int
 	// EnabledState is an integer enumeration that indicates the enabled and disabled states of an element. It can also indicate the transitions between these requested states. For example, shutting down (value=4) and starting (value=10) are transient states between enabled and disabled. The following text briefly summarizes the various enabled and disabled states:
 	//
@@ -122,7 +122,7 @@ type (
 	//
 	// ValueMap={0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11..32767, 32768..65535}
 	//
-	// Values={Unknown, Other, Enabled, Disabled, Shutting Down, Not Applicable, Enabled but Offline, In Test, Deferred, Quiesce, Starting, DMTF Reserved, Vendor Reserved}
+	// Values={Unknown, Other, Enabled, Disabled, Shutting Down, Not Applicable, Enabled but Offline, In Test, Deferred, Quiesce, Starting, DMTF Reserved, Vendor Reserved}.
 	EnabledState int
 	// Indicates the current health of the element. This attribute expresses the health of this element but not necessarily that of its subcomponents. The possible values are 0 to 30, where 5 means the element is entirely healthy and 30 means the element is completely non-functional. The following continuum is defined:
 	//
@@ -144,14 +144,14 @@ type (
 	//
 	// ValueMap={0, 5, 10, 15, 20, 25, 30, .., 32768..65535}
 	//
-	// Values={Unknown, OK, Degraded/Warning, Minor failure, Major failure, Critical failure, Non-recoverable error, DMTF Reserved, Vendor Specific}
+	// Values={Unknown, OK, Degraded/Warning, Minor failure, Major failure, Critical failure, Non-recoverable error, DMTF Reserved, Vendor Specific}.
 	HealthState int
 	// ReturnValue is an integer enumeration that indicates the completion status of the method. This value shall be 0 if the method was completed successfully. A non-zero value indicates an error condition.
 	ReturnValue int
 )
 
 // INPUT
-// Request Types
+// Request Types.
 type (
 	AddWiFiSettings_INPUT struct {
 		XMLName              xml.Name `xml:"h:AddWiFiSettings_INPUT"`
@@ -179,7 +179,7 @@ type (
 		UEFIWiFiProfileShareEnabled        bool                               `xml:"h:UEFIWiFiProfileShareEnabled,omitempty"`     // Enables or disables UEFI/CSME Wi-Fi Profile Sharing. The feature is available from Intel® CSME 16.0. The feature can be disabled even if the value of AMT_BootCapabilities.UEFIWiFiCoExistenceAndProfileShare is False.
 	}
 
-	// a Reference to an AMT_PublicKeyCertificate, which represents the CA certificate
+	// a Reference to an AMT_PublicKeyCertificate, which represents the CA certificate.
 	CACredentialRequest struct {
 		XMLName             xml.Name            `xml:"h:CACredential,omitempty"`
 		H                   string              `xml:"xmlns:a,attr"`
@@ -187,7 +187,7 @@ type (
 		ReferenceParameters ReferenceParameters `xml:"a:ReferenceParameters,omitempty"`
 	}
 
-	// a Reference to an AMT_PublicKeyCertificate, which represents the client certificate
+	// a Reference to an AMT_PublicKeyCertificate, which represents the client certificate.
 	ClientCredentialRequest struct {
 		XMLName             xml.Name            `xml:"h:ClientCredential,omitempty"`
 		H                   string              `xml:"xmlns:a,attr"`
@@ -216,7 +216,7 @@ type (
 	}
 )
 
-// The endpoint to associate the new settings with
+// The endpoint to associate the new settings with.
 type WiFiEndpoint struct {
 	XMLName             xml.Name            `xml:"h:WiFiEndpoint,omitempty"`
 	Address             string              `xml:"a:Address,omitempty"`

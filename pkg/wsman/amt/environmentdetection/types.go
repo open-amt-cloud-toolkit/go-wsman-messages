@@ -18,7 +18,7 @@ type SettingData struct {
 }
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -48,7 +48,7 @@ type (
 )
 
 // INPUTS
-// Request Types
+// Request Types.
 type EnvironmentDetectionSettingDataRequest struct {
 	XMLName                    xml.Name           `xml:"h:AMT_EnvironmentDetectionSettingData"`
 	H                          string             `xml:"xmlns:h,attr"`
@@ -65,5 +65,5 @@ type EnvironmentDetectionSettingDataRequest struct {
 //
 // ValueMap={0, 1}
 //
-// Values={Local Domains, Remote URLs}
+// Values={Local Domains, Remote URLs}.
 type DetectionAlgorithm int

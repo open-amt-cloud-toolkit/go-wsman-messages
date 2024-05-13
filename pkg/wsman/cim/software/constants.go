@@ -5,4 +5,4 @@
 
 package software
 
-const CIM_SoftwareIdentity = "CIM_SoftwareIdentity"
+const CIMSoftwareIdentity = "CIM_SoftwareIdentity"

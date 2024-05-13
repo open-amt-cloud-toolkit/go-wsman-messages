@@ -18,7 +18,7 @@ type Service struct {
 }
 
 // OUTPUT
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -38,17 +38,17 @@ type (
 	}
 
 	OptInServiceResponse struct {
-		XMLName                 xml.Name             `xml:"IPS_OptInService"`
-		Name                    string               `xml:"Name,omitempty"`
-		CreationClassName       string               `xml:"CreationClassName,omitempty"`
-		SystemName              string               `xml:"SystemName,omitempty"`
-		SystemCreationClassName string               `xml:"SystemCreationClassName,omitempty"`
-		ElementName             string               `xml:"ElementName,omitempty"`
-		OptInCodeTimeout        int                  `xml:"OptInCodeTimeout,omitempty"`
-		OptInRequired           OptInRequired        `xml:"OptInRequired"`
-		OptInState              OptInState           `xml:"OptInState"`
-		CanModifyOptInPolicy    CanModifyOptInPolicy `xml:"CanModifyOptInPolicy,omitempty"`
-		OptInDisplayTimeout     int                  `xml:"OptInDisplayTimeout,omitempty"`
+		XMLName                 xml.Name `xml:"IPS_OptInService"`
+		Name                    string   `xml:"Name,omitempty"`
+		CreationClassName       string   `xml:"CreationClassName,omitempty"`
+		SystemName              string   `xml:"SystemName,omitempty"`
+		SystemCreationClassName string   `xml:"SystemCreationClassName,omitempty"`
+		ElementName             string   `xml:"ElementName,omitempty"`
+		OptInCodeTimeout        int      `xml:"OptInCodeTimeout,omitempty"`
+		OptInRequired           uint32   `xml:"OptInRequired"`
+		OptInState              int      `xml:"OptInState"`
+		CanModifyOptInPolicy    int      `xml:"CanModifyOptInPolicy,omitempty"`
+		OptInDisplayTimeout     int      `xml:"OptInDisplayTimeout,omitempty"`
 	}
 
 	PullResponse struct {
@@ -81,7 +81,7 @@ type (
 )
 
 // INPUT
-// Request Types
+// Request Types.
 type (
 	OptInCode struct {
 		XMLName   xml.Name `xml:"h:SendOptInCode_INPUT"`

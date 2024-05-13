@@ -8,8 +8,9 @@ package wifiportconfiguration
 // INPUTS constants
 
 const (
-	AMT_WiFiPortConfigurationService string = "AMT_WiFiPortConfigurationService"
-	AddWiFiSettings                  string = "AddWiFiSettings"
+	AMTWiFiPortConfigurationService string = "AMT_WiFiPortConfigurationService"
+	AddWiFiSettings                 string = "AddWiFiSettings"
+	ValueNotFound                   string = "Value not found in map"
 )
 
 const (
@@ -18,19 +19,19 @@ const (
 	Reserved
 )
 
-// noHostCsmeSoftwarePolicyToString is a map of NoHostCsmeSoftwarePolicy values to their string representations
+// noHostCsmeSoftwarePolicyToString is a map of NoHostCsmeSoftwarePolicy values to their string representations.
 var noHostCsmeSoftwarePolicyToString = map[NoHostCsmeSoftwarePolicy]string{
 	RelaxedPolicy:    "RelaxedPolicy",
 	AggressivePolicy: "AggressivePolicy",
 }
 
-// String returns the string representation of the NoHostCsmeSoftwarePolicy value
+// String returns the string representation of the NoHostCsmeSoftwarePolicy value.
 func (n NoHostCsmeSoftwarePolicy) String() string {
 	if value, exists := noHostCsmeSoftwarePolicyToString[n]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -43,7 +44,7 @@ const (
 	HealthStateNonRecoverableError HealthState = 30
 )
 
-// healthStateToString is a map of HealthState values to their string representations
+// healthStateToString is a map of HealthState values to their string representations.
 var healthStateToString = map[HealthState]string{
 	HealthStateUnknown:             "HealthStateUnknown",
 	HealthStateOK:                  "HealthStateOK",
@@ -54,12 +55,13 @@ var healthStateToString = map[HealthState]string{
 	HealthStateNonRecoverableError: "HealthStateNonRecoverableError",
 }
 
-// String returns the string representation of the HealthState value
+// String returns the string representation of the HealthState value.
 func (h HealthState) String() string {
 	if value, exists := healthStateToString[h]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -76,7 +78,7 @@ const (
 	EnabledStateStarting
 )
 
-// enabledStateToString is a map of EnabledState values to their string representations
+// enabledStateToString is a map of EnabledState values to their string representations.
 var enabledStateToString = map[EnabledState]string{
 	EnabledStateUnknown:           "EnabledStateUnknown",
 	EnabledStateOther:             "EnabledStateOther",
@@ -91,12 +93,13 @@ var enabledStateToString = map[EnabledState]string{
 	EnabledStateStarting:          "EnabledStateStarting",
 }
 
-// String returns the string representation of the EnabledState value
+// String returns the string representation of the EnabledState value.
 func (e EnabledState) String() string {
 	if value, exists := enabledStateToString[e]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -114,7 +117,7 @@ const (
 	RequestedStateUnknown RequestedState = 0
 )
 
-// requestedStateToString is a map of RequestedState values to their string representations
+// requestedStateToString is a map of RequestedState values to their string representations.
 var requestedStateToString = map[RequestedState]string{
 	RequestedStateEnabled:       "RequestedStateEnabled",
 	RequestedStateDisabled:      "RequestedStateDisabled",
@@ -130,12 +133,13 @@ var requestedStateToString = map[RequestedState]string{
 	RequestedStateUnknown:       "RequestedStateUnknown",
 }
 
-// String returns the string representation of the RequestedState value
+// String returns the string representation of the RequestedState value.
 func (r RequestedState) String() string {
 	if value, exists := requestedStateToString[r]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -144,19 +148,20 @@ const (
 	UnrestrictedSync                       LocalProfileSynchronizationEnabled = 3
 )
 
-// localProfileSynchronizationEnabledToString is a map of LocalProfileSynchronizationEnabled to string
+// localProfileSynchronizationEnabledToString is a map of LocalProfileSynchronizationEnabled to string.
 var localProfileSynchronizationEnabledToString = map[LocalProfileSynchronizationEnabled]string{
 	LocalSyncDisabled:                      "LocalSyncDisabled",
 	LocalUserProfileSynchronizationEnabled: "LocalUserProfileSynchronizationEnabled",
 	UnrestrictedSync:                       "UnrestrictedSync",
 }
 
-// String returns the string representation of the LocalProfileSynchronizationEnabled value
+// String returns the string representation of the LocalProfileSynchronizationEnabled value.
 func (l LocalProfileSynchronizationEnabled) String() string {
 	if value, exists := localProfileSynchronizationEnabledToString[l]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -167,7 +172,7 @@ const (
 	ReturnValueInvalidReference
 )
 
-// returnValueToString is a map of ReturnValue values to their string representations
+// returnValueToString is a map of ReturnValue values to their string representations.
 var returnValueToString = map[ReturnValue]string{
 	ReturnValueCompletedNoError: "ReturnValueCompletedNoError",
 	ReturnValueNotSupported:     "ReturnValueNotSupported",
@@ -176,10 +181,11 @@ var returnValueToString = map[ReturnValue]string{
 	ReturnValueInvalidReference: "ReturnValueInvalidReference",
 }
 
-// String returns the string representation of the ReturnValue value
+// String returns the string representation of the ReturnValue value.
 func (r ReturnValue) String() string {
 	if value, exists := returnValueToString[r]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

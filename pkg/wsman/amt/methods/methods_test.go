@@ -11,23 +11,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const (
+	TestMethod string = "TestMethod"
+	AMTTest    string = "AMT_Test"
+)
+
 func TestMethods(t *testing.T) {
 	t.Run("GenerateAction Test", func(t *testing.T) {
 		expectedResult := "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_Test/TestMethod"
-		className := "AMT_Test"
-		methodName := "TestMethod"
+		className := AMTTest
+		methodName := TestMethod
 		result := GenerateAction(className, methodName)
 		assert.Equal(t, expectedResult, result)
 	})
 	t.Run("GenerateMethod Test", func(t *testing.T) {
 		expectedResult := "TestMethod_INPUT"
-		methodName := "TestMethod"
+		methodName := TestMethod
 		result := GenerateInputMethod(methodName)
 		assert.Equal(t, expectedResult, result)
 	})
 	t.Run("RequestStateChange Test", func(t *testing.T) {
 		expectedResult := "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_Test/RequestStateChange"
-		className := "AMT_Test"
+		className := AMTTest
 		result := RequestStateChange(className)
 		assert.Equal(t, expectedResult, result)
 	})

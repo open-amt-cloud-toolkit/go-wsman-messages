@@ -18,51 +18,57 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewWiFiPortConfigurationServiceWithClient instantiates a new Service
+// NewWiFiPortConfigurationServiceWithClient instantiates a new Service.
 func NewWiFiPortConfigurationServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
 	return Service{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_WiFiPortConfigurationService, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTWiFiPortConfigurationService, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (service Service) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: service.base.Get(nil),
 		},
 	}
+
 	// send the message to AMT
 	err = service.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
+
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
-	return
+
+	return response, err
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (service Service) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: service.base.Enumerate(),
 		},
 	}
+
 	// send the message to AMT
 	err = service.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
+
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
-	return
+
+	return response, err
 }
 
 // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
@@ -72,43 +78,49 @@ func (service Service) Pull(enumerationContext string) (response Response, err e
 			XMLInput: service.base.Pull(enumerationContext),
 		},
 	}
+
 	// send the message to AMT
 	err = service.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
+
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
-	return
+
+	return response, err
 }
 
-// Put will change properties of the selected instance
+// Put will change properties of the selected instance.
 func (service Service) Put(wiFiPortConfigurationService WiFiPortConfigurationServiceRequest) (response Response, err error) {
-	//wiFiPortConfigurationService.XMLSchema = "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService"
-	wiFiPortConfigurationService.H = fmt.Sprintf("%s%s", message.AMTSchema, AMT_WiFiPortConfigurationService)
+	// wiFiPortConfigurationService.XMLSchema = "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService"
+	wiFiPortConfigurationService.H = fmt.Sprintf("%s%s", message.AMTSchema, AMTWiFiPortConfigurationService)
 	response = Response{
 		Message: &client.Message{
 			XMLInput: service.base.Put(wiFiPortConfigurationService, false, nil),
 		},
 	}
+
 	// send the message to AMT
 	err = service.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
+
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
 
 	if response.Body.WiFiPortConfigurationService.LocalProfileSynchronizationEnabled == 0 {
 		err = errors.New("failed to enable wifi local profile synchronization")
 	}
-	return
+
+	return response, err
 }
 
 // AddWiFiSettings atomically creates an instance of CIM_WifiEndpointSettings from the embedded instance parameter
@@ -127,15 +139,15 @@ func (service Service) Put(wiFiPortConfigurationService WiFiPortConfigurationSer
 //
 // ValueMap={0, 1, 2, 3, 4, .., 32768..65535}
 //
-// Values={Completed with No Error, Not Supported, Failed, Invalid Parameter, Invalid Reference, Method Reserved, Vendor Specific}
+// Values={Completed with No Error, Not Supported, Failed, Invalid Parameter, Invalid Reference, Method Reserved, Vendor Specific}.
 func (service Service) AddWiFiSettings(wifiEndpointSettings wifi.WiFiEndpointSettingsRequest, ieee8021xSettingsInput models.IEEE8021xSettings, wifiEndpoint, clientCredential, caCredential string) (response Response, err error) {
-	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_WiFiPortConfigurationService, AddWiFiSettings), AMT_WiFiPortConfigurationService, nil, "", "")
+	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMTWiFiPortConfigurationService, AddWiFiSettings), AMTWiFiPortConfigurationService, nil, "", "")
 	input := AddWiFiSettings_INPUT{
 		WifiEndpoint: WiFiEndpoint{
 			Address: "/wsman",
 			ReferenceParameters: ReferenceParameters{
 				H:           "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
-				ResourceURI: fmt.Sprintf("%s%s", message.CIMSchema, wifi.CIM_WiFiEndpoint),
+				ResourceURI: fmt.Sprintf("%s%s", message.CIMSchema, wifi.CIMWiFiEndpoint),
 				SelectorSet: SelectorSet{
 					H: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
 					Selector: []Selector{
@@ -150,11 +162,14 @@ func (service Service) AddWiFiSettings(wifiEndpointSettings wifi.WiFiEndpointSet
 		},
 		WiFiEndpointSettings: wifiEndpointSettings,
 	}
+
 	input.WiFiEndpointSettings.H = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_WiFiEndpointSettings"
+
 	if wifiEndpointSettings.AuthenticationMethod == wifi.AuthenticationMethodWPAIEEE8021x ||
 		wifiEndpointSettings.AuthenticationMethod == wifi.AuthenticationMethodWPA2IEEE8021x {
 		input.IEEE8021xSettings = &ieee8021xSettingsInput
 		input.IEEE8021xSettings.H = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_IEEE8021xSettings"
+
 		input.CACredential = &CACredentialRequest{
 			H:       "http://schemas.xmlsoap.org/ws/2004/08/addressing",
 			Address: "default",
@@ -173,6 +188,7 @@ func (service Service) AddWiFiSettings(wifiEndpointSettings wifi.WiFiEndpointSet
 				},
 			},
 		}
+
 		if clientCredential != "" {
 			input.ClientCredential = &ClientCredentialRequest{
 				H:       "http://schemas.xmlsoap.org/ws/2004/08/addressing",
@@ -195,27 +211,37 @@ func (service Service) AddWiFiSettings(wifiEndpointSettings wifi.WiFiEndpointSet
 		}
 	}
 
-	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(AddWiFiSettings), AMT_WiFiPortConfigurationService, &input)
+	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(AddWiFiSettings), AMTWiFiPortConfigurationService, &input)
 	response = Response{
 		Message: &client.Message{
 			XMLInput: service.base.WSManMessageCreator.CreateXML(header, body),
 		},
 	}
+
 	// send the message to AMT
 	err = service.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
+
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
-	}
-	if response.Body.AddWiFiSettings_OUTPUT.ReturnValue != 0 {
-		err = fmt.Errorf("AddWiFiSettings_OUTPUT.ReturnValue: %d", response.Body.AddWiFiSettings_OUTPUT.ReturnValue)
+		return response, err
 	}
 
-	return
+	if response.Body.AddWiFiSettingsOutput.ReturnValue != 0 {
+		err = generateErrorMessage("addwifisettings", response.Body.AddWiFiSettingsOutput.ReturnValue)
+	}
+
+	return response, err
+}
+
+// generateErrorMessage returns an error message based on the return value.
+func generateErrorMessage(call string, returnValue ReturnValue) error {
+	ErrCallFailure := errors.New(call + " failed")
+
+	return fmt.Errorf("%w: returned %d", ErrCallFailure, returnValue)
 }
 
 // TODO: Add UpdateWiFiSettings

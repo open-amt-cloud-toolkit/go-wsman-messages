@@ -22,7 +22,7 @@ type Certificate struct {
 }
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -141,7 +141,7 @@ type (
 )
 
 // INPUTS
-// Request Types
+// Request Types.
 type (
 	PublicKeyCertificateRequest struct {
 		XMLName                xml.Name `xml:"h:AMT_PublicKeyCertificate"`
@@ -218,9 +218,9 @@ type (
 	//
 	// ValueMap={0, ..}
 	//
-	// Values={RSA, Reserved}
+	// Values={RSA, Reserved}.
 	KeyAlgorithm int
 
-	// The length of the generatd key in bits
+	// The length of the generatd key in bits.
 	KeyLength int
 )

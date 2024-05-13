@@ -9,10 +9,11 @@ import (
 	"encoding/xml"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestJson(t *testing.T) {
@@ -39,8 +40,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveCIMCard(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/card",
 	}
@@ -55,14 +56,15 @@ func TestPositiveCIMCard(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid cim_Card Get wsman message",
-				CIM_Card,
-				wsmantesting.GET,
+				CIMCard,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -82,14 +84,15 @@ func TestPositiveCIMCard(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid cim_Card Enumerate wsman message",
-				CIM_Card,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMCard,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -99,14 +102,15 @@ func TestPositiveCIMCard(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid cim_Card Pull wsman message",
-				CIM_Card,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMCard,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -135,7 +139,7 @@ func TestPositiveCIMCard(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -148,8 +152,8 @@ func TestPositiveCIMCard(t *testing.T) {
 
 func TestNegativeCIMCard(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/card",
 	}
@@ -164,14 +168,15 @@ func TestNegativeCIMCard(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid cim_Card Get wsman message",
-				CIM_Card,
-				wsmantesting.GET,
+				CIMCard,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -191,14 +196,15 @@ func TestNegativeCIMCard(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid cim_Card Enumerate wsman message",
-				CIM_Card,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMCard,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -208,14 +214,15 @@ func TestNegativeCIMCard(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid cim_Card Pull wsman message",
-				CIM_Card,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMCard,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -244,7 +251,7 @@ func TestNegativeCIMCard(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

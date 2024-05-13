@@ -14,14 +14,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewAuditLogWithClient instantiates a new Audit Log service
+// NewAuditLogWithClient instantiates a new Audit Log service.
 func NewAuditLogWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
 	return Service{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_AuditLog, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTAuditLog, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (service Service) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -38,16 +38,18 @@ func (service Service) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (service Service) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: service.base.Enumerate(),
 		},
 	}
+
 	err = service.base.Execute(response.Message)
 	if err != nil {
 		return
@@ -57,6 +59,7 @@ func (service Service) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -67,14 +70,17 @@ func (service Service) Pull(enumerationContext string) (response Response, err e
 			XMLInput: service.base.Pull(enumerationContext),
 		},
 	}
+
 	err = service.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -85,22 +91,27 @@ func (service Service) ReadRecords(startIndex int) (response Response, err error
 	if startIndex < 1 {
 		startIndex = 0
 	}
-	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AuditLog, ReadRecords), AMT_AuditLog, nil, "", "")
-	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(ReadRecords), AMT_AuditLog, &readRecords_INPUT{StartIndex: startIndex})
+
+	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMTAuditLog, ReadRecords), AMTAuditLog, nil, "", "")
+	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(ReadRecords), AMTAuditLog, &ReadRecordsInput{StartIndex: startIndex})
+
 	response = Response{
 		Message: &client.Message{
 			XMLInput: service.base.WSManMessageCreator.CreateXML(header, body),
 		},
 	}
+
 	err = service.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
 
 	response.Body.DecodedRecordsResponse = convertToAuditLogResult(response.Body.ReadRecordsResponse.EventRecords)
+
 	return
 }

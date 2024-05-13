@@ -18,7 +18,7 @@ type Settings struct {
 }
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -67,7 +67,7 @@ type (
 )
 
 // INPUTS
-// Request Types
+// Request Types.
 type SettingsRequest struct {
 	XMLName                      xml.Name                     `xml:"h:AMT_EthernetPortSettings"`
 	H                            string                       `xml:"xmlns:h,attr"`
@@ -86,7 +86,7 @@ type SettingsRequest struct {
 	DefaultGateway               string                       `xml:"h:DefaultGateway,omitempty"`               // Default Gateway in a string format. For example: 10.12.232.1
 	PrimaryDNS                   string                       `xml:"h:PrimaryDNS,omitempty"`                   // Primary DNS in a string format. For example: 10.12.232.1
 	SecondaryDNS                 string                       `xml:"h:SecondaryDNS,omitempty"`                 // Secondary DNS in a string format. For example: 10.12.232.1
-	ConsoleTcpMaxRetransmissions ConsoleTcpMaxRetransmissions `xml:"h:ConsoleTcpMaxRetransmissions,omitempty"` // Indicates the number of retransmissions host TCP SW tries if no ack is accepted
+	ConsoleTcpMaxRetransmissions ConsoleTCPMaxRetransmissions `xml:"h:ConsoleTcpMaxRetransmissions,omitempty"` // Indicates the number of retransmissions host TCP SW tries if no ack is accepted
 	PhysicalConnectionType       PhysicalConnectionType       `xml:"h:PhysicalConnectionType,omitempty"`       // Indicates the physical connection type of this network interface. Note: Applicable in Intel AMT 15.0 and later.
 	PhysicalNicMedium            PhysicalNicMedium            `xml:"h:PhysicalNicMedium,omitempty"`            // Indicates which medium is currently used by Intel® AMT to communicate with the NIC. Note: Applicable in Intel AMT 15.0 and later.
 }
@@ -95,47 +95,47 @@ type SettingsRequest struct {
 //
 // ValueMap={1, 14, 16, 224}
 //
-// Values={available on S0 AC, available on Sx AC, available on S0 DC, available on Sx DC}
+// Values={available on S0 AC, available on Sx AC, available on S0 DC, available on Sx DC}.
 type LinkPolicy int
 
 // Indicates the number of retransmissions host TCP SW tries if no ack is accepted
 //
 // MinValue=5
 //
-// MaxValue=7
-type ConsoleTcpMaxRetransmissions int
+// MaxValue=7.
+type ConsoleTCPMaxRetransmissions int
 
 // Determines whether the link is preferred to be owned by ME or host
 //
 // ValueMap={1, 2, 3..}
 //
-// Values={ME, HOST, Reserved}
+// Values={ME, HOST, Reserved}.
 type LinkPreference int
 
 // Determines whether the link is owned by ME or host.  Additional Notes: This property is read-only.
 //
 // ValueMap={1, 2, 3..}
 //
-// Values={ME, HOST, Reserved}
+// Values={ME, HOST, Reserved}.
 type LinkControl int
 
 // Defines the level of the link protection feature activation. Read only property.
 //
 // ValueMap={0, 1, 2, 3, 4..}
 //
-// Values={OVERRIDE, NONE, PASSIVE, HIGH, RESERVED}
+// Values={OVERRIDE, NONE, PASSIVE, HIGH, RESERVED}.
 type WLANLinkProtectionLevel int
 
 // Indicates the physical connection type of this network interface. Note: Applicable in Intel AMT 15.0 and later.
 //
 // ValueMap={"0", "1", "2", "3", "4.."}
 //
-// Values={"Integrated LAN NIC", "Discrete LAN NIC", "LAN via a Thunderbolt dock", "Wireless LAN", "Reserved"}
+// Values={"Integrated LAN NIC", "Discrete LAN NIC", "LAN via a Thunderbolt dock", "Wireless LAN", "Reserved"}.
 type PhysicalConnectionType int
 
 // Indicates which medium is currently used by Intel® AMT to communicate with the NIC. Note: Applicable in Intel AMT 15.0 and later.
 //
 // ValueMap={"0", "1", "2.."}
 //
-// Values={"SMBUS", "PCIe", "Reserved"}
+// Values={"SMBUS", "PCIe", "Reserved"}.
 type PhysicalNicMedium int

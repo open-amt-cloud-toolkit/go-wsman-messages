@@ -26,14 +26,13 @@ import (
 // NewContext returns a new instance of the NewContext struct.
 func NewContextWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Context {
 	return Context{
-		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_CredentialContext, client),
-		client: client,
+		base: message.NewBaseWithClient(wsmanMessageCreator, CIMCredentialContext, client),
 	}
 }
 
 // TODO: Figure out how to call GET requiring resourceURIs and Selectors
 
-// Enumerate the instances of this class
+// Enumerate the instances of this class.
 func (context Context) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -50,24 +49,27 @@ func (context Context) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
-	return
 
+	return
 }
 
-// Pull instances of this class, following an Enumerate operation
+// Pull instances of this class, following an Enumerate operation.
 func (context Context) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: context.base.Pull(enumerationContext),
 		},
 	}
+
 	err = context.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }

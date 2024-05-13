@@ -20,14 +20,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewPublicKeyCertificateWithClient instantiates a new Certificate
+// NewPublicKeyCertificateWithClient instantiates a new Certificate.
 func NewPublicKeyCertificateWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Certificate {
 	return Certificate{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_PublicKeyCertificate, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTPublicKeyCertificate, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (certificate Certificate) Get(instanceID string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
@@ -48,10 +48,11 @@ func (certificate Certificate) Get(instanceID string) (response Response, err er
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (certificate Certificate) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -68,6 +69,7 @@ func (certificate Certificate) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -88,18 +90,19 @@ func (certificate Certificate) Pull(enumerationContext string) (response Respons
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Put will change properties of the selected instance
-func (certificate Certificate) Put(instanceId string, cert string) (response Response, err error) {
+// Put will change properties of the selected instance.
+func (certificate Certificate) Put(instanceID, cert string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
-		Value: instanceId,
+		Value: instanceID,
 	}
 	publicKeyCertificate := PublicKeyCertificateRequest{}
 	publicKeyCertificate.X509Certificate = cert
-	publicKeyCertificate.H = fmt.Sprintf("%s%s", message.AMTSchema, AMT_PublicKeyCertificate)
+	publicKeyCertificate.H = fmt.Sprintf("%s%s", message.AMTSchema, AMTPublicKeyCertificate)
 	response = Response{
 		Message: &client.Message{
 			XMLInput: certificate.base.Put(publicKeyCertificate, true, &selector),
@@ -115,10 +118,11 @@ func (certificate Certificate) Put(instanceId string, cert string) (response Res
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Delete removes a the specified instance
+// Delete removes a the specified instance.
 func (certificate Certificate) Delete(instanceID string) (response Response, err error) {
 	selector := message.Selector{Name: "InstanceID", Value: instanceID}
 	response = Response{
@@ -136,5 +140,6 @@ func (certificate Certificate) Delete(instanceID string) (response Response, err
 	if err != nil {
 		return
 	}
+
 	return
 }

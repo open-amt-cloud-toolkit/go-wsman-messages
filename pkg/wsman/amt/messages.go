@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
 
-// Package amt implements AMT classes to support communicating with Intel® AMT Devices
+// Package amt implements AMT classes to support communicating with Intel® AMT Devices.
 package amt
 
 import (
@@ -32,12 +32,12 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// Messages contains the supported AMT classes
+// Messages contains the supported AMT classes.
 type Messages struct {
 	wsmanMessageCreator             *message.WSManMessageCreator
 	AlarmClockService               alarmclock.Service
 	AuditLog                        auditlog.Service
-	AuthorizationService            authorization.AuthorizationService
+	AuthorizationService            authorization.Service
 	BootCapabilities                boot.Capabilities
 	BootSettingData                 boot.SettingData
 	EnvironmentDetectionSettingData environmentdetection.SettingData
@@ -47,7 +47,7 @@ type Messages struct {
 	IEEE8021xProfile                ieee8021x.Profile
 	KerberosSettingData             kerberos.SettingData
 	ManagementPresenceRemoteSAP     managementpresence.RemoteSAP
-	MessageLog                      messagelog.MessageLog
+	MessageLog                      messagelog.Service
 	MPSUsernamePassword             mps.UsernamePassword
 	PublicKeyCertificate            publickey.Certificate
 	PublicKeyManagementService      publickey.ManagementService
@@ -65,7 +65,7 @@ type Messages struct {
 	WiFiPortConfigurationService    wifiportconfiguration.Service
 }
 
-// NewMessages instantiates a new instance of amt Messages
+// NewMessages instantiates a new instance of amt Messages.
 func NewMessages(client client.WSMan) Messages {
 	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
 	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
@@ -100,5 +100,6 @@ func NewMessages(client client.WSMan) Messages {
 	m.TLSSettingData = tls.NewTLSSettingDataWithClient(wsmanMessageCreator, client)
 	m.UserInitiatedConnectionService = userinitiatedconnection.NewUserInitiatedConnectionServiceWithClient(wsmanMessageCreator, client)
 	m.WiFiPortConfigurationService = wifiportconfiguration.NewWiFiPortConfigurationServiceWithClient(wsmanMessageCreator, client)
+
 	return m
 }

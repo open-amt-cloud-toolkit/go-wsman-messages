@@ -5,7 +5,10 @@
 
 package processor
 
-const CIM_Processor string = "CIM_Processor"
+const (
+	CIMProcessor  string = "CIM_Processor"
+	ValueNotFound string = "Value not found in map"
+)
 
 const (
 	OperationalStatusUnknown OperationalStatus = iota
@@ -30,7 +33,7 @@ const (
 	OperationalStatusRelocating
 )
 
-// operationalStatusMap is a map of the OperationalStatus enumeration
+// operationalStatusMap is a map of the OperationalStatus enumeration.
 var operationalStatusMap = map[OperationalStatus]string{
 	OperationalStatusUnknown:                 "Unknown",
 	OperationalStatusOther:                   "Other",
@@ -54,12 +57,13 @@ var operationalStatusMap = map[OperationalStatus]string{
 	OperationalStatusRelocating:              "Relocating",
 }
 
-// String returns a human-readable string representation of the OperationalStatus enumeration
+// String returns a human-readable string representation of the OperationalStatus enumeration.
 func (e OperationalStatus) String() string {
 	if s, ok := operationalStatusMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -72,7 +76,7 @@ const (
 	HealthStateNonRecoverableError HealthState = 30
 )
 
-// healthStateMap is a map of the HealthState enumeration
+// healthStateMap is a map of the HealthState enumeration.
 var healthStateMap = map[HealthState]string{
 	HealthStateUnknown:             "Unknown",
 	HealthStateOK:                  "OK",
@@ -83,12 +87,13 @@ var healthStateMap = map[HealthState]string{
 	HealthStateNonRecoverableError: "NonRecoverableError",
 }
 
-// String returns a human-readable string representation of the HealthState enumeration
+// String returns a human-readable string representation of the HealthState enumeration.
 func (e HealthState) String() string {
 	if s, ok := healthStateMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -105,7 +110,7 @@ const (
 	EnabledStateStarting
 )
 
-// enabledStateMap is a map of the EnabledState enumeration
+// enabledStateMap is a map of the EnabledState enumeration.
 var enabledStateMap = map[EnabledState]string{
 	EnabledStateDisabled:          "Disabled",
 	EnabledStateShuttingDown:      "ShuttingDown",
@@ -117,12 +122,13 @@ var enabledStateMap = map[EnabledState]string{
 	EnabledStateStarting:          "Starting",
 }
 
-// String returns a human-readable string representation of the EnabledState enumeration
+// String returns a human-readable string representation of the EnabledState enumeration.
 func (e EnabledState) String() string {
 	if s, ok := enabledStateMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -140,7 +146,7 @@ const (
 	RequestedStateNotApplicable
 )
 
-// requestedStateMap is a map of the RequestedState enumeration
+// requestedStateMap is a map of the RequestedState enumeration.
 var requestedStateMap = map[RequestedState]string{
 	RequestedStateEnabled:       "Enabled",
 	RequestedStateDisabled:      "Disabled",
@@ -155,12 +161,13 @@ var requestedStateMap = map[RequestedState]string{
 	RequestedStateNotApplicable: "NotApplicable",
 }
 
-// String returns a human-readable string representation of the RequestedState enumeration
+// String returns a human-readable string representation of the RequestedState enumeration.
 func (e RequestedState) String() string {
 	if s, ok := requestedStateMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -251,7 +258,7 @@ const (
 	UpgradeMethodSocketBGA2833
 )
 
-// upgradeMethodMap is a map of the UpgradeMethod enumeration
+// upgradeMethodMap is a map of the UpgradeMethod enumeration.
 var upgradeMethodMap = map[UpgradeMethod]string{
 	UpgradeMethodOther:                "Other",
 	UpgradeMethodUnknown:              "Unknown",
@@ -340,12 +347,13 @@ var upgradeMethodMap = map[UpgradeMethod]string{
 	UpgradeMethodSocketBGA2833:        "SocketBGA2833",
 }
 
-// String returns a human-readable string representation of the UpgradeMethod enumeration
+// String returns a human-readable string representation of the UpgradeMethod enumeration.
 func (e UpgradeMethod) String() string {
 	if s, ok := upgradeMethodMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -357,7 +365,7 @@ const (
 	CPUStatusOther
 )
 
-// cpuStatusMap is a map of the CPUStatus enumeration
+// cpuStatusMap is a map of the CPUStatus enumeration.
 var cpuStatusMap = map[CPUStatus]string{
 	CPUStatusUnknown:           "Unknown",
 	CPUStatusCPUEnabled:        "CPUEnabled",
@@ -367,10 +375,11 @@ var cpuStatusMap = map[CPUStatus]string{
 	CPUStatusOther:             "Other",
 }
 
-// String returns a human-readable string representation of the CPUStatus enumeration
+// String returns a human-readable string representation of the CPUStatus enumeration.
 func (e CPUStatus) String() string {
 	if s, ok := cpuStatusMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

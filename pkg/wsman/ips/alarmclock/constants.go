@@ -5,4 +5,4 @@
 
 package alarmclock
 
-const IPS_AlarmClockOccurrence string = "IPS_AlarmClockOccurrence"
+const IPSAlarmClockOccurrence string = "IPS_AlarmClockOccurrence"

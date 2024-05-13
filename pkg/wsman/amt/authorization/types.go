@@ -13,12 +13,12 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 )
 
-type AuthorizationService struct {
+type Service struct {
 	base message.Base
 }
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -64,16 +64,16 @@ type (
 
 // ValueMap={0, 1, 2}
 //
-// Values={LocalAccessPermission, NetworkAccessPermission, AnyAccessPermission}
+// Values={LocalAccessPermission, NetworkAccessPermission, AnyAccessPermission}.
 type AccessPermission int
 
 // ValueMap={0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, ..}
 //
-// Values={InvalidRealm, ReservedRealm0, RedirectionRealm, PTAdministrationRealm, HardwareAssetRealm, RemoteControlRealm, StorageRealm, EventManagerRealm, StorageAdminRealm, AgentPresenceLocalRealm, AgentPresenceRemoteRealm, CircuitBreakerRealm, NetworkTimeRealm, GeneralInfoRealm, FirmwareUpdateRealm, EITRealm, LocalUN, EndpointAccessControlRealm, EndpointAccessControlAdminRealm, EventLogReaderRealm, AuditLogRealm, ACLRealm, ReservedRealm1, ReservedRealm2, LocalSystemRealm, Reserved}
+// Values={InvalidRealm, ReservedRealm0, RedirectionRealm, PTAdministrationRealm, HardwareAssetRealm, RemoteControlRealm, StorageRealm, EventManagerRealm, StorageAdminRealm, AgentPresenceLocalRealm, AgentPresenceRemoteRealm, CircuitBreakerRealm, NetworkTimeRealm, GeneralInfoRealm, FirmwareUpdateRealm, EITRealm, LocalUN, EndpointAccessControlRealm, EndpointAccessControlAdminRealm, EventLogReaderRealm, AuditLogRealm, ACLRealm, ReservedRealm1, ReservedRealm2, LocalSystemRealm, Reserved}.
 type RealmValues int
 
 // INPUTS
-// Request Types
+// Request Types.
 type (
 	EnumerateUserAclEntries_INPUT struct {
 		XMLName    xml.Name `xml:"h:EnumerateUserAclEntries_INPUT"`

@@ -8,7 +8,8 @@ package userinitiatedconnection
 // INPUTS constants
 
 const (
-	AMT_UserInitiatedConnectionService string = "AMT_UserInitiatedConnectionService"
+	AMTUserInitiatedConnectionService string = "AMT_UserInitiatedConnectionService"
+	ValueNotFound                     string = "Value not found in map"
 )
 
 const (
@@ -36,7 +37,7 @@ const (
 	EnabledStateBIOSAndOSInterfacesEnabled EnabledState = 32771
 )
 
-// enabledStateToString is a map of EnabledState value to string
+// enabledStateToString is a map of EnabledState value to string.
 var enabledStateToString = map[EnabledState]string{
 	EnabledStateUnknown:                    "Unknown",
 	EnabledStateOther:                      "Other",
@@ -55,12 +56,13 @@ var enabledStateToString = map[EnabledState]string{
 	EnabledStateBIOSAndOSInterfacesEnabled: "BIOSAndOSInterfacesEnabled",
 }
 
-// String returns the string representation of the EnabledState value
+// String returns the string representation of the EnabledState value.
 func (e EnabledState) String() string {
 	if value, exists := enabledStateToString[e]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -77,7 +79,7 @@ const (
 	ReturnValueBusy                              ReturnValue = 4099
 )
 
-// returnValueToString is a map of ReturnValue value to string
+// returnValueToString is a map of ReturnValue value to string.
 var returnValueToString = map[ReturnValue]string{
 	ReturnValueCompletedWithNoError:              "CompletedWithNoError",
 	ReturnValueNotSupported:                      "NotSupported",
@@ -92,10 +94,11 @@ var returnValueToString = map[ReturnValue]string{
 	ReturnValueBusy:                              "Busy",
 }
 
-// String returns the string representation of the ReturnValue value
+// String returns the string representation of the ReturnValue value.
 func (r ReturnValue) String() string {
 	if value, exists := returnValueToString[r]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

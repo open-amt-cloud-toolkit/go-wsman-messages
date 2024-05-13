@@ -18,8 +18,8 @@ import (
 
 func TestPositiveAMT_8021XProfile(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/ieee8021x/profile",
 	}
@@ -34,14 +34,15 @@ func TestPositiveAMT_8021XProfile(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_8021XProfile Get wsman message",
-				AMT_IEEE8021xProfile,
-				wsmantesting.GET,
+				AMTIEEE8021xProfile,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -56,14 +57,15 @@ func TestPositiveAMT_8021XProfile(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_8021XProfile Enumerate wsman message",
-				AMT_IEEE8021xProfile,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTIEEE8021xProfile,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -73,14 +75,15 @@ func TestPositiveAMT_8021XProfile(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_8021XProfile Pull wsman message",
-				AMT_IEEE8021xProfile,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTIEEE8021xProfile,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -100,11 +103,11 @@ func TestPositiveAMT_8021XProfile(t *testing.T) {
 					},
 				},
 			},
-			//PUTS
+			// PUTS
 			{
 				"should create a valid AMT_8021XProfile Put wsman message",
-				AMT_IEEE8021xProfile,
-				wsmantesting.PUT,
+				AMTIEEE8021xProfile,
+				wsmantesting.Put,
 				"<h:AMT_8021XProfile xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_8021XProfile\"><h:ElementName>Intel(r) AMT 802.1x Profile</h:ElementName><h:InstanceID>Intel(r) AMT 802.1x Profile 0</h:InstanceID><h:Enabled>false</h:Enabled><h:ActiveInS0>false</h:ActiveInS0><h:AuthenticationProtocol>0</h:AuthenticationProtocol><h:ServerCertificateNameComparison>0</h:ServerCertificateNameComparison></h:AMT_8021XProfile>",
 				func() (Response, error) {
 					profileRequest := ProfileRequest{
@@ -114,7 +117,8 @@ func TestPositiveAMT_8021XProfile(t *testing.T) {
 						Enabled:     false,
 						InstanceID:  "Intel(r) AMT 802.1x Profile 0",
 					}
-					client.CurrentMessage = "Put"
+					client.CurrentMessage = wsmantesting.CurrentMessagePut
+
 					return elementUnderTest.Put(profileRequest)
 				},
 				Body{
@@ -132,7 +136,7 @@ func TestPositiveAMT_8021XProfile(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -142,10 +146,11 @@ func TestPositiveAMT_8021XProfile(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_8021XProfile(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/ieee8021x/profile",
 	}
@@ -160,14 +165,15 @@ func TestNegativeAMT_8021XProfile(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_8021XProfile Get wsman message",
-				AMT_IEEE8021xProfile,
-				wsmantesting.GET,
+				AMTIEEE8021xProfile,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -182,14 +188,15 @@ func TestNegativeAMT_8021XProfile(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_8021XProfile Enumerate wsman message",
-				AMT_IEEE8021xProfile,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTIEEE8021xProfile,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -199,14 +206,15 @@ func TestNegativeAMT_8021XProfile(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_8021XProfile Pull wsman message",
-				AMT_IEEE8021xProfile,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTIEEE8021xProfile,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -226,11 +234,11 @@ func TestNegativeAMT_8021XProfile(t *testing.T) {
 					},
 				},
 			},
-			//PUTS
+			// PUTS
 			{
 				"should create a valid AMT_8021XProfile Put wsman message",
-				AMT_IEEE8021xProfile,
-				wsmantesting.PUT,
+				AMTIEEE8021xProfile,
+				wsmantesting.Put,
 				"<h:AMT_8021XProfile xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_8021XProfile\"><h:ElementName>Intel(r) AMT 802.1x Profile</h:ElementName><h:InstanceID>Intel(r) AMT 802.1x Profile 0</h:InstanceID><h:Enabled>false</h:Enabled><h:ActiveInS0>false</h:ActiveInS0><h:AuthenticationProtocol>0</h:AuthenticationProtocol><h:ServerCertificateNameComparison>0</h:ServerCertificateNameComparison></h:AMT_8021XProfile>",
 				func() (Response, error) {
 					profileRequest := ProfileRequest{
@@ -240,7 +248,8 @@ func TestNegativeAMT_8021XProfile(t *testing.T) {
 						Enabled:     false,
 						InstanceID:  "Intel(r) AMT 802.1x Profile 0",
 					}
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Put(profileRequest)
 				},
 				Body{
@@ -258,7 +267,7 @@ func TestNegativeAMT_8021XProfile(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

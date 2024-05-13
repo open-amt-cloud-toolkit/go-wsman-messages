@@ -9,10 +9,11 @@ import (
 	"encoding/xml"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestJson(t *testing.T) {
@@ -39,12 +40,13 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_AuthorizationService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/authorization",
 	}
 	elementUnderTest := NewServiceWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_AuthorizationService Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -54,13 +56,14 @@ func TestPositiveAMT_AuthorizationService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
-			{"should create a valid AMT_AuthorizationService Get wsman message",
-				AMT_AuthorizationService,
-				wsmantesting.GET,
+			{
+				"should create a valid AMT_AuthorizationService Get wsman message",
+				AMTAuthorizationService,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -68,7 +71,7 @@ func TestPositiveAMT_AuthorizationService(t *testing.T) {
 					GetResponse: AuthorizationOccurrence{
 						XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService", Local: "AMT_AuthorizationService"},
 						AllowHttpQopAuthOnly:    1,
-						CreationClassName:       AMT_AuthorizationService,
+						CreationClassName:       AMTAuthorizationService,
 						ElementName:             "Intel(r) AMT Authorization Service",
 						EnabledState:            5,
 						Name:                    "Intel(r) AMT Authorization Service",
@@ -78,13 +81,15 @@ func TestPositiveAMT_AuthorizationService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
-			{"should create a valid AMT_AuthorizationService Enumerate wsman message",
-				AMT_AuthorizationService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+
+			{
+				"should create a valid AMT_AuthorizationService Enumerate wsman message",
+				AMTAuthorizationService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -94,14 +99,15 @@ func TestPositiveAMT_AuthorizationService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_AuthorizationService Pull wsman message",
-				AMT_AuthorizationService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTAuthorizationService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -112,7 +118,7 @@ func TestPositiveAMT_AuthorizationService(t *testing.T) {
 							{
 								XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService", Local: "AMT_AuthorizationService"},
 								AllowHttpQopAuthOnly:    1,
-								CreationClassName:       AMT_AuthorizationService,
+								CreationClassName:       AMTAuthorizationService,
 								ElementName:             "Intel(r) AMT Authorization Service",
 								EnabledState:            5,
 								Name:                    "Intel(r) AMT Authorization Service",
@@ -128,10 +134,10 @@ func TestPositiveAMT_AuthorizationService(t *testing.T) {
 
 			// // ADD USER ACL ENTRY EX
 			// // Verify with Matt - Typescript is referring to wrong realm values
-			// // {"should return a valid amt_AuthorizationService ADD_USER_ACL_ENTRY_EX wsman message using digest", AMT_AuthorizationService, ADD_USER_ACL_ENTRY_EX, fmt.Sprintf(`<h:AddUserAclEntryEx_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService"><h:DigestUsername>%s</h:DigestUsername><h:DigestPassword>%s</h:DigestPassword><h:AccessPermission>%d</h:AccessPermission><h:Realms>%d</h:Realms></h:AddUserAclEntryEx_INPUT>`, "test", "P@ssw0rd", 2, 3), func() string {
+			// // {"should return a valid amt_AuthorizationService ADD_USER_ACL_ENTRY_EX wsman message using digest", AMT_AuthorizationService, ADD_USER_ACL_ENTRY_EX, logrus.Sprintf(`<h:AddUserAclEntryEx_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService"><h:DigestUsername>%s</h:DigestUsername><h:DigestPassword>%s</h:DigestPassword><h:AccessPermission>%d</h:AccessPermission><h:Realms>%d</h:Realms></h:AddUserAclEntryEx_INPUT>`, "test", "P@ssw0rd", 2, 3), func() string {
 			// // 	return elementUnderTest.AddUserAclEntryEx(authorization.AccessPermissionLocalAndNetworkAccess, []authorization.RealmValues{authorization.RedirectionRealm}, "test", "P@ssw0rd", "")
 			// // }},
-			// // {"should return a valid amt_AuthorizationService ADD_USER_ACL_ENTRY_EX wsman message using kerberos", AMT_AuthorizationService, ADD_USER_ACL_ENTRY_EX, fmt.Sprintf(`<h:AddUserAclEntryEx_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService"><h:KerberosUserSid>%d</h:KerberosUserSid><h:AccessPermission>%d</h:AccessPermission><h:Realms>%d3</h:Realms></h:AddUserAclEntryEx_INPUT>`, 64, 2, 3), func() string {
+			// // {"should return a valid amt_AuthorizationService ADD_USER_ACL_ENTRY_EX wsman message using kerberos", AMT_AuthorizationService, ADD_USER_ACL_ENTRY_EX, logrus.Sprintf(`<h:AddUserAclEntryEx_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService"><h:KerberosUserSid>%d</h:KerberosUserSid><h:AccessPermission>%d</h:AccessPermission><h:Realms>%d3</h:Realms></h:AddUserAclEntryEx_INPUT>`, 64, 2, 3), func() string {
 			// // 	return elementUnderTest.AddUserAclEntryEx(authorization.AccessPermissionLocalAndNetworkAccess, []authorization.RealmValues{authorization.RedirectionRealm}, "", "", "64")
 			// // }},
 			// // // Check how to verify for exceptions
@@ -139,11 +145,11 @@ func TestPositiveAMT_AuthorizationService(t *testing.T) {
 			// // // 	return elementUnderTest.AddUserAclEntryEx(2, []models.RealmValues{models.RedirectionRealm}, "thisusernameistoolong", "test", "")
 			// // // }},
 			// // ENUMERATE USER ACL ENTRIES
-			// {"should return a valid amt_AuthorizationService EnumerateUserAclEntries wsman message when startIndex is undefined", AMT_AuthorizationService, `http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService/EnumerateUserAclEntries`, fmt.Sprintf(`<h:EnumerateUserAclEntries_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService"><h:StartIndex>%d</h:StartIndex></h:EnumerateUserAclEntries_INPUT>`, 1), func() string {
+			// {"should return a valid amt_AuthorizationService EnumerateUserAclEntries wsman message when startIndex is undefined", AMT_AuthorizationService, `http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService/EnumerateUserAclEntries`, logrus.Sprintf(`<h:EnumerateUserAclEntries_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService"><h:StartIndex>%d</h:StartIndex></h:EnumerateUserAclEntries_INPUT>`, 1), func() string {
 			// 	var index int
 			// 	return elementUnderTest.EnumerateUserAclEntries(index)
 			// }},
-			// {"should return a valid amt_AuthorizationService EnumerateUserAclEntries wsman message when startIndex is not 1", AMT_AuthorizationService, `http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService/EnumerateUserAclEntries`, fmt.Sprintf(`<h:EnumerateUserAclEntries_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService"><h:StartIndex>%d</h:StartIndex></h:EnumerateUserAclEntries_INPUT>`, 50), func() string {
+			// {"should return a valid amt_AuthorizationService EnumerateUserAclEntries wsman message when startIndex is not 1", AMT_AuthorizationService, `http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService/EnumerateUserAclEntries`, logrus.Sprintf(`<h:EnumerateUserAclEntries_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService"><h:StartIndex>%d</h:StartIndex></h:EnumerateUserAclEntries_INPUT>`, 50), func() string {
 			// 	return elementUnderTest.EnumerateUserAclEntries(50)
 			// }},
 			// // GET USER ACL ENTRY EX
@@ -188,11 +194,12 @@ func TestPositiveAMT_AuthorizationService(t *testing.T) {
 			// SET ADMIN ACL ENTRY
 			{
 				"should return a valid amt_AuthorizationService SetAdminAclEntryEx wsman message",
-				AMT_AuthorizationService,
+				AMTAuthorizationService,
 				`http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService/SetAdminAclEntryEx`,
 				`<h:SetAdminAclEntryEx_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService"><h:Username>admin</h:Username><h:DigestPassword>AMviB05zT+twP2E9Tn/hPA==</h:DigestPassword></h:SetAdminAclEntryEx_INPUT>`,
 				func() (Response, error) {
 					client.CurrentMessage = "SetAdminAclEntryEx"
+
 					return elementUnderTest.SetAdminAclEntryEx("admin", "AMviB05zT+twP2E9Tn/hPA==")
 				},
 				Body{
@@ -205,7 +212,7 @@ func TestPositiveAMT_AuthorizationService(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -215,14 +222,16 @@ func TestPositiveAMT_AuthorizationService(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_AuthorizationService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/authorization",
 	}
 	elementUnderTest := NewServiceWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_AuthorizationService Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -236,11 +245,12 @@ func TestNegativeAMT_AuthorizationService(t *testing.T) {
 			{
 				"should create an invalid AMT_EthernetPortSettings Get wsman message",
 				"AMT_EthernetPortSettings",
-				wsmantesting.GET,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -248,7 +258,7 @@ func TestNegativeAMT_AuthorizationService(t *testing.T) {
 					GetResponse: AuthorizationOccurrence{
 						XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService", Local: "AMT_AuthorizationService"},
 						AllowHttpQopAuthOnly:    1,
-						CreationClassName:       AMT_AuthorizationService,
+						CreationClassName:       AMTAuthorizationService,
 						ElementName:             "Intel(r) AMT Authorization Service",
 						EnabledState:            5,
 						Name:                    "Intel(r) AMT Authorization Service",
@@ -261,11 +271,12 @@ func TestNegativeAMT_AuthorizationService(t *testing.T) {
 			{
 				"should create an invalid AMT_EthernetPortSettings Pull wsman message",
 				"AMT_EthernetPortSettings",
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull("")
 				},
 				Body{
@@ -276,7 +287,7 @@ func TestNegativeAMT_AuthorizationService(t *testing.T) {
 							{
 								XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService", Local: "AMT_AuthorizationService"},
 								AllowHttpQopAuthOnly:    1,
-								CreationClassName:       AMT_AuthorizationService,
+								CreationClassName:       AMTAuthorizationService,
 								ElementName:             "Intel(r) AMT Authorization Service",
 								EnabledState:            5,
 								Name:                    "Intel(r) AMT Authorization Service",
@@ -292,7 +303,7 @@ func TestNegativeAMT_AuthorizationService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

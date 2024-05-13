@@ -14,14 +14,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewTimeSynchronizationServiceWithClient instantiates a new Service
+// NewTimeSynchronizationServiceWithClient instantiates a new Service.
 func NewTimeSynchronizationServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
 	return Service{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_TimeSynchronizationService, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTTimeSynchronizationService, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (service Service) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -38,10 +38,11 @@ func (service Service) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (service Service) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -58,6 +59,7 @@ func (service Service) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -78,6 +80,7 @@ func (service Service) Pull(enumerationContext string) (response Response, err e
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -91,10 +94,10 @@ func (service Service) Pull(enumerationContext string) (response Response, err e
 //
 // ValueMap={0, 1, 36, 38}
 //
-// Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_INVALID_PARAMETER, PT_STATUS_FLASH_WRITE_LIMIT_EXCEEDED}
+// Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_INVALID_PARAMETER, PT_STATUS_FLASH_WRITE_LIMIT_EXCEEDED}.
 func (service Service) SetHighAccuracyTimeSynch(ta0, tm1, tm2 int64) (response Response, err error) {
-	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_TimeSynchronizationService, SetHighAccuracyTimeSynch), AMT_TimeSynchronizationService, nil, "", "")
-	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetHighAccuracyTimeSynch), AMT_TimeSynchronizationService, &SetHighAccuracyTimeSynch_INPUT{
+	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMTTimeSynchronizationService, SetHighAccuracyTimeSynch), AMTTimeSynchronizationService, nil, "", "")
+	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(SetHighAccuracyTimeSynch), AMTTimeSynchronizationService, &SetHighAccuracyTimeSynch_INPUT{
 		H:   "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TimeSynchronizationService",
 		Ta0: ta0,
 		Tm1: tm1,
@@ -115,13 +118,14 @@ func (service Service) SetHighAccuracyTimeSynch(ta0, tm1, tm2 int64) (response R
 	if err != nil {
 		return
 	}
+
 	return
 }
 
 // GetLowAccuracyTimeSynch is used for reading the Intel® AMT device's internal clock.
 func (service Service) GetLowAccuracyTimeSynch() (response Response, err error) {
-	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_TimeSynchronizationService, GetLowAccuracyTimeSynch), AMT_TimeSynchronizationService, nil, "", "")
-	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetLowAccuracyTimeSynch), AMT_TimeSynchronizationService, nil)
+	header := service.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMTTimeSynchronizationService, GetLowAccuracyTimeSynch), AMTTimeSynchronizationService, nil, "", "")
+	body := service.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetLowAccuracyTimeSynch), AMTTimeSynchronizationService, nil)
 	response = Response{
 		Message: &client.Message{
 			XMLInput: service.base.WSManMessageCreator.CreateXML(header, body),
@@ -137,5 +141,6 @@ func (service Service) GetLowAccuracyTimeSynch() (response Response, err error) 
 	if err != nil {
 		return
 	}
+
 	return
 }

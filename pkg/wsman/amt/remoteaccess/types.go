@@ -26,7 +26,7 @@ type Service struct {
 }
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -87,7 +87,6 @@ type (
 		XMLName            xml.Name           `xml:"AddRemoteAccessPolicyRule_OUTPUT"`
 		PolicyRuleResponse PolicyRuleResponse `xml:"PolicyRule"`
 		ReturnValue        ReturnValue        `xml:"ReturnValue"` // ValueMap={0, 1, 36, 38, 2058} Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_INVALID_PARAMETER, PT_STATUS_FLASH_WRITE_LIMIT_EXCEEDED, PT_STATUS_DUPLICATE}
-
 	}
 	MpServer struct {
 		XMLName             xml.Name                    `xml:"MpServer"`
@@ -126,7 +125,7 @@ type (
 )
 
 // INPUTS
-// Request Types
+// Request Types.
 type (
 	AddMpServerRequest struct {
 		XMLName     xml.Name           `xml:"h:AddMpServer_INPUT"`
@@ -179,7 +178,7 @@ type (
 	}
 )
 
-// Property Types
+// Property Types.
 type (
 	RemoteAccessPolicyRuleSelector message.Selector
 	PolicyDecisionStrategy         int // First Matching:1 | All:2
@@ -187,25 +186,25 @@ type (
 	//
 	// ValueMap={3, 4, 201}
 	//
-	// Values={IPv4 Address, IPv6 Address, FQDN}
+	// Values={IPv4 Address, IPv6 Address, FQDN}.
 	MPServerInfoFormat int
 	// Authentication method to be used when the Intel® AMT subsystem opens a tunnel to the MpServer
 	//
 	// ValueMap={1, 2}
 	//
-	// Values={Mutual Authentication, Username Password Authentication}
+	// Values={Mutual Authentication, Username Password Authentication}.
 	MPServerAuthMethod int
 	// The event that will trigger the establishment of the remote connection to the MpServer.
 	//
 	// ValueMap={0, 1, 2, 3}
 	//
-	// Values={User Initiated, Alert, Periodic, Home Provisioning}
+	// Values={User Initiated, Alert, Periodic, Home Provisioning}.
 	Trigger int
 	// This field indicates if the MpServer is to be used inside or outside of the organization, or both. Default is outside (0).
 	//
 	// ValueMap={0, 1, 2}
 	//
-	// Values={External MPS, Internal MPS, Both}
+	// Values={External MPS, Internal MPS, Both}.
 	MPSType int
 
 	// ReturnValue is an integer enumeration that indicates the completion status of the method. A value of 0 indicates success. A non-zero value indicates an error.

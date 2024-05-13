@@ -18,8 +18,8 @@ import (
 
 func TestPositiveSourceSetting(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/boot/sourcesetting",
 	}
@@ -35,21 +35,22 @@ func TestPositiveSourceSetting(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create and parse a valid cim_BootSourceSetting Get call",
-				CIM_BootSourceSetting,
-				wsmantesting.GET,
+				CIMBootSourceSetting,
+				wsmantesting.Get,
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT: Force Hard-drive Boot</w:Selector></w:SelectorSet>",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get("Intel(r) AMT: Force Hard-drive Boot")
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					SourceSettingGetResponse: BootSourceSetting{
-						XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIM_BootSourceSetting},
+						XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIMBootSourceSetting},
 						ElementName:          "Intel(r) AMT: Boot Source",
 						InstanceID:           "Intel(r) AMT: Force Hard-drive Boot",
 						StructuredBootString: "CIM:Hard-Disk:1",
@@ -57,15 +58,16 @@ func TestPositiveSourceSetting(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create and parse a valid cim_BootSourceSetting Enumerate call",
-				CIM_BootSourceSetting,
-				wsmantesting.ENUMERATE,
+				CIMBootSourceSetting,
+				wsmantesting.Enumerate,
 				"",
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -75,15 +77,16 @@ func TestPositiveSourceSetting(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create and parse a valid cim_BootSourceSetting Pull call",
-				CIM_BootSourceSetting,
-				wsmantesting.PULL,
+				CIMBootSourceSetting,
+				wsmantesting.Pull,
 				"",
-				wsmantesting.PULL_BODY,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -91,21 +94,21 @@ func TestPositiveSourceSetting(t *testing.T) {
 					PullResponse: PullResponse{
 						BootSourceSettingItems: []BootSourceSetting{
 							{
-								XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIM_BootSourceSetting},
+								XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIMBootSourceSetting},
 								InstanceID:           "Intel(r) AMT: Force Hard-drive Boot",
 								ElementName:          "Intel(r) AMT: Boot Source",
 								StructuredBootString: "CIM:Hard-Disk:1",
 								FailThroughSupported: 2,
 							},
 							{
-								XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIM_BootSourceSetting},
+								XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIMBootSourceSetting},
 								InstanceID:           "Intel(r) AMT: Force PXE Boot",
 								ElementName:          "Intel(r) AMT: Boot Source",
 								StructuredBootString: "CIM:Network:1",
 								FailThroughSupported: 2,
 							},
 							{
-								XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIM_BootSourceSetting},
+								XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIMBootSourceSetting},
 								InstanceID:           "Intel(r) AMT: Force CD/DVD Boot",
 								ElementName:          "Intel(r) AMT: Boot Source",
 								StructuredBootString: "CIM:CD/DVD:1",
@@ -119,7 +122,7 @@ func TestPositiveSourceSetting(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedResponse := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedResponse := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -132,8 +135,8 @@ func TestPositiveSourceSetting(t *testing.T) {
 
 func TestNegativeSourceSetting(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/boot/sourcesetting",
 	}
@@ -149,21 +152,22 @@ func TestNegativeSourceSetting(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should handle error when cim_BootSourceSetting Get call",
-				CIM_BootSourceSetting,
-				wsmantesting.GET,
+				CIMBootSourceSetting,
+				wsmantesting.Get,
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT: Force Hard-drive Boot</w:Selector></w:SelectorSet>",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get("Intel(r) AMT: Force Hard-drive Boot")
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					SourceSettingGetResponse: BootSourceSetting{
-						XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIM_BootSourceSetting},
+						XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIMBootSourceSetting},
 						ElementName:          "Intel(r) AMT: Boot Source",
 						InstanceID:           "Intel(r) AMT: Force Hard-drive Boot",
 						StructuredBootString: "CIM:Hard-Disk:1",
@@ -171,15 +175,16 @@ func TestNegativeSourceSetting(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should handle error when cim_BootSourceSetting Enumerate call",
-				CIM_BootSourceSetting,
-				wsmantesting.ENUMERATE,
+				CIMBootSourceSetting,
+				wsmantesting.Enumerate,
 				"",
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -189,15 +194,16 @@ func TestNegativeSourceSetting(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should handle error when cim_BootSourceSetting Pull call",
-				CIM_BootSourceSetting,
-				wsmantesting.PULL,
+				CIMBootSourceSetting,
+				wsmantesting.Pull,
 				"",
-				wsmantesting.PULL_BODY,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -205,21 +211,21 @@ func TestNegativeSourceSetting(t *testing.T) {
 					PullResponse: PullResponse{
 						BootSourceSettingItems: []BootSourceSetting{
 							{
-								XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIM_BootSourceSetting},
+								XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIMBootSourceSetting},
 								InstanceID:           "Intel(r) AMT: Force Hard-drive Boot",
 								ElementName:          "Intel(r) AMT: Boot Source",
 								StructuredBootString: "CIM:Hard-Disk:1",
 								FailThroughSupported: 2,
 							},
 							{
-								XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIM_BootSourceSetting},
+								XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIMBootSourceSetting},
 								InstanceID:           "Intel(r) AMT: Force PXE Boot",
 								ElementName:          "Intel(r) AMT: Boot Source",
 								StructuredBootString: "CIM:Network:1",
 								FailThroughSupported: 2,
 							},
 							{
-								XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIM_BootSourceSetting},
+								XMLName:              xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting", Local: CIMBootSourceSetting},
 								InstanceID:           "Intel(r) AMT: Force CD/DVD Boot",
 								ElementName:          "Intel(r) AMT: Boot Source",
 								StructuredBootString: "CIM:CD/DVD:1",
@@ -233,7 +239,7 @@ func TestNegativeSourceSetting(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedResponse := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedResponse := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

@@ -5,7 +5,7 @@
 
 package chip
 
-const CIM_Chip string = "CIM_Chip"
+const CIMChip string = "CIM_Chip"
 
 const (
 	OperationalStatusUnknown OperationalStatus = iota
@@ -30,7 +30,7 @@ const (
 	OperationalStatusRelocating
 )
 
-// operationalStatusMap is a map of the OperationalStatus enumeration
+// operationalStatusMap is a map of the OperationalStatus enumeration.
 var operationalStatusMap = map[OperationalStatus]string{
 	OperationalStatusUnknown:                 "Unknown",
 	OperationalStatusOther:                   "Other",
@@ -54,10 +54,11 @@ var operationalStatusMap = map[OperationalStatus]string{
 	OperationalStatusRelocating:              "Relocating",
 }
 
-// String returns a human-readable string representation of the OperationalStatus enumeration
+// String returns a human-readable string representation of the OperationalStatus enumeration.
 func (e OperationalStatus) String() string {
 	if s, ok := operationalStatusMap[e]; ok {
 		return s
 	}
+
 	return "Value not found in map"
 }

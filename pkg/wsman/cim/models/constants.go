@@ -5,21 +5,26 @@
 
 package models
 
-// RoleCharacteristicsToString is a map of RoleCharacteristics value to string
+const (
+	ValueNotFound string = "Value not found in map"
+)
+
+// RoleCharacteristicsToString is a map of RoleCharacteristics value to string.
 var RoleCharacteristicsToString = map[int]string{
 	2: "Static",
 	3: "Opaque",
 }
 
-// ConvertRoleCharacteristicsToString returns the string representation of RoleCharacteristics
+// ConvertRoleCharacteristicsToString returns the string representation of RoleCharacteristics.
 func ConvertRoleCharacteristicsToString(value int) string {
 	if value, exist := RoleCharacteristicsToString[value]; exist {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// UsageRestrictionToString is a map of UsageRestriction value to string
+// UsageRestrictionToString is a map of UsageRestriction value to string.
 var UsageRestrictionToString = map[int]string{
 	0: "Unknown",
 	1: "FrontEndOnly",
@@ -27,30 +32,32 @@ var UsageRestrictionToString = map[int]string{
 	3: "NotRestricted",
 }
 
-// ConvertUsageRestrictionToString returns the string representation of UsageRestriction
+// ConvertUsageRestrictionToString returns the string representation of UsageRestriction.
 func ConvertUsageRestrictionToString(value int) string {
 	if value, exist := UsageRestrictionToString[value]; exist {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// PortTypeToString is a map of PortType value to string
+// PortTypeToString is a map of PortType value to string.
 var PortTypeToString = map[int]string{
 	0: "Unknown",
 	1: "Other",
 	2: "Not Applicable",
 }
 
-// ConvertPortTypeToString returns the string representation of PortType
+// ConvertPortTypeToString returns the string representation of PortType.
 func ConvertPortTypeToString(value int) string {
 	if value, exist := PortTypeToString[value]; exist {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// LinkTechnologyToString is a map of LinkTechnology value to string
+// LinkTechnologyToString is a map of LinkTechnology value to string.
 var LinkTechnologyToString = map[int]string{
 	0:  "Unknown",
 	1:  "Other",
@@ -66,15 +73,16 @@ var LinkTechnologyToString = map[int]string{
 	11: "Wireless LAN",
 }
 
-// ConvertLinkTechnologyToString returns the string representation of LinkTechnology
+// ConvertLinkTechnologyToString returns the string representation of LinkTechnology.
 func ConvertLinkTechnologyToString(value int) string {
 	if value, exist := LinkTechnologyToString[value]; exist {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// RemovalConditionsToString is a map of RemovalConditions value to string
+// RemovalConditionsToString is a map of RemovalConditions value to string.
 var RemovalConditionsToString = map[int]string{
 	0: "Unknown",
 	2: "Not Applicable",
@@ -82,15 +90,16 @@ var RemovalConditionsToString = map[int]string{
 	4: "Removable When On or Off",
 }
 
-// ConvertRemovalConditionsToString returns the string representation of RemovalConditions
+// ConvertRemovalConditionsToString returns the string representation of RemovalConditions.
 func ConvertRemovalConditionsToString(value int) string {
 	if value, exist := RemovalConditionsToString[value]; exist {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// ServicePhilosophyToString is a map of ServicePhilosophy value to string
+// ServicePhilosophyToString is a map of ServicePhilosophy value to string.
 var ServicePhilosophyToString = map[int]string{
 	0: "Unknown",
 	1: "Other",
@@ -103,15 +112,16 @@ var ServicePhilosophyToString = map[int]string{
 	8: "Moveable",
 }
 
-// ConvertServicePhilosophyToString returns the string representation of ServicePhilosophy
+// ConvertServicePhilosophyToString returns the string representation of ServicePhilosophy.
 func ConvertServicePhilosophyToString(value int) string {
 	if value, exist := ServicePhilosophyToString[value]; exist {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// SecurityBreachToString is a map of SecurityBreach value to string
+// SecurityBreachToString is a map of SecurityBreach value to string.
 var SecurityBreachToString = map[int]string{
 	1: "Other",
 	2: "Unknown",
@@ -120,15 +130,16 @@ var SecurityBreachToString = map[int]string{
 	5: "Breach Successful",
 }
 
-// ConvertSecurityBreachToString returns the string representation of SecurityBreach
+// ConvertSecurityBreachToString returns the string representation of SecurityBreach.
 func ConvertSecurityBreachToString(value int) string {
 	if value, exist := SecurityBreachToString[value]; exist {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// ChassisPackageTypeToString is a map of ChassisPackageType value to string
+// ChassisPackageTypeToString is a map of ChassisPackageType value to string.
 var ChassisPackageTypeToString = map[int]string{
 	0:  "Unknown",
 	1:  "Other",
@@ -169,15 +180,16 @@ var ChassisPackageTypeToString = map[int]string{
 	36: "Stick PC",
 }
 
-// ConvertChassisPackageTypeToString returns the string representation of ChassisPackageType
+// ConvertChassisPackageTypeToString returns the string representation of ChassisPackageType.
 func ConvertChassisPackageTypeToString(value int) string {
 	if value, exist := ChassisPackageTypeToString[value]; exist {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
-// SoftwareElementStateToString is a map of SoftwareElementState value to string
+// SoftwareElementStateToString is a map of SoftwareElementState value to string.
 var SoftwareElementStateToString = map[int]string{
 	0: "Deployable",
 	1: "Installable",
@@ -185,12 +197,13 @@ var SoftwareElementStateToString = map[int]string{
 	3: "Running",
 }
 
-// ConvertSoftwareElementStateToString returns the string representation of SoftwareElementState
+// ConvertSoftwareElementStateToString returns the string representation of SoftwareElementState.
 func ConvertSoftwareElementStateToString(value int) string {
 	if value, exist := SoftwareElementStateToString[value]; exist {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -226,6 +239,7 @@ const (
 	ConcreteJobState_Service
 	ConcreteJobState_QueryPending
 )
+
 const (
 	CommunicationStatus_UnknownCS CommunicationStatus = iota
 	CommunicationStatus_NotAvailableCS
@@ -233,6 +247,7 @@ const (
 	CommunicationStatus_LostCommunication
 	CommunicationStatus_NoContact
 )
+
 const (
 	DetailedStatus_NotAvailableDS DetailedStatus = iota
 	DetailedStatus_NoAdditionalInformation
@@ -241,6 +256,7 @@ const (
 	DetailedStatus_NonRecoverableError
 	DetailedStatus_SupportingEntityInError
 )
+
 const (
 	OperatingStatus_UnknownOS OperatingStatus = iota
 	OperatingStatus_NotAvailableOS
@@ -260,12 +276,14 @@ const (
 	OperatingStatus_Transitioning
 	OperatingStatus_InService
 )
+
 const (
 	PrimaryStatus_UnknownPS PrimaryStatus = iota
 	PrimaryStatus_OK
 	PrimaryStatus_Degraded
 	PrimaryStatus_ErrorPS
 )
+
 const (
 	January RunMonth = iota
 	February
@@ -280,6 +298,7 @@ const (
 	November
 	December
 )
+
 const (
 	SaturdayNegative RunDayOfWeek = iota - 7
 	FridayNegative
@@ -297,6 +316,7 @@ const (
 	Friday
 	Saturday
 )
+
 const (
 	RecoveryAction_UnknownRA RecoveryAction = iota
 	RecoveryAction_Other
@@ -305,10 +325,12 @@ const (
 	RecoveryAction_RerunJob
 	RecoveryAction_RunRecoveryJob
 )
+
 const (
 	LocalTime LocalOrUtcTime = iota + 1
 	UTCTime
 )
+
 const (
 	PowerManagementCapabilities_Unknown PowerManagementCapabilitiesValues = iota
 	PowerManagementCapabilities_NotSupported
@@ -319,6 +341,7 @@ const (
 	PowerManagementCapabilities_PowerCyclingSupported
 	PowerManagementCapabilities_TimedPowerOnSupported
 )
+
 const (
 	Availability_Other AvailabilityValues = iota + 1
 	Availability_Unknown
@@ -342,6 +365,7 @@ const (
 	Availability_NotConfigured
 	Availability_Quiesced
 )
+
 const (
 	StatusInfo_Other StatusInfoValues = iota + 1
 	StatusInfo_Unknown
@@ -349,6 +373,7 @@ const (
 	StatusInfo_Disabled
 	StatusInfo_NotApplicable
 )
+
 const (
 	AdditionalAvailability_Other AdditionalAvailabilityValues = iota + 1
 	AdditionalAvailability_Unknown
@@ -389,6 +414,7 @@ const (
 	ForceOCRUEFIBootOption9  BootConfigSettingInstanceID = "Intel(r) AMT: Force OCR UEFI Boot Option 9"
 	ForceOCRUEFIBootOption10 BootConfigSettingInstanceID = "Intel(r) AMT: Force OCR UEFI Boot Option 10"
 )
+
 const (
 	RemovalConditions_Unknown              RemovalConditions = 0
 	RemovalConditions_NotApplicable        RemovalConditions = 2
@@ -407,12 +433,14 @@ const (
 	OverwritePolicy_WrapsWhenFull   OverwritePolicy = 2
 	OverwritePolicy_NeverOverwrites OverwritePolicy = 7
 )
+
 const (
 	LogState_Unknown       LogState = 0
 	LogState_Normal        LogState = 2
 	LogState_Erasing       LogState = 3
 	LogState_NotApplicable LogState = 4
 )
+
 const (
 	Capabilities_Unknown CapabilitiesValues = iota
 	Capabilities_Other
@@ -426,6 +454,7 @@ const (
 	Capabilities_VariableFormatsForRecords
 	Capabilities_CanFlagRecordsForOverwrite
 )
+
 const (
 	LastChange_Unknown LastChange = iota
 	LastChange_Add
@@ -433,6 +462,7 @@ const (
 	LastChange_Modify
 	LastChange_LogCleared
 )
+
 const (
 	CharacterSet_Unknown CharacterSet = iota
 	CharacterSet_Other

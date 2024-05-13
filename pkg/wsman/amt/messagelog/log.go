@@ -32,15 +32,15 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewMessageLogWithClient instantiates a new MessageLog
-func NewMessageLogWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) MessageLog {
-	return MessageLog{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_MessageLog, client),
+// NewMessageLogWithClient instantiates a new MessageLog.
+func NewMessageLogWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
+	return Service{
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTMessageLog, client),
 	}
 }
 
-// Get retrieves the representation of the instance
-func (messageLog MessageLog) Get() (response Response, err error) {
+// Get retrieves the representation of the instance.
+func (messageLog Service) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: messageLog.base.Get(nil),
@@ -56,11 +56,12 @@ func (messageLog MessageLog) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
-func (messageLog MessageLog) Enumerate() (response Response, err error) {
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
+func (messageLog Service) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: messageLog.base.Enumerate(),
@@ -76,11 +77,12 @@ func (messageLog MessageLog) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
 // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
-func (messageLog MessageLog) Pull(enumerationContext string) (response Response, err error) {
+func (messageLog Service) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: messageLog.base.Pull(enumerationContext),
@@ -96,19 +98,20 @@ func (messageLog MessageLog) Pull(enumerationContext string) (response Response,
 	if err != nil {
 		return
 	}
+
 	return
 }
 
 // GetRecords retrieves multiple records from event log.
 // The IterationIdentifier input parameter is a numeric value (starting at 1) which is the position of the first record in the log that should be extracted.
-// MaxReadRecords is set to 390.  If NoMoreRecords returns false, call this again setting the identifier to the start of the next IterationIdentifier
-func (messageLog MessageLog) GetRecords(identifier int) (response Response, err error) {
+// MaxReadRecords is set to 390.  If NoMoreRecords returns false, call this again setting the identifier to the start of the next IterationIdentifier.
+func (messageLog Service) GetRecords(identifier int) (response Response, err error) {
 	if identifier < 1 {
 		identifier = 1
 	}
 
-	header := messageLog.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_MessageLog, GetRecords), AMT_MessageLog, nil, "", "")
-	body := messageLog.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetRecords), AMT_MessageLog, &GetRecords_INPUT{
+	header := messageLog.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMTMessageLog, GetRecords), AMTMessageLog, nil, "", "")
+	body := messageLog.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(GetRecords), AMTMessageLog, &GetRecords_INPUT{
 		IterationIdentifier: identifier,
 		MaxReadRecords:      390,
 	})
@@ -128,15 +131,16 @@ func (messageLog MessageLog) GetRecords(identifier int) (response Response, err 
 	if err != nil {
 		return
 	}
+
 	return
 }
 
 // Requests that an iteration of the MessageLog be established and that the iterator be set to the first entry in the Log. An identifier for the iterator is returned as an output parameter of the method. Regarding iteration, you have 2 choices: 1) Embed iteration data in the method call, and allow implementations to track/ store this data manually; or, 2) Iterate using a separate object (for example, class ActiveIterator) as an iteration agent. The first approach is used here for interoperability. The second requires an instance of the Iterator object for EACH iteration in progress. 2's functionality could be implemented underneath 1.
 //
 // Product Specific Usage: In current implementation this method doesn't have any affect. In order to get the events from the log user should just call GetRecord or GetRecords.
-func (messageLog MessageLog) PositionToFirstRecord() (response Response, err error) {
-	header := messageLog.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_MessageLog, PositionToFirstRecord), AMT_MessageLog, nil, "", "")
-	body := messageLog.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(PositionToFirstRecord), AMT_MessageLog, nil)
+func (messageLog Service) PositionToFirstRecord() (response Response, err error) {
+	header := messageLog.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMTMessageLog, PositionToFirstRecord), AMTMessageLog, nil, "", "")
+	body := messageLog.base.WSManMessageCreator.CreateBody(methods.GenerateInputMethod(PositionToFirstRecord), AMTMessageLog, nil)
 	response = Response{
 		Message: &client.Message{
 			XMLInput: messageLog.base.WSManMessageCreator.CreateXML(header, body),
@@ -152,5 +156,6 @@ func (messageLog MessageLog) PositionToFirstRecord() (response Response, err err
 	if err != nil {
 		return
 	}
+
 	return
 }

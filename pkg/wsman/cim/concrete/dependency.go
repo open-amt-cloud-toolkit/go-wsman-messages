@@ -21,14 +21,13 @@ import (
 // should be NewDependency() because concrete is scoped already as package name.
 func NewDependencyWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Dependency {
 	return Dependency{
-		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_ConcreteDependency, client),
-		client: client,
+		base: message.NewBaseWithClient(wsmanMessageCreator, CIMConcreteDependency, client),
 	}
 }
 
 // TODO: Figure out how to call GET requiring resourceURIs and Selectors
 
-// Enumerate the instances of this class
+// Enumerate the instances of this class.
 func (dependency Dependency) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -45,24 +44,27 @@ func (dependency Dependency) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
-	return
 
+	return
 }
 
-// Pull instances of this class, following an Enumerate operation
+// Pull instances of this class, following an Enumerate operation.
 func (dependency Dependency) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: dependency.base.Pull(enumerationContext),
 		},
 	}
+
 	err = dependency.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }

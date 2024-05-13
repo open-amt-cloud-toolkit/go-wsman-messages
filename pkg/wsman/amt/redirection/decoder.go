@@ -6,8 +6,9 @@
 package redirection
 
 const (
-	AMT_RedirectionService string = "AMT_RedirectionService"
-	RequestStateChange     string = "RequestStateChange"
+	AMTRedirectionService string = "AMT_RedirectionService"
+	RequestStateChange    string = "RequestStateChange"
+	ValueNotFound         string = "Value not found in map"
 )
 
 const (
@@ -59,7 +60,8 @@ func (es EnabledState) String() string {
 	if v, ok := enabledStateToString[es]; ok {
 		return v
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -76,7 +78,7 @@ const (
 	Busy                              ReturnValue = 4099
 )
 
-// returnValueToString is a map of ReturnValue values to string
+// returnValueToString is a map of ReturnValue values to string.
 var returnValueToString = map[ReturnValue]string{
 	CompletedWithNoError:              "CompletedWithNoError",
 	NotSupported:                      "NotSupported",
@@ -91,10 +93,11 @@ var returnValueToString = map[ReturnValue]string{
 	Busy:                              "Busy",
 }
 
-// String returns a string representation of ReturnValue
+// String returns a string representation of ReturnValue.
 func (rv ReturnValue) String() string {
 	if v, ok := returnValueToString[rv]; ok {
 		return v
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

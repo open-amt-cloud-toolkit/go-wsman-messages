@@ -41,8 +41,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveConfigSetting(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/boot/configsetting",
 	}
@@ -57,33 +57,35 @@ func TestPositiveConfigSetting(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create and parse a valid cim_BootConfigSetting Get call",
-				CIM_BootConfigSetting,
-				wsmantesting.GET,
+				CIMBootConfigSetting,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					ConfigSettingGetResponse: BootConfigSetting{
-						XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting", Local: CIM_BootConfigSetting},
+						XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting", Local: CIMBootConfigSetting},
 						InstanceID:  "Intel(r) AMT: Boot Configuration 0",
 						ElementName: "Intel(r) AMT: Boot Configuration",
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create and parse a valid cim_BootConfigSetting Enumerate call",
-				CIM_BootConfigSetting,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMBootConfigSetting,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -93,14 +95,15 @@ func TestPositiveConfigSetting(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create and parse a valid cim_BootConfigSetting Pull call",
-				CIM_BootConfigSetting,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMBootConfigSetting,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -108,7 +111,7 @@ func TestPositiveConfigSetting(t *testing.T) {
 					PullResponse: PullResponse{
 						BootConfigSettingItems: []BootConfigSetting{
 							{
-								XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting", Local: CIM_BootConfigSetting},
+								XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting", Local: CIMBootConfigSetting},
 								InstanceID:  "Intel(r) AMT: Boot Configuration 0",
 								ElementName: "Intel(r) AMT: Boot Configuration",
 							},
@@ -116,14 +119,15 @@ func TestPositiveConfigSetting(t *testing.T) {
 					},
 				},
 			},
-			//Change Boot Order
+			// Change Boot Order
 			{
 				"should create and parse a valid cim_BootConfigSetting ChangeBootOrder call",
-				CIM_BootConfigSetting,
-				methods.GenerateAction(CIM_BootConfigSetting, ChangeBootOrder),
+				CIMBootConfigSetting,
+				methods.GenerateAction(CIMBootConfigSetting, ChangeBootOrder),
 				"<h:ChangeBootOrder_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting\"><h:Source><Address xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\"><ResourceURI xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting</ResourceURI><SelectorSet xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\"><Selector Name=\"InstanceID\">Intel(r) AMT: Force Hard-drive Boot</Selector></SelectorSet></ReferenceParameters></h:Source></h:ChangeBootOrder_INPUT>",
 				func() (Response, error) {
 					client.CurrentMessage = "ChangeBootOrder"
+
 					return elementUnderTest.ChangeBootOrder(HardDrive)
 				},
 				Body{
@@ -137,7 +141,7 @@ func TestPositiveConfigSetting(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -150,8 +154,8 @@ func TestPositiveConfigSetting(t *testing.T) {
 
 func TestNegativeConfigSetting(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/boot/configsetting",
 	}
@@ -166,33 +170,35 @@ func TestNegativeConfigSetting(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should handle error when cim_BootConfigSetting Get call",
-				CIM_BootConfigSetting,
-				wsmantesting.GET,
+				CIMBootConfigSetting,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					ConfigSettingGetResponse: BootConfigSetting{
-						XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting", Local: CIM_BootConfigSetting},
+						XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting", Local: CIMBootConfigSetting},
 						InstanceID:  "Intel(r) AMT: Boot Configuration 0",
 						ElementName: "Intel(r) AMT: Boot Configuration",
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should handle error when cim_BootConfigSetting Enumerate call",
-				CIM_BootConfigSetting,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMBootConfigSetting,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -202,14 +208,15 @@ func TestNegativeConfigSetting(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should handle error when cim_BootConfigSetting Pull call",
-				CIM_BootConfigSetting,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMBootConfigSetting,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -217,7 +224,7 @@ func TestNegativeConfigSetting(t *testing.T) {
 					PullResponse: PullResponse{
 						BootConfigSettingItems: []BootConfigSetting{
 							{
-								XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting", Local: CIM_BootConfigSetting},
+								XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting", Local: CIMBootConfigSetting},
 								InstanceID:  "Intel(r) AMT: Boot Configuration 0",
 								ElementName: "Intel(r) AMT: Boot Configuration",
 							},
@@ -225,14 +232,15 @@ func TestNegativeConfigSetting(t *testing.T) {
 					},
 				},
 			},
-			//Change Boot Order
+			// Change Boot Order
 			{
 				"should handle error when cim_BootConfigSetting ChangeBootOrder call",
-				CIM_BootConfigSetting,
-				methods.GenerateAction(CIM_BootConfigSetting, ChangeBootOrder),
+				CIMBootConfigSetting,
+				methods.GenerateAction(CIMBootConfigSetting, ChangeBootOrder),
 				"<h:ChangeBootOrder_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootConfigSetting\"><h:Source><Address xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\">http://schemas.xmlsoap.org/ws/2004/08/addressing</Address><ReferenceParameters xmlns=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\"><ResourceURI xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\">http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootSourceSetting</ResourceURI><SelectorSet xmlns=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\"><Selector Name=\"InstanceID\">Intel(r) AMT: Force Hard-drive Boot</Selector></SelectorSet></ReferenceParameters></h:Source></h:ChangeBootOrder_INPUT>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.ChangeBootOrder(HardDrive)
 				},
 				Body{
@@ -246,7 +254,7 @@ func TestNegativeConfigSetting(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

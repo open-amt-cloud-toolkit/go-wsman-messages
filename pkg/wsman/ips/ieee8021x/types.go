@@ -13,7 +13,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 )
 
-// Package Types
+// Package Types.
 type (
 	Settings struct {
 		base message.Base
@@ -24,7 +24,7 @@ type (
 )
 
 // OUTPUT
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -67,7 +67,7 @@ type (
 )
 
 // INPUT
-// Request Types
+// Request Types.
 type (
 	IEEE8021xSettingsRequest struct {
 		XMLName                         xml.Name `xml:"h:IPS_IEEE8021xSettings,omitempty"`

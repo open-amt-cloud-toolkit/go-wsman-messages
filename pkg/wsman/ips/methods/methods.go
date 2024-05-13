@@ -11,7 +11,7 @@ func RequestStateChange(className string) string {
 	return fmt.Sprintf("http://intel.com/wbem/wscim/1/ips-schema/1/%s/RequestStateChange", className)
 }
 
-func GenerateAction(className string, methodName string) string {
+func GenerateAction(className, methodName string) string {
 	return fmt.Sprintf("http://intel.com/wbem/wscim/1/ips-schema/1/%s/%s", className, methodName)
 }
 

@@ -15,12 +15,11 @@ import (
 // NewBootSourceSetting returns a new instance of the BootSourceSetting struct.
 func NewBootSourceSettingWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) SourceSetting {
 	return SourceSetting{
-		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_BootSourceSetting, client),
-		client: client,
+		base: message.NewBaseWithClient(wsmanMessageCreator, CIMBootSourceSetting, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (sourceSetting SourceSetting) Get(instanceID string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
@@ -41,10 +40,11 @@ func (sourceSetting SourceSetting) Get(instanceID string) (response Response, er
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (sourceSetting SourceSetting) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -61,6 +61,7 @@ func (sourceSetting SourceSetting) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -71,13 +72,16 @@ func (sourceSetting SourceSetting) Pull(enumerationContext string) (response Res
 			XMLInput: sourceSetting.base.Pull(enumerationContext),
 		},
 	}
+
 	err = sourceSetting.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }

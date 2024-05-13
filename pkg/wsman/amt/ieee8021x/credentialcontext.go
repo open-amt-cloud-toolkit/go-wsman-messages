@@ -24,14 +24,14 @@ type CredentialContext struct {
 // NewIEEE8021xCredentialContextWithClient instantiates a new CredentialContext service.
 func NewIEEE8021xCredentialContextWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) CredentialContext {
 	return CredentialContext{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_IEEE8021xCredentialContext, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTIEEE8021xCredentialContext, client),
 	}
 }
 
 // TODO: Handle GET input
 // Get retrieves the representation of the instance
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (credentialContext CredentialContext) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -48,6 +48,7 @@ func (credentialContext CredentialContext) Enumerate() (response Response, err e
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -68,5 +69,6 @@ func (credentialContext CredentialContext) Pull(enumerationContext string) (resp
 	if err != nil {
 		return
 	}
+
 	return
 }

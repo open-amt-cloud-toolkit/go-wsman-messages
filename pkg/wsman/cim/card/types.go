@@ -14,11 +14,10 @@ import (
 )
 
 type Package struct {
-	base   message.Base
-	client client.WSMan
+	base message.Base
 }
 
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -53,8 +52,8 @@ type (
 		Version           string              `xml:"Version"`           // A string that indicates the version of the PhysicalElement.
 	}
 
-	// OperationalStatus is the current statuses of the element
+	// OperationalStatus is the current statuses of the element.
 	OperationalStatus int
-	// PackageType is the type of the PhysicalPackage
+	// PackageType is the type of the PhysicalPackage.
 	PackageType int
 )

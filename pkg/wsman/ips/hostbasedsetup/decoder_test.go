@@ -24,6 +24,7 @@ func TestAdminPassEncryptionType_String(t *testing.T) {
 		}
 	}
 }
+
 func TestSigningAlgorithm_String(t *testing.T) {
 	tests := []struct {
 		state    SigningAlgorithm
@@ -41,6 +42,7 @@ func TestSigningAlgorithm_String(t *testing.T) {
 		}
 	}
 }
+
 func TestCurrentControlMode_String(t *testing.T) {
 	tests := []struct {
 		state    CurrentControlMode

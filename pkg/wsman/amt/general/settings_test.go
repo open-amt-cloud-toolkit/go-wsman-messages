@@ -9,10 +9,11 @@ import (
 	"encoding/xml"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestJson(t *testing.T) {
@@ -39,13 +40,14 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_GeneralSettings(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/general",
 	}
 	elementUnderTest := NewGeneralSettingsWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -55,20 +57,21 @@ func TestPositiveAMT_GeneralSettings(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_GeneralSettings Get wsman message",
-				AMT_GeneralSettings,
-				wsmantesting.GET,
+				AMTGeneralSettings,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: GeneralSettingsResponse{
-						XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings", Local: AMT_GeneralSettings},
+						XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings", Local: AMTGeneralSettings},
 						ElementName:                   "Intel(r) AMT: General Settings",
 						InstanceID:                    "Intel(r) AMT: General Settings",
 						AMTNetworkEnabled:             1,
@@ -76,7 +79,7 @@ func TestPositiveAMT_GeneralSettings(t *testing.T) {
 						DDNSTTL:                       900,
 						DDNSUpdateByDHCPServerEnabled: true,
 						DDNSUpdateEnabled:             false,
-						DHCPSyncRequiresHostname:      1, //Intel SDK documentation missing
+						DHCPSyncRequiresHostname:      1, // Intel SDK documentation missing
 						DHCPv6ConfigurationTimeout:    0,
 						DigestRealm:                   "Digest:F3EB554784E729164447A89F60B641C5",
 						DomainName:                    "Test Domain Name",
@@ -96,14 +99,15 @@ func TestPositiveAMT_GeneralSettings(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_GeneralSettings Enumerate wsman message",
-				AMT_GeneralSettings,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTGeneralSettings,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -113,14 +117,15 @@ func TestPositiveAMT_GeneralSettings(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_GeneralSettings Pull wsman message",
-				AMT_GeneralSettings,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTGeneralSettings,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -129,7 +134,7 @@ func TestPositiveAMT_GeneralSettings(t *testing.T) {
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
 						GeneralSettingsItems: []GeneralSettingsResponse{
 							{
-								XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings", Local: AMT_GeneralSettings},
+								XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings", Local: AMTGeneralSettings},
 								ElementName:                   "Intel(r) AMT: General Settings",
 								InstanceID:                    "Intel(r) AMT: General Settings",
 								AMTNetworkEnabled:             1,
@@ -159,7 +164,7 @@ func TestPositiveAMT_GeneralSettings(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -169,15 +174,17 @@ func TestPositiveAMT_GeneralSettings(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_GeneralSettings(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/general",
 	}
 	elementUnderTest := NewGeneralSettingsWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -187,20 +194,21 @@ func TestNegativeAMT_GeneralSettings(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_GeneralSettings Get wsman message",
-				AMT_GeneralSettings,
-				wsmantesting.GET,
+				AMTGeneralSettings,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: GeneralSettingsResponse{
-						XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings", Local: AMT_GeneralSettings},
+						XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings", Local: AMTGeneralSettings},
 						ElementName:                   "Intel(r) AMT: General Settings",
 						InstanceID:                    "Intel(r) AMT: General Settings",
 						AMTNetworkEnabled:             1,
@@ -208,7 +216,7 @@ func TestNegativeAMT_GeneralSettings(t *testing.T) {
 						DDNSTTL:                       900,
 						DDNSUpdateByDHCPServerEnabled: true,
 						DDNSUpdateEnabled:             false,
-						DHCPSyncRequiresHostname:      1, //Intel SDK documentation missing
+						DHCPSyncRequiresHostname:      1, // Intel SDK documentation missing
 						DHCPv6ConfigurationTimeout:    0,
 						DigestRealm:                   "Digest:F3EB554784E729164447A89F60B641C5",
 						DomainName:                    "Test Domain Name",
@@ -228,14 +236,15 @@ func TestNegativeAMT_GeneralSettings(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_GeneralSettings Enumerate wsman message",
-				AMT_GeneralSettings,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTGeneralSettings,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -245,14 +254,15 @@ func TestNegativeAMT_GeneralSettings(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_GeneralSettings Pull wsman message",
-				AMT_GeneralSettings,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTGeneralSettings,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -261,7 +271,7 @@ func TestNegativeAMT_GeneralSettings(t *testing.T) {
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
 						GeneralSettingsItems: []GeneralSettingsResponse{
 							{
-								XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings", Local: AMT_GeneralSettings},
+								XMLName:                       xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings", Local: AMTGeneralSettings},
 								ElementName:                   "Intel(r) AMT: General Settings",
 								InstanceID:                    "Intel(r) AMT: General Settings",
 								AMTNetworkEnabled:             1,
@@ -291,7 +301,7 @@ func TestNegativeAMT_GeneralSettings(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

@@ -5,7 +5,10 @@
 
 package optin
 
-const IPS_OptInService string = "IPS_OptInService"
+const (
+	IPSOptInService string = "IPS_OptInService"
+	ValueNotFound   string = "Value not found in map"
+)
 
 const (
 	OptInRequiredNone OptInRequired = iota
@@ -13,19 +16,20 @@ const (
 	OptInRequiredAll OptInRequired = 4294967295
 )
 
-// optInRequiredToString is a map of OptInRequired value to string
+// optInRequiredToString is a map of OptInRequired value to string.
 var optInRequiredToString = map[OptInRequired]string{
 	OptInRequiredNone: "None",
 	OptInRequiredKVM:  "KVM",
 	OptInRequiredAll:  "All",
 }
 
-// String returns a human-readable string representation of the OptInRequired enumeration
+// String returns a human-readable string representation of the OptInRequired enumeration.
 func (o OptInRequired) String() string {
 	if s, ok := optInRequiredToString[o]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -36,7 +40,7 @@ const (
 	InSession
 )
 
-// optInStateToString is a map of OptInState value to string
+// optInStateToString is a map of OptInState value to string.
 var optInStateToString = map[OptInState]string{
 	NotStarted: "NotStarted",
 	Requested:  "Requested",
@@ -45,12 +49,13 @@ var optInStateToString = map[OptInState]string{
 	InSession:  "InSession",
 }
 
-// String returns a human-readable string representation of the OptInState enumeration
+// String returns a human-readable string representation of the OptInState enumeration.
 func (o OptInState) String() string {
 	if s, ok := optInStateToString[o]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -58,18 +63,19 @@ const (
 	CanModifyOptInPolicyTrue  CanModifyOptInPolicy = 1
 )
 
-// canModifyOptInPolicyToString is a map of CanModifyOptInPolicy value to string
+// canModifyOptInPolicyToString is a map of CanModifyOptInPolicy value to string.
 var canModifyOptInPolicyToString = map[CanModifyOptInPolicy]string{
 	CanModifyOptInPolicyFalse: "False",
 	CanModifyOptInPolicyTrue:  "True",
 }
 
-// String returns a human-readable string representation of the CanModifyOptInPolicy enumeration
+// String returns a human-readable string representation of the CanModifyOptInPolicy enumeration.
 func (c CanModifyOptInPolicy) String() string {
 	if s, ok := canModifyOptInPolicyToString[c]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -80,7 +86,7 @@ const (
 	ReturnValueFailedFFS
 )
 
-// returnValueToString is a map of ReturnValue value to string
+// returnValueToString is a map of ReturnValue value to string.
 var returnValueToString = map[ReturnValue]string{
 	ReturnValueSuccess:       "Success",
 	ReturnValueInternalError: "InternalError",
@@ -89,10 +95,11 @@ var returnValueToString = map[ReturnValue]string{
 	ReturnValueFailedFFS:     "FailedFFS",
 }
 
-// String returns a human-readable string representation of the ReturnValue enumeration
+// String returns a human-readable string representation of the ReturnValue enumeration.
 func (r ReturnValue) String() string {
 	if s, ok := returnValueToString[r]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

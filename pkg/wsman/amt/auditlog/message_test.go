@@ -41,8 +41,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_AuditLog(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/auditlog",
 	}
@@ -57,14 +57,15 @@ func TestPositiveAMT_AuditLog(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_AuditLog Get wsman message",
-				AMT_AuditLog,
-				wsmantesting.GET,
+				AMTAuditLog,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -88,14 +89,15 @@ func TestPositiveAMT_AuditLog(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_AuditLog Enumerate wsman message",
-				AMT_AuditLog,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTAuditLog,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -105,14 +107,15 @@ func TestPositiveAMT_AuditLog(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_AuditLog Pull wsman message",
-				AMT_AuditLog,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTAuditLog,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -141,14 +144,15 @@ func TestPositiveAMT_AuditLog(t *testing.T) {
 					},
 				},
 			},
-			//READ RECORDS
+			// READ RECORDS
 			{
 				"should create a valid AMT_AuditLog Read Records wsman message",
-				AMT_AuditLog,
+				AMTAuditLog,
 				`http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuditLog/ReadRecords`,
 				`<h:ReadRecords_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuditLog"><h:StartIndex>1</h:StartIndex></h:ReadRecords_INPUT>`,
 				func() (Response, error) {
 					client.CurrentMessage = "ReadRecords"
+
 					return elementUnderTest.ReadRecords(1)
 				},
 				Body{
@@ -194,7 +198,7 @@ func TestPositiveAMT_AuditLog(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -204,10 +208,11 @@ func TestPositiveAMT_AuditLog(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_AuditLog(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/auditlog",
 	}
@@ -222,14 +227,15 @@ func TestNegativeAMT_AuditLog(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_AuditLog Get wsman message",
-				AMT_AuditLog,
-				wsmantesting.GET,
+				AMTAuditLog,
+				wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -253,14 +259,15 @@ func TestNegativeAMT_AuditLog(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_AuditLog Enumerate wsman message",
-				AMT_AuditLog,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTAuditLog,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -270,14 +277,15 @@ func TestNegativeAMT_AuditLog(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_AuditLog Pull wsman message",
-				AMT_AuditLog,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTAuditLog,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -306,14 +314,15 @@ func TestNegativeAMT_AuditLog(t *testing.T) {
 					},
 				},
 			},
-			//READ RECORDS
+			// READ RECORDS
 			{
 				"should create a valid AMT_AuditLog Read Records wsman message",
-				AMT_AuditLog,
+				AMTAuditLog,
 				`http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuditLog/ReadRecords`,
 				`<h:ReadRecords_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuditLog"><h:StartIndex>1</h:StartIndex></h:ReadRecords_INPUT>`,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.ReadRecords(1)
 				},
 				Body{
@@ -331,7 +340,7 @@ func TestNegativeAMT_AuditLog(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

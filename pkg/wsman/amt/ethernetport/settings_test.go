@@ -9,10 +9,11 @@ import (
 	"encoding/xml"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestJson(t *testing.T) {
@@ -39,12 +40,13 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_EthernetPortSettings(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/ethernetport",
 	}
 	elementUnderTest := NewEthernetPortSettingsWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_EthernetPortSettings Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -55,15 +57,16 @@ func TestPositiveAMT_EthernetPortSettings(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_EthernetPortSettings Get wsman message",
-				AMT_EthernetPortSettings,
-				wsmantesting.GET,
+				AMTEthernetPortSettings,
+				wsmantesting.Get,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Ethernet Port Settings 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get("Intel(r) AMT Ethernet Port Settings 0")
 				},
 				Body{
@@ -89,15 +92,16 @@ func TestPositiveAMT_EthernetPortSettings(t *testing.T) {
 				},
 			},
 
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_EthernetPortSettings Enumerate wsman message",
-				AMT_EthernetPortSettings,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTEthernetPortSettings,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -107,15 +111,16 @@ func TestPositiveAMT_EthernetPortSettings(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_EthernetPortSettings Pull wsman message",
-				AMT_EthernetPortSettings,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTEthernetPortSettings,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -159,11 +164,11 @@ func TestPositiveAMT_EthernetPortSettings(t *testing.T) {
 					},
 				},
 			},
-			//PUTS
+			// PUTS
 			{
 				"should create a valid AMT_EthernetPortSettings Put wsman message",
-				AMT_EthernetPortSettings,
-				wsmantesting.PUT,
+				AMTEthernetPortSettings,
+				wsmantesting.Put,
 				"<h:AMT_EthernetPortSettings xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings\"><h:ElementName>Intel(r) AMT Ethernet Port Settings</h:ElementName><h:InstanceID>Intel(r) AMT Ethernet Port Settings 0</h:InstanceID><h:SharedMAC>true</h:SharedMAC><h:LinkIsUp>false</h:LinkIsUp><h:SharedStaticIp>true</h:SharedStaticIp><h:IpSyncEnabled>true</h:IpSyncEnabled><h:DHCPEnabled>true</h:DHCPEnabled></h:AMT_EthernetPortSettings>",
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Ethernet Port Settings 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
@@ -176,7 +181,8 @@ func TestPositiveAMT_EthernetPortSettings(t *testing.T) {
 						SharedMAC:      true,
 						SharedStaticIp: true,
 					}
-					client.CurrentMessage = "Put"
+					client.CurrentMessage = wsmantesting.CurrentMessagePut
+
 					return elementUnderTest.Put(ethernetPortSettings.InstanceID, ethernetPortSettings)
 				},
 				Body{
@@ -206,7 +212,7 @@ func TestPositiveAMT_EthernetPortSettings(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -219,12 +225,13 @@ func TestPositiveAMT_EthernetPortSettings(t *testing.T) {
 
 func TestNegativeAMT_EthernetPortSettings(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/ethernetport",
 	}
 	elementUnderTest := NewEthernetPortSettingsWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_EthernetPortSettings Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -235,15 +242,16 @@ func TestNegativeAMT_EthernetPortSettings(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_EthernetPortSettings Get wsman message",
-				AMT_EthernetPortSettings,
-				wsmantesting.GET,
+				AMTEthernetPortSettings,
+				wsmantesting.Get,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Ethernet Port Settings 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get("Intel(r) AMT Ethernet Port Settings 0")
 				},
 				Body{
@@ -269,15 +277,16 @@ func TestNegativeAMT_EthernetPortSettings(t *testing.T) {
 				},
 			},
 
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_EthernetPortSettings Enumerate wsman message",
-				AMT_EthernetPortSettings,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTEthernetPortSettings,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -287,15 +296,16 @@ func TestNegativeAMT_EthernetPortSettings(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_EthernetPortSettings Pull wsman message",
-				AMT_EthernetPortSettings,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTEthernetPortSettings,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -339,11 +349,11 @@ func TestNegativeAMT_EthernetPortSettings(t *testing.T) {
 					},
 				},
 			},
-			//PUTS
+			// PUTS
 			{
 				"should create a valid AMT_EthernetPortSettings Put wsman message",
-				AMT_EthernetPortSettings,
-				wsmantesting.PUT,
+				AMTEthernetPortSettings,
+				wsmantesting.Put,
 				"<h:AMT_EthernetPortSettings xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EthernetPortSettings\"><h:ElementName>Intel(r) AMT Ethernet Port Settings</h:ElementName><h:InstanceID>Intel(r) AMT Ethernet Port Settings 0</h:InstanceID><h:SharedMAC>true</h:SharedMAC><h:LinkIsUp>false</h:LinkIsUp><h:SharedStaticIp>true</h:SharedStaticIp><h:IpSyncEnabled>true</h:IpSyncEnabled><h:DHCPEnabled>true</h:DHCPEnabled></h:AMT_EthernetPortSettings>",
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">Intel(r) AMT Ethernet Port Settings 0</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
@@ -356,7 +366,8 @@ func TestNegativeAMT_EthernetPortSettings(t *testing.T) {
 						SharedMAC:      true,
 						SharedStaticIp: true,
 					}
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Put(ethernetPortSettings.InstanceID, ethernetPortSettings)
 				},
 				Body{
@@ -386,7 +397,7 @@ func TestNegativeAMT_EthernetPortSettings(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

@@ -18,7 +18,7 @@ type UsernamePassword struct {
 }
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -50,7 +50,7 @@ type (
 )
 
 // INPUTS
-// Request Types
+// Request Types.
 type (
 	MPSUsernamePasswordRequest struct {
 		XMLName    xml.Name `xml:"h:AMT_MPSUsernamePassword"`

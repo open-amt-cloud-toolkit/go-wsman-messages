@@ -17,14 +17,14 @@ type Profile struct {
 	base message.Base
 }
 
-// NewIEEE8021xProfileWithClient instantiates a new Profile service
+// NewIEEE8021xProfileWithClient instantiates a new Profile service.
 func NewIEEE8021xProfileWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Profile {
 	return Profile{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_IEEE8021xProfile, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTIEEE8021xProfile, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (profile Profile) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -41,10 +41,11 @@ func (profile Profile) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (profile Profile) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -61,6 +62,7 @@ func (profile Profile) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -81,12 +83,13 @@ func (profile Profile) Pull(enumerationContext string) (response Response, err e
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Put will change properties of the selected instance
+// Put will change properties of the selected instance.
 func (profile Profile) Put(ieee8021xProfile ProfileRequest) (response Response, err error) {
-	ieee8021xProfile.H = fmt.Sprintf("%s%s", message.AMTSchema, AMT_IEEE8021xProfile)
+	ieee8021xProfile.H = fmt.Sprintf("%s%s", message.AMTSchema, AMTIEEE8021xProfile)
 	response = Response{
 		Message: &client.Message{
 			XMLInput: profile.base.Put(ieee8021xProfile, false, nil),
@@ -102,5 +105,6 @@ func (profile Profile) Put(ieee8021xProfile ProfileRequest) (response Response, 
 	if err != nil {
 		return
 	}
+
 	return
 }

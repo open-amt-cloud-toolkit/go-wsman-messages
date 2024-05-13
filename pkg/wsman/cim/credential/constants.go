@@ -5,4 +5,4 @@
 
 package credential
 
-const CIM_CredentialContext string = "CIM_CredentialContext"
+const CIMCredentialContext string = "CIM_CredentialContext"

@@ -6,28 +6,29 @@
 package boot
 
 const (
-	CIM_BootConfigSetting string = "CIM_BootConfigSetting"
-	CIM_BootSourceSetting string = "CIM_BootSourceSetting"
-	CIM_BootService       string = "CIM_BootService"
-	ChangeBootOrder       string = "ChangeBootOrder"
-	SetBootConfigRole     string = "SetBootConfigRole"
+	CIMBootConfigSetting string = "CIM_BootConfigSetting"
+	CIMBootSourceSetting string = "CIM_BootSourceSetting"
+	CIMBootService       string = "CIM_BootService"
+	ChangeBootOrder      string = "ChangeBootOrder"
+	ValueNotFound        string = "Value not found in map"
+	SetBootConfigRole    string = "SetBootConfigRole"
 )
 
 const (
-	HardDrive             Source = "Intel(r) AMT: Force Hard-drive Boot"
-	CD                    Source = "Intel(r) AMT: Force CD/DVD Boot"
-	PXE                   Source = "Intel(r) AMT: Force PXE Boot"
-	OCR_UEFI_HTTPS        Source = "Intel(r) AMT: Force OCR UEFI HTTPS Boot"
-	OCR_UEFI_BootOption1  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 1"
-	OCR_UEFI_BootOption2  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 2"
-	OCR_UEFI_BootOption3  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 3"
-	OCR_UEFI_BootOption4  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 4"
-	OCR_UEFI_BootOption5  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 5"
-	OCR_UEFI_BootOption6  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 6"
-	OCR_UEFI_BootOption7  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 7"
-	OCR_UEFI_BootOption8  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 8"
-	OCR_UEFI_BootOption9  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 9"
-	OCR_UEFI_BootOption10 Source = "Intel(r) AMT: Force OCR UEFI Boot Option 10"
+	HardDrive           Source = "Intel(r) AMT: Force Hard-drive Boot"
+	CD                  Source = "Intel(r) AMT: Force CD/DVD Boot"
+	PXE                 Source = "Intel(r) AMT: Force PXE Boot"
+	OCRUEFIHTTPS        Source = "Intel(r) AMT: Force OCR UEFI HTTPS Boot"
+	OCRUEFIBootOption1  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 1"
+	OCRUEFIBootOption2  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 2"
+	OCRUEFIBootOption3  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 3"
+	OCRUEFIBootOption4  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 4"
+	OCRUEFIBootOption5  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 5"
+	OCRUEFIBootOption6  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 6"
+	OCRUEFIBootOption7  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 7"
+	OCRUEFIBootOption8  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 8"
+	OCRUEFIBootOption9  Source = "Intel(r) AMT: Force OCR UEFI Boot Option 9"
+	OCRUEFIBootOption10 Source = "Intel(r) AMT: Force OCR UEFI Boot Option 10"
 )
 
 const (
@@ -36,20 +37,20 @@ const (
 	FailThroughSupportedNotSupported
 )
 
-// FailThroughSupportedToString is a mapping of the FailThroughSupported value to a string
+// FailThroughSupportedToString is a mapping of the FailThroughSupported value to a string.
 var FailThroughSupportedToString = map[FailThroughSupported]string{
 	FailThroughSupportedUnknown:      "Unknown",
 	FailThroughSupportedIsSupported:  "IsSupported",
 	FailThroughSupportedNotSupported: "NotSupported",
 }
 
-// String returns the string representation of the FailThroughSupported value
+// String returns the string representation of the FailThroughSupported value.
 func (f FailThroughSupported) String() string {
 	if value, exists := FailThroughSupportedToString[f]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -62,7 +63,7 @@ const (
 	ReturnValueAccessDenied
 )
 
-// ReturnValueToString is a mapping of the ReturnValue value to a string
+// ReturnValueToString is a mapping of the ReturnValue value to a string.
 var ReturnValueToString = map[ReturnValue]string{
 	ReturnValueCompletedNoError: "CompletedNoError",
 	ReturnValueNotSupported:     "NotSupported",
@@ -73,13 +74,13 @@ var ReturnValueToString = map[ReturnValue]string{
 	ReturnValueAccessDenied:     "AccessDenied",
 }
 
-// String returns the string representation of the ReturnValue value
+// String returns the string representation of the ReturnValue value.
 func (r ReturnValue) String() string {
 	if value, exists := ReturnValueToString[r]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -105,7 +106,7 @@ const (
 	OperationalStatusRelocating
 )
 
-// operationalStatusToString is a mapping of the OperationalStatus value to a string
+// operationalStatusToString is a mapping of the OperationalStatus value to a string.
 var operationalStatusToString = map[OperationalStatus]string{
 	OperationalStatusUnknown:                 "Unknown",
 	OperationalStatusOther:                   "Other",
@@ -129,13 +130,13 @@ var operationalStatusToString = map[OperationalStatus]string{
 	OperationalStatusRelocating:              "Relocating",
 }
 
-// String returns the string representation of the OperationalStatus value
+// String returns the string representation of the OperationalStatus value.
 func (o OperationalStatus) String() string {
 	if value, exists := operationalStatusToString[o]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -156,7 +157,7 @@ const (
 	EnabledStateIntelOneClickRecoveryAndIntelRPEAreEnabledAndAllOtherBootOptionsAreEnabled          EnabledState = 32771
 )
 
-// enabledStateToString is a mapping of the EnabledState value to a string
+// enabledStateToString is a mapping of the EnabledState value to a string.
 var enabledStateToString = map[EnabledState]string{
 	EnabledStateUnknown:           "Unknown",
 	EnabledStateOther:             "Other",
@@ -175,13 +176,13 @@ var enabledStateToString = map[EnabledState]string{
 	EnabledStateIntelOneClickRecoveryAndIntelRPEAreEnabledAndAllOtherBootOptionsAreEnabled:          "IntelOneClickRecoveryAndIntelRPEAreEnabledAndAllOtherBootOptionsAreEnabled",
 }
 
-// String returns the string representation of the EnabledState value
+// String returns the string representation of the EnabledState value.
 func (e EnabledState) String() string {
 	if value, exists := enabledStateToString[e]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -203,7 +204,7 @@ const (
 	RequestedStateEnableAllBootOptions                                                RequestedState = 32771
 )
 
-// requestedStateToString is a mapping of the RequestedState value to a string
+// requestedStateToString is a mapping of the RequestedState value to a string.
 var requestedStateToString = map[RequestedState]string{
 	RequestedStateUnknown:       "Unknown",
 	RequestedStateEnabled:       "Enabled",
@@ -223,11 +224,11 @@ var requestedStateToString = map[RequestedState]string{
 	RequestedStateEnableAllBootOptions:                                                "EnableAllBootOptions",
 }
 
-// String returns the string representation of the RequestedState value
+// String returns the string representation of the RequestedState value.
 func (r RequestedState) String() string {
 	if value, exists := requestedStateToString[r]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }

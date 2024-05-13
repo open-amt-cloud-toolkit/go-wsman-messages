@@ -14,14 +14,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewMPSUsernamePasswordWithClient instantiates a new UsernamePassword
+// NewMPSUsernamePasswordWithClient instantiates a new UsernamePassword.
 func NewMPSUsernamePasswordWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) UsernamePassword {
 	return UsernamePassword{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_MPSUsernamePassword, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTMPSUsernamePassword, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (usernamePassword UsernamePassword) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -38,10 +38,11 @@ func (usernamePassword UsernamePassword) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (usernamePassword UsernamePassword) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -58,6 +59,7 @@ func (usernamePassword UsernamePassword) Enumerate() (response Response, err err
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -78,12 +80,13 @@ func (usernamePassword UsernamePassword) Pull(enumerationContext string) (respon
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Put will change properties of the selected instance
+// Put will change properties of the selected instance.
 func (usernamePassword UsernamePassword) Put(mpsUsernamePassword MPSUsernamePasswordRequest) (response Response, err error) {
-	mpsUsernamePassword.H = fmt.Sprintf("%s%s", message.AMTSchema, AMT_MPSUsernamePassword)
+	mpsUsernamePassword.H = fmt.Sprintf("%s%s", message.AMTSchema, AMTMPSUsernamePassword)
 	response = Response{
 		Message: &client.Message{
 			XMLInput: usernamePassword.base.Put(mpsUsernamePassword, false, nil),
@@ -99,5 +102,6 @@ func (usernamePassword UsernamePassword) Put(mpsUsernamePassword MPSUsernamePass
 	if err != nil {
 		return
 	}
+
 	return
 }

@@ -9,11 +9,12 @@ import (
 	"encoding/xml"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/models"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestJson(t *testing.T) {
@@ -40,8 +41,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveCIMCredentialContext(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/credential/context",
 	}
@@ -56,14 +57,15 @@ func TestPositiveCIMCredentialContext(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create and parse a valid cim_IEEE8021xSettings Enumerate call",
-				CIM_CredentialContext,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMCredentialContext,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -73,14 +75,15 @@ func TestPositiveCIMCredentialContext(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create and parse a valid cim_IEEE8021xSettings Pull call",
-				CIM_CredentialContext,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMCredentialContext,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -132,7 +135,7 @@ func TestPositiveCIMCredentialContext(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -145,8 +148,8 @@ func TestPositiveCIMCredentialContext(t *testing.T) {
 
 func TestNegativeCIMCredentialContext(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/credential/context",
 	}
@@ -161,14 +164,15 @@ func TestNegativeCIMCredentialContext(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should handle error when cim_IEEE8021xSettings Enumerate call",
-				CIM_CredentialContext,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMCredentialContext,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -178,14 +182,15 @@ func TestNegativeCIMCredentialContext(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should handle error when cim_IEEE8021xSettings Pull call",
-				CIM_CredentialContext,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMCredentialContext,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -231,7 +236,7 @@ func TestNegativeCIMCredentialContext(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

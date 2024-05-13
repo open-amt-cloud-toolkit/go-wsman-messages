@@ -21,7 +21,7 @@ type Service struct {
 //
 // ValueMap={32768, 32769, 32770, 32771}
 //
-// Values={All Interfaces disabled, BIOS Interface enabled, OS Interface enabled, BIOS and OS Interfaces enabled}
+// Values={All Interfaces disabled, BIOS Interface enabled, OS Interface enabled, BIOS and OS Interfaces enabled}.
 type RequestedState int
 
 // EnabledState is an integer enumeration that indicates the enabled and disabled states of an element.
@@ -31,7 +31,7 @@ type EnabledState int
 type ReturnValue int
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message

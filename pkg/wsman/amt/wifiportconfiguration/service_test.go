@@ -23,7 +23,7 @@ func TestJson(t *testing.T) {
 			WiFiPortConfigurationService: WiFiPortConfigurationServiceResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"WiFiPortConfigurationService\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"RequestedState\":0,\"EnabledState\":0,\"HealthState\":0,\"ElementName\":\"\",\"SystemCreationClassName\":\"\",\"SystemName\":\"\",\"CreationClassName\":\"\",\"Name\":\"\",\"LocalProfileSynchronizationEnabled\":0,\"LastConnectedSsidUnderMeControl\":\"\",\"NoHostCsmeSoftwarePolicy\":0,\"UEFIWiFiProfileShareEnabled\":false},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"WiFiPortConfigurationItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"AddWiFiSettings_OUTPUT\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"WiFiPortConfigurationService\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"RequestedState\":0,\"EnabledState\":0,\"HealthState\":0,\"ElementName\":\"\",\"SystemCreationClassName\":\"\",\"SystemName\":\"\",\"CreationClassName\":\"\",\"Name\":\"\",\"LocalProfileSynchronizationEnabled\":0,\"LastConnectedSsidUnderMeControl\":\"\",\"NoHostCsmeSoftwarePolicy\":0,\"UEFIWiFiProfileShareEnabled\":false},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"WiFiPortConfigurationItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"AddWiFiSettingsOutput\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -34,15 +34,15 @@ func TestYaml(t *testing.T) {
 			WiFiPortConfigurationService: WiFiPortConfigurationServiceResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nwifiportconfigurationservice:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    requestedstate: 0\n    enabledstate: 0\n    healthstate: 0\n    elementname: \"\"\n    systemcreationclassname: \"\"\n    systemname: \"\"\n    creationclassname: \"\"\n    name: \"\"\n    localprofilesynchronizationenabled: 0\n    lastconnectedssidundermecontrol: \"\"\n    nohostcsmesoftwarepolicy: 0\n    uefiwifiprofileshareenabled: false\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    wifiportconfigurationitems: []\nenumerateresponse:\n    enumerationcontext: \"\"\naddwifisettings_output:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nwifiportconfigurationservice:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    requestedstate: 0\n    enabledstate: 0\n    healthstate: 0\n    elementname: \"\"\n    systemcreationclassname: \"\"\n    systemname: \"\"\n    creationclassname: \"\"\n    name: \"\"\n    localprofilesynchronizationenabled: 0\n    lastconnectedssidundermecontrol: \"\"\n    nohostcsmesoftwarepolicy: 0\n    uefiwifiprofileshareenabled: false\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    wifiportconfigurationitems: []\nenumerateresponse:\n    enumerationcontext: \"\"\naddwifisettingsoutput:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
 
 func TestPositiveAMT_WiFiPortConfigurationService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/wifiportconfiguration",
 	}
@@ -58,21 +58,22 @@ func TestPositiveAMT_WiFiPortConfigurationService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_WiFiPortConfigurationService Get wsman message",
-				AMT_WiFiPortConfigurationService,
-				wsmantesting.GET,
+				AMTWiFiPortConfigurationService,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					WiFiPortConfigurationService: WiFiPortConfigurationServiceResponse{
-						XMLName:                            xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_WiFiPortConfigurationService), Local: AMT_WiFiPortConfigurationService},
+						XMLName:                            xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTWiFiPortConfigurationService), Local: AMTWiFiPortConfigurationService},
 						CreationClassName:                  "AMT_WiFiPortConfigurationService",
 						ElementName:                        "Intel(r) AMT WiFiPort Configuration Service",
 						EnabledState:                       5,
@@ -87,15 +88,16 @@ func TestPositiveAMT_WiFiPortConfigurationService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_WiFiPortConfigurationService Enumerate wsman message",
-				AMT_WiFiPortConfigurationService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTWiFiPortConfigurationService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -105,15 +107,16 @@ func TestPositiveAMT_WiFiPortConfigurationService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_WiFiPortConfigurationService Pull wsman message",
-				AMT_WiFiPortConfigurationService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTWiFiPortConfigurationService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -122,7 +125,7 @@ func TestPositiveAMT_WiFiPortConfigurationService(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						WiFiPortConfigurationItems: []WiFiPortConfigurationServiceResponse{
 							{
-								XMLName:                            xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_WiFiPortConfigurationService), Local: AMT_WiFiPortConfigurationService},
+								XMLName:                            xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTWiFiPortConfigurationService), Local: AMTWiFiPortConfigurationService},
 								CreationClassName:                  "AMT_WiFiPortConfigurationService",
 								ElementName:                        "Intel(r) AMT WiFiPort Configuration Service",
 								EnabledState:                       5,
@@ -142,12 +145,12 @@ func TestPositiveAMT_WiFiPortConfigurationService(t *testing.T) {
 			// PUTS
 			{
 				"should create a valid AMT_WiFiPortConfigurationService Put wsman message",
-				AMT_WiFiPortConfigurationService,
-				wsmantesting.PUT,
+				AMTWiFiPortConfigurationService,
+				wsmantesting.Put,
 				"<h:AMT_WiFiPortConfigurationService xmlns:h=\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService\"><h:RequestedState>12</h:RequestedState><h:EnabledState>5</h:EnabledState><h:HealthState>5</h:HealthState><h:ElementName>Intel(r) AMT WiFiPort Configuration Service</h:ElementName><h:SystemCreationClassName>CIM_ComputerSystem</h:SystemCreationClassName><h:SystemName>Intel(r) AMT</h:SystemName><h:CreationClassName>AMT_WiFiPortConfigurationService</h:CreationClassName><h:Name>Intel(r) AMT WiFi Port Configuration Service</h:Name><h:localProfileSynchronizationEnabled>1</h:localProfileSynchronizationEnabled></h:AMT_WiFiPortConfigurationService>",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Put"
+					client.CurrentMessage = wsmantesting.CurrentMessagePut
 					wifiConfiguration := WiFiPortConfigurationServiceRequest{
 						RequestedState:                     12,
 						EnabledState:                       5,
@@ -161,12 +164,13 @@ func TestPositiveAMT_WiFiPortConfigurationService(t *testing.T) {
 						LastConnectedSsidUnderMeControl:    "",
 						NoHostCsmeSoftwarePolicy:           0,
 					}
+
 					return elementUnderTest.Put(wifiConfiguration)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					WiFiPortConfigurationService: WiFiPortConfigurationServiceResponse{
-						XMLName:                            xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMT_WiFiPortConfigurationService), Local: AMT_WiFiPortConfigurationService},
+						XMLName:                            xml.Name{Space: fmt.Sprintf("%s%s", message.AMTSchema, AMTWiFiPortConfigurationService), Local: AMTWiFiPortConfigurationService},
 						CreationClassName:                  "AMT_WiFiPortConfigurationService",
 						ElementName:                        "Intel(r) AMT WiFiPort Configuration Service",
 						EnabledState:                       5,
@@ -202,7 +206,7 @@ func TestPositiveAMT_WiFiPortConfigurationService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)

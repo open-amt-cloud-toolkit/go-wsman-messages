@@ -14,7 +14,7 @@ func RequestStateChange(className string) string {
 	return fmt.Sprintf("http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/%s/RequestStateChange", className)
 }
 
-func GenerateAction(className string, methodName string) string {
+func GenerateAction(className, methodName string) string {
 	return fmt.Sprintf("http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/%s/%s", className, methodName)
 }
 

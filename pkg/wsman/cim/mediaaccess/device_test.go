@@ -40,8 +40,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveCIMMediaAccessDevice(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/mediaaccess",
 	}
@@ -57,33 +57,35 @@ func TestPositiveCIMMediaAccessDevice(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create and parse a valid cim_MediaAccessDevice Enumerate call",
-				CIM_MediaAccessDevice,
-				wsmantesting.ENUMERATE,
+				CIMMediaAccessDevice,
+				wsmantesting.Enumerate,
 				"",
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
-				}, Body{
+				},
+				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "CE020000-0000-0000-0000-000000000000",
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create and parse a valid cim_MediaAccessDevice Pull call",
-				CIM_MediaAccessDevice,
-				wsmantesting.PULL,
+				CIMMediaAccessDevice,
+				wsmantesting.Pull,
 				"",
-				wsmantesting.PULL_BODY,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -127,7 +129,7 @@ func TestPositiveCIMMediaAccessDevice(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -140,8 +142,8 @@ func TestPositiveCIMMediaAccessDevice(t *testing.T) {
 
 func TestNegativeCIMMediaAccessDevice(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/mediaaccess",
 	}
@@ -157,33 +159,35 @@ func TestNegativeCIMMediaAccessDevice(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should handle error when cim_MediaAccessDevice Enumerate call",
-				CIM_MediaAccessDevice,
-				wsmantesting.ENUMERATE,
+				CIMMediaAccessDevice,
+				wsmantesting.Enumerate,
 				"",
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
-				}, Body{
+				},
+				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "CE020000-0000-0000-0000-000000000000",
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should handle error when cim_MediaAccessDevice Pull call",
-				CIM_MediaAccessDevice,
-				wsmantesting.PULL,
+				CIMMediaAccessDevice,
+				wsmantesting.Pull,
 				"",
-				wsmantesting.PULL_BODY,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -227,7 +231,7 @@ func TestNegativeCIMMediaAccessDevice(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

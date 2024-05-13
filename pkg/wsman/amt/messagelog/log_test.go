@@ -40,8 +40,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_MessageLog(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/messagelog",
 	}
@@ -56,13 +56,14 @@ func TestPositiveAMT_MessageLog(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_MessageLog Get wsman message",
-				AMT_MessageLog, wsmantesting.GET,
+				AMTMessageLog, wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -94,14 +95,15 @@ func TestPositiveAMT_MessageLog(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_MessageLog Enumerate wsman message",
-				AMT_MessageLog,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTMessageLog,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -111,14 +113,15 @@ func TestPositiveAMT_MessageLog(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_MessageLog Pull wsman message",
-				AMT_MessageLog,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTMessageLog,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -158,11 +161,12 @@ func TestPositiveAMT_MessageLog(t *testing.T) {
 			// POSITION TO FIRST RECORD
 			{
 				"should return a valid amt_MessageLog PositionToFirstRecords wsman message",
-				AMT_MessageLog,
+				AMTMessageLog,
 				`http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog/PositionToFirstRecord`,
 				`<h:PositionToFirstRecord_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog"></h:PositionToFirstRecord_INPUT>`,
 				func() (Response, error) {
 					client.CurrentMessage = "PositionToFirstRecord"
+
 					return elementUnderTest.PositionToFirstRecord()
 				},
 				Body{
@@ -177,11 +181,12 @@ func TestPositiveAMT_MessageLog(t *testing.T) {
 			// GET RECORDS
 			{
 				"should return a valid amt_MessageLog GetRecords wsman message",
-				AMT_MessageLog,
+				AMTMessageLog,
 				`http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog/GetRecords`,
 				`<h:GetRecords_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog"><h:IterationIdentifier>1</h:IterationIdentifier><h:MaxReadRecords>390</h:MaxReadRecords></h:GetRecords_INPUT>`,
 				func() (Response, error) {
 					client.CurrentMessage = "GetRecords"
+
 					return elementUnderTest.GetRecords(1)
 				},
 				Body{
@@ -199,7 +204,7 @@ func TestPositiveAMT_MessageLog(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -209,10 +214,11 @@ func TestPositiveAMT_MessageLog(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_MessageLog(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/messagelog",
 	}
@@ -227,13 +233,14 @@ func TestNegativeAMT_MessageLog(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_MessageLog Get wsman message",
-				AMT_MessageLog, wsmantesting.GET,
+				AMTMessageLog, wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -265,14 +272,15 @@ func TestNegativeAMT_MessageLog(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_MessageLog Enumerate wsman message",
-				AMT_MessageLog,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTMessageLog,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -282,14 +290,15 @@ func TestNegativeAMT_MessageLog(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_MessageLog Pull wsman message",
-				AMT_MessageLog,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTMessageLog,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -329,11 +338,12 @@ func TestNegativeAMT_MessageLog(t *testing.T) {
 			// POSITION TO FIRST RECORD
 			{
 				"should return a valid amt_MessageLog PositionToFirstRecords wsman message",
-				AMT_MessageLog,
+				AMTMessageLog,
 				`http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog/PositionToFirstRecord`,
 				`<h:PositionToFirstRecord_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog"></h:PositionToFirstRecord_INPUT>`,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.PositionToFirstRecord()
 				},
 				Body{
@@ -348,11 +358,12 @@ func TestNegativeAMT_MessageLog(t *testing.T) {
 			// GET RECORDS
 			{
 				"should return a valid amt_MessageLog GetRecords wsman message",
-				AMT_MessageLog,
+				AMTMessageLog,
 				`http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog/GetRecords`,
 				`<h:GetRecords_INPUT xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog"><h:IterationIdentifier>1</h:IterationIdentifier><h:MaxReadRecords>390</h:MaxReadRecords></h:GetRecords_INPUT>`,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.GetRecords(1)
 				},
 				Body{
@@ -370,7 +381,7 @@ func TestNegativeAMT_MessageLog(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

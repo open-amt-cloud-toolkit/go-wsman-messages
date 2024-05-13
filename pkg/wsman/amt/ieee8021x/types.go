@@ -14,7 +14,7 @@ import (
 )
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -87,12 +87,12 @@ type ProfileRequest struct {
 //
 // ValueMap={0, 1, 2, 3, 4, 5, 6}
 //
-// Values={TLS, TTLS_MSCHAPv2, PEAP_MSCHAPv2, EAP_GTC, EAPFAST_MSCHAPv2, EAPFAST_GTC, EAPFAST_TLS}
+// Values={TLS, TTLS_MSCHAPv2, PEAP_MSCHAPv2, EAP_GTC, EAPFAST_MSCHAPv2, EAPFAST_GTC, EAPFAST_TLS}.
 type AuthenticationProtocol int
 
 // Determines the comparison algorithm used between the ServerCertificateName value and the subject name field of the certificate presented by the AAA server. This field is mandatory if ServerCertificateName is defined.
 //
 // ValueMap={0, 1}
 //
-// Values={FullName, DomainSuffix}
+// Values={FullName, DomainSuffix}.
 type ServerCertificateNameComparison int

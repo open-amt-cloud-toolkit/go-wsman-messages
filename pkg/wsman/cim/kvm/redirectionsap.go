@@ -17,8 +17,7 @@ import (
 // NewKVMRedirectionSAP returns a new instance of the KVMRedirectionSAP struct.
 func NewKVMRedirectionSAPWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) RedirectionSAP {
 	return RedirectionSAP{
-		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_KVMRedirectionSAP, client),
-		client: client,
+		base: message.NewBaseWithClient(wsmanMessageCreator, CIMKVMRedirectionSAP, client),
 	}
 }
 
@@ -26,7 +25,7 @@ func NewKVMRedirectionSAPWithClient(wsmanMessageCreator *message.WSManMessageCre
 func (redirectionSAP RedirectionSAP) RequestStateChange(requestedState KVMRedirectionSAPRequestStateChangeInput) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
-			XMLInput: redirectionSAP.base.RequestStateChange(methods.RequestStateChange(CIM_KVMRedirectionSAP), int(requestedState)),
+			XMLInput: redirectionSAP.base.RequestStateChange(methods.RequestStateChange(CIMKVMRedirectionSAP), int(requestedState)),
 		},
 	}
 
@@ -39,10 +38,11 @@ func (redirectionSAP RedirectionSAP) RequestStateChange(requestedState KVMRedire
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (redirectionSAP RedirectionSAP) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -59,11 +59,11 @@ func (redirectionSAP RedirectionSAP) Get() (response Response, err error) {
 	if err != nil {
 		return
 	}
-	return
 
+	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (redirectionSAP RedirectionSAP) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -80,8 +80,8 @@ func (redirectionSAP RedirectionSAP) Enumerate() (response Response, err error) 
 	if err != nil {
 		return
 	}
-	return
 
+	return
 }
 
 // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
@@ -91,13 +91,16 @@ func (redirectionSAP RedirectionSAP) Pull(enumerationContext string) (response R
 			XMLInput: redirectionSAP.base.Pull(enumerationContext),
 		},
 	}
+
 	err = redirectionSAP.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }

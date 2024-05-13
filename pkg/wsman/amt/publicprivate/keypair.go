@@ -15,14 +15,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewPublicPrivateKeyPairWithClient instantiates a new KeyPair
+// NewPublicPrivateKeyPairWithClient instantiates a new KeyPair.
 func NewPublicPrivateKeyPairWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) KeyPair {
 	return KeyPair{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_PublicPrivateKeyPair, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTPublicPrivateKeyPair, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (keyPair KeyPair) Get(instanceID string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
@@ -30,7 +30,7 @@ func (keyPair KeyPair) Get(instanceID string) (response Response, err error) {
 	}
 	response = Response{
 		Message: &client.Message{
-			XMLInput: keyPair.base.Get((*message.Selector)(&selector)),
+			XMLInput: keyPair.base.Get(&selector),
 		},
 	}
 	// send the message to AMT
@@ -43,10 +43,11 @@ func (keyPair KeyPair) Get(instanceID string) (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (keyPair KeyPair) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -63,6 +64,7 @@ func (keyPair KeyPair) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -83,10 +85,11 @@ func (keyPair KeyPair) Pull(enumerationContext string) (response Response, err e
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Deletes an instance of a key pair
+// Deletes an instance of a key pair.
 func (keyPair KeyPair) Delete(handle string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
@@ -107,5 +110,6 @@ func (keyPair KeyPair) Delete(handle string) (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }

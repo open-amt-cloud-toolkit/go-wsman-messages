@@ -26,14 +26,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewRemoteAccessPolicyAppliesToMPSWithClient instantiates a new PolicyAppliesToMPS
+// NewRemoteAccessPolicyAppliesToMPSWithClient instantiates a new PolicyAppliesToMPS.
 func NewRemoteAccessPolicyAppliesToMPSWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) PolicyAppliesToMPS {
 	return PolicyAppliesToMPS{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_RemoteAccessPolicyAppliesToMPS, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTRemoteAccessPolicyAppliesToMPS, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (policyAppliesToMPS PolicyAppliesToMPS) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -51,10 +51,11 @@ func (policyAppliesToMPS PolicyAppliesToMPS) Get() (response Response, err error
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (policyAppliesToMPS PolicyAppliesToMPS) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -98,7 +99,7 @@ func (policyAppliesToMPS PolicyAppliesToMPS) Pull(enumerationContext string) (re
 	return
 }
 
-// Put will change properties of the selected instance
+// Put will change properties of the selected instance.
 func (policyAppliesToMPS PolicyAppliesToMPS) Put(remoteAccessPolicyAppliesToMPS *RemoteAccessPolicyAppliesToMPSRequest) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -120,7 +121,7 @@ func (policyAppliesToMPS PolicyAppliesToMPS) Put(remoteAccessPolicyAppliesToMPS 
 	return
 }
 
-// Delete removes a the specified instance
+// Delete removes a the specified instance.
 func (policyAppliesToMPS PolicyAppliesToMPS) Delete(handle string) (response Response, err error) {
 	selector := message.Selector{Name: "Name", Value: handle}
 	response = Response{

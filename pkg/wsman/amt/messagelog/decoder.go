@@ -6,9 +6,10 @@
 package messagelog
 
 const (
-	AMT_MessageLog        string = "AMT_MessageLog"
+	AMTMessageLog         string = "AMT_MessageLog"
 	GetRecords            string = "GetRecords"
 	PositionToFirstRecord string = "PositionToFirstRecord"
+	ValueNotFound         string = "Value not found in map"
 )
 
 const (
@@ -25,7 +26,7 @@ const (
 	CapabilitiesCanFlagRecordsForOverwrite
 )
 
-// capabilitiesString is a map of the capabilities to their string representation
+// capabilitiesString is a map of the capabilities to their string representation.
 var capabilitiesString = map[Capabilities]string{
 	CapabilitiesUnknown:                                 "Unknown",
 	CapabilitiesOther:                                   "Other",
@@ -40,12 +41,13 @@ var capabilitiesString = map[Capabilities]string{
 	CapabilitiesCanFlagRecordsForOverwrite:              "CanFlagRecordsForOverwrite",
 }
 
-// String returns the string representation of the capabilities
+// String returns the string representation of the capabilities.
 func (c Capabilities) String() string {
 	if value, exists := capabilitiesString[c]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -63,7 +65,7 @@ const (
 	CharacterSetDefinedByIndividualRecords
 )
 
-// characterSetString is a map of the character set to their string representation
+// characterSetString is a map of the character set to their string representation.
 var characterSetString = map[CharacterSet]string{
 	CharacterSetUnknown:                    "Unknown",
 	CharacterSetOther:                      "Other",
@@ -79,12 +81,13 @@ var characterSetString = map[CharacterSet]string{
 	CharacterSetDefinedByIndividualRecords: "DefinedByIndividualRecords",
 }
 
-// ConvertCharacterSetToString returns the string representation of the character set
+// ConvertCharacterSetToString returns the string representation of the character set.
 func (c CharacterSet) String() string {
 	if value, exists := characterSetString[c]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -96,7 +99,7 @@ const (
 	EnabledDefaultQuiesce           EnabledDefault = 9
 )
 
-// enabledDefaultString is a map of the enabled default to their string representation
+// enabledDefaultString is a map of the enabled default to their string representation.
 var enabledDefaultString = map[EnabledDefault]string{
 	EnabledDefaultEnabled:           "Enabled",
 	EnabledDefaultDisabled:          "Disabled",
@@ -106,12 +109,13 @@ var enabledDefaultString = map[EnabledDefault]string{
 	EnabledDefaultQuiesce:           "Quiesce",
 }
 
-// String returns the string representation of the enabled default
+// String returns the string representation of the enabled default.
 func (e EnabledDefault) String() string {
 	if value, exists := enabledDefaultString[e]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -128,7 +132,7 @@ const (
 	EnabledStateStarting
 )
 
-// enabledStateString is a map of the enabled state to their string representation
+// enabledStateString is a map of the enabled state to their string representation.
 var enabledStateString = map[EnabledState]string{
 	EnabledStateUnknown:           "Unknown",
 	EnabledStateOther:             "Other",
@@ -143,12 +147,13 @@ var enabledStateString = map[EnabledState]string{
 	EnabledStateStarting:          "Starting",
 }
 
-// String returns the string representation of the enabled state
+// String returns the string representation of the enabled state.
 func (e EnabledState) String() string {
 	if value, exists := enabledStateString[e]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -161,7 +166,7 @@ const (
 	HealthStateNonRecoverableError HealthState = 35
 )
 
-// healthStateString is a map of the health state to their string representation
+// healthStateString is a map of the health state to their string representation.
 var healthStateString = map[HealthState]string{
 	HealthStateUnknown:             "Unknown",
 	HealthStateOK:                  "OK",
@@ -172,12 +177,13 @@ var healthStateString = map[HealthState]string{
 	HealthStateNonRecoverableError: "NonRecoverableError",
 }
 
-// String returns the string representation of the health state
+// String returns the string representation of the health state.
 func (h HealthState) String() string {
 	if value, exists := healthStateString[h]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -188,7 +194,7 @@ const (
 	LastChangeLogCleared
 )
 
-// lastChangeString is a map of the last change to their string representation
+// lastChangeString is a map of the last change to their string representation.
 var lastChangeString = map[LastChange]string{
 	LastChangeUnknown:    "Unknown",
 	LastChangeAdd:        "Add",
@@ -197,12 +203,13 @@ var lastChangeString = map[LastChange]string{
 	LastChangeLogCleared: "LogCleared",
 }
 
-// String returns the string representation of the last change
+// String returns the string representation of the last change.
 func (l LastChange) String() string {
 	if value, exists := lastChangeString[l]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -212,7 +219,7 @@ const (
 	LogStateNotApplicable LogState = 5
 )
 
-// logStateString is a map of the log state to their string representation
+// logStateString is a map of the log state to their string representation.
 var logStateString = map[LogState]string{
 	LogStateUnknown:       "Unknown",
 	LogStateNormal:        "Normal",
@@ -220,12 +227,13 @@ var logStateString = map[LogState]string{
 	LogStateNotApplicable: "NotApplicable",
 }
 
-// String returns the string representation of the log state
+// String returns the string representation of the log state.
 func (l LogState) String() string {
 	if value, exists := logStateString[l]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -251,7 +259,7 @@ const (
 	OperationalStatusRelocating
 )
 
-// operationalStatusString is a map of the operational status to their string representation
+// operationalStatusString is a map of the operational status to their string representation.
 var operationalStatusString = map[OperationalStatus]string{
 	OperationalStatusUnknown:                 "Unknown",
 	OperationalStatusOther:                   "Other",
@@ -275,12 +283,13 @@ var operationalStatusString = map[OperationalStatus]string{
 	OperationalStatusRelocating:              "Relocating",
 }
 
-// String returns the string representation of the operational status
+// String returns the string representation of the operational status.
 func (o OperationalStatus) String() string {
 	if value, exists := operationalStatusString[o]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -294,7 +303,7 @@ const (
 	OverwritePolicyNeverOverwrite
 )
 
-// overwritePolicyString is a map of the overwrite policy to their string representation
+// overwritePolicyString is a map of the overwrite policy to their string representation.
 var overwritePolicyString = map[OverwritePolicy]string{
 	OverwritePolicyUnknown:                     "Unknown",
 	OverwritePolicyOther:                       "Other",
@@ -306,12 +315,13 @@ var overwritePolicyString = map[OverwritePolicy]string{
 	OverwritePolicyNeverOverwrite:              "NeverOverwrite",
 }
 
-// String returns the string representation of the overwrite policy
+// String returns the string representation of the overwrite policy.
 func (o OverwritePolicy) String() string {
 	if value, exists := overwritePolicyString[o]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -329,7 +339,7 @@ const (
 	RequestedStateNotApplicable RequestedState = 12
 )
 
-// requestedStateString is a map of the requested state to their string representation
+// requestedStateString is a map of the requested state to their string representation.
 var requestedStateString = map[RequestedState]string{
 	RequestedStateUnknown:       "Unknown",
 	RequestedStateEnabled:       "Enabled",
@@ -345,12 +355,13 @@ var requestedStateString = map[RequestedState]string{
 	RequestedStateNotApplicable: "NotApplicable",
 }
 
-// String returns the string representation of the requested state
+// String returns the string representation of the requested state.
 func (r RequestedState) String() string {
 	if value, exists := requestedStateString[r]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -360,7 +371,7 @@ const (
 	GetRecordsReturnValueNoRecordExistsInLog  GetRecordsReturnValue = 3
 )
 
-// getRecordsReturnValueString is a map of the GetRecordsReturnValue to their string representation
+// getRecordsReturnValueString is a map of the GetRecordsReturnValue to their string representation.
 var getRecordsReturnValueString = map[GetRecordsReturnValue]string{
 	GetRecordsReturnValueCompletedWithNoError: "CompletedWithNoError",
 	GetRecordsReturnValueNotSupported:         "NotSupported",
@@ -368,12 +379,13 @@ var getRecordsReturnValueString = map[GetRecordsReturnValue]string{
 	GetRecordsReturnValueNoRecordExistsInLog:  "NoRecordExistsInLog",
 }
 
-// String returns the string representation of the GetRecordsReturnValue value
+// String returns the string representation of the GetRecordsReturnValue value.
 func (g GetRecordsReturnValue) String() string {
 	if value, exists := getRecordsReturnValueString[g]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -382,17 +394,18 @@ const (
 	PositionToFirstRecordReturnValueNoRecordExists       PositionToFirstRecordReturnValue = 2
 )
 
-// positionToFirstRecordReturnValueString is a map of the PositionToFirstRecordReturnValue to their string representation
+// positionToFirstRecordReturnValueString is a map of the PositionToFirstRecordReturnValue to their string representation.
 var positionToFirstRecordReturnValueString = map[PositionToFirstRecordReturnValue]string{
 	PositionToFirstRecordReturnValueCompletedWithNoError: "CompletedWithNoError",
 	PositionToFirstRecordReturnValueNotSupported:         "NotSupported",
 	PositionToFirstRecordReturnValueNoRecordExists:       "NoRecordExists",
 }
 
-// String returns the string representation of the PositionToFirstRecordReturnValue value
+// String returns the string representation of the PositionToFirstRecordReturnValue value.
 func (p PositionToFirstRecordReturnValue) String() string {
 	if value, exists := positionToFirstRecordReturnValueString[p]; exists {
 		return value
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

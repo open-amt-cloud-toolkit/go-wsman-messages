@@ -40,8 +40,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveCIMWifiEndpointSettings(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/wifi/endpointsettings",
 	}
@@ -57,32 +57,35 @@ func TestPositiveCIMWifiEndpointSettings(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create and parse a valid cim_WiFiEndpointSettings Enumerate call",
-				CIM_WiFiEndpointSettings,
-				wsmantesting.ENUMERATE,
+				CIMWiFiEndpointSettings,
+				wsmantesting.Enumerate,
 				"",
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
-				}, Body{
+				},
+				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "95040000-0000-0000-0000-000000000000",
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create and parse a valid cim_WiFiEndpointSettings Pull call",
-				CIM_WiFiEndpointSettings,
-				wsmantesting.PULL,
+				CIMWiFiEndpointSettings,
+				wsmantesting.Pull,
 				"",
-				wsmantesting.PULL_BODY,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -104,15 +107,16 @@ func TestPositiveCIMWifiEndpointSettings(t *testing.T) {
 					},
 				},
 			},
-			//DELETE
+			// DELETE
 			{
 				"should create and parse a valid cim_WiFiEndpointSettings Delete call",
-				CIM_WiFiEndpointSettings,
-				wsmantesting.DELETE,
+				CIMWiFiEndpointSettings,
+				wsmantesting.Delete,
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">instanceID123</w:Selector></w:SelectorSet>",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Delete"
+					client.CurrentMessage = wsmantesting.CurrentMessageDelete
+
 					return elementUnderTest.Delete("instanceID123")
 				},
 				Body{
@@ -126,7 +130,7 @@ func TestPositiveCIMWifiEndpointSettings(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -136,10 +140,11 @@ func TestPositiveCIMWifiEndpointSettings(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeCIMWifiEndpointSettings(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/wifi/endpointsettings",
 	}
@@ -155,32 +160,35 @@ func TestNegativeCIMWifiEndpointSettings(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should handle error when cim_WiFiEndpointSettings Enumerate call",
-				CIM_WiFiEndpointSettings,
-				wsmantesting.ENUMERATE,
+				CIMWiFiEndpointSettings,
+				wsmantesting.Enumerate,
 				"",
-				wsmantesting.ENUMERATE_BODY,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
-				}, Body{
+				},
+				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "95040000-0000-0000-0000-000000000000",
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should handle error when cim_WiFiEndpointSettings Pull call",
-				CIM_WiFiEndpointSettings,
-				wsmantesting.PULL,
+				CIMWiFiEndpointSettings,
+				wsmantesting.Pull,
 				"",
-				wsmantesting.PULL_BODY,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -202,15 +210,16 @@ func TestNegativeCIMWifiEndpointSettings(t *testing.T) {
 					},
 				},
 			},
-			//DELETE
+			// DELETE
 			{
 				"should handle error when cim_WiFiEndpointSettings Delete call",
-				CIM_WiFiEndpointSettings,
-				wsmantesting.DELETE,
+				CIMWiFiEndpointSettings,
+				wsmantesting.Delete,
 				"<w:SelectorSet><w:Selector Name=\"InstanceID\">instanceID123</w:Selector></w:SelectorSet>",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Delete("instanceID123")
 				},
 				Body{
@@ -224,7 +233,7 @@ func TestNegativeCIMWifiEndpointSettings(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

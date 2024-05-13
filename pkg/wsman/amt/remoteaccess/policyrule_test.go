@@ -23,12 +23,13 @@ const (
 
 func TestPositiveAMT_RemoteAccessPolicyRule(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/remoteaccess/policyrule",
 	}
 	elementUnderTest := NewPolicyRuleWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -39,22 +40,23 @@ func TestPositiveAMT_RemoteAccessPolicyRule(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_RemoteAccessPolicyRule Get wsman message",
-				AMT_RemoteAccessPolicyRule,
-				wsmantesting.GET,
+				AMTRemoteAccessPolicyRule,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					RemoteAccessPolicyRuleGetResponse: RemoteAccessPolicyRuleResponse{
 						XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyRule", Local: "AMT_RemoteAccessPolicyRule"},
-						CreationClassName:       AMT_RemoteAccessPolicyRule,
+						CreationClassName:       AMTRemoteAccessPolicyRule,
 						ElementName:             "Inte(r) AMT:Remote Access Policy",
 						ExtendedData:            "AAAAAAAAABk=",
 						PolicyRuleName:          "Periodic",
@@ -65,15 +67,16 @@ func TestPositiveAMT_RemoteAccessPolicyRule(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_RemoteAccessPolicyRule Enumerate wsman message",
-				AMT_RemoteAccessPolicyRule,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTRemoteAccessPolicyRule,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -83,15 +86,16 @@ func TestPositiveAMT_RemoteAccessPolicyRule(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_RemoteAccessPolicyRule Pull wsman message",
-				AMT_RemoteAccessPolicyRule,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTRemoteAccessPolicyRule,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -115,15 +119,16 @@ func TestPositiveAMT_RemoteAccessPolicyRule(t *testing.T) {
 				},
 			},
 
-			//DELETE
+			// DELETE
 			{
 				"should create a valid AMT_RemoteAccessPolicyRule Delete wsman message",
-				AMT_RemoteAccessPolicyRule,
-				wsmantesting.DELETE,
+				AMTRemoteAccessPolicyRule,
+				wsmantesting.Delete,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"PolicyRuleName\">Instance</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Delete"
+					client.CurrentMessage = wsmantesting.CurrentMessageDelete
+
 					return elementUnderTest.Delete("Instance")
 				},
 				Body{
@@ -134,7 +139,7 @@ func TestPositiveAMT_RemoteAccessPolicyRule(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -144,14 +149,16 @@ func TestPositiveAMT_RemoteAccessPolicyRule(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_RemoteAccessPolicyRule(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/remoteaccess/policyrule",
 	}
 	elementUnderTest := NewPolicyRuleWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_* Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -162,22 +169,23 @@ func TestNegativeAMT_RemoteAccessPolicyRule(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_RemoteAccessPolicyRule Get wsman message",
-				AMT_RemoteAccessPolicyRule,
-				wsmantesting.GET,
+				AMTRemoteAccessPolicyRule,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					RemoteAccessPolicyRuleGetResponse: RemoteAccessPolicyRuleResponse{
 						XMLName:                 xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessPolicyRule", Local: "AMT_RemoteAccessPolicyRule"},
-						CreationClassName:       AMT_RemoteAccessPolicyRule,
+						CreationClassName:       AMTRemoteAccessPolicyRule,
 						ElementName:             "Inte(r) AMT:Remote Access Policy",
 						ExtendedData:            "AAAAAAAAABk=",
 						PolicyRuleName:          "Periodic",
@@ -188,15 +196,16 @@ func TestNegativeAMT_RemoteAccessPolicyRule(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_RemoteAccessPolicyRule Enumerate wsman message",
-				AMT_RemoteAccessPolicyRule,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTRemoteAccessPolicyRule,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -206,15 +215,16 @@ func TestNegativeAMT_RemoteAccessPolicyRule(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_RemoteAccessPolicyRule Pull wsman message",
-				AMT_RemoteAccessPolicyRule,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTRemoteAccessPolicyRule,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -238,15 +248,16 @@ func TestNegativeAMT_RemoteAccessPolicyRule(t *testing.T) {
 				},
 			},
 
-			//DELETE
+			// DELETE
 			{
 				"should create a valid AMT_RemoteAccessPolicyRule Delete wsman message",
-				AMT_RemoteAccessPolicyRule,
-				wsmantesting.DELETE,
+				AMTRemoteAccessPolicyRule,
+				wsmantesting.Delete,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"PolicyRuleName\">Instance</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Delete("Instance")
 				},
 				Body{
@@ -257,7 +268,7 @@ func TestNegativeAMT_RemoteAccessPolicyRule(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

@@ -6,9 +6,10 @@
 package ieee8021x
 
 const (
-	IPS_IEEE8021xSettings      string = "IPS_IEEE8021xSettings"
-	IPS_8021xCredentialContext string = "IPS_8021xCredentialContext"
-	SetCertificates            string = "SetCertificates"
+	IPSIEEE8021xSettings      string = "IPS_IEEE8021xSettings"
+	IPS8021xCredentialContext string = "IPS_8021xCredentialContext"
+	SetCertificates           string = "SetCertificates"
+	ValueNotFound             string = "Value not found in map"
 )
 
 const (
@@ -17,19 +18,20 @@ const (
 	EnabledWithoutCertificates Enabled = 6
 )
 
-// enabledToString is a map of Enabled value to string
+// enabledToString is a map of Enabled value to string.
 var enabledToString = map[Enabled]string{
 	EnabledWithCertificates:    "EnabledWithCertificates",
 	Disabled:                   "Disabled",
 	EnabledWithoutCertificates: "EnabledWithoutCertificates",
 }
 
-// String returns a human-readable string representation of the Enabled enumeration
+// String returns a human-readable string representation of the Enabled enumeration.
 func (e Enabled) String() string {
 	if s, ok := enabledToString[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -51,16 +53,17 @@ const (
 	ReturnValueInternalError
 )
 
-// returnValueToString is a map of ReturnValue value to string
+// returnValueToString is a map of ReturnValue value to string.
 var returnValueToString = map[ReturnValue]string{
 	ReturnValueSuccess:       "Success",
 	ReturnValueInternalError: "InternalError",
 }
 
-// String returns a human-readable string representation of the ReturnValue enumeration
+// String returns a human-readable string representation of the ReturnValue enumeration.
 func (r ReturnValue) String() string {
 	if s, ok := returnValueToString[r]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

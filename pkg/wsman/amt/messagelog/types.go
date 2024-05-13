@@ -13,12 +13,12 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 )
 
-type MessageLog struct {
+type Service struct {
 	base message.Base
 }
 
 // OUTPUTS
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -118,7 +118,7 @@ type (
 	PositionToFirstRecordReturnValue int
 )
 
-// INPUTS
+// INPUTS.
 type GetRecords_INPUT struct {
 	XMLName             xml.Name `xml:"h:GetRecords_INPUT"`
 	H                   string   `xml:"xmlns:h,attr"`

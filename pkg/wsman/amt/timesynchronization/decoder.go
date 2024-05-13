@@ -6,9 +6,10 @@
 package timesynchronization
 
 const (
-	AMT_TimeSynchronizationService string = "AMT_TimeSynchronizationService"
-	GetLowAccuracyTimeSynch        string = "GetLowAccuracyTimeSynch"
-	SetHighAccuracyTimeSynch       string = "SetHighAccuracyTimeSynch"
+	AMTTimeSynchronizationService string = "AMT_TimeSynchronizationService"
+	GetLowAccuracyTimeSynch       string = "GetLowAccuracyTimeSynch"
+	SetHighAccuracyTimeSynch      string = "SetHighAccuracyTimeSynch"
+	ValueNotFound                 string = "Value not found in map"
 )
 
 const (
@@ -17,20 +18,20 @@ const (
 	LocalTimeSyncEnabledFalse
 )
 
-// localTimeSyncEnabledString is a map of LocalTimeSyncEnabled values to their string representations
+// localTimeSyncEnabledString is a map of LocalTimeSyncEnabled values to their string representations.
 var localTimeSyncEnabledString = map[LocalTimeSyncEnabled]string{
 	LocalTimeSyncEnabledDefaultTrue:    "LocalTimeSyncEnabledDefaultTrue",
 	LocalTimeSyncEnabledConfiguredTrue: "LocalTimeSyncEnabledConfiguredTrue",
 	LocalTimeSyncEnabledFalse:          "LocalTimeSyncEnabledFalse",
 }
 
-// String returns the string representation of the LocalTimeSyncEnabled value
+// String returns the string representation of the LocalTimeSyncEnabled value.
 func (l LocalTimeSyncEnabled) String() string {
 	if value, exists := localTimeSyncEnabledString[l]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -38,19 +39,19 @@ const (
 	TimeSourceConfigured
 )
 
-// timeSourceString is a map of TimeSource values to their string representations
+// timeSourceString is a map of TimeSource values to their string representations.
 var timeSourceString = map[TimeSource]string{
 	TimeSourceBiosRTC:    "TimeSourceBiosRTC",
 	TimeSourceConfigured: "TimeSourceConfigured",
 }
 
-// String returns the string representation of the TimeSource value
+// String returns the string representation of the TimeSource value.
 func (t TimeSource) String() string {
 	if value, exists := timeSourceString[t]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -67,7 +68,7 @@ const (
 	EnabledStateStarting
 )
 
-// enabledStateString is a map of EnabledState values to their string representations
+// enabledStateString is a map of EnabledState values to their string representations.
 var enabledStateString = map[EnabledState]string{
 	EnabledStateUnknown:           "EnabledStateUnknown",
 	EnabledStateOther:             "EnabledStateOther",
@@ -82,13 +83,13 @@ var enabledStateString = map[EnabledState]string{
 	EnabledStateStarting:          "EnabledStateStarting",
 }
 
-// String returns the string representation of the EnabledState value
+// String returns the string representation of the EnabledState value.
 func (e EnabledState) String() string {
 	if value, exists := enabledStateString[e]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -106,7 +107,7 @@ const (
 	RequestedStateNotApplicable RequestedState = 12
 )
 
-// requestedStateString is a map of RequestedState values to their string representations
+// requestedStateString is a map of RequestedState values to their string representations.
 var requestedStateString = map[RequestedState]string{
 	RequestedStateUnknown:       "RequestedStateUnknown",
 	RequestedStateEnabled:       "RequestedStateEnabled",
@@ -122,13 +123,13 @@ var requestedStateString = map[RequestedState]string{
 	RequestedStateNotApplicable: "RequestedStateNotApplicable",
 }
 
-// String returns the string representation of the RequestedState value
+// String returns the string representation of the RequestedState value.
 func (r RequestedState) String() string {
 	if value, exists := requestedStateString[r]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }
 
 const (
@@ -138,7 +139,7 @@ const (
 	ReturnValueFlashWriteLimitExceeded ReturnValue = 38
 )
 
-// returnValueString is a map of ReturnValue values to their string representations
+// returnValueString is a map of ReturnValue values to their string representations.
 var returnValueString = map[ReturnValue]string{
 	ReturnValueSuccess:                 "ReturnValueSuccess",
 	ReturnValueInternalError:           "ReturnValueInternalError",
@@ -146,11 +147,11 @@ var returnValueString = map[ReturnValue]string{
 	ReturnValueFlashWriteLimitExceeded: "ReturnValueFlashWriteLimitExceeded",
 }
 
-// String returns the string representation of the ReturnValue value
+// String returns the string representation of the ReturnValue value.
 func (r ReturnValue) String() string {
 	if value, exists := returnValueString[r]; exists {
 		return value
 	}
 
-	return "Value not found in map"
+	return ValueNotFound
 }

@@ -5,7 +5,10 @@
 
 package card
 
-const CIM_Card string = "CIM_Card"
+const (
+	CIMCard       string = "CIM_Card"
+	ValueNotFound string = "Value not found in map"
+)
 
 const (
 	OperationalStatusUnknown OperationalStatus = iota
@@ -30,7 +33,7 @@ const (
 	OperationalStatusRelocating
 )
 
-// operationalStatusMap is a map of the OperationalStatus enumeration
+// operationalStatusMap is a map of the OperationalStatus enumeration.
 var operationalStatusMap = map[OperationalStatus]string{
 	OperationalStatusUnknown:                 "Unknown",
 	OperationalStatusOther:                   "Other",
@@ -54,12 +57,13 @@ var operationalStatusMap = map[OperationalStatus]string{
 	OperationalStatusRelocating:              "Relocating",
 }
 
-// String returns a human-readable string representation of the OperationalStatus enumeration
+// String returns a human-readable string representation of the OperationalStatus enumeration.
 func (e OperationalStatus) String() string {
 	if s, ok := operationalStatusMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -83,7 +87,7 @@ const (
 	PackageTypeBladeExpansion
 )
 
-// packageTypeMap is a map of the PackageType enumeration
+// packageTypeMap is a map of the PackageType enumeration.
 var packageTypeMap = map[PackageType]string{
 	PackageTypeUnknown:               "Unknown",
 	PackageTypeOther:                 "Other",
@@ -105,10 +109,11 @@ var packageTypeMap = map[PackageType]string{
 	PackageTypeBladeExpansion:        "BladeExpansion",
 }
 
-// String returns a human-readable string representation of the PackageType enumeration
+// String returns a human-readable string representation of the PackageType enumeration.
 func (e PackageType) String() string {
 	if s, ok := packageTypeMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

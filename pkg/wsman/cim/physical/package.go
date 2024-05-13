@@ -15,15 +15,14 @@ import (
 // NewPhysicalPackage returns a new instance of the PhysicalPackage struct.
 func NewPhysicalPackageWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Package {
 	return Package{
-		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_PhysicalPackage, client),
-		client: client,
+		base: message.NewBaseWithClient(wsmanMessageCreator, CIMPhysicalPackage, client),
 	}
 }
 
 // TODO: Figure out how to call GET requiring resourceURIs and Selectors
 // Get retrieves the representation of the instance
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (physicalPackage Package) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -40,8 +39,8 @@ func (physicalPackage Package) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
-	return
 
+	return
 }
 
 // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
@@ -51,13 +50,16 @@ func (physicalPackage Package) Pull(enumerationContext string) (response Respons
 			XMLInput: physicalPackage.base.Pull(enumerationContext),
 		},
 	}
+
 	err = physicalPackage.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }

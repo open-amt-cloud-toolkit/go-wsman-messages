@@ -17,14 +17,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewServiceWithClient instantiates a new Alarm Clock service
+// NewServiceWithClient instantiates a new Alarm Clock service.
 func NewServiceWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Service {
 	return Service{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_AlarmClockService, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTAlarmClockService, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (acs Service) Get() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -35,38 +35,39 @@ func (acs Service) Get() (response Response, err error) {
 	// send the message to AMT
 	err = acs.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
 
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
 
-	return
+	return response, nil
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (acs Service) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
 			XMLInput: acs.base.Enumerate(),
 		},
 	}
+
 	// send the message to AMT
 	err = acs.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
 
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
 
-	return
+	return response, nil
 }
 
 // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
@@ -76,28 +77,30 @@ func (acs Service) Pull(enumerationContext string) (response Response, err error
 			XMLInput: acs.base.Pull(enumerationContext),
 		},
 	}
+
 	// send the message to AMT
 	err = acs.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
 
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
 
-	return
+	return response, nil
 }
 
 // AddAlarm creates an alarm that would wake the system at a given time. The method receives as input an embedded instance of type IPS_AlarmClockOccurrence, with the following fields set: StartTime, Interval, InstanceID, DeleteOnCompletion. Upon success, the method creates an instance of IPS_AlarmClockOccurrence which is associated with AlarmClockService. The method would fail if 5 instances or more of IPS_AlarmClockOccurrence already exist in the system.
 func (acs Service) AddAlarm(alarmClockOccurrence AlarmClockOccurrence) (response Response, err error) {
-	header := acs.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMT_AlarmClockService, AddAlarm), AMT_AlarmClockService, nil, "", "")
+	header := acs.base.WSManMessageCreator.CreateHeader(methods.GenerateAction(AMTAlarmClockService, AddAlarm), AMTAlarmClockService, nil, "", "")
 	startTime := alarmClockOccurrence.StartTime.UTC().Format(time.RFC3339Nano)
 	startTime = strings.Split(startTime, ".")[0]
 
 	var body strings.Builder
+
 	body.WriteString(`<Body><p:AddAlarm_INPUT xmlns:p="`)
 	body.WriteString(acs.base.WSManMessageCreator.ResourceURIBase)
 	body.WriteString(`AMT_AlarmClockService"><p:AlarmTemplate><s:InstanceID xmlns:s="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence">`)
@@ -135,17 +138,18 @@ func (acs Service) AddAlarm(alarmClockOccurrence AlarmClockOccurrence) (response
 			XMLInput: acs.base.WSManMessageCreator.CreateXML(header, body.String()),
 		},
 	}
+
 	// send the message to AMT
 	err = acs.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
 
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
 
-	return
+	return response, nil
 }

@@ -1,19 +1,17 @@
 linters-settings:
   gci:
-    local-prefixes: github.com/open-amt-cloud-toolkit/console
-  dupl:
-    threshold: 300
+    local-prefixes: github.com/open-amt-cloud-toolkit/go-wsman-messages
   errorlint:
     errorf: true
   errcheck:
     check-type-assertions: true
-    check-blank: true
+    check-blank: false
   exhaustive:
     check-generated: false
     default-signifies-exhaustive: false
   funlen:
-    lines: 65
-    statements: 40
+    lines: 100
+    statements: 45
   gocognit:
     min-complexity: 15
   gocyclo:
@@ -35,14 +33,12 @@ linters-settings:
   gofumpt:
     extra-rules: true
   gomnd:
-    settings:
-      mnd:
-        checks:
-          - argument
-          - case
-          - condition
-          - operation
-          - return
+    checks:
+      - argument
+      - case
+      - condition
+      - operation
+      - return
   govet:
     check-shadowing: true
   misspell:
@@ -56,69 +52,64 @@ linters-settings:
 linters:
   disable-all: true
   enable:
-    # - errcheck
-    - gosimple
-    # - govet
-    - ineffassign
-    - unused
-    # - asciicheck
+    - asciicheck
     # - bodyclose
     # - cyclop
     # - deadcode
-    # # - depguard
-    # - dogsled
+    # - depguard
+    - dogsled
     # - dupl
-    # - durationcheck
-    # - errcheck
-    # - errorlint
-    # - exhaustive
-    # - exportloopref
-    # - forbidigo
+    - durationcheck
+    - errcheck
+    - errorlint
+    - exhaustive
+    - exportloopref
+    - forbidigo
     # - funlen
-    # - gci
-    # # - gochecknoglobals
-    # - gochecknoinits
+    - gci
+    # - gochecknoglobals
+    - gochecknoinits
     # - gocognit
-    # - goconst
+    - goconst
     # - gocritic
     # - gocyclo
-    # - godot
+    - godot
     # - godox
     # - goerr113
-    # - gofmt
-    # - gofumpt
-    # - goimports
+    - gofmt
+    - gofumpt
+    - goimports
     # - gomnd
-    # - gomodguard
-    # - goprintffuncname
+    - gomodguard
+    - goprintffuncname
     # - gosec
-    # - gosimple
+    - gosimple
     # - govet
-    # - ineffassign
-    # - makezero
+    - ineffassign
+    - makezero
     # - misspell
-    # - nakedret
+    - nakedret
     # - nestif
-    # - nlreturn
+    - nlreturn
     # - noctx
-    # - nolintlint
+    - nolintlint
     # - paralleltest
-    # - predeclared
+    - predeclared
     # - revive
-    # - rowserrcheck
-    # - sqlclosecheck
-    # - staticcheck
+    - rowserrcheck
+    - sqlclosecheck
+    - staticcheck
     # - structcheck
     # - stylecheck
-    # - tparallel
-    # - thelper
-    # - typecheck
-    # - unconvert
+    - tparallel
+    - thelper
+    - typecheck
+    - unconvert
     # - unparam
-    # - unused
+    - unused
     # - varcheck
-    # - wsl
-    # - whitespace
+    - wsl
+    - whitespace
 
 # disable:
 #    - exhaustivestruct
@@ -141,7 +132,5 @@ issues:
       linters:
         - funlen
         - goerr113
-
-run:
-  skip-dirs:
+  exclude-dirs:
     - docs

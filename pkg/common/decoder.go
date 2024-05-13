@@ -59,6 +59,7 @@ func Rstr2hex(input string) string {
 	for i := 0; i < len(input); i++ {
 		result += fmt.Sprintf("%02X", input[i])
 	}
+
 	return result
 }
 
@@ -68,6 +69,7 @@ func Hex2rstr(d string) string {
 	if err != nil {
 		panic(err) // For simplicity, though you might want to handle errors more gracefully
 	}
+
 	return string(bytes)
 }
 
@@ -81,26 +83,35 @@ func ComputeDigesthash(username, password, realm, method, path, qop, nonce, nc, 
 	ha1 := md5.Sum([]byte(fmt.Sprintf("%s:%s:%s", username, realm, password)))
 	ha2 := md5.Sum([]byte(fmt.Sprintf("%s:%s", method, path)))
 	final := md5.Sum([]byte(fmt.Sprintf("%x:%s:%s:%s:%s:%x", ha1, nonce, nc, cnonce, qop, ha2)))
+
 	return fmt.Sprintf("%x", final)
 }
 
 // RandomValueHex generates a random hex string of a given length.
-func RandomValueHex(len int) string {
-	b := make([]byte, (len+1)/2) // +1 to handle odd lengths
+func RandomValueHex(i int) string {
+	b := make([]byte, (i+1)/2) // +1 to handle odd lengths
 	if _, err := rand.Read(b); err != nil {
 		panic(err) // For simplicity, though you might want to handle errors more gracefully
 	}
-	return hex.EncodeToString(b)[:len]
+
+	return hex.EncodeToString(b)[:i]
 }
 
 // GetSidString converts a byte array of SID into string.
 // Note: This function assumes sid is provided as a string for simplicity but should be []byte in a real Go implementation.
 func GetSidString(sid string) string {
 	value := fmt.Sprintf("S-%d-%d", sid[0], sid[7])
+
 	for i := 2; i < len(sid)/4; i++ {
 		substr := sid[i*4 : (i+1)*4]
-		intValue, _ := strconv.ParseInt(strconv.Itoa(ReadIntX(substr, 0)), 10, 64)
+
+		intValue, err := strconv.ParseInt(strconv.Itoa(ReadIntX(substr, 0)), 10, 64)
+		if err != nil {
+			return ""
+		}
+
 		value += fmt.Sprintf("-%d", intValue)
 	}
+
 	return value
 }

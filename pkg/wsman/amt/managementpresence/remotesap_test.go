@@ -9,10 +9,11 @@ import (
 	"encoding/xml"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestJson(t *testing.T) {
@@ -39,12 +40,13 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/managementpresence",
 	}
 	elementUnderTest := NewManagementPresenceRemoteSAPWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_ManagementPresenceRemoteSAP Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -55,15 +57,16 @@ func TestPositiveAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_ManagementPresenceRemoteSAP Get wsman message",
-				AMT_ManagementPresenceRemoteSAP,
-				wsmantesting.GET,
+				AMTManagementPresenceRemoteSAP,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -82,15 +85,16 @@ func TestPositiveAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_ManagementPresenceRemoteSAP Enumerate wsman message",
-				AMT_ManagementPresenceRemoteSAP,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTManagementPresenceRemoteSAP,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -100,15 +104,16 @@ func TestPositiveAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_ManagementPresenceRemoteSAP Pull wsman message",
-				AMT_ManagementPresenceRemoteSAP,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTManagementPresenceRemoteSAP,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -132,15 +137,16 @@ func TestPositiveAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 					},
 				},
 			},
-			//DELETE
+			// DELETE
 			{
 				"should create a valid AMT_ManagementPresenceRemoteSAP Delete wsman message",
-				AMT_ManagementPresenceRemoteSAP,
-				wsmantesting.DELETE,
+				AMTManagementPresenceRemoteSAP,
+				wsmantesting.Delete,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"Name\">instanceID123</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Delete"
+					client.CurrentMessage = wsmantesting.CurrentMessageDelete
+
 					return elementUnderTest.Delete("instanceID123")
 				},
 				Body{
@@ -151,7 +157,7 @@ func TestPositiveAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -161,14 +167,16 @@ func TestPositiveAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/managementpresence",
 	}
 	elementUnderTest := NewManagementPresenceRemoteSAPWithClient(wsmanMessageCreator, &client)
+
 	t.Run("amt_ManagementPresenceRemoteSAP Tests", func(t *testing.T) {
 		tests := []struct {
 			name             string
@@ -179,15 +187,16 @@ func TestNegativeAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid AMT_ManagementPresenceRemoteSAP Get wsman message",
-				AMT_ManagementPresenceRemoteSAP,
-				wsmantesting.GET,
+				AMTManagementPresenceRemoteSAP,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
@@ -206,15 +215,16 @@ func TestNegativeAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_ManagementPresenceRemoteSAP Enumerate wsman message",
-				AMT_ManagementPresenceRemoteSAP,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTManagementPresenceRemoteSAP,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -224,15 +234,16 @@ func TestNegativeAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid AMT_ManagementPresenceRemoteSAP Pull wsman message",
-				AMT_ManagementPresenceRemoteSAP,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				AMTManagementPresenceRemoteSAP,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -256,15 +267,16 @@ func TestNegativeAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 					},
 				},
 			},
-			//DELETE
+			// DELETE
 			{
 				"should create a valid AMT_ManagementPresenceRemoteSAP Delete wsman message",
-				AMT_ManagementPresenceRemoteSAP,
-				wsmantesting.DELETE,
+				AMTManagementPresenceRemoteSAP,
+				wsmantesting.Delete,
 				"",
 				"<w:SelectorSet><w:Selector Name=\"Name\">instanceID123</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Delete("instanceID123")
 				},
 				Body{
@@ -275,7 +287,7 @@ func TestNegativeAMT_ManagementPresenceRemoteSAP(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

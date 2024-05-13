@@ -17,7 +17,7 @@ type Service struct {
 	base message.Base
 }
 
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -59,7 +59,7 @@ type (
 		SetupAndConfigurationServiceItems []SetupAndConfigurationServiceResponse `xml:"Items>AMT_SetupAndConfigurationService"`
 	}
 
-	// UUID of the system. If the value is all FFh, the ID is not currently present in the system, but is settable. If the value is all 00h, the ID is not present in the system. Corresponds to the UUID field of the SMBIOS Type 1 structure
+	// UUID of the system. If the value is all FFh, the ID is not currently present in the system, but is settable. If the value is all 00h, the ID is not present in the system. Corresponds to the UUID field of the SMBIOS Type 1 structure.
 	GetUuid_OUTPUT struct {
 		XMLName xml.Name `xml:"GetUuid_OUTPUT"`
 		UUID    string   `xml:"UUID"`
@@ -67,7 +67,7 @@ type (
 
 	// ValueMap={0, 1, 16, 36, 2076}
 	//
-	// Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_NOT_PERMITTED, PT_STATUS_INVALID_PARAMETER, PT_STATUS_BLOCKING_COMPONENT}
+	// Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_NOT_PERMITTED, PT_STATUS_INVALID_PARAMETER, PT_STATUS_BLOCKING_COMPONENT}.
 	Unprovision_OUTPUT struct {
 		XMLName     xml.Name `xml:"Unprovision_OUTPUT"`
 		ReturnValue ReturnValue
@@ -75,7 +75,7 @@ type (
 
 	// ValueMap={0, 1, 38, 2057}
 	//
-	// Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_FLASH_WRITE_LIMIT_EXCEEDED, PT_STATUS_DATA_MISSING}
+	// Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_FLASH_WRITE_LIMIT_EXCEEDED, PT_STATUS_DATA_MISSING}.
 	CommitChanges_OUTPUT struct {
 		XMLName     xml.Name `xml:"CommitChanges_OUTPUT"`
 		ReturnValue ReturnValue
@@ -83,14 +83,14 @@ type (
 
 	// ValueMap={0, 1, 16, 2054}
 	//
-	// Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_NOT_PERMITTED, PT_STATUS_INVALID_PASSWORD}
+	// Values={PT_STATUS_SUCCESS, PT_STATUS_INTERNAL_ERROR, PT_STATUS_NOT_PERMITTED, PT_STATUS_INVALID_PASSWORD}.
 	SetMEBxPassword_OUTPUT struct {
 		XMLName     xml.Name `xml:"SetMEBxPassword_OUTPUT"`
 		ReturnValue ReturnValue
 	}
 )
 
-// Request Types
+// Request Types.
 type (
 	SetupAndConfigurationServiceRequest struct {
 		XMLName                       xml.Name               `xml:"h:AMT_SetupAndConfigurationService"`
@@ -114,7 +114,7 @@ type (
 
 	// Password needs to be strong: Contain at least one of: upper-case, lower-case, digit and special character
 	//
-	// MinLen=8, MaxLen=32
+	// MinLen=8, MaxLen=32.
 	MEBXPassword struct {
 		XMLName  xml.Name `xml:"h:SetMEBxPassword_INPUT"`
 		H        string   `xml:"xmlns:h,attr"`
@@ -125,7 +125,7 @@ type (
 	//
 	// ValueMap={0, 1, 2, 3}
 	//
-	// Values={ProvisioningModeCurrent, ProvisioningModeEnterprise, ProvisioningModeSmallBusiness, ProvisioningRemoteConnectivity}
+	// Values={ProvisioningModeCurrent, ProvisioningModeEnterprise, ProvisioningModeSmallBusiness, ProvisioningRemoteConnectivity}.
 	ProvisioningMode struct {
 		XMLName          xml.Name              `xml:"h:Unprovision_INPUT"`
 		H                string                `xml:"xmlns:h,attr"`

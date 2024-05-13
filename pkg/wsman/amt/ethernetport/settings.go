@@ -16,14 +16,14 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 )
 
-// NewEthernetPortSettingsWithClient instantiates a new Ethernet Port Settings service
+// NewEthernetPortSettingsWithClient instantiates a new Ethernet Port Settings service.
 func NewEthernetPortSettingsWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) Settings {
 	return Settings{
-		base: message.NewBaseWithClient(wsmanMessageCreator, AMT_EthernetPortSettings, client),
+		base: message.NewBaseWithClient(wsmanMessageCreator, AMTEthernetPortSettings, client),
 	}
 }
 
-// Get retrieves the representation of the instance
+// Get retrieves the representation of the instance.
 func (s Settings) Get(instanceID string) (response Response, err error) {
 	selector := message.Selector{
 		Name:  "InstanceID",
@@ -44,10 +44,11 @@ func (s Settings) Get(instanceID string) (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (s Settings) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -64,6 +65,7 @@ func (s Settings) Enumerate() (response Response, err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -84,15 +86,16 @@ func (s Settings) Pull(enumerationContext string) (response Response, err error)
 	if err != nil {
 		return
 	}
+
 	return
 }
 
-// Put will change properties of the selected instance
-func (s Settings) Put(instanceId string, ethernetPortSettings SettingsRequest) (response Response, err error) {
-	ethernetPortSettings.H = fmt.Sprintf("%s%s", message.AMTSchema, AMT_EthernetPortSettings)
+// Put will change properties of the selected instance.
+func (s Settings) Put(instanceID string, ethernetPortSettings SettingsRequest) (response Response, err error) {
+	ethernetPortSettings.H = fmt.Sprintf("%s%s", message.AMTSchema, AMTEthernetPortSettings)
 	selector := message.Selector{
 		Name:  "InstanceID",
-		Value: instanceId,
+		Value: instanceID,
 	}
 	response = Response{
 		Message: &client.Message{
@@ -110,5 +113,6 @@ func (s Settings) Put(instanceId string, ethernetPortSettings SettingsRequest) (
 	if err != nil {
 		return
 	}
+
 	return
 }

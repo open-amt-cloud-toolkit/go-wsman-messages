@@ -12,7 +12,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips"
 )
 
-// Messages implements client.WSMan, amt.Messages, cim.Messages, and ips.Messages
+// Messages implements client.WSMan, amt.Messages, cim.Messages, and ips.Messages.
 type Messages struct {
 	Client client.WSMan
 	AMT    amt.Messages

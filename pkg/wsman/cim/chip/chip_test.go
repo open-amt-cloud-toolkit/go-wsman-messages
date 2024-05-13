@@ -40,8 +40,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveCIMChip(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/chip",
 	}
@@ -56,15 +56,17 @@ func TestPositiveCIMChip(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create and parse a valid cim_Chip Get call",
-				CIM_Chip, wsmantesting.GET,
+				CIMChip, wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
-				}, Body{
+				},
+				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PackageResponse: PackageResponse{
 						XMLName:           xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Chip", Local: "CIM_Chip"},
@@ -78,28 +80,31 @@ func TestPositiveCIMChip(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create and parse a valid cim_Chip Enumerate call",
-				CIM_Chip, wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMChip, wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
-				}, Body{
+				},
+				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "D3020000-0000-0000-0000-000000000000",
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create and parse a valid cim_Chip Pull call",
-				CIM_Chip, wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMChip, wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -125,7 +130,7 @@ func TestPositiveCIMChip(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -135,10 +140,11 @@ func TestPositiveCIMChip(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeCIMChip(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "cim/chip",
 	}
@@ -153,15 +159,17 @@ func TestNegativeCIMChip(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create and parse a valid cim_Chip Get call",
-				CIM_Chip, wsmantesting.GET,
+				CIMChip, wsmantesting.Get,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
-				}, Body{
+				},
+				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PackageResponse: PackageResponse{
 						XMLName:           xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Chip", Local: "CIM_Chip"},
@@ -175,28 +183,31 @@ func TestNegativeCIMChip(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create and parse a valid cim_Chip Enumerate call",
-				CIM_Chip, wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				CIMChip, wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
-				}, Body{
+				},
+				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					EnumerateResponse: common.EnumerateResponse{
 						EnumerationContext: "D3020000-0000-0000-0000-000000000000",
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create and parse a valid cim_Chip Pull call",
-				CIM_Chip, wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				CIMChip, wsmantesting.Pull,
+				wsmantesting.PullBody,
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -222,7 +233,7 @@ func TestNegativeCIMChip(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)

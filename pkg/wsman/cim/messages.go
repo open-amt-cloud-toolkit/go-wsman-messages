@@ -2,7 +2,7 @@
  * Copyright (c) Intel Corporation 2023
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
-//Package cim implements CIM classes to support communicating with Intel® AMT Devices
+// Package cim implements CIM classes to support communicating with Intel® AMT Devices
 package cim
 
 import (
@@ -26,6 +26,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/system"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/wifi"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
 type Messages struct {
@@ -55,8 +56,8 @@ type Messages struct {
 }
 
 func NewMessages(client client.WSMan) Messages {
-	resourceUriBase := "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.CIMResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	m := Messages{
 		wsmanMessageCreator: wsmanMessageCreator,
 	}
@@ -82,5 +83,6 @@ func NewMessages(client client.WSMan) Messages {
 	m.SystemPackaging = system.NewSystemPackageWithClient(wsmanMessageCreator, client)
 	m.WiFiEndpointSettings = wifi.NewWiFiEndpointSettingsWithClient(wsmanMessageCreator, client)
 	m.WiFiPort = wifi.NewWiFiPortWithClient(wsmanMessageCreator, client)
+
 	return m
 }

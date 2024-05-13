@@ -14,8 +14,7 @@ import (
 )
 
 type Port struct {
-	base   message.Base
-	client client.WSMan
+	base message.Base
 }
 
 type EndpointSettings struct {
@@ -23,7 +22,7 @@ type EndpointSettings struct {
 }
 
 // OUTPUT
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -74,7 +73,7 @@ type (
 )
 
 // INPUT
-// Request Types
+// Request Types.
 type (
 	WiFiEndpointSettings_INPUT struct {
 		XMLName              xml.Name `xml:"CIM_WiFiEndpointSettings"`

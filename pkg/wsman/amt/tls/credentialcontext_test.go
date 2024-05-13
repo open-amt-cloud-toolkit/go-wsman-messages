@@ -40,8 +40,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveAMT_TLSCredentialContext(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/amt-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.AMTResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "amt/tls/credentialcontext",
 	}
@@ -57,7 +57,7 @@ func TestPositiveAMT_TLSCredentialContext(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			// {
 			// 	"should create a valid AMT_TLSCredentialContext Get wsman message",
 			// 	AMT_TLSCredentialContext,
@@ -65,20 +65,21 @@ func TestPositiveAMT_TLSCredentialContext(t *testing.T) {
 			// 	"",
 			// 	"",
 			// 	func() (Response, error) {
-			// 		client.CurrentMessage = "Get"
+			// 		 client.CurrentMessage = wsmantesting.CurrentMessageGet
 			// 		return elementUnderTest.Get()
 			// 	},
 			// 	Body{},
 			// },
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid AMT_TLSCredentialContext Enumerate wsman message",
-				AMT_TLSCredentialContext,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				AMTTLSCredentialContext,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -88,7 +89,8 @@ func TestPositiveAMT_TLSCredentialContext(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+
+			// PULLS
 			// {
 			// 	"should create a valid AMT_TLSCredentialContext Pull wsman message",
 			// 	AMT_TLSCredentialContext,
@@ -96,7 +98,7 @@ func TestPositiveAMT_TLSCredentialContext(t *testing.T) {
 			// 	wsmantesting.PULL_BODY,
 			// 	"",
 			// 	func() (Response, error) {
-			// 		client.CurrentMessage = "Pull"
+			// 		 client.CurrentMessage = wsmantesting.CurrentMessagePull
 			// 		return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 			// 	},
 			// 	Body{
@@ -106,7 +108,7 @@ func TestPositiveAMT_TLSCredentialContext(t *testing.T) {
 			// 		},
 			// 	},
 			// },
-			//DELETE
+			// DELETE
 			// {
 			// 	"should create a valid AMT_TLSCredentialContext Delete wsman message",
 			// 	AMT_TLSCredentialContext,
@@ -114,18 +116,18 @@ func TestPositiveAMT_TLSCredentialContext(t *testing.T) {
 			// 	"",
 			// 	"<w:SelectorSet><w:Selector Name=\"Name\">instanceID123</w:Selector></w:SelectorSet>",
 			// 	func() (Response, error) {
-			// 		client.CurrentMessage = "Delete"
+			// 		 client.CurrentMessage = wsmantesting.CurrentMessageDelete
 			// 		return elementUnderTest.Delete("instanceID123")
 			// 	},
 			// 	Body{},
 			// },
-			//Create
+			// Create
 			// {
 			// 	"should create a valid AMT_TLSCredentialContext Create wsman message",
 			// 	AMT_TLSCredentialContext,
 			// 	wsmantesting.CREATE,
 			// 	"",
-			// 	"", //fmt.Sprintf(`<Body><h:AMT_TLSCredentialContext xmlns:h="%sAMT_TLSCredentialContext"><h:ElementInContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementInContext><h:ElementProvidingContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_TLSProtocolEndpointCollection</w:ResourceURI><w:SelectorSet><w:Selector Name="ElementName">TLSProtocolEndpointInstances Collection</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementProvidingContext></h:AMT_TLSCredentialContext></Body>`, credentialContext.base.WSManMessageCreator.ResourceURIBase, credentialContext.base.WSManMessageCreator.ResourceURIBase, certHandle, credentialContext.base.WSManMessageCreator.ResourceURIBase),
+			// 	"", //logrus.Sprintf(`<Body><h:AMT_TLSCredentialContext xmlns:h="%sAMT_TLSCredentialContext"><h:ElementInContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementInContext><h:ElementProvidingContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_TLSProtocolEndpointCollection</w:ResourceURI><w:SelectorSet><w:Selector Name="ElementName">TLSProtocolEndpointInstances Collection</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementProvidingContext></h:AMT_TLSCredentialContext></Body>`, credentialContext.base.WSManMessageCreator.ResourceURIBase, credentialContext.base.WSManMessageCreator.ResourceURIBase, certHandle, credentialContext.base.WSManMessageCreator.ResourceURIBase),
 			// 	func() (Response, error) {
 			// 		client.CurrentMessage = "Create"
 			// 		return elementUnderTest.Create("test")
@@ -135,7 +137,7 @@ func TestPositiveAMT_TLSCredentialContext(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, test.extraHeader, test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, test.extraHeader, test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)

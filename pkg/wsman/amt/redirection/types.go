@@ -18,7 +18,7 @@ type Service struct {
 }
 
 // OUTPUT
-// Response Types
+// Response Types.
 type (
 	Response struct {
 		*client.Message
@@ -61,7 +61,7 @@ type (
 )
 
 // INPUT
-// Request Types
+// Request Types.
 type (
 	RedirectionRequest struct {
 		XMLName                 xml.Name     `xml:"h:AMT_RedirectionService"`
@@ -98,12 +98,12 @@ type (
 //
 // ValueMap={0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11..32767, 32768, 32769, 32770, 32771, 32772..65535}
 //
-// Values={Unknown, Other, Enabled, Disabled, Shutting Down, Not Applicable, Enabled but Offline, In Test, Deferred, Quiesce, Starting, DMTF Reserved, IDER and SOL are disabled, IDER is enabled and SOL is disabled, SOL is enabled and IDER is disabled, IDER and SOL are enabled, Vendor Reserved}
+// Values={Unknown, Other, Enabled, Disabled, Shutting Down, Not Applicable, Enabled but Offline, In Test, Deferred, Quiesce, Starting, DMTF Reserved, IDER and SOL are disabled, IDER is enabled and SOL is disabled, SOL is enabled and IDER is disabled, IDER and SOL are enabled, Vendor Reserved}.
 type EnabledState int
 
 // The state requested for the element. The only valid values that should be used when requesting a state change to redirection are: 32768, 32769, 32770, and 32771.
 //
 // ValueMap={32768, 32769, 32770, 32771}
 //
-// Values={disable IDER and SOL, enable IDER and disable SOL, enable SOL and disable IDER, enable IDER and SOL}
+// Values={disable IDER and SOL, enable IDER and disable SOL, enable SOL and disable IDER, enable IDER and SOL}.
 type RequestedState int

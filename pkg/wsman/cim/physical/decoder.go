@@ -6,16 +6,17 @@
 package physical
 
 const (
-	CIM_PhysicalMemory  string = "CIM_PhysicalMemory"
-	CIM_PhysicalPackage string = "CIM_PhysicalPackage"
+	CIMPhysicalMemory  string = "CIM_PhysicalMemory"
+	CIMPhysicalPackage string = "CIM_PhysicalPackage"
+	ValueNotFound      string = "Value not found in map"
 )
 
 const (
 	MemoryTypeUnknown MemoryType = iota
 	MemoryTypeOther
 	MemoryTypeDRAM
-	MemoryTypeSynchronous_DRAM
-	MemoryTypeCache_DRAM
+	MemoryTypeSynchronousDRAM
+	MemoryTypeCacheDRAM
 	MemoryTypeEDO
 	MemoryTypeEDRAM
 	MemoryTypeVRAM
@@ -50,13 +51,13 @@ const (
 	MemoryTypeHBM3
 )
 
-// memoryTypeMap is a map of the MemoryType enumeration
+// memoryTypeMap is a map of the MemoryType enumeration.
 var memoryTypeMap = map[MemoryType]string{
 	MemoryTypeUnknown:                  "Unknown",
 	MemoryTypeOther:                    "Other",
 	MemoryTypeDRAM:                     "DRAM",
-	MemoryTypeSynchronous_DRAM:         "SynchronousDRAM",
-	MemoryTypeCache_DRAM:               "CacheDRAM",
+	MemoryTypeSynchronousDRAM:          "SynchronousDRAM",
+	MemoryTypeCacheDRAM:                "CacheDRAM",
 	MemoryTypeEDO:                      "EDO",
 	MemoryTypeEDRAM:                    "EDRAM",
 	MemoryTypeVRAM:                     "VRAM",
@@ -91,12 +92,13 @@ var memoryTypeMap = map[MemoryType]string{
 	MemoryTypeHBM3:                     "HBM3",
 }
 
-// String returns a human-readable string representation of the MemoryType enumeration
+// String returns a human-readable string representation of the MemoryType enumeration.
 func (e MemoryType) String() string {
 	if s, ok := memoryTypeMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -122,7 +124,7 @@ const (
 	OperationalStatusRelocating
 )
 
-// operationalStatusMap is a map of the OperationalStatus enumeration
+// operationalStatusMap is a map of the OperationalStatus enumeration.
 var operationalStatusMap = map[OperationalStatus]string{
 	OperationalStatusUnknown:                 "Unknown",
 	OperationalStatusOther:                   "Other",
@@ -146,10 +148,11 @@ var operationalStatusMap = map[OperationalStatus]string{
 	OperationalStatusRelocating:              "Relocating",
 }
 
-// String returns a human-readable string representation of the OperationalStatus enumeration
+// String returns a human-readable string representation of the OperationalStatus enumeration.
 func (e OperationalStatus) String() string {
 	if s, ok := operationalStatusMap[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

@@ -22,15 +22,14 @@ import (
 // NewServiceAvailableToElement returns a new instance of the ServiceAvailableToElement struct.
 func NewServiceAvailableToElementWithClient(wsmanMessageCreator *message.WSManMessageCreator, client client.WSMan) AvailableToElement {
 	return AvailableToElement{
-		base:   message.NewBaseWithClient(wsmanMessageCreator, CIM_ServiceAvailableToElement, client),
-		client: client,
+		base: message.NewBaseWithClient(wsmanMessageCreator, CIMServiceAvailableToElement, client),
 	}
 }
 
 // TODO Figure out how to call GET requiring resourceURIs and Selectors
 // Get retrieves the representation of the instance.  No route
 
-// Enumerate returns an enumeration context which is used in a subsequent Pull call
+// Enumerate returns an enumeration context which is used in a subsequent Pull call.
 func (availableToElement AvailableToElement) Enumerate() (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -47,8 +46,8 @@ func (availableToElement AvailableToElement) Enumerate() (response Response, err
 	if err != nil {
 		return
 	}
-	return
 
+	return
 }
 
 // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
@@ -58,13 +57,16 @@ func (availableToElement AvailableToElement) Pull(enumerationContext string) (re
 			XMLInput: availableToElement.base.Pull(enumerationContext),
 		},
 	}
+
 	err = availableToElement.base.Execute(response.Message)
 	if err != nil {
 		return
 	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
 	}
+
 	return
 }

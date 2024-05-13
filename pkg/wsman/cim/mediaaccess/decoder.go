@@ -5,7 +5,10 @@
 
 package mediaaccess
 
-const CIM_MediaAccessDevice string = "CIM_MediaAccessDevice"
+const (
+	CIMMediaAccessDevice string = "CIM_MediaAccessDevice"
+	ValueNotFound        string = "Value not found in map"
+)
 
 const (
 	Other Security = iota + 1
@@ -17,7 +20,7 @@ const (
 	BootBypassAndReadOnly
 )
 
-// securityToString is a map of Security values to string
+// securityToString is a map of Security values to string.
 var securityToString = map[Security]string{
 	Other:                 "Other",
 	Unknown:               "Unknown",
@@ -28,12 +31,13 @@ var securityToString = map[Security]string{
 	BootBypassAndReadOnly: "BootBypassandReadOnly",
 }
 
-// String returns a human-readable string representation of the Security enumeration
+// String returns a human-readable string representation of the Security enumeration.
 func (e Security) String() string {
 	if s, ok := securityToString[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -52,7 +56,7 @@ const (
 	PreDismountEjectNotRequired
 )
 
-// capabilitiesToString is a map of Capabilities value to string
+// capabilitiesToString is a map of Capabilities value to string.
 var capabilitiesToString = map[Capabilities]string{
 	UnknownCapabilities:         "Unknown",
 	OtherCapabilities:           "Other",
@@ -69,12 +73,13 @@ var capabilitiesToString = map[Capabilities]string{
 	PreDismountEjectNotRequired: "PreDismountEjectNotRequired",
 }
 
-// String returns a human-readable string representation of the Capabilities enumeration
+// String returns a human-readable string representation of the Capabilities enumeration.
 func (e Capabilities) String() string {
 	if s, ok := capabilitiesToString[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -86,7 +91,7 @@ const (
 	EnabledDefaultQuiesce           EnabledDefault = 9
 )
 
-// enabledDefaultToString is a map of EnabledDefault value to string
+// enabledDefaultToString is a map of EnabledDefault value to string.
 var enabledDefaultToString = map[EnabledDefault]string{
 	EnabledDefaultEnabled:           "Enabled",
 	EnabledDefaultDisabled:          "Disabled",
@@ -96,12 +101,13 @@ var enabledDefaultToString = map[EnabledDefault]string{
 	EnabledDefaultQuiesce:           "Quiesce",
 }
 
-// String returns a human-readable string representation of the EnabledDefault enumeration
+// String returns a human-readable string representation of the EnabledDefault enumeration.
 func (e EnabledDefault) String() string {
 	if s, ok := enabledDefaultToString[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -118,7 +124,7 @@ const (
 	EnabledStateStarting
 )
 
-// enabledStateToString is a map of EnabledState value to string
+// enabledStateToString is a map of EnabledState value to string.
 var enabledStateToString = map[EnabledState]string{
 	EnabledStateUnknown:           "Unknown",
 	EnabledStateOther:             "Other",
@@ -133,12 +139,13 @@ var enabledStateToString = map[EnabledState]string{
 	EnabledStateStarting:          "Starting",
 }
 
-// String returns a human-readable string representation of the EnabledState enumeration
+// String returns a human-readable string representation of the EnabledState enumeration.
 func (e EnabledState) String() string {
 	if s, ok := enabledStateToString[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -156,7 +163,7 @@ const (
 	RequestedStateNotApplicable RequestedState = 12
 )
 
-// requestedStateToString is a map of RequestedState value to string
+// requestedStateToString is a map of RequestedState value to string.
 var requestedStateToString = map[RequestedState]string{
 	RequestedStateUnknown:       "Unknown",
 	RequestedStateEnabled:       "Enabled",
@@ -172,12 +179,13 @@ var requestedStateToString = map[RequestedState]string{
 	RequestedStateNotApplicable: "NotApplicable",
 }
 
-// String returns a human-readable string representation of the RequestedState enumeration
+// String returns a human-readable string representation of the RequestedState enumeration.
 func (e RequestedState) String() string {
 	if s, ok := requestedStateToString[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }
 
 const (
@@ -203,7 +211,7 @@ const (
 	OperationalStatusRelocating
 )
 
-// operationalStatusToString is a map of OperationalStatus value to string
+// operationalStatusToString is a map of OperationalStatus value to string.
 var operationalStatusToString = map[OperationalStatus]string{
 	OperationalStatusUnknown:                 "Unknown",
 	OperationalStatusOther:                   "Other",
@@ -227,10 +235,11 @@ var operationalStatusToString = map[OperationalStatus]string{
 	OperationalStatusRelocating:              "Relocating",
 }
 
-// String returns a human-readable string representation of the OperationalStatus enumeration
+// String returns a human-readable string representation of the OperationalStatus enumeration.
 func (e OperationalStatus) String() string {
 	if s, ok := operationalStatusToString[e]; ok {
 		return s
 	}
-	return "Value not found in map"
+
+	return ValueNotFound
 }

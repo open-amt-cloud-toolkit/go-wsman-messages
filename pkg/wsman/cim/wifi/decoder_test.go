@@ -37,9 +37,9 @@ func TestBSSType_String(t *testing.T) {
 		state    BSSType
 		expected string
 	}{
-		{BSSType_Unknown, "Unknown"},
-		{BSSType_Independent, "Independent"},
-		{BSSType_Infrastructure, "Infrastructure"},
+		{BSSTypeUnknown, "Unknown"},
+		{BSSTypeIndependent, "Independent"},
+		{BSSTypeInfrastructure, "Infrastructure"},
 		{BSSType(999), "Value not found in map"},
 	}
 

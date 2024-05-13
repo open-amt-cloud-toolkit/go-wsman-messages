@@ -41,8 +41,8 @@ func TestYaml(t *testing.T) {
 
 func TestPositiveIPS_OptInService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/ips-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.IPSResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "ips/optin",
 	}
@@ -58,21 +58,22 @@ func TestPositiveIPS_OptInService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid IPS_OptInService Get wsman message",
-				IPS_OptInService,
-				wsmantesting.GET,
+				IPSOptInService,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Get"
+					client.CurrentMessage = wsmantesting.CurrentMessageGet
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetAndPutResponse: OptInServiceResponse{
-						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: IPS_OptInService},
+						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSOptInService), Local: IPSOptInService},
 						CanModifyOptInPolicy:    1,
 						CreationClassName:       "IPS_OptInService",
 						ElementName:             "Intel(r) AMT OptIn Service",
@@ -86,15 +87,16 @@ func TestPositiveIPS_OptInService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid IPS_OptInService Enumerate wsman message",
-				IPS_OptInService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				IPSOptInService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Enumerate"
+					client.CurrentMessage = wsmantesting.CurrentMessageEnumerate
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -104,15 +106,16 @@ func TestPositiveIPS_OptInService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid IPS_OptInService Pull wsman message",
-				IPS_OptInService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				IPSOptInService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Pull"
+					client.CurrentMessage = wsmantesting.CurrentMessagePull
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -121,7 +124,7 @@ func TestPositiveIPS_OptInService(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						OptInServiceItems: []OptInServiceResponse{
 							{
-								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: IPS_OptInService},
+								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSOptInService), Local: IPSOptInService},
 								CanModifyOptInPolicy:    1,
 								CreationClassName:       "IPS_OptInService",
 								ElementName:             "Intel(r) AMT OptIn Service",
@@ -140,18 +143,19 @@ func TestPositiveIPS_OptInService(t *testing.T) {
 			// SEND_OPT_IN_CODE
 			{
 				"should create a valid IPS_OptInService send opt in code wsman message",
-				IPS_OptInService,
-				wsmantesting.SEND_OPT_IN_CODE,
+				IPSOptInService,
+				wsmantesting.SendOptInCode,
 				`<h:SendOptInCode_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_OptInService"><h:OptInCode>1</h:OptInCode></h:SendOptInCode_INPUT>`,
 				"",
 				func() (Response, error) {
 					client.CurrentMessage = "SendOptInCode"
+
 					return elementUnderTest.SendOptInCode(1)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					SendOptInCodeResponse: SendOptInCode_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: "SendOptInCode_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSOptInService), Local: "SendOptInCode_OUTPUT"},
 						ReturnValue: 2,
 					},
 				},
@@ -159,18 +163,19 @@ func TestPositiveIPS_OptInService(t *testing.T) {
 			// START_OPT_IN
 			{
 				"should create a valid IPS_OptInService start opt in code wsman message",
-				IPS_OptInService,
-				wsmantesting.START_OPT_IN,
+				IPSOptInService,
+				wsmantesting.StartOptIn,
 				`<h:StartOptIn_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_OptInService"></h:StartOptIn_INPUT>`,
 				"",
 				func() (Response, error) {
 					client.CurrentMessage = "StartOptIn"
+
 					return elementUnderTest.StartOptIn()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					StartOptInResponse: StartOptIn_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: "StartOptIn_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSOptInService), Local: "StartOptIn_OUTPUT"},
 						ReturnValue: 2,
 					},
 				},
@@ -178,18 +183,19 @@ func TestPositiveIPS_OptInService(t *testing.T) {
 			// CANCEL_OPT_IN
 			{
 				"should create a valid IPS_OptInService cancel opt in code wsman message",
-				IPS_OptInService,
-				wsmantesting.CANCEL_OPT_IN,
+				IPSOptInService,
+				wsmantesting.CancelOptIn,
 				`<h:CancelOptIn_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_OptInService"></h:CancelOptIn_INPUT>`,
 				"",
 				func() (Response, error) {
 					client.CurrentMessage = "CancelOptIn"
+
 					return elementUnderTest.CancelOptIn()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					CancelOptInResponse: CancelOptIn_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: "CancelOptIn_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSOptInService), Local: "CancelOptIn_OUTPUT"},
 						ReturnValue: 2,
 					},
 				},
@@ -198,7 +204,7 @@ func TestPositiveIPS_OptInService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.NoError(t, err)
@@ -208,10 +214,11 @@ func TestPositiveIPS_OptInService(t *testing.T) {
 		}
 	})
 }
+
 func TestNegativeIPS_OptInService(t *testing.T) {
 	messageID := 0
-	resourceUriBase := "http://intel.com/wbem/wscim/1/ips-schema/1/"
-	wsmanMessageCreator := message.NewWSManMessageCreator(resourceUriBase)
+	resourceURIBase := wsmantesting.IPSResourceURIBase
+	wsmanMessageCreator := message.NewWSManMessageCreator(resourceURIBase)
 	client := wsmantesting.MockClient{
 		PackageUnderTest: "ips/optin",
 	}
@@ -227,21 +234,22 @@ func TestNegativeIPS_OptInService(t *testing.T) {
 			responseFunc     func() (Response, error)
 			expectedResponse interface{}
 		}{
-			//GETS
+			// GETS
 			{
 				"should create a valid IPS_OptInService Get wsman message",
-				IPS_OptInService,
-				wsmantesting.GET,
+				IPSOptInService,
+				wsmantesting.Get,
 				"",
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Get()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetAndPutResponse: OptInServiceResponse{
-						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: IPS_OptInService},
+						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSOptInService), Local: IPSOptInService},
 						CanModifyOptInPolicy:    1,
 						CreationClassName:       "IPS_OptInService",
 						ElementName:             "Intel(r) AMT OptIn Service",
@@ -255,15 +263,16 @@ func TestNegativeIPS_OptInService(t *testing.T) {
 					},
 				},
 			},
-			//ENUMERATES
+			// ENUMERATES
 			{
 				"should create a valid IPS_OptInService Enumerate wsman message",
-				IPS_OptInService,
-				wsmantesting.ENUMERATE,
-				wsmantesting.ENUMERATE_BODY,
+				IPSOptInService,
+				wsmantesting.Enumerate,
+				wsmantesting.EnumerateBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Enumerate()
 				},
 				Body{
@@ -273,15 +282,16 @@ func TestNegativeIPS_OptInService(t *testing.T) {
 					},
 				},
 			},
-			//PULLS
+			// PULLS
 			{
 				"should create a valid IPS_OptInService Pull wsman message",
-				IPS_OptInService,
-				wsmantesting.PULL,
-				wsmantesting.PULL_BODY,
+				IPSOptInService,
+				wsmantesting.Pull,
+				wsmantesting.PullBody,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.Pull(wsmantesting.EnumerationContext)
 				},
 				Body{
@@ -290,7 +300,7 @@ func TestNegativeIPS_OptInService(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						OptInServiceItems: []OptInServiceResponse{
 							{
-								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: IPS_OptInService},
+								XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSOptInService), Local: IPSOptInService},
 								CanModifyOptInPolicy:    1,
 								CreationClassName:       "IPS_OptInService",
 								ElementName:             "Intel(r) AMT OptIn Service",
@@ -310,18 +320,19 @@ func TestNegativeIPS_OptInService(t *testing.T) {
 			// SEND_OPT_IN_CODE
 			{
 				"should create a valid IPS_OptInService send opt in code wsman message",
-				IPS_OptInService,
-				wsmantesting.SEND_OPT_IN_CODE,
+				IPSOptInService,
+				wsmantesting.SendOptInCode,
 				`<h:SendOptInCode_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_OptInService"><h:OptInCode>1</h:OptInCode></h:SendOptInCode_INPUT>`,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.SendOptInCode(1)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					SendOptInCodeResponse: SendOptInCode_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: "SendOptInCode_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSOptInService), Local: "SendOptInCode_OUTPUT"},
 						ReturnValue: 2,
 					},
 				},
@@ -330,18 +341,19 @@ func TestNegativeIPS_OptInService(t *testing.T) {
 			// START_OPT_IN
 			{
 				"should create a valid IPS_OptInService start opt in code wsman message",
-				IPS_OptInService,
-				wsmantesting.START_OPT_IN,
+				IPSOptInService,
+				wsmantesting.StartOptIn,
 				`<h:StartOptIn_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_OptInService"></h:StartOptIn_INPUT>`,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.StartOptIn()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					StartOptInResponse: StartOptIn_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: "StartOptIn_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSOptInService), Local: "StartOptIn_OUTPUT"},
 						ReturnValue: 2,
 					},
 				},
@@ -350,18 +362,19 @@ func TestNegativeIPS_OptInService(t *testing.T) {
 			// CANCEL_OPT_IN
 			{
 				"should create a valid IPS_OptInService cancel opt in code wsman message",
-				IPS_OptInService,
-				wsmantesting.CANCEL_OPT_IN,
+				IPSOptInService,
+				wsmantesting.CancelOptIn,
 				`<h:CancelOptIn_INPUT xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_OptInService"></h:CancelOptIn_INPUT>`,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
 					return elementUnderTest.CancelOptIn()
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					CancelOptInResponse: CancelOptIn_OUTPUT{
-						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: "CancelOptIn_OUTPUT"},
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSOptInService), Local: "CancelOptIn_OUTPUT"},
 						ReturnValue: 2,
 					},
 				},
@@ -369,12 +382,12 @@ func TestNegativeIPS_OptInService(t *testing.T) {
 			// PUT
 			{
 				"should create a valid IPS_OptInService Put wsman message",
-				IPS_OptInService,
-				wsmantesting.PUT,
+				IPSOptInService,
+				wsmantesting.Put,
 				`<h:IPS_OptInService xmlns:h="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_OptInService"><h:CanModifyOptInPolicy>1</h:CanModifyOptInPolicy><h:CreationClassName>IPS_OptInService</h:CreationClassName><h:ElementName>Intel(r) AMT OptIn Service</h:ElementName><h:Name>Intel(r) AMT OptIn Service</h:Name><h:OptInCodeTimeout>120</h:OptInCodeTimeout><h:OptInDisplayTimeout>300</h:OptInDisplayTimeout><h:OptInRequired>0</h:OptInRequired><h:OptInState>0</h:OptInState><h:SystemName>Intel(r) AMT</h:SystemName><h:SystemCreationClassName>CIM_ComputerSystem</h:SystemCreationClassName></h:IPS_OptInService>`,
 				"",
 				func() (Response, error) {
-					client.CurrentMessage = "Error"
+					client.CurrentMessage = wsmantesting.CurrentMessageError
 					request := OptInServiceRequest{
 						H:                       "http://intel.com/wbem/wscim/1/ips-schema/1//IPS_OptInService",
 						CanModifyOptInPolicy:    1,
@@ -388,12 +401,13 @@ func TestNegativeIPS_OptInService(t *testing.T) {
 						SystemCreationClassName: "CIM_ComputerSystem",
 						SystemName:              "Intel(r) AMT",
 					}
+
 					return elementUnderTest.Put(request)
 				},
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetAndPutResponse: OptInServiceResponse{
-						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPS_OptInService), Local: IPS_OptInService},
+						XMLName:                 xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSOptInService), Local: IPSOptInService},
 						CanModifyOptInPolicy:    1,
 						CreationClassName:       "IPS_OptInService",
 						ElementName:             "Intel(r) AMT OptIn Service",
@@ -411,7 +425,7 @@ func TestNegativeIPS_OptInService(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
-				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceUriBase, test.method, test.action, "", test.body)
+				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
 				messageID++
 				response, err := test.responseFunc()
 				assert.Error(t, err)
