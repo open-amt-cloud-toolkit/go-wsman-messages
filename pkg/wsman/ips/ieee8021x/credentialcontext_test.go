@@ -22,7 +22,7 @@ func TestJson(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"IEEE8021xSettingsItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"IEEE8021xSettingsResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"Enabled\":0,\"AvailableInS0\":false,\"PxeTimeout\":0},\"SetCertificatesResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"IEEE8021xSettingsItems\":null,\"CredentialContextItems\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"IEEE8021xSettingsResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"Enabled\":0,\"AvailableInS0\":false,\"PxeTimeout\":0},\"SetCertificatesResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ReturnValue\":0}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -33,7 +33,7 @@ func TestYaml(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    ieee8021xsettingsitems: []\nenumerateresponse:\n    enumerationcontext: \"\"\nieee8021xsettingsresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    enabled: 0\n    availableins0: false\n    pxetimeout: 0\nsetcertificatesresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    ieee8021xsettingsitems: []\n    credentialcontextitems: []\nenumerateresponse:\n    enumerationcontext: \"\"\nieee8021xsettingsresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    enabled: 0\n    availableins0: false\n    pxetimeout: 0\nsetcertificatesresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    returnvalue: 0\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }

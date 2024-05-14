@@ -56,9 +56,34 @@ type (
 		ServerCertificateIssue          string                          `xml:"ServerCertificateIssue,omitempty"`          // The trusted root CA that should be used while verifying the server certificate. The root certificate should be specified in the Put request while configuring the profile. This will delete the existing instance of AMT_8021xCredentialContext that represents the trusted root certificate, and create a new instance if a trusted root certificate EPR is provided. This property will never be returned in Get response. This field is optional. If not defined, AMT looks for a matching root certidicate in its repository.
 		PxeTimeout                      int                             `xml:"PxeTimeout,omitempty"`                      // Timeout in seconds, in which the Intel® AMT will hold an authenticated 802.1X session. During the defined period, Intel® AMT manages the 802.1X negotiation while a PXE boot takes place. After the timeout, control of the negotiation passes to the host. The maximum value is 86400 seconds (one day). A value of 0 disables the feature. If you do not set a profile, the value of PxeTimeout is 0. If you set a profile without specifying a value for PxeTimeout, the firmware sets it to 120.
 	}
-
+	SelectorResponse struct {
+		XMLName xml.Name `xml:"Selector,omitempty"`
+		Name    string   `xml:"Name,attr"`
+		Text    string   `xml:",chardata"`
+	}
+	SelectorSetResponse struct {
+		XMLName   xml.Name           `xml:"SelectorSet,omitempty"`
+		Selectors []SelectorResponse `xml:"Selector,omitempty"`
+	}
+	ReferenceParametersResponse struct {
+		XMLName     xml.Name            `xml:"ReferenceParameters,omitempty"`
+		ResourceURI string              `xml:"ResourceURI,omitempty"`
+		SelectorSet SelectorSetResponse `xml:"SelectorSet,omitempty"`
+	}
+	ElementInContextResponse struct {
+		XMLName             xml.Name                    `xml:"ElementInContext"`
+		Address             string                      `xml:"Address,omitempty"`
+		ReferenceParameters ReferenceParametersResponse `xml:"ReferenceParameters,omitempty"`
+	}
+	ElementProvidingContextResponse struct {
+		XMLName             xml.Name                    `xml:"ElementProvidingContext"`
+		Address             string                      `xml:"Address,omitempty"`
+		ReferenceParameters ReferenceParametersResponse `xml:"ReferenceParameters,omitempty"`
+	}
 	CredentialContextResponse struct {
-		XMLName xml.Name `xml:"AMT_8021XCredentialContext"`
+		XMLName                 xml.Name                        `xml:"AMT_8021xCredentialContext"`
+		ElementInContext        ElementInContextResponse        `xml:"ElementInContext"`
+		ElementProvidingContext ElementProvidingContextResponse `xml:"ElementProvidingContext"`
 	}
 )
 
