@@ -23,7 +23,7 @@ func TestJson(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Items\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Items\":{\"CredentialContext\":null,\"CredentialContextTLS\":null,\"CredentialContext8021x\":null},\"EndOfSequence\":{\"Space\":\"\",\"Local\":\"\"}},\"EnumerateResponse\":{\"EnumerationContext\":\"\"}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -34,7 +34,7 @@ func TestYaml(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    items: []\nenumerateresponse:\n    enumerationcontext: \"\"\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    items:\n        credentialcontext: []\n        credentialcontexttls: []\n        credentialcontext8021x: []\n    endofsequence:\n        space: \"\"\n        local: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
@@ -90,44 +90,49 @@ func TestPositiveCIMCredentialContext(t *testing.T) {
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
-						Items: []CredentialContext{
-							{
-								ElementInContext: models.AssociationReference{
-									Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
-									ReferenceParameters: models.ReferenceParametersNoNamespace{
-										XMLName:     xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing", Local: "ReferenceParameters"},
-										ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
-										SelectorSet: models.SelectorNoNamespace{
-											XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "SelectorSet"},
-											Selectors: []models.SelectorResponse{
-												{
-													XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "Selector"},
-													Name:    "InstanceID",
-													Text:    "Intel(r) AMT Certificate: Handle: 0",
+						Items: Items{
+							[]CredentialContext{
+								{
+									ElementInContext: models.AssociationReference{
+										Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
+										ReferenceParameters: models.ReferenceParametersNoNamespace{
+											XMLName:     xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing", Local: "ReferenceParameters"},
+											ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
+											SelectorSet: models.SelectorNoNamespace{
+												XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "SelectorSet"},
+												Selectors: []models.SelectorResponse{
+													{
+														XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "Selector"},
+														Name:    "InstanceID",
+														Text:    "Intel(r) AMT Certificate: Handle: 0",
+													},
 												},
 											},
 										},
 									},
-								},
-								ElementProvidingContext: models.AssociationReference{
-									Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
-									ReferenceParameters: models.ReferenceParametersNoNamespace{
-										XMLName:     xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing", Local: "ReferenceParameters"},
-										ResourceURI: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_IEEE8021xSettings",
-										SelectorSet: models.SelectorNoNamespace{
-											XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "SelectorSet"},
-											Selectors: []models.SelectorResponse{
-												{
-													XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "Selector"},
-													Name:    "InstanceID",
-													Text:    "Intel(r) AMT:IEEE 802.1x Settings",
+									ElementProvidingContext: models.AssociationReference{
+										Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
+										ReferenceParameters: models.ReferenceParametersNoNamespace{
+											XMLName:     xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing", Local: "ReferenceParameters"},
+											ResourceURI: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_IEEE8021xSettings",
+											SelectorSet: models.SelectorNoNamespace{
+												XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "SelectorSet"},
+												Selectors: []models.SelectorResponse{
+													{
+														XMLName: xml.Name{Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd", Local: "Selector"},
+														Name:    "InstanceID",
+														Text:    "Intel(r) AMT:IEEE 802.1x Settings",
+													},
 												},
 											},
 										},
 									},
 								},
 							},
+							[]CredentialContextTLS(nil),
+							[]CredentialContext8021x(nil),
 						},
+						EndOfSequence: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "EndOfSequence"},
 					},
 				},
 			},
@@ -197,38 +202,43 @@ func TestNegativeCIMCredentialContext(t *testing.T) {
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					PullResponse: PullResponse{
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
-						Items: []CredentialContext{
-							{
-								ElementInContext: models.AssociationReference{
-									Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
-									ReferenceParameters: models.ReferenceParametersNoNamespace{
-										ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
-										SelectorSet: models.SelectorNoNamespace{
-											Selectors: []models.SelectorResponse{
-												{
-													Name: "InstanceID",
-													Text: "Intel(r) AMT Certificate: Handle: 0",
+						Items: Items{
+							[]CredentialContext{
+								{
+									ElementInContext: models.AssociationReference{
+										Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
+										ReferenceParameters: models.ReferenceParametersNoNamespace{
+											ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
+											SelectorSet: models.SelectorNoNamespace{
+												Selectors: []models.SelectorResponse{
+													{
+														Name: "InstanceID",
+														Text: "Intel(r) AMT Certificate: Handle: 0",
+													},
 												},
 											},
 										},
 									},
-								},
-								ElementProvidingContext: models.AssociationReference{
-									Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
-									ReferenceParameters: models.ReferenceParametersNoNamespace{
-										ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSProtocolEndpointCollection",
-										SelectorSet: models.SelectorNoNamespace{
-											Selectors: []models.SelectorResponse{
-												{
-													Name: "ElementName",
-													Text: "TLSProtocolEndpoint Instances Collection",
+									ElementProvidingContext: models.AssociationReference{
+										Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
+										ReferenceParameters: models.ReferenceParametersNoNamespace{
+											ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSProtocolEndpointCollection",
+											SelectorSet: models.SelectorNoNamespace{
+												Selectors: []models.SelectorResponse{
+													{
+														Name: "ElementName",
+														Text: "TLSProtocolEndpoint Instances Collection",
+													},
 												},
 											},
 										},
 									},
 								},
 							},
+							[]CredentialContextTLS(nil),
+							[]CredentialContext8021x(nil),
 						},
+						EndOfSequence: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "EndOfSequence"},
 					},
 				},
 			},
