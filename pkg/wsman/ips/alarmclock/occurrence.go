@@ -48,7 +48,7 @@ func (occurrence Occurrence) Get(alarmName string) (response Response, err error
 
 // Delete removes a the specified instance.
 func (occurrence Occurrence) Delete(handle string) (response Response, err error) {
-	selector := message.Selector{Name: "Name", Value: handle}
+	selector := message.Selector{Name: "InstanceID", Value: handle}
 	response = Response{
 		Message: &client.Message{
 			XMLInput: occurrence.base.Delete(selector),

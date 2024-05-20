@@ -136,7 +136,7 @@ func TestPositiveIPS_AlarmClockOccurrence(t *testing.T) {
 				"IPS_AlarmClockOccurrence",
 				wsmantesting.Delete,
 				"",
-				"<w:SelectorSet><w:Selector Name=\"Name\">testalarm</w:Selector></w:SelectorSet>",
+				"<w:SelectorSet><w:Selector Name=\"InstanceID\">testalarm</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
 					client.CurrentMessage = wsmantesting.CurrentMessageDelete
 
@@ -256,7 +256,7 @@ func TestNegativeIPS_AlarmClockOccurrence(t *testing.T) {
 				"IPS_AlarmClockOccurrence",
 				wsmantesting.Delete,
 				"",
-				"<w:SelectorSet><w:Selector Name=\"Name\">testalarm</w:Selector></w:SelectorSet>",
+				"<w:SelectorSet><w:Selector Name=\"InstanceID\">testalarm</w:Selector></w:SelectorSet>",
 				func() (Response, error) {
 					client.CurrentMessage = wsmantesting.CurrentMessageError
 
