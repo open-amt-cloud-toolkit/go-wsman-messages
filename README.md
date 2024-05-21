@@ -45,7 +45,9 @@ if err != nil {
 
 # Dev tips for passing CI Checks
 
-- Ensure code is formatted correctly with `gofmt -s -w ./` 
+- Install gofumpt `go install mvdan.cc/gofumpt@latest` (replaces gofmt)
+- Install gci `go install github.com/daixiang0/gci@latest` (organizes imports)
+- Ensure code is formatted correctly with `gofumpt -l -w -extra ./`
+- Ensure code is gci'd with `gci.exe write --skip-generated -s standard -s default .`
 - Ensure all unit tests pass with `go test ./...`
-- Ensure code has been gci'd with `gci.exe write --skip-generated -s standard -s default .`
 - Ensure code has been linted with `docker run --rm -v ${pwd}:/app -w /app golangci/golangci-lint:latest golangci-lint run -v`
