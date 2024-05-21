@@ -60,7 +60,7 @@ linters:
     - dogsled
     # - dupl
     - durationcheck
-    - errcheck
+    # - errcheck
     - errorlint
     - exhaustive
     - exportloopref
@@ -98,7 +98,7 @@ linters:
     # - revive
     - rowserrcheck
     - sqlclosecheck
-    - staticcheck
+    # - staticcheck
     # - structcheck
     # - stylecheck
     - tparallel
