@@ -7,6 +7,7 @@ package messagelog
 
 import (
 	"encoding/xml"
+	"time"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
@@ -72,6 +73,8 @@ type (
 		IterationIdentifier int                   `xml:"IterationIdentifier"` // An identifier for the iterator.
 		NoMoreRecords       bool                  `xml:"NoMoreRecords"`       // Indicates that there are no more records to read
 		RecordArray         []string              `xml:"RecordArray"`         // Array of records encoded as Base64
+		RawEventData        []RawEventData        `xml:"RawEventData"`        // Slice of raw event data
+		RefinedEventData    []RefinedEventData    `xml:"RefinedEventData"`    // Slice of refined event data
 		ReturnValue         GetRecordsReturnValue `xml:"ReturnValue"`         // ValueMap={0, 1, 2, 3} Values={Completed with No Error, Not Supported, Invalid record pointed, No record exists in log}
 	}
 
@@ -79,6 +82,27 @@ type (
 		XMLName             xml.Name                         `xml:"PositionToFirstRecord_OUTPUT"`
 		IterationIdentifier int                              `xml:"IterationIdentifier"` // An identifier for the iterator.
 		ReturnValue         PositionToFirstRecordReturnValue `xml:"ReturnValue"`         // ValueMap={0, 1, 2} Values={Completed with No Error, Not Supported, No record exists}
+	}
+
+	RawEventData struct {
+		TimeStamp       uint32
+		DeviceAddress   uint8
+		EventSensorType uint8
+		EventType       uint8
+		EventOffset     uint8
+		EventSourceType uint8
+		EventSeverity   uint8
+		SensorNumber    uint8
+		Entity          uint8
+		EntityInstance  uint8
+		EventData       []uint8
+	}
+
+	RefinedEventData struct {
+		TimeStamp     time.Time
+		Description   string
+		Entity        string
+		EventSeverity string
 	}
 
 	// Capabilities is an array of integers indicating the Log capabilities.
