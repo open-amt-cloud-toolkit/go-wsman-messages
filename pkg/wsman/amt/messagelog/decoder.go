@@ -419,96 +419,62 @@ func (p PositionToFirstRecordReturnValue) String() string {
 }
 
 func parseEventLogResult(eventlogdata []string) (records []RawEventData, err error) {
-	records = []RawEventData{}
+	records = make([]RawEventData, len(eventlogdata))
 
-	for _, eventRecord := range eventlogdata {
+	for idx, eventRecord := range eventlogdata {
 		decodedEventRecord, err := base64.StdEncoding.DecodeString(eventRecord)
 		if err != nil {
-			continue
+			return records, err
 		}
 
 		eventData := RawEventData{}
 
 		buf := bytes.NewReader(decodedEventRecord)
 
-		err = binary.Read(buf, binary.LittleEndian, &eventData.TimeStamp)
-		if err != nil {
-			return records, err
-		}
-
-		err = binary.Read(buf, binary.LittleEndian, &eventData.DeviceAddress)
-		if err != nil {
-			return records, err
-		}
-
-		err = binary.Read(buf, binary.LittleEndian, &eventData.EventSensorType)
-		if err != nil {
-			return records, err
-		}
-
-		err = binary.Read(buf, binary.LittleEndian, &eventData.EventType)
-		if err != nil {
-			return records, err
-		}
-
-		err = binary.Read(buf, binary.LittleEndian, &eventData.EventOffset)
-		if err != nil {
-			return records, err
-		}
-
-		err = binary.Read(buf, binary.LittleEndian, &eventData.EventSourceType)
-		if err != nil {
-			return records, err
-		}
-
-		err = binary.Read(buf, binary.LittleEndian, &eventData.EventSeverity)
-		if err != nil {
-			return records, err
-		}
-
-		err = binary.Read(buf, binary.LittleEndian, &eventData.SensorNumber)
-		if err != nil {
-			return records, err
-		}
-
-		err = binary.Read(buf, binary.LittleEndian, &eventData.Entity)
-		if err != nil {
-			return records, err
-		}
-
-		err = binary.Read(buf, binary.LittleEndian, &eventData.EntityInstance)
-		if err != nil {
-			return records, err
-		}
+		_ = binary.Read(buf, binary.LittleEndian, &eventData.TimeStamp)
+		_ = binary.Read(buf, binary.LittleEndian, &eventData.DeviceAddress)
+		_ = binary.Read(buf, binary.LittleEndian, &eventData.EventSensorType)
+		_ = binary.Read(buf, binary.LittleEndian, &eventData.EventType)
+		_ = binary.Read(buf, binary.LittleEndian, &eventData.EventOffset)
+		_ = binary.Read(buf, binary.LittleEndian, &eventData.EventSourceType)
+		_ = binary.Read(buf, binary.LittleEndian, &eventData.EventSeverity)
+		_ = binary.Read(buf, binary.LittleEndian, &eventData.SensorNumber)
+		_ = binary.Read(buf, binary.LittleEndian, &eventData.Entity)
+		_ = binary.Read(buf, binary.LittleEndian, &eventData.EntityInstance)
 
 		for i := 13; i < 21; i++ {
 			var b uint8
 
-			err = binary.Read(buf, binary.LittleEndian, &b)
-			if err != nil {
-				return records, err
-			}
+			_ = binary.Read(buf, binary.LittleEndian, &b)
 
 			eventData.EventData = append(eventData.EventData, b)
 		}
 
-		records = append(records, eventData)
+		records[idx] = eventData
 	}
 
 	return records, err
 }
 
 func decodeEventRecord(eventLog []RawEventData) []RefinedEventData {
-	refinedEventData := []RefinedEventData{}
+	refinedEventData := make([]RefinedEventData, len(eventLog))
 
-	for _, event := range eventLog {
+	for idx, event := range eventLog {
 		decodedEvent := RefinedEventData{
-			TimeStamp:     time.Unix(int64(event.TimeStamp), 0),
-			Description:   decodeEventDetailString(event.EventSensorType, event.EventOffset, event.EventData),
-			Entity:        SystemEntityTypes[int(event.Entity)],
-			EventSeverity: EventSeverity[int(event.EventSeverity)],
+			TimeStamp:       time.Unix(int64(event.TimeStamp), 0),
+			DeviceAddress:   event.DeviceAddress,
+			Description:     decodeEventDetailString(event.EventSensorType, event.EventOffset, event.EventData),
+			Entity:          SystemEntityTypes[int(event.Entity)],
+			EntityInstance:  event.EntityInstance,
+			EventData:       event.EventData,
+			EventSensorType: event.EventSensorType,
+			EventType:       event.EventType,
+			EventOffset:     event.EventOffset,
+			EventSourceType: event.EventSourceType,
+			EventSeverity:   EventSeverity[int(event.EventSeverity)],
+			SensorNumber:    event.SensorNumber,
 		}
-		refinedEventData = append(refinedEventData, decodedEvent)
+		refinedEventData[idx] = decodedEvent
 	}
 
 	return refinedEventData

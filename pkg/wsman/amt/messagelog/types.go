@@ -99,10 +99,18 @@ type (
 	}
 
 	RefinedEventData struct {
-		TimeStamp     time.Time
-		Description   string
-		Entity        string
-		EventSeverity string
+		TimeStamp       time.Time
+		DeviceAddress   uint8
+		Description     string
+		Entity          string
+		EntityInstance  uint8
+		EventData       []uint8
+		EventSensorType uint8
+		EventType       uint8
+		EventOffset     uint8
+		EventSourceType uint8
+		EventSeverity   string
+		SensorNumber    uint8
 	}
 
 	// Capabilities is an array of integers indicating the Log capabilities.
