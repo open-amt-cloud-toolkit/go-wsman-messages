@@ -70,14 +70,8 @@ func (t *Target) Receive() ([]byte, error) {
 		return nil, fmt.Errorf("no active connection")
 	}
 
-	item := t.bufferPool.Get()
-
-	tmp, ok := item.([]byte)
-	if !ok {
-		return nil, fmt.Errorf("failed to get buffer from pool")
-	}
-
-	defer t.bufferPool.Put(&tmp)
+	tmp := t.bufferPool.Get().([]byte)
+	defer t.bufferPool.Put(tmp)
 
 	n, err := t.conn.Read(tmp)
 	if err != nil {

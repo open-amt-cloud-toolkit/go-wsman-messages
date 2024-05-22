@@ -5,7 +5,13 @@
 
 package messagelog
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+	"time"
+
+	"github.com/stretchr/testify/assert"
+)
 
 func TestCapabilities_String(t *testing.T) {
 	tests := []struct {
@@ -299,5 +305,51 @@ func TestPositionToFirstRecordReturnValue_String(t *testing.T) {
 		if result != test.expected {
 			t.Errorf("Expected %s, but got %s", test.expected, result)
 		}
+	}
+}
+
+func TestConvertToEventLogResult(t *testing.T) {
+	records := []string{"Y8iYZf8GbwVoEP8mYaoKAAAAAAAA", "IgYBZf8PbwJoAf8iAEAHAAAAAAAA", "IgYBZf8PbwJoAf8iAEAHAAAAAAAA"}
+	expectedResult := []RawEventData{{TimeStamp: 0x6598c863, DeviceAddress: 0xff, EventSensorType: 0x6, EventType: 0x6f, EventOffset: 0x5, EventSourceType: 0x68, EventSeverity: 0x10, SensorNumber: 0xff, Entity: 0x26, EntityInstance: 0x61, EventData: []uint8{0xaa, 0xa, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}}, {TimeStamp: 0x65010622, DeviceAddress: 0xff, EventSensorType: 0xf, EventType: 0x6f, EventOffset: 0x2, EventSourceType: 0x68, EventSeverity: 0x1, SensorNumber: 0xff, Entity: 0x22, EntityInstance: 0x0, EventData: []uint8{0x40, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}}, {TimeStamp: 0x65010622, DeviceAddress: 0xff, EventSensorType: 0xf, EventType: 0x6f, EventOffset: 0x2, EventSourceType: 0x68, EventSeverity: 0x1, SensorNumber: 0xff, Entity: 0x22, EntityInstance: 0x0, EventData: []uint8{0x40, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}}}
+	expectedDecodedResult := []RefinedEventData{{TimeStamp: time.Unix(int64(0x6598c863), 0), Description: "Authentication failed 10 times. The system may be under attack.", Entity: "Intel(r) ME", EventSeverity: "Critical condition"}, {TimeStamp: time.Unix(int64(0x65010622), 0), Description: "PCI resource configuration", Entity: "BIOS", EventSeverity: "Monitor"}, {TimeStamp: time.Unix(int64(0x65010622), 0), Description: "PCI resource configuration", Entity: "BIOS", EventSeverity: "Monitor"}}
+
+	result, err := parseEventLogResult(records)
+	if err != nil {
+		t.Errorf("Error: %v", err)
+	}
+
+	decodedResult := decodeEventRecord(result)
+
+	assert.Equal(t, expectedResult, result)
+	assert.Equal(t, expectedDecodedResult, decodedResult)
+}
+
+func TestDecodeEventDetailString(t *testing.T) {
+	tests := []struct {
+		eventSensorType uint8
+		eventOffset     uint8
+		eventDataField  []uint8
+		expected        string
+	}{
+		{6, 0, []uint8{0, 5, 0}, "Authentication failed 5 times. The system may be under attack."},
+		{6, 0, []uint8{0, 1, 1}, "Authentication failed 257 times. The system may be under attack."},
+		{15, 0, []uint8{235}, "Invalid Data"},
+		{15, 0, []uint8{0, 1}, "No system memory is physically installed in the system."},
+		{15, 1, []uint8{0, 2}, "Starting hard-disk initialization and test"},
+		{18, 0, []uint8{170, 1, 2, 3, 4, 5, 6, 1}, "Agent watchdog 4321-65-... changed to Not Started"},
+		{30, 0, nil, "No bootable media"},
+		{32, 0, nil, "Operating system lockup or power interrupt"},
+		{35, 0, nil, "System boot failure"},
+		{37, 0, nil, "System firmware started (at least one CPU is properly executing)."},
+		{0, 0, nil, "Unknown Sensor Type #0"},
+	}
+
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("eventSensorType=%d/eventOffset=%d", test.eventSensorType, test.eventOffset), func(t *testing.T) {
+			result := decodeEventDetailString(test.eventSensorType, test.eventOffset, test.eventDataField)
+			if result != test.expected {
+				t.Errorf("Expected %q but got %q", test.expected, result)
+			}
+		})
 	}
 }

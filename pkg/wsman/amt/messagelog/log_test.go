@@ -8,6 +8,7 @@ package messagelog
 import (
 	"encoding/xml"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -22,7 +23,7 @@ func TestJson(t *testing.T) {
 			GetResponse: MessageLogResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Capabilities\":null,\"CharacterSet\":0,\"CreationClassName\":\"\",\"CurrentNumberOfRecords\":0,\"ElementName\":\"\",\"EnabledDefault\":0,\"EnabledState\":0,\"HealthState\":0,\"IsFrozen\":false,\"LastChange\":0,\"LogState\":0,\"MaxLogSize\":0,\"MaxNumberOfRecords\":0,\"MaxRecordSize\":0,\"Name\":\"\",\"OperationalStatus\":null,\"OverwritePolicy\":0,\"PercentageNearFull\":0,\"RequestedState\":0,\"SizeOfHeader\":0,\"SizeOfRecordHeader\":0,\"Status\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"MessageLogItems\":null},\"GetRecordsResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"IterationIdentifier\":0,\"NoMoreRecords\":false,\"RecordArray\":null,\"ReturnValue\":0},\"PositionToFirstRecordResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"IterationIdentifier\":0,\"ReturnValue\":0}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Capabilities\":null,\"CharacterSet\":0,\"CreationClassName\":\"\",\"CurrentNumberOfRecords\":0,\"ElementName\":\"\",\"EnabledDefault\":0,\"EnabledState\":0,\"HealthState\":0,\"IsFrozen\":false,\"LastChange\":0,\"LogState\":0,\"MaxLogSize\":0,\"MaxNumberOfRecords\":0,\"MaxRecordSize\":0,\"Name\":\"\",\"OperationalStatus\":null,\"OverwritePolicy\":0,\"PercentageNearFull\":0,\"RequestedState\":0,\"SizeOfHeader\":0,\"SizeOfRecordHeader\":0,\"Status\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"MessageLogItems\":null},\"GetRecordsResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"IterationIdentifier\":0,\"NoMoreRecords\":false,\"RecordArray\":null,\"RawEventData\":null,\"RefinedEventData\":null,\"ReturnValue\":0},\"PositionToFirstRecordResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"IterationIdentifier\":0,\"ReturnValue\":0}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -33,7 +34,7 @@ func TestYaml(t *testing.T) {
 			GetResponse: MessageLogResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    capabilities: []\n    characterset: 0\n    creationclassname: \"\"\n    currentnumberofrecords: 0\n    elementname: \"\"\n    enableddefault: 0\n    enabledstate: 0\n    healthstate: 0\n    isfrozen: false\n    lastchange: 0\n    logstate: 0\n    maxlogsize: 0\n    maxnumberofrecords: 0\n    maxrecordsize: 0\n    name: \"\"\n    operationalstatus: []\n    overwritepolicy: 0\n    percentagenearfull: 0\n    requestedstate: 0\n    sizeofheader: 0\n    sizeofrecordheader: 0\n    status: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    messagelogitems: []\ngetrecordsresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    iterationidentifier: 0\n    nomorerecords: false\n    recordarray: []\n    returnvalue: 0\npositiontofirstrecordresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    iterationidentifier: 0\n    returnvalue: 0\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    capabilities: []\n    characterset: 0\n    creationclassname: \"\"\n    currentnumberofrecords: 0\n    elementname: \"\"\n    enableddefault: 0\n    enabledstate: 0\n    healthstate: 0\n    isfrozen: false\n    lastchange: 0\n    logstate: 0\n    maxlogsize: 0\n    maxnumberofrecords: 0\n    maxrecordsize: 0\n    name: \"\"\n    operationalstatus: []\n    overwritepolicy: 0\n    percentagenearfull: 0\n    requestedstate: 0\n    sizeofheader: 0\n    sizeofrecordheader: 0\n    status: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    messagelogitems: []\ngetrecordsresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    iterationidentifier: 0\n    nomorerecords: false\n    recordarray: []\n    raweventdata: []\n    refinedeventdata: []\n    returnvalue: 0\npositiontofirstrecordresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    iterationidentifier: 0\n    returnvalue: 0\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
@@ -196,7 +197,68 @@ func TestPositiveAMT_MessageLog(t *testing.T) {
 						IterationIdentifier: 3,
 						NoMoreRecords:       true,
 						RecordArray:         []string{"Y8iYZf8GbwVoEP8mYaoKAAAAAAAA", "IgYBZf8PbwJoAf8iAEAHAAAAAAAA", "IgYBZf8PbwJoAf8iAEAHAAAAAAAA"},
-						ReturnValue:         0,
+						RawEventData: []RawEventData{
+							{
+								TimeStamp:       0x6598c863,
+								DeviceAddress:   0xff,
+								EventSensorType: 0x6,
+								EventType:       0x6f,
+								EventOffset:     0x5,
+								EventSourceType: 0x68,
+								EventSeverity:   0x10,
+								SensorNumber:    0xff,
+								Entity:          0x26,
+								EntityInstance:  0x61,
+								EventData:       []uint8{0xaa, 0xa, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+							},
+							{
+								TimeStamp:       0x65010622,
+								DeviceAddress:   0xff,
+								EventSensorType: 0xf,
+								EventType:       0x6f,
+								EventOffset:     0x2,
+								EventSourceType: 0x68,
+								EventSeverity:   0x1,
+								SensorNumber:    0xff,
+								Entity:          0x22,
+								EntityInstance:  0x0,
+								EventData:       []uint8{0x40, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+							},
+							{
+								TimeStamp:       0x65010622,
+								DeviceAddress:   0xff,
+								EventSensorType: 0xf,
+								EventType:       0x6f,
+								EventOffset:     0x2,
+								EventSourceType: 0x68,
+								EventSeverity:   0x1,
+								SensorNumber:    0xff,
+								Entity:          0x22,
+								EntityInstance:  0x0,
+								EventData:       []uint8{0x40, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+							},
+						},
+						RefinedEventData: []RefinedEventData{
+							{
+								TimeStamp:     time.Unix(int64(0x6598c863), 0),
+								Description:   "Authentication failed 10 times. The system may be under attack.",
+								Entity:        "Intel(r) ME",
+								EventSeverity: "Critical condition",
+							},
+							{
+								TimeStamp:     time.Unix(int64(0x65010622), 0),
+								Description:   "PCI resource configuration",
+								Entity:        "BIOS",
+								EventSeverity: "Monitor",
+							},
+							{
+								TimeStamp:     time.Unix(int64(0x65010622), 0),
+								Description:   "PCI resource configuration",
+								Entity:        "BIOS",
+								EventSeverity: "Monitor",
+							},
+						},
+						ReturnValue: 0,
 					},
 				},
 			},

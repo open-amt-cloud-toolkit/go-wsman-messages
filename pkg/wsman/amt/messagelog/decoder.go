@@ -5,6 +5,14 @@
 
 package messagelog
 
+import (
+	"bytes"
+	"encoding/base64"
+	"encoding/binary"
+	"fmt"
+	"time"
+)
+
 const (
 	AMTMessageLog         string = "AMT_MessageLog"
 	GetRecords            string = "GetRecords"
@@ -408,4 +416,261 @@ func (p PositionToFirstRecordReturnValue) String() string {
 	}
 
 	return ValueNotFound
+}
+
+func parseEventLogResult(eventlogdata []string) (records []RawEventData, err error) {
+	records = []RawEventData{}
+
+	for _, eventRecord := range eventlogdata {
+		decodedEventRecord, err := base64.StdEncoding.DecodeString(eventRecord)
+		if err != nil {
+			continue
+		}
+
+		eventData := RawEventData{}
+
+		buf := bytes.NewReader(decodedEventRecord)
+
+		err = binary.Read(buf, binary.LittleEndian, &eventData.TimeStamp)
+		if err != nil {
+			return records, err
+		}
+
+		err = binary.Read(buf, binary.LittleEndian, &eventData.DeviceAddress)
+		if err != nil {
+			return records, err
+		}
+
+		err = binary.Read(buf, binary.LittleEndian, &eventData.EventSensorType)
+		if err != nil {
+			return records, err
+		}
+
+		err = binary.Read(buf, binary.LittleEndian, &eventData.EventType)
+		if err != nil {
+			return records, err
+		}
+
+		err = binary.Read(buf, binary.LittleEndian, &eventData.EventOffset)
+		if err != nil {
+			return records, err
+		}
+
+		err = binary.Read(buf, binary.LittleEndian, &eventData.EventSourceType)
+		if err != nil {
+			return records, err
+		}
+
+		err = binary.Read(buf, binary.LittleEndian, &eventData.EventSeverity)
+		if err != nil {
+			return records, err
+		}
+
+		err = binary.Read(buf, binary.LittleEndian, &eventData.SensorNumber)
+		if err != nil {
+			return records, err
+		}
+
+		err = binary.Read(buf, binary.LittleEndian, &eventData.Entity)
+		if err != nil {
+			return records, err
+		}
+
+		err = binary.Read(buf, binary.LittleEndian, &eventData.EntityInstance)
+		if err != nil {
+			return records, err
+		}
+
+		for i := 13; i < 21; i++ {
+			var b uint8
+
+			err = binary.Read(buf, binary.LittleEndian, &b)
+			if err != nil {
+				return records, err
+			}
+
+			eventData.EventData = append(eventData.EventData, b)
+		}
+
+		records = append(records, eventData)
+	}
+
+	return records, err
+}
+
+func decodeEventRecord(eventLog []RawEventData) []RefinedEventData {
+	refinedEventData := []RefinedEventData{}
+
+	for _, event := range eventLog {
+		decodedEvent := RefinedEventData{
+			TimeStamp:     time.Unix(int64(event.TimeStamp), 0),
+			Description:   decodeEventDetailString(event.EventSensorType, event.EventOffset, event.EventData),
+			Entity:        SystemEntityTypes[int(event.Entity)],
+			EventSeverity: EventSeverity[int(event.EventSeverity)],
+		}
+		refinedEventData = append(refinedEventData, decodedEvent)
+	}
+
+	return refinedEventData
+}
+
+func decodeEventDetailString(eventSensorType, eventOffset uint8, eventDataField []uint8) string {
+	switch eventSensorType {
+	case 6:
+		value := int(eventDataField[1]) + (int(eventDataField[2]) << 8)
+
+		return fmt.Sprintf("Authentication failed %d times. The system may be under attack.", value)
+	case 15:
+		{
+			if eventDataField[0] == 235 {
+				return "Invalid Data"
+			}
+
+			if eventOffset == 0 {
+				return SystemFirmwareError[int(eventDataField[1])]
+			}
+
+			return SystemFirmwareProgress[int(eventDataField[1])]
+		}
+	case 18:
+		// System watchdog event
+		if eventDataField[0] == 170 {
+			watchdog := fmt.Sprintf("%x%x%x%x-%x%x", eventDataField[4], eventDataField[3], eventDataField[2], eventDataField[1], eventDataField[6], eventDataField[5])
+			watchdogCurrentState := WatchdogCurrentStates[int(eventDataField[7])]
+
+			return fmt.Sprintf("Agent watchdog %s-... changed to %s", watchdog, watchdogCurrentState)
+		}
+
+		return "Unknown event data field"
+	case 30:
+		return "No bootable media"
+	case 32:
+		return "Operating system lockup or power interrupt"
+	case 35:
+		return "System boot failure"
+	case 37:
+		return "System firmware started (at least one CPU is properly executing)."
+	default:
+		return fmt.Sprintf("Unknown Sensor Type #%d", eventSensorType)
+	}
+}
+
+var EventSeverity = map[int]string{
+	0:  "Unspecified",
+	1:  "Monitor",
+	2:  "Information",
+	4:  "OK",
+	8:  "Non-critical condition",
+	16: "Critical condition",
+	32: "Non-recoverable condition",
+}
+
+var SystemEntityTypes = map[int]string{
+	0:  "Unspecified",
+	1:  "Other",
+	2:  "Unknown",
+	3:  "Processor",
+	4:  "Disk",
+	5:  "Peripheral",
+	6:  "System management module",
+	7:  "System board",
+	8:  "Memory module",
+	9:  "Processor module",
+	10: "Power supply",
+	11: "Add in card",
+	12: "Front panel board",
+	13: "Back panel board",
+	14: "Power system board",
+	15: "Drive backplane",
+	16: "System internal expansion board",
+	17: "Other system board",
+	18: "Processor board",
+	19: "Power unit",
+	20: "Power module",
+	21: "Power management board",
+	22: "Chassis back panel board",
+	23: "System chassis",
+	24: "Sub chassis",
+	25: "Other chassis board",
+	26: "Disk drive bay",
+	27: "Peripheral bay",
+	28: "Device bay",
+	29: "Fan cooling",
+	30: "Cooling unit",
+	31: "Cable interconnect",
+	32: "Memory device",
+	33: "System management software",
+	34: "BIOS",
+	35: "Intel(r) ME",
+	36: "System bus",
+	37: "Group",
+	38: "Intel(r) ME",
+	39: "External environment",
+	40: "Battery",
+	41: "Processing blade",
+	42: "Connectivity switch",
+	43: "Processor/memory module",
+	44: "I/O module",
+	45: "Processor I/O module",
+	46: "Management controller firmware",
+	47: "IPMI channel",
+	48: "PCI bus",
+	49: "PCI express bus",
+	50: "SCSI bus",
+	51: "SATA/SAS bus",
+	52: "Processor front side bus",
+}
+
+var SystemFirmwareError = map[int]string{
+	0:  "Unspecified.",
+	1:  "No system memory is physically installed in the system.",
+	2:  "No usable system memory, all installed memory has experienced an unrecoverable failure.",
+	3:  "Unrecoverable hard-disk/ATAPI/IDE device failure.",
+	4:  "Unrecoverable system-board failure.",
+	5:  "Unrecoverable diskette subsystem failure.",
+	6:  "Unrecoverable hard-disk controller failure.",
+	7:  "Unrecoverable PS/2 or USB keyboard failure.",
+	8:  "Removable boot media not found.",
+	9:  "Unrecoverable video controller failure.",
+	10: "No video device detected.",
+	11: "Firmware (BIOS) ROM corruption detected.",
+	12: "CPU voltage mismatch (processors that share same supply have mismatched voltage requirements)",
+	13: "CPU speed matching failure",
+}
+
+var SystemFirmwareProgress = map[int]string{
+	0:  "Unspecified.",
+	1:  "Memory initialization.",
+	2:  "Starting hard-disk initialization and test",
+	3:  "Secondary processor(s) initialization",
+	4:  "User authentication",
+	5:  "User-initiated system setup",
+	6:  "USB resource configuration",
+	7:  "PCI resource configuration",
+	8:  "Option ROM initialization",
+	9:  "Video initialization",
+	10: "Cache initialization",
+	11: "SM Bus initialization",
+	12: "Keyboard controller initialization",
+	13: "Embedded controller/management controller initialization",
+	14: "Docking station attachment",
+	15: "Enabling docking station",
+	16: "Docking station ejection",
+	17: "Disabling docking station",
+	18: "Calling operating system wake-up vector",
+	19: "Starting operating system boot process",
+	20: "Baseboard or motherboard initialization",
+	21: "reserved",
+	22: "Floppy initialization",
+	23: "Keyboard test",
+	24: "Pointing device test",
+	25: "Primary processor initialization",
+}
+
+var WatchdogCurrentStates = map[int]string{
+	1:  "Not Started",
+	2:  "Stopped",
+	4:  "Running",
+	8:  "Expired",
+	16: "Suspended",
 }

@@ -124,15 +124,22 @@ func (messageLog Service) GetRecords(identifier int) (response Response, err err
 	// send the message to AMT
 	err = messageLog.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
 
-	return
+	response.Body.GetRecordsResponse.RawEventData, err = parseEventLogResult(response.Body.GetRecordsResponse.RecordArray)
+	if err != nil {
+		return response, err
+	}
+
+	response.Body.GetRecordsResponse.RefinedEventData = decodeEventRecord(response.Body.GetRecordsResponse.RawEventData)
+
+	return response, err
 }
 
 // Requests that an iteration of the MessageLog be established and that the iterator be set to the first entry in the Log. An identifier for the iterator is returned as an output parameter of the method. Regarding iteration, you have 2 choices: 1) Embed iteration data in the method call, and allow implementations to track/ store this data manually; or, 2) Iterate using a separate object (for example, class ActiveIterator) as an iteration agent. The first approach is used here for interoperability. The second requires an instance of the Iterator object for EACH iteration in progress. 2's functionality could be implemented underneath 1.
