@@ -41,6 +41,11 @@ type (
 		PublicKeyCertificateGetAndPutResponse PublicKeyCertificateResponse     `xml:"AMT_PublicKeyCertificate,omitempty"`
 		EnumerateResponse                     common.EnumerateResponse
 		PullResponse                          PullResponse
+		RefinedPullResponse                   RefinedPullResponse
+	}
+	RefinedPullResponse struct {
+		KeyManagementItems        []RefinedKeyManagementResponse        `json:"KeyManagementItems,omitempty"`
+		PublicKeyCertificateItems []RefinedPublicKeyCertificateResponse `json:"PublicKeyCertificateItems,omitempty"`
 	}
 	PullResponse struct {
 		XMLName                   xml.Name                       `xml:"PullResponse,omitempty"`
@@ -59,6 +64,17 @@ type (
 		SystemCreationClassName string              `xml:"SystemCreationClassName,omitempty"` // The CreationClassName of the scoping System.
 		SystemName              string              `xml:"SystemName,omitempty"`              // The Name of the scoping System.
 	}
+	RefinedKeyManagementResponse struct {
+		CreationClassName       string
+		ElementName             string
+		EnabledDefault          EnabledDefault
+		EnabledState            EnabledState
+		Name                    string
+		RequestedState          RequestedState
+		SystemCreationClassName string
+		SystemName              string
+	}
+
 	PublicKeyCertificateResponse struct {
 		XMLName                xml.Name `xml:"AMT_PublicKeyCertificate,omitempty"`
 		ElementName            string   `xml:"ElementName,omitempty"`     // A user-friendly name for the object . . .
@@ -68,6 +84,18 @@ type (
 		Issuer                 string   `xml:"Issuer,omitempty"`          // The Issuer field of this certificate.
 		Subject                string   `xml:"Subject,omitempty"`         // The Subject field of this certificate.
 		ReadOnlyCertificate    bool     `xml:"ReadOnlyCertificate"`       // Indicates whether the certificate is an Intel AMT self-signed certificate. If True, the certificate cannot be deleted.
+	}
+
+	RefinedPublicKeyCertificateResponse struct {
+		ElementName            string   `json:"ElementName,omitempty"`     // A user-friendly name for the object . . .
+		InstanceID             string   `json:"InstanceID,omitempty"`      // Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class.
+		X509Certificate        string   `json:"X509Certificate,omitempty"` // uint8[4100] // The X.509 Certificate blob.
+		TrustedRootCertificate bool     `json:"TrustedRootCertficate"`     // For root certificate [that were added by AMT_PublicKeyManagementService.AddTrustedRootCertificate()]this property will be true. FYI Certificate is spelled wrong comimg from AMT.
+		Issuer                 string   `json:"Issuer,omitempty"`          // The Issuer field of this certificate.
+		Subject                string   `json:"Subject,omitempty"`         // The Subject field of this certificate.
+		ReadOnlyCertificate    bool     `json:"ReadOnlyCertificate"`       // Indicates whether the certificate is an Intel AMT self-signed certificate. If True, the certificate cannot be deleted.
+		PublicKeyHandle        string   `json:"PublicKeyHandle,omitempty"`
+		AssociatedProfiles     []string `json:"AssociatedProfiles,omitempty"`
 	}
 	AddTrustedRootCertificate_OUTPUT struct {
 		XMLName            xml.Name                   `xml:"AddTrustedRootCertificate_OUTPUT"`

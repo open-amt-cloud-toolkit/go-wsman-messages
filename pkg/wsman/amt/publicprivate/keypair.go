@@ -70,23 +70,39 @@ func (keyPair KeyPair) Enumerate() (response Response, err error) {
 
 // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
 func (keyPair KeyPair) Pull(enumerationContext string) (response Response, err error) {
+	var refinedOutput []RefinedPublicPrivateKeyPair
+
 	response = Response{
 		Message: &client.Message{
 			XMLInput: keyPair.base.Pull(enumerationContext),
 		},
 	}
+
 	// send the message to AMT
 	err = keyPair.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
+
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
 
-	return
+	for _, item := range response.Body.PullResponse.PublicPrivateKeyPairItems {
+		output := RefinedPublicPrivateKeyPair{
+			InstanceID:  item.InstanceID,
+			ElementName: item.ElementName,
+			DERKey:      item.DERKey,
+		}
+
+		refinedOutput = append(refinedOutput, output)
+	}
+
+	response.Body.RefinedPullResponse.PublicPrivateKeyPairItems = refinedOutput
+
+	return response, err
 }
 
 // Deletes an instance of a key pair.
