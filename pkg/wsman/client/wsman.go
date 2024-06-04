@@ -130,8 +130,6 @@ func (t *Target) Post(msg string) (response []byte, err error) {
 
 	res, err := t.Do(req)
 	if err != nil {
-		res.Body.Close()
-
 		return nil, err
 	}
 
@@ -157,8 +155,6 @@ func (t *Target) Post(msg string) (response []byte, err error) {
 
 		res, err = t.Do(req)
 		if err != nil && err.Error() != io.EOF.Error() {
-			res.Body.Close()
-
 			return nil, err
 		}
 	}
