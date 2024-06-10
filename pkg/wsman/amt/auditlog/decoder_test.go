@@ -5,7 +5,10 @@
 
 package auditlog
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func TestOverwritePolicy_String(t *testing.T) {
 	tests := []struct {
@@ -98,5 +101,38 @@ func TestRequestedState_String(t *testing.T) {
 		if result != test.expected {
 			t.Errorf("Expected %s, but got %s", test.expected, result)
 		}
+	}
+}
+
+func TestGetAuditLogExtendedDataString(t *testing.T) {
+	tests := []struct {
+		name         string
+		auditEventId int
+		data         string
+		expected     string
+	}{
+		{"ACLEntryAdded", ACLEntryAdded, "\x00\x05Hello World", "Hello"},
+		{"ACLEntryRemoved", ACLEntryRemoved, "\x00\x05Hello World", "Hello"},
+		{"ACLEntryModified", ACLEntryModified, "\x01\x00Hello World", "Hello World"},
+		{"ACLAccessWithInvalidCredentials", ACLAccessWithInvalidCredentials, "\x00", "Invalid ME access"},
+		{"ACLAccessWithInvalidCredentials", ACLAccessWithInvalidCredentials, "\x01", "Invalid MEBx access"},
+		{"ACLEntryStateChanged", ACLEntryStateChanged, "\x00\x00Hello World", "Disabled, Hello World"},
+		{"ACLEntryStateChanged", ACLEntryStateChanged, "\x01\x01", "Enabled"},
+		{"TLSStateChanged", TLSStateChanged, "\x01\x02", "Remote ServerAuth, Local MutualAuth"},
+		{"SetRealmAuthenticationMode", SetRealmAuthenticationMode, "\x00\x00\x00\x00\x02", "Redirection, Disabled"},
+		{"AMTUnprovisioningStarted", AMTUnprovisioningStarted, "\x03", "Local WSMAN"},
+		{"FirmwareUpdate", FirmwareUpdate, "\x00\x01\x00\x02\x00\x03\x00\x04\x00\x05\x00\x06\x00\x07\x00\x08", "From 1.2.3.4 to 5.6.7.8"},
+		{"AMTTimeSet", AMTTimeSet, "\x00\x00\x00\x00", time.Unix(0, 0).Local().Format(time.RFC1123)},
+		{"OptInPolicyChange", OptInPolicyChange, "\x00\x01", "From None to KVM"},
+		{"SendConsentCode", SendConsentCode, "\x00", "Success"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := GetAuditLogExtendedDataString(tt.auditEventId, tt.data)
+			if result != tt.expected {
+				t.Errorf("GetAuditLogExtendedDataString(%d, %q) = %v; want %v", tt.auditEventId, tt.data, result, tt.expected)
+			}
+		})
 	}
 }

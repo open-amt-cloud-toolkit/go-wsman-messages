@@ -176,7 +176,7 @@ func TestPositiveAMT_AuditLog(t *testing.T) {
 							MCLocationType: 0x2,
 							NetAddress:     "",
 							Ex:             "\x00\f\x00\x00\x00(\x05\x99\x00\f\x00\x00\x00$\x05\x94",
-							ExStr:          "",
+							ExStr:          "From 12.0.40.1433 to 12.0.36.1428",
 						},
 						{
 							AuditAppID:     19,
@@ -189,7 +189,7 @@ func TestPositiveAMT_AuditLog(t *testing.T) {
 							MCLocationType: 0x2,
 							NetAddress:     "",
 							Ex:             "\x00\f\x00\x00\x00(\x05\x99\x00\f\x00\x00\x00$\x05\x94",
-							ExStr:          "",
+							ExStr:          "From 12.0.40.1433 to 12.0.36.1428",
 						},
 					},
 				},
