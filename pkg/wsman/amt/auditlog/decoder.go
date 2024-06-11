@@ -7,6 +7,7 @@ package auditlog
 
 import (
 	"encoding/base64"
+	"strconv"
 	"strings"
 	"time"
 
@@ -186,7 +187,7 @@ func convertToAuditLogResult(auditlogdata []string) []AuditLogRecord {
 		exlen := []byte(decodedEventRecordStr[ptr : ptr+1])[0]
 		ptr++
 		auditLogRecord.Ex = decodedEventRecordStr[ptr : ptr+int(exlen)]
-		// auditLogRecord.ExStr = GetAuditLogExtendedDataString((auditLogRecord.AuditAppID*100)+auditLogRecord.EventID, auditLogRecord.Ex)
+		auditLogRecord.ExStr = GetAuditLogExtendedDataString((auditLogRecord.AuditAppID*100)+auditLogRecord.EventID, auditLogRecord.Ex)
 
 		records = append([]AuditLogRecord{auditLogRecord}, records...)
 	}
@@ -209,67 +210,78 @@ const (
 	SendConsentCode                 = 3001
 )
 
+var RealmNames = []string{
+	"Redirection",
+	"PT Administration",
+	"Hardware Asset",
+	"Remote Control",
+	"Storage",
+	"Event Manager",
+	"Storage Admin",
+	"Agent Presence Local",
+	"Agent Presence Remote",
+	"Circuit Breaker",
+	"Network Time",
+	"General Information",
+	"Firmware Update",
+	"EIT",
+	"LocalUN",
+	"Endpoint Access Control",
+	"Endpoint Access Control Admin",
+	"Event Log Reader",
+	"Audit Log",
+	"ACL Realm",
+	"",
+	"",
+	"Local System",
+	// Add more as needed
+}
+
 // Return human readable extended audit log data
 // TODO: Just put some of them here, but many more still need to be added, helpful link here:
 // https://software.intel.com/sites/manageability/AMT_Implementation_and_Reference_Guide/default.htm?turl=WordDocuments%2Fsecurityadminevents.htm
-// func GetAuditLogExtendedDataString(auditEventId int, data string) string {
-// 	extendedDataString := ""
+func GetAuditLogExtendedDataString(auditEventId int, data string) string {
+	var extendedDataString string
 
-// 	switch auditEventId {
-// 	case AclEntryAdded:
-// 	case AclEntryRemoved:
-// 		if data[0:1] == "0" {
-// 			indx, _ := strconv.Atoi(data[0:1])
-// 			extendedDataString = data[2 : 2+indx]
-// 		}
-// 		break
-// 	case AclEntryModified:
-// 		if data[1:2] == "0" {
-// 			extendedDataString = data[3:4]
-// 		}
-// 		break
-// 	case AclAccessWithInvalidCredentials:
-// 		extendedDataString = "" //['Invalid ME access', 'Invalid MEBx access'][data[:0]]
-// 		break
-// 	case AclEntryStateChanged:
-// 		{
-// 			// r := ['Disabled', 'Enabled'][data[:0]]
-// 			// if (data[:1] === 0) {
-// 			//   r += ', ' + data.substring(3)
-// 			// }
-// 			extendedDataString = r
-// 			break
-// 		}
-// 	case TlsStateChanged:
-// 		//extendedDataString = 'Remote ' + ['NoAuth', 'ServerAuth', 'MutualAuth'][data[:0]] + ', Local ' + ['NoAuth', 'ServerAuth', 'MutualAuth'][data[:1]]
-// 		break
-// 	case SetRealmAuthenticationMode:
-// 		//extendedDataString = RealmNames[Common.ReadInt(data, 0)] + ', ' + ['NoAuth', 'Auth', 'Disabled'][data[:4]]
-// 		break
-// 	case AmtUnprovisioningStarted:
-// 		//extendedDataString = ['BIOS', 'MEBx', 'Local MEI', 'Local WSMAN', 'Remote WSMAN'][data[:0]]
-// 		break
-// 	case FirmwareUpdate:
-// 		//extendedDataString = 'From ' + Common.ReadShort(data, 0) + '.' + Common.ReadShort(data, 2) + '.' + Common.ReadShort(data, 4) + '.' + Common.ReadShort(data, 6) + ' to ' + Common.ReadShort(data, 8) + '.' + Common.ReadShort(data, 10) + '.' + Common.ReadShort(data, 12) + '.' + Common.ReadShort(data, 14)
-// 		break
-// 	case AmtTimeSet:
-// 		{
-// 			// const t4 = new Date()
-// 			// t4.setTime(Common.ReadInt(data, 0) * 1000 + (new Date().getTimezoneOffset() * 60000))
-// 			// extendedDataString = t4.toLocaleString()
-// 			break
-// 		}
-// 	case OptInPolicyChange:
-// 		//extendedDataString = 'From ' + ['None', 'KVM', 'All'][data[:0]] + ' to ' + ['None', 'KVM', 'All'][data[:1]]
-// 		break
-// 	case SendConsentCode:
-// 		//extendedDataString = ['Success', 'Failed 3 times'][data[:0]]
-// 		break
-// 	default:
-// 		extendedDataString = null
-// 	}
-// 	return extendedDataString
-// }
+	switch auditEventId {
+	case ACLEntryAdded, ACLEntryRemoved:
+		if data[0] == 0 {
+			extendedDataString = data[2 : 2+data[1]]
+		}
+	case ACLEntryModified:
+		if data[1] == 0 {
+			extendedDataString = data[2:]
+		}
+	case ACLAccessWithInvalidCredentials:
+		extendedDataString = []string{"Invalid ME access", "Invalid MEBx access"}[data[0]]
+	case ACLEntryStateChanged:
+		r := []string{"Disabled", "Enabled"}[data[0]]
+		if data[1] == 0 {
+			r += ", " + data[2:]
+		}
+
+		extendedDataString = r
+	case TLSStateChanged:
+		extendedDataString = "Remote " + []string{"NoAuth", "ServerAuth", "MutualAuth"}[data[0]] + ", Local " + []string{"NoAuth", "ServerAuth", "MutualAuth"}[data[1]]
+	case SetRealmAuthenticationMode:
+		extendedDataString = RealmNames[common.ReadInt(data, 0)] + ", " + []string{"NoAuth", "Auth", "Disabled"}[data[4]]
+	case AMTUnprovisioningStarted:
+		extendedDataString = []string{"BIOS", "MEBx", "Local MEI", "Local WSMAN", "Remote WSMAN"}[data[0]]
+	case FirmwareUpdate:
+		extendedDataString = "From " + strconv.Itoa(common.ReadShort(data, 0)) + "." + strconv.Itoa(common.ReadShort(data, 2)) + "." + strconv.Itoa(common.ReadShort(data, 4)) + "." + strconv.Itoa(common.ReadShort(data, 6)) + " to " + strconv.Itoa(common.ReadShort(data, 8)) + "." + strconv.Itoa(common.ReadShort(data, 10)) + "." + strconv.Itoa(common.ReadShort(data, 12)) + "." + strconv.Itoa(common.ReadShort(data, 14))
+	case AMTTimeSet:
+		t := time.Unix(int64(common.ReadInt(data, 0)), 0).Local()
+		extendedDataString = t.Format(time.RFC1123)
+	case OptInPolicyChange:
+		extendedDataString = "From " + []string{"None", "KVM", "All"}[data[0]] + " to " + []string{"None", "KVM", "All"}[data[1]]
+	case SendConsentCode:
+		extendedDataString = []string{"Success", "Failed 3 times"}[data[0]]
+	default:
+		extendedDataString = ""
+	}
+
+	return extendedDataString
+}
 
 const (
 	HTTPDigest     byte = 0
