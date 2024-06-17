@@ -84,7 +84,7 @@ func (c *AuthChallenge) response(method, uri, cnonce string) (string, error) {
 					return "", fmt.Errorf("%w: %w", errRandRead, err)
 				}
 
-				c.CNonce = fmt.Sprintf("%x", b)[:16]
+				c.CNonce = fmt.Sprintf("%x", b)[:6]
 			}
 
 			c.Qop = "auth"
@@ -115,34 +115,34 @@ func (c *AuthChallenge) authorize(method, uri string) (string, error) {
 
 	sb.WriteString(`Digest username="`)
 	sb.WriteString(c.Username)
-	sb.WriteString(`", realm="`)
+	sb.WriteString(`",realm="`)
 	sb.WriteString(c.Realm)
-	sb.WriteString(`", nonce="`)
+	sb.WriteString(`",nonce="`)
 	sb.WriteString(c.Nonce)
-	sb.WriteString(`", uri="`)
+	sb.WriteString(`",uri="`)
 	sb.WriteString(uri)
-	sb.WriteString(`", response="`)
+	sb.WriteString(`",response="`)
 	sb.WriteString(response)
 	sb.WriteString(`"`)
 
-	if c.Algorithm != "" {
-		sb.WriteString(`, algorithm="`)
-		sb.WriteString(c.Algorithm)
-		sb.WriteString(`"`)
-	}
+	// if c.Algorithm != "" {
+	// 	sb.WriteString(`, algorithm="`)
+	// 	sb.WriteString(c.Algorithm)
+	// 	sb.WriteString(`"`)
+	// }
 
 	if c.Opaque != "" {
-		sb.WriteString(`, opaque="`)
+		sb.WriteString(`,opaque="`)
 		sb.WriteString(c.Opaque)
 		sb.WriteString(`"`)
 	}
 
 	if c.Qop != "" {
-		sb.WriteString(`, qop="`)
+		sb.WriteString(`,qop="`)
 		sb.WriteString(c.Qop)
-		sb.WriteString(`", nc="`)
+		sb.WriteString(`",nc="`)
 		sb.WriteString(fmt.Sprintf("%08x", c.NonceCount))
-		sb.WriteString(`", cnonce="`)
+		sb.WriteString(`",cnonce="`)
 		sb.WriteString(c.CNonce)
 		sb.WriteString(`"`)
 	}
