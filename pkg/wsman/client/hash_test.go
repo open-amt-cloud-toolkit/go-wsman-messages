@@ -115,7 +115,7 @@ func TestAuthorize(t *testing.T) {
 		uri      string
 		expected string
 	}{
-		{"POST", "/path", "Digest username=\"\", realm=\"\", nonce=\"\", uri=\"/path\", response=\"b9c5d3509b8a70d95a6204668265e6f9\""},
+		{"POST", "/path", "Digest username=\"\",realm=\"\",nonce=\"\",uri=\"/path\",response=\"b9c5d3509b8a70d95a6204668265e6f9\""},
 	}
 
 	for _, tc := range testCases {
@@ -132,7 +132,7 @@ func TestAuthorize_Full(t *testing.T) {
 		uri      string
 		expected string
 	}{
-		{"POST", "/path", "Digest username=\"admin\", realm=\"test\", nonce=\"00000001\", uri=\"/path\", response=\"99d726faaaa4e8874b3fd0f425053f5a\""},
+		{"POST", "/path", "Digest username=\"admin\",realm=\"test\",nonce=\"00000001\",uri=\"/path\",response=\"99d726faaaa4e8874b3fd0f425053f5a\""},
 	}
 
 	for _, tc := range testCases {

@@ -4,7 +4,10 @@
  **********************************************************************/
 package apf
 
-import "time"
+import (
+	"sync"
+	"time"
+)
 
 const (
 	LMS_PROTOCOL_VERSION = 4
@@ -267,4 +270,5 @@ type Session struct {
 	ErrorBuffer      chan error
 	Status           chan bool
 	Timer            *time.Timer
+	WaitGroup        *sync.WaitGroup
 }

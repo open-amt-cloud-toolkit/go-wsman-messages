@@ -275,7 +275,7 @@ func ProcessChannelOpenConfirmation(data []byte, session *Session) {
 	session.SenderChannel = confirmationMessage.SenderChannel
 	session.RecipientChannel = confirmationMessage.RecipientChannel
 	session.TXWindow = confirmationMessage.InitialWindowSize
-	session.Status <- true
+	session.WaitGroup.Done()
 }
 
 func ProcessChannelOpenFailure(data []byte, session *Session) {
