@@ -72,7 +72,7 @@ func (endpointSettings EndpointSettings) Pull(enumerationContext string) (respon
 	return
 }
 
-// Delete removes a the specified instance.
+// Delete removes the specified instance.
 func (endpointSettings EndpointSettings) Delete(handle string) (response Response, err error) {
 	selector := message.Selector{Name: "InstanceID", Value: handle}
 	response = Response{

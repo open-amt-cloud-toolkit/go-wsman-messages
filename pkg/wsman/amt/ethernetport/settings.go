@@ -69,7 +69,7 @@ func (s Settings) Enumerate() (response Response, err error) {
 	return
 }
 
-// // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
+// Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
 func (s Settings) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
@@ -109,6 +109,28 @@ func (s Settings) Put(instanceID string, ethernetPortSettings SettingsRequest) (
 	}
 
 	// put the xml response into the go struct
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+// Delete removes the specified instance.
+func (s Settings) Delete(handle string) (response Response, err error) { // CRAIG - copied from delete wifi with little changes
+	selector := message.Selector{Name: "InstanceID", Value: handle}
+	response = Response{
+		Message: &client.Message{
+			XMLInput: s.base.Delete(selector),
+		},
+	}
+
+	err = s.base.Execute(response.Message)
+	if err != nil {
+		return
+	}
+
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
 		return
