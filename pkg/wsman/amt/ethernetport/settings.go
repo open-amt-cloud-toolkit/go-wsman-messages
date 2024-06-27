@@ -116,25 +116,3 @@ func (s Settings) Put(instanceID string, ethernetPortSettings SettingsRequest) (
 
 	return
 }
-
-// Delete removes the specified instance.
-func (s Settings) Delete(handle string) (response Response, err error) { // CRAIG - copied from delete wifi with little changes
-	selector := message.Selector{Name: "InstanceID", Value: handle}
-	response = Response{
-		Message: &client.Message{
-			XMLInput: s.base.Delete(selector),
-		},
-	}
-
-	err = s.base.Execute(response.Message)
-	if err != nil {
-		return
-	}
-
-	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
-	if err != nil {
-		return
-	}
-
-	return
-}
