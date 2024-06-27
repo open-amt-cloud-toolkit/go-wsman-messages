@@ -49,14 +49,16 @@ type WSMan interface {
 // Target is a thin wrapper around http.Target.
 type Target struct {
 	http.Client
-	endpoint       string
-	username       string
-	password       string
-	useDigest      bool
-	logAMTMessages bool
-	challenge      *AuthChallenge
-	conn           net.Conn
-	bufferPool     sync.Pool
+	endpoint           string
+	username           string
+	password           string
+	useDigest          bool
+	logAMTMessages     bool
+	challenge          *AuthChallenge
+	conn               net.Conn
+	bufferPool         sync.Pool
+	UseTLS             bool
+	InsecureSkipVerify bool
 }
 
 const timeout = 10 * time.Second
@@ -75,11 +77,13 @@ func NewWsman(cp Parameters) *Target {
 	}
 
 	res := &Target{
-		endpoint:       protocol + "://" + cp.Target + ":" + port + path,
-		username:       cp.Username,
-		password:       cp.Password,
-		useDigest:      cp.UseDigest,
-		logAMTMessages: cp.LogAMTMessages,
+		endpoint:           protocol + "://" + cp.Target + ":" + port + path,
+		username:           cp.Username,
+		password:           cp.Password,
+		useDigest:          cp.UseDigest,
+		logAMTMessages:     cp.LogAMTMessages,
+		UseTLS:             cp.UseTLS,
+		InsecureSkipVerify: cp.SelfSignedAllowed,
 	}
 
 	res.Timeout = timeout
