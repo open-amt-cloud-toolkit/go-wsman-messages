@@ -1,6 +1,7 @@
 package client
 
 import (
+	"crypto/tls"
 	"fmt"
 	"net"
 	"sync"
@@ -13,12 +14,14 @@ func NewWsmanTCP(cp Parameters) *Target {
 	}
 
 	return &Target{
-		endpoint:       cp.Target + ":" + port,
-		username:       cp.Username,
-		password:       cp.Password,
-		useDigest:      cp.UseDigest,
-		logAMTMessages: cp.LogAMTMessages,
-		challenge:      &AuthChallenge{},
+		endpoint:           cp.Target + ":" + port,
+		username:           cp.Username,
+		password:           cp.Password,
+		useDigest:          cp.UseDigest,
+		logAMTMessages:     cp.LogAMTMessages,
+		challenge:          &AuthChallenge{},
+		UseTLS:             cp.UseTLS,
+		InsecureSkipVerify: cp.SelfSignedAllowed,
 		bufferPool: sync.Pool{
 			New: func() interface{} {
 				return make([]byte, 4096) // Adjust size according to your needs.
@@ -29,22 +32,17 @@ func NewWsmanTCP(cp Parameters) *Target {
 
 // Connect establishes a TCP connection to the endpoint specified in the Target struct.
 func (t *Target) Connect() error {
-	conn, err := net.Dial("tcp", t.endpoint)
+	var err error
+	if t.UseTLS {
+		t.conn, err = tls.Dial("tcp", t.endpoint, &tls.Config{
+			InsecureSkipVerify: t.InsecureSkipVerify,
+		})
+	} else {
+		t.conn, err = net.Dial("tcp", t.endpoint)
+	}
+
 	if err != nil {
 		return fmt.Errorf("failed to connect to %s: %w", t.endpoint, err)
-	}
-
-	t.conn = conn
-
-	// Type assert the net.Conn to *net.TCPConn to access TCP-specific options.
-	tcpConn, ok := t.conn.(*net.TCPConn)
-	if !ok {
-		return fmt.Errorf("connection is not a TCP connection")
-	}
-
-	// Disable Nagle's Algorithm for this TCP connection.
-	if err := tcpConn.SetNoDelay(true); err != nil {
-		return fmt.Errorf("failed to set NoDelay: %w", err)
 	}
 
 	return nil
