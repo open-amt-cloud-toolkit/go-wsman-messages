@@ -38,13 +38,13 @@ type (
 	}
 
 	MediaAccessDevice struct {
-		Capabilities            Capabilities        `xml:"Capabilities,omitempty"`  // ValueMap={0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12} Values={Unknown, Other, Sequential Access, Random Access, Supports Writing, Encryption, Compression, Supports Removeable Media, Manual Cleaning, Automatic Cleaning, SMART Notification, Supports Dual Sided Media, Predismount Eject Not Required} ArrayType=Indexed
+		Capabilities            []Capabilities      `xml:"Capabilities,omitempty"`  // ValueMap={0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12} Values={Unknown, Other, Sequential Access, Random Access, Supports Writing, Encryption, Compression, Supports Removeable Media, Manual Cleaning, Automatic Cleaning, SMART Notification, Supports Dual Sided Media, Predismount Eject Not Required} ArrayType=Indexed
 		CreationClassName       string              `xml:"CreationClassName"`       // CreationClassName indicates the name of the class or the subclass used in the creation of an instance.
 		DeviceID                string              `xml:"DeviceID"`                // An address or other identifying information to uniquely name the LogicalDevice.
 		ElementName             string              `xml:"ElementName"`             // This property allows each instance to define a user-friendly name in addition to its key properties, identity data, and description information.
 		EnabledDefault          EnabledDefault      `xml:"EnabledDefault"`          // An enumerated value indicating an administrator's default or startup configuration for the Enabled State of an element.
 		EnabledState            EnabledState        `xml:"EnabledState"`            // EnabledState is an integer enumeration that indicates the enabled and disabled states of an element. It can also indicate the transitions between these requested states.
-		MaxMediaSize            int                 `xml:"MaxMediaSize,omitempty"`  // Maximum size, in KBytes, of media supported by this Device.
+		MaxMediaSize            uint64              `xml:"MaxMediaSize,omitempty"`  // Maximum size, in KBytes, of media supported by this Device.
 		OperationalStatus       []OperationalStatus `xml:"OperationalStatus"`       // Indicates the current statuses of the element.
 		RequestedState          RequestedState      `xml:"RequestedState"`          // RequestedState is an integer enumeration that indicates the last requested or desired state for the element, irrespective of the mechanism through which it was requested.
 		Security                Security            `xml:"Security,omitempty"`      // ValueMap={1, 2, 3, 4, 5, 6, 7} Values={Other, Unknown, None, Read Only, Locked Out, Boot Bypass, Boot Bypass and Read Only}
