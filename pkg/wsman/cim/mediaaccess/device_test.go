@@ -94,7 +94,7 @@ func TestPositiveCIMMediaAccessDevice(t *testing.T) {
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
 						MediaAccessDevices: []MediaAccessDevice{
 							{
-								Capabilities:            4,
+								Capabilities:            []Capabilities{4},
 								CreationClassName:       "CIM_MediaAccessDevice",
 								DeviceID:                "MEDIA DEV 0",
 								ElementName:             "Managed System Media Access Device",
@@ -108,7 +108,7 @@ func TestPositiveCIMMediaAccessDevice(t *testing.T) {
 								SystemName:              "ManagedSystem",
 							},
 							{
-								Capabilities:            4,
+								Capabilities:            []Capabilities{4},
 								CreationClassName:       "CIM_MediaAccessDevice",
 								DeviceID:                "MEDIA DEV 1",
 								ElementName:             "Managed System Media Access Device",
@@ -196,7 +196,7 @@ func TestNegativeCIMMediaAccessDevice(t *testing.T) {
 						XMLName: xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "PullResponse"},
 						MediaAccessDevices: []MediaAccessDevice{
 							{
-								Capabilities:            4,
+								Capabilities:            []Capabilities{4},
 								CreationClassName:       "CIM_MediaAccessDevice",
 								DeviceID:                "MEDIA DEV 0",
 								ElementName:             "Managed System Media Access Device",
@@ -210,7 +210,7 @@ func TestNegativeCIMMediaAccessDevice(t *testing.T) {
 								SystemName:              "ManagedSystem",
 							},
 							{
-								Capabilities:            4,
+								Capabilities:            []Capabilities{4},
 								CreationClassName:       "CIM_MediaAccessDevice",
 								DeviceID:                "MEDIA DEV 1",
 								ElementName:             "Managed System Media Access Device",
