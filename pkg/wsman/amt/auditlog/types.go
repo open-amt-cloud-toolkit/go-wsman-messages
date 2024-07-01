@@ -102,4 +102,117 @@ type (
 
 	// RequestedState is an integer enumeration that indicates the last requested or desired state for the element, irrespective of the mechanism through which it was requested.
 	RequestedState int
+
+	ProvisioningParameters struct {
+		ProvisioningMethod        uint8
+		HashType                  uint8
+		TrustedRootCertHash       []byte
+		NumberOfCertificates      uint8
+		CertSerialNumbers         []string
+		AdditionalCaSerialNumbers uint8
+		ProvServFQDNLength        uint8
+		ProvServFQDN              string
+	}
+
+	ACLEntry struct {
+		ParameterModified uint8
+		AccessType        uint8
+		EntryState        uint8
+		InitiatorType     uint8
+		UsernameLength    uint8
+		SID               uint32
+		Username          string
+		DomainLength      uint8
+		Domain            string
+	}
+
+	RemoteControlEvent struct {
+		SpecialCommand                  uint8
+		SpecialCommandParameterHighByte uint8
+		SpecialCommandParameterLowByte  uint8
+		BootOptionsMaskByte1            uint8
+		BootOptionsMaskByte2            uint8
+		OEMParameterByte1               uint8
+		OEMParameterByte2               uint8
+	}
+
+	FWVersion struct {
+		Major  uint16
+		Minor  uint16
+		Hotfix uint16
+		Build  uint16
+	}
+
+	FWUpdateFailure struct {
+		Type   uint8
+		Reason uint8
+	}
+
+	NetworkAdministrationEvent struct {
+		InterfaceHandle    uint32
+		DHCPEnabled        uint8
+		IPV4Address        uint32
+		SubnetMask         uint32
+		Gateway            uint32
+		PrimaryDNS         uint32
+		SecondaryDNS       uint32
+		HostNameLength     uint8
+		HostName           string
+		DomainNameLength   uint8
+		DomainName         string
+		VLANTag            uint16
+		LinkPolicy         uint32
+		IPV6Enabled        uint8
+		InterfaceIDGenType uint8
+		InterfaceID        []uint8
+		IPV6Address        []uint8
+		IPV6Gateway        []uint8
+		IPV6PrimaryDNS     []uint8
+		IPV6SecondaryDNS   []uint8
+	}
+
+	StorageAdministrationEvent struct {
+		MaxPartnerStorage                uint32
+		MaxNonPartnerTotalAllocationSize uint32
+	}
+
+	EventManagerEvent struct {
+		PolicyID              uint8
+		SubscriptionAlertType uint8
+		IPAddrType            uint8
+		AlertTargetIPAddress  []uint8
+		Freeze                uint8
+	}
+
+	SystemDefenseManagerEvent struct {
+		FilterHandle       uint32
+		PolicyHandle       uint32
+		HardwareInterface  uint32
+		InterfaceHandle    uint32
+		BlockAll           uint8
+		BlockOffensivePort uint8
+	}
+
+	AgentPresenceManagerEvent struct {
+		AgentID            []uint8
+		AgentHeartBeatTime uint16
+		AgentStartupTime   uint16
+	}
+
+	WirelessConfigurationEvent struct {
+		SSID                   []uint8
+		ProfilePriority        uint8
+		ProfileNameLength      uint8
+		ProfileName            []uint8
+		ProfileSync            uint32
+		Timeout                uint32
+		LinkPreference         uint32
+		ProfileSharingWithUEFI uint8
+	}
+
+	UserOptInEvent struct {
+		PreviousOptInPolicy uint8
+		CurrentOptInPolicy  uint8
+		OperationStatus     uint8
+	}
 )
