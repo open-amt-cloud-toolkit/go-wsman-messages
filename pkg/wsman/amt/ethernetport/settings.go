@@ -69,7 +69,7 @@ func (s Settings) Enumerate() (response Response, err error) {
 	return
 }
 
-// // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
+// Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
 func (s Settings) Pull(enumerationContext string) (response Response, err error) {
 	response = Response{
 		Message: &client.Message{
