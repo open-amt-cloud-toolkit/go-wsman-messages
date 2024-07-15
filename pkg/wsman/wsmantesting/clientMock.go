@@ -14,6 +14,8 @@ type MockClient struct {
 	PackageUnderTest string
 }
 
+func (c *MockClient) IsAuthenticated() bool { return true }
+
 func (c *MockClient) Post(msg string) ([]byte, error) {
 	if strings.EqualFold(c.CurrentMessage, "error") {
 		return []byte(""), nil
