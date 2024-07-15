@@ -44,6 +44,7 @@ type WSMan interface {
 	Send(data []byte) error
 	Receive() ([]byte, error)
 	CloseConnection() error
+	IsAuthenticated() bool
 }
 
 // Target is a thin wrapper around http.Target.
@@ -101,6 +102,10 @@ func NewWsman(cp Parameters) *Target {
 	}
 
 	return res
+}
+
+func (t *Target) IsAuthenticated() bool {
+	return t.challenge != nil && t.challenge.Realm != ""
 }
 
 // Post overrides http.Client's Post method.

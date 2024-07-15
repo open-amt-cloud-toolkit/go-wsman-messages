@@ -34,6 +34,7 @@ func (c *MockClient) Send(data []byte) error   { return nil }
 func (c *MockClient) Receive() ([]byte, error) { return nil, nil }
 func (c *MockClient) CloseConnection() error   { return nil }
 func (c *MockClient) Connect() error           { return nil }
+func (c *MockClient) IsAuthenticated() bool    { return true }
 
 func TestBaseWithClient(t *testing.T) {
 	mockWsmanMessageCreator := NewWSManMessageCreator("test-uri")
