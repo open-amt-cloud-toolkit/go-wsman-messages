@@ -91,7 +91,10 @@ func NewWsman(cp Parameters) *Target {
 
 	if cp.Transport == nil {
 		res.Transport = &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: cp.SelfSignedAllowed},
+			MaxIdleConns:      10,
+			IdleConnTimeout:   30 * time.Second,
+			DisableKeepAlives: true,
+			TLSClientConfig:   &tls.Config{InsecureSkipVerify: cp.SelfSignedAllowed},
 		}
 	} else {
 		res.Transport = cp.Transport
