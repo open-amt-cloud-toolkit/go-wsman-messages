@@ -7,6 +7,7 @@ package physical
 
 import (
 	"encoding/xml"
+	"errors"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
@@ -45,21 +46,36 @@ func (physicalPackage Package) Enumerate() (response Response, err error) {
 
 // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
 func (physicalPackage Package) Pull(enumerationContext string) (response Response, err error) {
+	loopMax := 3 // arbitrary number
+	loopCnt := 0
 	response = Response{
 		Message: &client.Message{
 			XMLInput: physicalPackage.base.Pull(enumerationContext),
 		},
 	}
 
-	err = physicalPackage.base.Execute(response.Message)
-	if err != nil {
-		return
+	for {
+		err = physicalPackage.base.Execute(response.Message)
+		if err != nil {
+			return response, err
+		}
+
+		err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+		if err != nil {
+			return response, err
+		}
+
+		if response.Body.PullResponse.EndOfSequence.Local != "" {
+			break
+		}
+
+		loopCnt++
+		if loopCnt == loopMax { // safety valve for bad fw. i.e. no "EndOfSequence" found while pulling
+			err = errors.New("CIM_PhysicalPackage.Pull() - maximum pull attempts exceeded")
+
+			break
+		}
 	}
 
-	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
-	if err != nil {
-		return
-	}
-
-	return
+	return response, err
 }

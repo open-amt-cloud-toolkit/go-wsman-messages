@@ -33,6 +33,7 @@
                     <h:Version>K47180-402</h:Version>
                 </h:CIM_Card>
             </g:Items>
+            <g:EndOfSequence></g:EndOfSequence>
         </g:PullResponse>
     </a:Body>
 </a:Envelope>

@@ -71,7 +71,7 @@ func TestPositiveCIMPackage(t *testing.T) {
 						EnumerateResponse: common.EnumerateResponse{
 							EnumerationContext: "D7020000-0000-0000-0000-000000000000",
 						},
-						PhysicalPackage: []card.PackageResponse{
+						Card: []card.PackageResponse{
 							{
 								XMLName:           xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Card", Local: "CIM_Card"},
 								CanBeFRUed:        true,
@@ -86,6 +86,9 @@ func TestPositiveCIMPackage(t *testing.T) {
 								Version:           "K47180-402",
 							},
 						},
+						PhysicalPackage: nil,
+						Chassis:         nil,
+						EndOfSequence:   xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "EndOfSequence"},
 					},
 				},
 			},
@@ -158,7 +161,7 @@ func TestNegativeCIMPackage(t *testing.T) {
 						EnumerateResponse: common.EnumerateResponse{
 							EnumerationContext: "D7020000-0000-0000-0000-000000000000",
 						},
-						PhysicalPackage: []card.PackageResponse{
+						Card: []card.PackageResponse{
 							{
 								XMLName:           xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Card", Local: "CIM_Card"},
 								CanBeFRUed:        true,
@@ -173,6 +176,9 @@ func TestNegativeCIMPackage(t *testing.T) {
 								Version:           "K47180-402",
 							},
 						},
+						PhysicalPackage: nil,
+						Chassis:         nil,
+						EndOfSequence:   xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "EndOfSequence"},
 					},
 				},
 			},
