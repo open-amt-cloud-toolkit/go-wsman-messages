@@ -104,18 +104,18 @@ type (
 		H                               string   `xml:"xmlns:h,attr"`
 		ElementName                     string   `xml:"h:ElementName,omitempty"`
 		InstanceID                      string   `xml:"h:InstanceID,omitempty"`
-		AuthenticationProtocol          int      `xml:"h:AuthenticationProtocol"`
+		AuthenticationProtocol          *int     `xml:"h:AuthenticationProtocol,omitempty"`
 		RoamingIdentity                 string   `xml:"h:RoamingIdentity,omitempty"`
 		ServerCertificateName           string   `xml:"h:ServerCertificateName,omitempty"`
-		ServerCertificateNameComparison int      `xml:"h:ServerCertificateNameComparison,omitempty"`
+		ServerCertificateNameComparison *int     `xml:"h:ServerCertificateNameComparison,omitempty"`
 		Username                        string   `xml:"h:Username,omitempty"`
 		Password                        string   `xml:"h:Password,omitempty"`
 		Domain                          string   `xml:"h:Domain,omitempty"`
 		ProtectedAccessCredential       string   `xml:"h:ProtectedAccessCredential,omitempty"`
 		PACPassword                     string   `xml:"h:PACPassword,omitempty"`
 		PSK                             string   `xml:"h:PSK,omitempty"`
-		Enabled                         int      `xml:"h:Enabled,omitempty"`
-		PxeTimeout                      int      `xml:"h:PxeTimeout,omitempty"`
+		Enabled                         *int     `xml:"h:Enabled,omitempty"`
+		PxeTimeout                      *int     `xml:"h:PxeTimeout,omitempty"`
 		AvailableInS0                   bool     `xml:"h:AvailableInS0,omitempty"`
 	}
 	Certificate struct {

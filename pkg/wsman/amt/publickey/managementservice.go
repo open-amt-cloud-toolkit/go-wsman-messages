@@ -322,5 +322,7 @@ func (managementService ManagementService) AddKey(keyBlob string) (response Resp
 		return response, err
 	}
 
-	return response, nil
+	err = checkReturnValue(int(response.Body.AddKey_OUTPUT.ReturnValue), "Client Certificate")
+
+	return response, err
 }
