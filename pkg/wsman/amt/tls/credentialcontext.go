@@ -140,3 +140,26 @@ func (credentialContext CredentialContext) Create(certHandle string) (response R
 
 	return
 }
+
+// Put will update the certificate when TLS is enabled.
+func (credentialContext CredentialContext) Put(certHandle string) (response Response, err error) {
+	header := credentialContext.base.WSManMessageCreator.CreateHeader(message.BaseActionsPut, AMTTLSCredentialContext, nil, "", "")
+	body := fmt.Sprintf(`<Body><h:AMT_TLSCredentialContext xmlns:h="%sAMT_TLSCredentialContext"><h:ElementInContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementInContext><h:ElementProvidingContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_TLSProtocolEndpointCollection</w:ResourceURI><w:SelectorSet><w:Selector Name="ElementName">TLSProtocolEndpointInstances Collection</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementProvidingContext></h:AMT_TLSCredentialContext></Body>`, credentialContext.base.WSManMessageCreator.ResourceURIBase, credentialContext.base.WSManMessageCreator.ResourceURIBase, certHandle, credentialContext.base.WSManMessageCreator.ResourceURIBase)
+	response = Response{
+		Message: &client.Message{
+			XMLInput: credentialContext.base.WSManMessageCreator.CreateXML(header, body),
+		},
+	}
+
+	err = credentialContext.base.Execute(response.Message)
+	if err != nil {
+		return response, err
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return response, err
+	}
+
+	return response, err
+}
