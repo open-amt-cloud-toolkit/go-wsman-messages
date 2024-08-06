@@ -7,6 +7,7 @@ package tls
 
 import (
 	"encoding/xml"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -16,13 +17,178 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
+var createCredentialContextResponse = CredentialContextCreateResponse{
+	XMLName: xml.Name{
+		Space: "http://schemas.xmlsoap.org/ws/2004/09/transfer",
+		Local: "ResourceCreated",
+	},
+	Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
+	ReferenceParameters: ReferenceParametersResponse{
+		XMLName: xml.Name{
+			Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing",
+			Local: "ReferenceParameters",
+		},
+		ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSCredentialContext",
+		SelectorSet: SelectorSetResponse{
+			XMLName: xml.Name{
+				Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+				Local: "SelectorSet",
+			},
+			Selectors: []SelectorResponse{
+				{
+					XMLName: xml.Name{
+						Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+						Local: "Selector",
+					},
+					Name: "ElementInContext",
+					EndpointReference: EndpointReferenceResponse{
+						XMLName: xml.Name{
+							Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing",
+							Local: "EndpointReference",
+						},
+						Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
+						ReferenceParameters: ReferenceParametersResponse{
+							XMLName: xml.Name{
+								Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing",
+								Local: "ReferenceParameters",
+							},
+							ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
+							SelectorSet: SelectorSetResponse{
+								XMLName: xml.Name{
+									Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+									Local: "SelectorSet",
+								},
+								Selectors: []SelectorResponse{
+									{
+										XMLName: xml.Name{
+											Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+											Local: "Selector",
+										},
+										Name: "InstanceID",
+										Text: "",
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					XMLName: xml.Name{
+						Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+						Local: "Selector",
+					},
+					Name: "ElementProvidingContext",
+					EndpointReference: EndpointReferenceResponse{
+						XMLName: xml.Name{
+							Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing",
+							Local: "EndpointReference",
+						},
+						Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
+						ReferenceParameters: ReferenceParametersResponse{
+							XMLName: xml.Name{
+								Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing",
+								Local: "ReferenceParameters",
+							},
+							ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSProtocolEndpointCollection",
+							SelectorSet: SelectorSetResponse{
+								XMLName: xml.Name{
+									Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+									Local: "SelectorSet",
+								},
+								Selectors: []SelectorResponse{
+									{
+										XMLName: xml.Name{
+											Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+											Local: "Selector",
+										},
+										Name: "ElementName",
+										Text: "",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+}
+
+var putCredentialContextResponse = CredentialContextResponse{
+	XMLName: xml.Name{
+		Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSCredentialContext",
+		Local: "AMT_TLSCredentialContext",
+	},
+	ElementInContext: ElementInContextResponse{
+		XMLName: xml.Name{
+			Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSCredentialContext",
+			Local: "ElementInContext",
+		},
+		Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
+		ReferenceParameters: ReferenceParametersResponse{
+			XMLName: xml.Name{
+				Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing",
+				Local: "ReferenceParameters",
+			},
+			ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate",
+			SelectorSet: SelectorSetResponse{
+				XMLName: xml.Name{
+					Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+					Local: "SelectorSet",
+				},
+				Selectors: []SelectorResponse{
+					{
+						XMLName: xml.Name{
+							Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+							Local: "Selector",
+						},
+						Name: "InstanceID",
+						Text: "",
+					},
+				},
+			},
+		},
+	},
+	ElementProvidingContext: ElementProvidingContextResponse{
+		XMLName: xml.Name{
+			Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSCredentialContext",
+			Local: "ElementProvidingContext",
+		},
+		Address: "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous",
+		ReferenceParameters: ReferenceParametersResponse{
+			XMLName: xml.Name{
+				Space: "http://schemas.xmlsoap.org/ws/2004/08/addressing",
+				Local: "ReferenceParameters",
+			},
+			ResourceURI: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSProtocolEndpointCollection",
+			SelectorSet: SelectorSetResponse{
+				XMLName: xml.Name{
+					Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+					Local: "SelectorSet",
+				},
+				Selectors: []SelectorResponse{
+					{
+						XMLName: xml.Name{
+							Space: "http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd",
+							Local: "Selector",
+						},
+						Name: "ElementName",
+						Text: "",
+					},
+				},
+			},
+		},
+	},
+}
+
 func TestJson(t *testing.T) {
 	response := Response{
 		Body: Body{
-			CredentialContextGetResponse: CredentialContextResponse{},
+			CredentialContextGetResponse:    CredentialContextResponse{},
+			CredentialContextCreateResponse: createCredentialContextResponse,
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"SettingDataGetAndPutResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"MutualAuthentication\":false,\"Enabled\":false,\"TrustedCN\":null,\"AcceptNonSecureConnections\":false,\"NonSecureConnectionsSupported\":null},\"CredentialContextGetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementInContext\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Address\":\"\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ResourceURI\":\"\",\"SelectorSet\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Selectors\":null}}},\"ElementProvidingContext\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Address\":\"\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ResourceURI\":\"\",\"SelectorSet\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Selectors\":null}}}},\"ProtocolEndpointCollectionGetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"SettingDataItems\":null,\"ProtocolEndpointCollectionItems\":null,\"CredentialContextItems\":null}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"SettingDataGetAndPutResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"MutualAuthentication\":false,\"Enabled\":false,\"TrustedCN\":null,\"AcceptNonSecureConnections\":false,\"NonSecureConnectionsSupported\":null},\"CredentialContextGetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementInContext\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Address\":\"\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ResourceURI\":\"\",\"SelectorSet\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Selectors\":null}}},\"ElementProvidingContext\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Address\":\"\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ResourceURI\":\"\",\"SelectorSet\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Selectors\":null}}}},\"CredentialContextCreateResponse\":{\"XMLName\":{\"Space\":\"http://schemas.xmlsoap.org/ws/2004/09/transfer\",\"Local\":\"ResourceCreated\"},\"Address\":\"http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"http://schemas.xmlsoap.org/ws/2004/08/addressing\",\"Local\":\"ReferenceParameters\"},\"ResourceURI\":\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSCredentialContext\",\"SelectorSet\":{\"XMLName\":{\"Space\":\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\",\"Local\":\"SelectorSet\"},\"Selectors\":[{\"XMLName\":{\"Space\":\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\",\"Local\":\"Selector\"},\"Name\":\"ElementInContext\",\"Text\":\"\",\"EndpointReference\":{\"XMLName\":{\"Space\":\"http://schemas.xmlsoap.org/ws/2004/08/addressing\",\"Local\":\"EndpointReference\"},\"Address\":\"http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"http://schemas.xmlsoap.org/ws/2004/08/addressing\",\"Local\":\"ReferenceParameters\"},\"ResourceURI\":\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate\",\"SelectorSet\":{\"XMLName\":{\"Space\":\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\",\"Local\":\"SelectorSet\"},\"Selectors\":[{\"XMLName\":{\"Space\":\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\",\"Local\":\"Selector\"},\"Name\":\"InstanceID\",\"Text\":\"\",\"EndpointReference\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Address\":\"\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ResourceURI\":\"\",\"SelectorSet\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Selectors\":null}}}}]}}}},{\"XMLName\":{\"Space\":\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\",\"Local\":\"Selector\"},\"Name\":\"ElementProvidingContext\",\"Text\":\"\",\"EndpointReference\":{\"XMLName\":{\"Space\":\"http://schemas.xmlsoap.org/ws/2004/08/addressing\",\"Local\":\"EndpointReference\"},\"Address\":\"http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"http://schemas.xmlsoap.org/ws/2004/08/addressing\",\"Local\":\"ReferenceParameters\"},\"ResourceURI\":\"http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSProtocolEndpointCollection\",\"SelectorSet\":{\"XMLName\":{\"Space\":\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\",\"Local\":\"SelectorSet\"},\"Selectors\":[{\"XMLName\":{\"Space\":\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\",\"Local\":\"Selector\"},\"Name\":\"ElementName\",\"Text\":\"\",\"EndpointReference\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Address\":\"\",\"ReferenceParameters\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ResourceURI\":\"\",\"SelectorSet\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Selectors\":null}}}}]}}}}]}}},\"ProtocolEndpointCollectionGetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"SettingDataItems\":null,\"ProtocolEndpointCollectionItems\":null,\"CredentialContextItems\":null}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -30,10 +196,11 @@ func TestJson(t *testing.T) {
 func TestYaml(t *testing.T) {
 	response := Response{
 		Body: Body{
-			CredentialContextGetResponse: CredentialContextResponse{},
+			CredentialContextGetResponse:    CredentialContextResponse{},
+			CredentialContextCreateResponse: createCredentialContextResponse,
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nsettingdatagetandputresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    mutualauthentication: false\n    enabled: false\n    trustedcn: []\n    acceptnonsecureconnections: false\n    nonsecureconnectionssupported: null\ncredentialcontextgetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementincontext:\n        xmlname:\n            space: \"\"\n            local: \"\"\n        address: \"\"\n        referenceparameters:\n            xmlname:\n                space: \"\"\n                local: \"\"\n            resourceuri: \"\"\n            selectorset:\n                xmlname:\n                    space: \"\"\n                    local: \"\"\n                selectors: []\n    elementprovidingcontext:\n        xmlname:\n            space: \"\"\n            local: \"\"\n        address: \"\"\n        referenceparameters:\n            xmlname:\n                space: \"\"\n                local: \"\"\n            resourceuri: \"\"\n            selectorset:\n                xmlname:\n                    space: \"\"\n                    local: \"\"\n                selectors: []\nprotocolendpointcollectiongetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    settingdataitems: []\n    protocolendpointcollectionitems: []\n    credentialcontextitems: []\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\nsettingdatagetandputresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    mutualauthentication: false\n    enabled: false\n    trustedcn: []\n    acceptnonsecureconnections: false\n    nonsecureconnectionssupported: null\ncredentialcontextgetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementincontext:\n        xmlname:\n            space: \"\"\n            local: \"\"\n        address: \"\"\n        referenceparameters:\n            xmlname:\n                space: \"\"\n                local: \"\"\n            resourceuri: \"\"\n            selectorset:\n                xmlname:\n                    space: \"\"\n                    local: \"\"\n                selectors: []\n    elementprovidingcontext:\n        xmlname:\n            space: \"\"\n            local: \"\"\n        address: \"\"\n        referenceparameters:\n            xmlname:\n                space: \"\"\n                local: \"\"\n            resourceuri: \"\"\n            selectorset:\n                xmlname:\n                    space: \"\"\n                    local: \"\"\n                selectors: []\ncredentialcontextcreateresponse:\n    xmlname:\n        space: http://schemas.xmlsoap.org/ws/2004/09/transfer\n        local: ResourceCreated\n    address: http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous\n    referenceparameters:\n        xmlname:\n            space: http://schemas.xmlsoap.org/ws/2004/08/addressing\n            local: ReferenceParameters\n        resourceuri: http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSCredentialContext\n        selectorset:\n            xmlname:\n                space: http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\n                local: SelectorSet\n            selectors:\n                - xmlname:\n                    space: http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\n                    local: Selector\n                  name: ElementInContext\n                  text: \"\"\n                  endpointreference:\n                    xmlname:\n                        space: http://schemas.xmlsoap.org/ws/2004/08/addressing\n                        local: EndpointReference\n                    address: http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous\n                    referenceparameters:\n                        xmlname:\n                            space: http://schemas.xmlsoap.org/ws/2004/08/addressing\n                            local: ReferenceParameters\n                        resourceuri: http://intel.com/wbem/wscim/1/amt-schema/1/AMT_PublicKeyCertificate\n                        selectorset:\n                            xmlname:\n                                space: http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\n                                local: SelectorSet\n                            selectors:\n                                - xmlname:\n                                    space: http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\n                                    local: Selector\n                                  name: InstanceID\n                                  text: \"\"\n                                  endpointreference:\n                                    xmlname:\n                                        space: \"\"\n                                        local: \"\"\n                                    address: \"\"\n                                    referenceparameters:\n                                        xmlname:\n                                            space: \"\"\n                                            local: \"\"\n                                        resourceuri: \"\"\n                                        selectorset:\n                                            xmlname:\n                                                space: \"\"\n                                                local: \"\"\n                                            selectors: []\n                - xmlname:\n                    space: http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\n                    local: Selector\n                  name: ElementProvidingContext\n                  text: \"\"\n                  endpointreference:\n                    xmlname:\n                        space: http://schemas.xmlsoap.org/ws/2004/08/addressing\n                        local: EndpointReference\n                    address: http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous\n                    referenceparameters:\n                        xmlname:\n                            space: http://schemas.xmlsoap.org/ws/2004/08/addressing\n                            local: ReferenceParameters\n                        resourceuri: http://intel.com/wbem/wscim/1/amt-schema/1/AMT_TLSProtocolEndpointCollection\n                        selectorset:\n                            xmlname:\n                                space: http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\n                                local: SelectorSet\n                            selectors:\n                                - xmlname:\n                                    space: http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\n                                    local: Selector\n                                  name: ElementName\n                                  text: \"\"\n                                  endpointreference:\n                                    xmlname:\n                                        space: \"\"\n                                        local: \"\"\n                                    address: \"\"\n                                    referenceparameters:\n                                        xmlname:\n                                            space: \"\"\n                                            local: \"\"\n                                        resourceuri: \"\"\n                                        selectorset:\n                                            xmlname:\n                                                space: \"\"\n                                                local: \"\"\n                                            selectors: []\nprotocolendpointcollectiongetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    settingdataitems: []\n    protocolendpointcollectionitems: []\n    credentialcontextitems: []\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
@@ -124,16 +291,42 @@ func TestPositiveAMT_TLSCredentialContext(t *testing.T) {
 			// Create
 			// {
 			// 	"should create a valid AMT_TLSCredentialContext Create wsman message",
-			// 	AMT_TLSCredentialContext,
-			// 	wsmantesting.CREATE,
+			// 	AMTTLSCredentialContext,
+			// 	wsmantesting.Create,
+			// 	fmt.Sprintf(`<h:AMT_TLSCredentialContext xmlns:h="%sAMT_TLSCredentialContext"><h:ElementInContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementInContext><h:ElementProvidingContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_TLSProtocolEndpointCollection</w:ResourceURI><w:SelectorSet><w:Selector Name="ElementName">TLSProtocolEndpointInstances Collection</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementProvidingContext></h:AMT_TLSCredentialContext>`, "http://intel.com/wbem/wscim/1/amt-schema/1/", "http://intel.com/wbem/wscim/1/amt-schema/1/", "testCertificate", "http://intel.com/wbem/wscim/1/amt-schema/1/"),
 			// 	"",
-			// 	"", //logrus.Sprintf(`<Body><h:AMT_TLSCredentialContext xmlns:h="%sAMT_TLSCredentialContext"><h:ElementInContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementInContext><h:ElementProvidingContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_TLSProtocolEndpointCollection</w:ResourceURI><w:SelectorSet><w:Selector Name="ElementName">TLSProtocolEndpointInstances Collection</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementProvidingContext></h:AMT_TLSCredentialContext></Body>`, credentialContext.base.WSManMessageCreator.ResourceURIBase, credentialContext.base.WSManMessageCreator.ResourceURIBase, certHandle, credentialContext.base.WSManMessageCreator.ResourceURIBase),
 			// 	func() (Response, error) {
-			// 		client.CurrentMessage = "Create"
-			// 		return elementUnderTest.Create("test")
+			// 		client.CurrentMessage = wsmantesting.CurrentMessageCreate
+			// 		return elementUnderTest.Create("testCertificate")
 			// 	},
-			// 	Body{},
+			// 	Body{
+			// 		XMLName: xml.Name{
+			// 			Space: "http://www.w3.org/2003/05/soap-envelope",
+			// 			Local: "Body",
+			// 		},
+			// 		CredentialContextCreateResponse: createCredentialContextResponse,
+			// 	},
 			// },
+			// Put
+			{
+				"should create a valid AMT_TLSCredentialContext Put wsman message",
+				AMTTLSCredentialContext,
+				wsmantesting.Put,
+				fmt.Sprintf(`<h:AMT_TLSCredentialContext xmlns:h="%sAMT_TLSCredentialContext"><h:ElementInContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_PublicKeyCertificate</w:ResourceURI><w:SelectorSet><w:Selector Name="InstanceID">%s</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementInContext><h:ElementProvidingContext><a:Address>/wsman</a:Address><a:ReferenceParameters><w:ResourceURI>%sAMT_TLSProtocolEndpointCollection</w:ResourceURI><w:SelectorSet><w:Selector Name="ElementName">TLSProtocolEndpointInstances Collection</w:Selector></w:SelectorSet></a:ReferenceParameters></h:ElementProvidingContext></h:AMT_TLSCredentialContext>`, "http://intel.com/wbem/wscim/1/amt-schema/1/", "http://intel.com/wbem/wscim/1/amt-schema/1/", "testCertificate", "http://intel.com/wbem/wscim/1/amt-schema/1/"),
+				"",
+				func() (Response, error) {
+					client.CurrentMessage = wsmantesting.CurrentMessagePut
+
+					return elementUnderTest.Put("testCertificate")
+				},
+				Body{
+					XMLName: xml.Name{
+						Space: "http://www.w3.org/2003/05/soap-envelope",
+						Local: "Body",
+					},
+					CredentialContextGetResponse: putCredentialContextResponse,
+				},
+			},
 		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {

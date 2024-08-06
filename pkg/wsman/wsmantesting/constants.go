@@ -44,6 +44,7 @@ const (
 	CurrentMessagePull      = "Pull"
 	CurrentMessageGet       = "Get"
 	CurrentMessagePut       = "Put"
+	CurrentMessageCreate    = "Create"
 	CurrentMessageDelete    = "Delete"
 	CurrentMessageError     = "Error"
 )
