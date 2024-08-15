@@ -1,54 +1,56 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<a:Envelope xmlns:a="http://www.w3.org/2003/05/soap-envelope"
-    xmlns:b="http://schemas.xmlsoap.org/ws/2004/08/addressing"
-    xmlns:c="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"
-    xmlns:d="http://schemas.xmlsoap.org/ws/2005/02/trust"
-    xmlns:e="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
-    xmlns:f="http://schemas.dmtf.org/wbem/wsman/1/cimbinding.xsd"
-    xmlns:g="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_BootSettingData"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <a:Header>
-        <b:To>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:To>
-        <b:RelatesTo>5</b:RelatesTo>
-        <b:Action a:mustUnderstand="true">http://schemas.xmlsoap.org/ws/2004/09/transfer/PutResponse</b:Action>
-        <b:MessageID>uuid:00000000-8086-8086-8086-0000001BBCE5</b:MessageID>
-        <c:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_BootSettingData</c:ResourceURI>
-    </a:Header>
-    <a:Body>
-        <g:AMT_BootSettingData>
-            <g:BIOSLastStatus>2</g:BIOSLastStatus>
-            <g:BIOSLastStatus>0</g:BIOSLastStatus>
-            <g:BIOSPause>false</g:BIOSPause>
-            <g:BIOSSetup>false</g:BIOSSetup>
-            <g:BootMediaIndex>0</g:BootMediaIndex>
-            <g:BootguardStatus>127</g:BootguardStatus>
-            <g:ConfigurationDataReset>false</g:ConfigurationDataReset>
-            <g:ElementName>Intel(r) AMT Boot Configuration Settings</g:ElementName>
-            <g:EnforceSecureBoot>false</g:EnforceSecureBoot>
-            <g:FirmwareVerbosity>0</g:FirmwareVerbosity>
-            <g:ForcedProgressEvents>false</g:ForcedProgressEvents>
-            <g:IDERBootDevice>0</g:IDERBootDevice>
-            <g:InstanceID>Intel(r) AMT:BootSettingData 0</g:InstanceID>
-            <g:LockKeyboard>false</g:LockKeyboard>
-            <g:LockPowerButton>false</g:LockPowerButton>
-            <g:LockResetButton>false</g:LockResetButton>
-            <g:LockSleepButton>false</g:LockSleepButton>
-            <g:OptionsCleared>true</g:OptionsCleared>
-            <g:OwningEntity>Intel(r) AMT</g:OwningEntity>
-            <g:PlatformErase>false</g:PlatformErase>
-            <g:RPEEnabled>true</g:RPEEnabled>
-            <g:RSEPassword></g:RSEPassword>
-            <g:ReflashBIOS>false</g:ReflashBIOS>
-            <g:SecureBootControlEnabled>true</g:SecureBootControlEnabled>
-            <g:SecureErase>false</g:SecureErase>
-            <g:UEFIHTTPSBootEnabled>true</g:UEFIHTTPSBootEnabled>
-            <g:UEFILocalPBABootEnabled>true</g:UEFILocalPBABootEnabled>
-            <g:UefiBootNumberOfParams>0</g:UefiBootNumberOfParams>
-            <g:UseIDER>false</g:UseIDER>
-            <g:UseSOL>false</g:UseSOL>
-            <g:UseSafeMode>false</g:UseSafeMode>
-            <g:UserPasswordBypass>false</g:UserPasswordBypass>
-            <g:WinREBootEnabled>true</g:WinREBootEnabled>
-        </g:AMT_BootSettingData>
-    </a:Body>
-</a:Envelope>
+<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:a="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+	xmlns:w="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd"
+	xmlns="http://www.w3.org/2003/05/soap-envelope">
+	<Header>
+		<a:Action>http://schemas.xmlsoap.org/ws/2004/09/transfer/Put</a:Action>
+		<a:To>/wsman</a:To>
+		<w:ResourceURI>http://intel.com/wbem/wscim/1/amt-schema/1/AMT_BootSettingData</w:ResourceURI>
+		<a:MessageID>1</a:MessageID>
+		<a:ReplyTo>
+			<a:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</a:Address>
+		</a:ReplyTo>
+		<w:OperationTimeout>PT60S</w:OperationTimeout>
+	</Header>
+	<Body>
+		<h:AMT_BootSettingData
+			xmlns:h="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_BootSettingData">
+			<h:BIOSLastStatus>2</h:BIOSLastStatus>
+			<h:BIOSLastStatus>0</h:BIOSLastStatus>
+			<h:BIOSPause>false</h:BIOSPause>
+			<h:BIOSSetup>false</h:BIOSSetup>
+			<h:BootMediaIndex>0</h:BootMediaIndex>
+			<h:BootguardStatus>127</h:BootguardStatus>
+			<h:ConfigurationDataReset>false</h:ConfigurationDataReset>
+			<h:ElementName>Intel(r) AMT Boot Configuration Settings</h:ElementName>
+			<h:EnforceSecureBoot>false</h:EnforceSecureBoot>
+			<h:FirmwareVerbosity>0</h:FirmwareVerbosity>
+			<h:ForcedProgressEvents>false</h:ForcedProgressEvents>
+			<h:IDERBootDevice>0</h:IDERBootDevice>
+			<h:InstanceID>Intel(r) AMT:BootSettingData 0</h:InstanceID>
+			<h:LockKeyboard>false</h:LockKeyboard>
+			<h:LockPowerButton>false</h:LockPowerButton>
+			<h:LockResetButton>false</h:LockResetButton>
+			<h:LockSleepButton>false</h:LockSleepButton>
+			<h:OptionsCleared>true</h:OptionsCleared>
+			<h:OwningEntity>Intel(r) AMT</h:OwningEntity>
+			<h:PlatformErase>false</h:PlatformErase>
+			<h:RPEEnabled>false</h:RPEEnabled>
+			<h:RSEPassword></h:RSEPassword>
+			<h:ReflashBIOS>false</h:ReflashBIOS>
+			<h:SecureBootControlEnabled>false</h:SecureBootControlEnabled>
+			<h:SecureErase>false</h:SecureErase>
+			<h:UEFIHTTPSBootEnabled>false</h:UEFIHTTPSBootEnabled>
+			<h:UEFILocalPBABootEnabled>false</h:UEFILocalPBABootEnabled>
+			<h:UefiBootNumberOfParams>0</h:UefiBootNumberOfParams>
+			<h:UseIDER>false</h:UseIDER>
+			<h:UseSOL>false</h:UseSOL>
+			<h:UseSafeMode>false</h:UseSafeMode>
+			<h:UserPasswordBypass>false</h:UserPasswordBypass>
+			<h:WinREBootEnabled>false</h:WinREBootEnabled>
+		</h:AMT_BootSettingData>
+	</Body>
+</Envelope>
