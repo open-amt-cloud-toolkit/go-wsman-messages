@@ -7,6 +7,7 @@ package boot
 
 import (
 	"encoding/xml"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -15,6 +16,41 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
+
+var boot_settings = BootSettingDataRequest{
+	BIOSLastStatus:           []int{2, 0},
+	BIOSPause:                false,
+	BIOSSetup:                false,
+	BootMediaIndex:           0,
+	BootguardStatus:          127,
+	ConfigurationDataReset:   false,
+	ElementName:              "Intel(r) AMT Boot Configuration Settings",
+	EnforceSecureBoot:        false,
+	FirmwareVerbosity:        0,
+	ForcedProgressEvents:     false,
+	IDERBootDevice:           0,
+	InstanceID:               "Intel(r) AMT:BootSettingData 0",
+	LockKeyboard:             false,
+	LockPowerButton:          false,
+	LockResetButton:          false,
+	LockSleepButton:          false,
+	OptionsCleared:           true,
+	OwningEntity:             "Intel(r) AMT",
+	PlatformErase:            false,
+	RPEEnabled:               false,
+	RSEPassword:              "",
+	ReflashBIOS:              false,
+	SecureBootControlEnabled: false,
+	SecureErase:              false,
+	UEFIHTTPSBootEnabled:     false,
+	UEFILocalPBABootEnabled:  false,
+	UefiBootNumberOfParams:   0,
+	UseIDER:                  false,
+	UseSOL:                   false,
+	UseSafeMode:              false,
+	UserPasswordBypass:       false,
+	WinREBootEnabled:         false,
+}
 
 func TestPositiveAMT_BootSettingData(t *testing.T) {
 	messageID := 0
@@ -77,7 +113,7 @@ func TestPositiveAMT_BootSettingData(t *testing.T) {
 						SecureErase:              false,
 						UEFIHTTPSBootEnabled:     true,
 						UEFILocalPBABootEnabled:  true,
-						UEFIBootNumberOfParams:   0,
+						UefiBootNumberOfParams:   0,
 						UseIDER:                  false,
 						UseSOL:                   false,
 						UseSafeMode:              false,
@@ -148,7 +184,7 @@ func TestPositiveAMT_BootSettingData(t *testing.T) {
 								SecureErase:              false,
 								UEFIHTTPSBootEnabled:     true,
 								UEFILocalPBABootEnabled:  true,
-								UEFIBootNumberOfParams:   0,
+								UefiBootNumberOfParams:   0,
 								UseIDER:                  false,
 								UseSOL:                   false,
 								UseSafeMode:              false,
@@ -159,8 +195,59 @@ func TestPositiveAMT_BootSettingData(t *testing.T) {
 					},
 				},
 			},
-		}
+			// PUT
+			{
+				"should create a valid AMT_BootSettingData Put wsman message",
+				AMTBootSettingData,
+				wsmantesting.Put,
+				fmt.Sprintf(
+					`<h:AMT_BootSettingData xmlns:h="%sAMT_BootSettingData"><h:BIOSLastStatus>2</h:BIOSLastStatus><h:BIOSLastStatus>0</h:BIOSLastStatus><h:BIOSPause>false</h:BIOSPause><h:BIOSSetup>false</h:BIOSSetup><h:BootMediaIndex>0</h:BootMediaIndex><h:BootguardStatus>127</h:BootguardStatus><h:ConfigurationDataReset>false</h:ConfigurationDataReset><h:ElementName>Intel(r) AMT Boot Configuration Settings</h:ElementName><h:EnforceSecureBoot>false</h:EnforceSecureBoot><h:FirmwareVerbosity>0</h:FirmwareVerbosity><h:ForcedProgressEvents>false</h:ForcedProgressEvents><h:IDERBootDevice>0</h:IDERBootDevice><h:InstanceID>Intel(r) AMT:BootSettingData 0</h:InstanceID><h:LockKeyboard>false</h:LockKeyboard><h:LockPowerButton>false</h:LockPowerButton><h:LockResetButton>false</h:LockResetButton><h:LockSleepButton>false</h:LockSleepButton><h:OptionsCleared>true</h:OptionsCleared><h:OwningEntity>Intel(r) AMT</h:OwningEntity><h:PlatformErase>false</h:PlatformErase><h:RPEEnabled>false</h:RPEEnabled><h:RSEPassword></h:RSEPassword><h:ReflashBIOS>false</h:ReflashBIOS><h:SecureBootControlEnabled>false</h:SecureBootControlEnabled><h:SecureErase>false</h:SecureErase><h:UEFIHTTPSBootEnabled>false</h:UEFIHTTPSBootEnabled><h:UEFILocalPBABootEnabled>false</h:UEFILocalPBABootEnabled><h:UefiBootNumberOfParams>0</h:UefiBootNumberOfParams><h:UseIDER>false</h:UseIDER><h:UseSOL>false</h:UseSOL><h:UseSafeMode>false</h:UseSafeMode><h:UserPasswordBypass>false</h:UserPasswordBypass><h:WinREBootEnabled>false</h:WinREBootEnabled></h:AMT_BootSettingData>`,
+					"http://intel.com/wbem/wscim/1/amt-schema/1/"),
+				func() (Response, error) {
+					client.CurrentMessage = wsmantesting.CurrentMessagePut
 
+					return elementUnderTest.Put(boot_settings)
+				},
+				Body{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					BootSettingDataGetResponse: BootSettingDataResponse{
+						XMLName:                  xml.Name{Space: "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_BootSettingData", Local: "AMT_BootSettingData"},
+						BIOSLastStatus:           []int{2, 0},
+						BIOSSetup:                false,
+						BIOSPause:                false,
+						BootMediaIndex:           0,
+						BootguardStatus:          127,
+						ConfigurationDataReset:   false,
+						ElementName:              "Intel(r) AMT Boot Configuration Settings",
+						EnforceSecureBoot:        false,
+						FirmwareVerbosity:        0,
+						ForcedProgressEvents:     false,
+						IDERBootDevice:           0,
+						InstanceID:               "Intel(r) AMT:BootSettingData 0",
+						LockKeyboard:             false,
+						LockPowerButton:          false,
+						LockResetButton:          false,
+						LockSleepButton:          false,
+						OptionsCleared:           true,
+						OwningEntity:             "Intel(r) AMT",
+						PlatformErase:            false,
+						RPEEnabled:               false,
+						RSEPassword:              "",
+						ReflashBIOS:              false,
+						SecureBootControlEnabled: false,
+						SecureErase:              false,
+						UEFIHTTPSBootEnabled:     false,
+						UEFILocalPBABootEnabled:  false,
+						UefiBootNumberOfParams:   0,
+						UseIDER:                  false,
+						UseSOL:                   false,
+						UseSafeMode:              false,
+						UserPasswordBypass:       false,
+						WinREBootEnabled:         false,
+					},
+				},
+			},
+		}
 		for _, test := range tests {
 			t.Run(test.name, func(t *testing.T) {
 				expectedXMLInput := wsmantesting.ExpectedResponse(messageID, resourceURIBase, test.method, test.action, "", test.body)
@@ -237,7 +324,7 @@ func TestNegativeAMT_BootSettingData(t *testing.T) {
 						BootguardStatus:          127,
 						BIOSLastStatus:           []int{0, 0},
 						UEFIBootParametersArray:  []int{0},
-						UEFIBootNumberOfParams:   0,
+						UefiBootNumberOfParams:   0,
 						RPEEnabled:               false,
 						PlatformErase:            false,
 					},
@@ -309,7 +396,7 @@ func TestNegativeAMT_BootSettingData(t *testing.T) {
 								BootguardStatus:          127,
 								BIOSLastStatus:           []int{0, 0},
 								UEFIBootParametersArray:  []int{0},
-								UEFIBootNumberOfParams:   0,
+								UefiBootNumberOfParams:   0,
 								RPEEnabled:               false,
 								PlatformErase:            false,
 							},
