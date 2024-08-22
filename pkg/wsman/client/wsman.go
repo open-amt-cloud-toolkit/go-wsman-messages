@@ -171,7 +171,7 @@ func (t *Target) GetServerCertificate() (*tls.Certificate, error) {
 		return nil
 	}
 
-	// Perform a connection to trigger the TLS handshake
+	// undo what we did in the constructor to get the endpoint (host and port)
 	nohttps := strings.Replace(t.endpoint, "https://", "", 1)
 	nohttps = strings.Replace(nohttps, "/wsman", "", 1)
 
