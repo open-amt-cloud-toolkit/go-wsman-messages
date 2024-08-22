@@ -7,13 +7,17 @@ package client
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"crypto/tls"
+	"crypto/x509"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
 	"net"
 	"net/http"
 	"net/url"
+	"strings"
 	"sync"
 	"time"
 
@@ -45,6 +49,7 @@ type WSMan interface {
 	Receive() ([]byte, error)
 	CloseConnection() error
 	IsAuthenticated() bool
+	GetServerCertificate() (*tls.Certificate, error)
 }
 
 // Target is a thin wrapper around http.Target.
@@ -90,12 +95,39 @@ func NewWsman(cp Parameters) *Target {
 	res.Timeout = timeout
 
 	if cp.Transport == nil {
+		// check if pinnedCert is not null and not empty
+		var config *tls.Config
+		if len(cp.PinnedCert) > 0 {
+			config = &tls.Config{
+				InsecureSkipVerify: cp.SelfSignedAllowed,
+				VerifyPeerCertificate: func(rawCerts [][]byte, verifiedChains [][]*x509.Certificate) error {
+					for _, rawCert := range rawCerts {
+						cert, err := x509.ParseCertificate(rawCert)
+						if err != nil {
+							return err
+						}
+
+						// Compare the current certificate with the pinned certificate
+						sha256Fingerprint := sha256.Sum256(cert.Raw)
+						if hex.EncodeToString(sha256Fingerprint[:]) == cp.PinnedCert {
+							return nil // Success: The certificate matches the pinned certificate
+						}
+					}
+
+					return fmt.Errorf("certificate pinning failed")
+				},
+			}
+		} else {
+			config = &tls.Config{InsecureSkipVerify: cp.SelfSignedAllowed}
+		}
+
 		res.Transport = &http.Transport{
 			MaxIdleConns:      10,
 			IdleConnTimeout:   30 * time.Second,
 			DisableKeepAlives: true,
-			TLSClientConfig:   &tls.Config{InsecureSkipVerify: cp.SelfSignedAllowed},
+			TLSClientConfig:   config,
 		}
+
 	} else {
 		res.Transport = cp.Transport
 	}
@@ -109,6 +141,48 @@ func NewWsman(cp Parameters) *Target {
 
 func (t *Target) IsAuthenticated() bool {
 	return t.challenge != nil && t.challenge.Realm != ""
+}
+
+func (t *Target) GetServerCertificate() (*tls.Certificate, error) {
+	httpTransport, ok := t.Transport.(*http.Transport)
+	if !ok {
+		return nil, errors.New("transport does not support TLSClientConfig")
+	}
+
+	tlsConfig := httpTransport.TLSClientConfig
+	if tlsConfig == nil {
+		return nil, errors.New("TLSClientConfig is nil")
+	}
+
+	// Create a custom DialTLS to capture the server certificate
+	capturedCert := &tls.Certificate{}
+	tlsConfig.VerifyPeerCertificate = func(rawCerts [][]byte, verifiedChains [][]*x509.Certificate) error {
+		if len(rawCerts) > 0 {
+			cert, err := x509.ParseCertificate(rawCerts[0])
+			if err != nil {
+				return err
+			}
+			*capturedCert = tls.Certificate{
+				Certificate: [][]byte{cert.Raw},
+			}
+		}
+		return nil
+	}
+
+	// Perform a connection to trigger the TLS handshake
+	nohttps := strings.Replace(t.endpoint, "https://", "", 1)
+	nohttps = strings.Replace(nohttps, "/wsman", "", 1)
+	conn, err := tls.Dial("tcp", nohttps, tlsConfig)
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	if len(capturedCert.Certificate) == 0 {
+		return nil, errors.New("no server certificate captured")
+	}
+
+	return capturedCert, nil
 }
 
 // Post overrides http.Client's Post method.

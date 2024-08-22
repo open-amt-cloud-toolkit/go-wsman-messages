@@ -13,4 +13,5 @@ type Parameters struct {
 	LogAMTMessages    bool
 	Transport         http.RoundTripper
 	IsRedirection     bool
+	PinnedCert        string
 }
