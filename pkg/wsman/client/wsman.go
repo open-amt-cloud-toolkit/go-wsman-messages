@@ -65,6 +65,7 @@ type Target struct {
 	bufferPool         sync.Pool
 	UseTLS             bool
 	InsecureSkipVerify bool
+	PinnedCert         string
 }
 
 const timeout = 10 * time.Second
@@ -127,7 +128,6 @@ func NewWsman(cp Parameters) *Target {
 			DisableKeepAlives: true,
 			TLSClientConfig:   config,
 		}
-
 	} else {
 		res.Transport = cp.Transport
 	}
@@ -162,20 +162,24 @@ func (t *Target) GetServerCertificate() (*tls.Certificate, error) {
 			if err != nil {
 				return err
 			}
+
 			*capturedCert = tls.Certificate{
 				Certificate: [][]byte{cert.Raw},
 			}
 		}
+
 		return nil
 	}
 
 	// Perform a connection to trigger the TLS handshake
 	nohttps := strings.Replace(t.endpoint, "https://", "", 1)
 	nohttps = strings.Replace(nohttps, "/wsman", "", 1)
+
 	conn, err := tls.Dial("tcp", nohttps, tlsConfig)
 	if err != nil {
 		return nil, err
 	}
+
 	defer conn.Close()
 
 	if len(capturedCert.Certificate) == 0 {
