@@ -65,6 +65,7 @@ type Target struct {
 	bufferPool         sync.Pool
 	UseTLS             bool
 	InsecureSkipVerify bool
+	PinnedCert         string
 }
 
 const timeout = 10 * time.Second
@@ -174,7 +175,6 @@ func (t *Target) GetServerCertificate() (*tls.Certificate, error) {
 	nohttps := strings.Replace(t.endpoint, "https://", "", 1)
 	nohttps = strings.Replace(nohttps, "/wsman", "", 1)
 
-	// Perform a connection to trigger the TLS handshake
 	conn, err := tls.Dial("tcp", nohttps, tlsConfig)
 	if err != nil {
 		return nil, err
