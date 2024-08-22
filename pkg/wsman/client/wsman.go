@@ -127,7 +127,6 @@ func NewWsman(cp Parameters) *Target {
 			DisableKeepAlives: true,
 			TLSClientConfig:   config,
 		}
-
 	} else {
 		res.Transport = cp.Transport
 	}
@@ -162,20 +161,25 @@ func (t *Target) GetServerCertificate() (*tls.Certificate, error) {
 			if err != nil {
 				return err
 			}
+
 			*capturedCert = tls.Certificate{
 				Certificate: [][]byte{cert.Raw},
 			}
 		}
+
 		return nil
 	}
 
-	// Perform a connection to trigger the TLS handshake
+	// undo what we did in the constructor to get the endpoint (host and port)
 	nohttps := strings.Replace(t.endpoint, "https://", "", 1)
 	nohttps = strings.Replace(nohttps, "/wsman", "", 1)
+
+	// Perform a connection to trigger the TLS handshake
 	conn, err := tls.Dial("tcp", nohttps, tlsConfig)
 	if err != nil {
 		return nil, err
 	}
+
 	defer conn.Close()
 
 	if len(capturedCert.Certificate) == 0 {
