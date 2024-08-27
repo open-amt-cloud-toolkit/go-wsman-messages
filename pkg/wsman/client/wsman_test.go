@@ -417,3 +417,34 @@ func TestClient_SimpleRountripper(t *testing.T) {
 		t.Error("Failed to detect proper transport")
 	}
 }
+
+func TestClient_GetServerCertificate(t *testing.T) {
+	// Setting up a mock server to simulate a TLS handshake and provide a certificate
+	ts := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer ts.Close()
+
+	cp := Parameters{
+		Target:            ts.URL,
+		Username:          "user",
+		Password:          "password",
+		UseDigest:         false,
+		UseTLS:            true,
+		SelfSignedAllowed: true,
+		LogAMTMessages:    false,
+	}
+
+	client := NewWsman(cp)
+	client.endpoint = ts.URL
+
+	cert, err := client.GetServerCertificate()
+	if err != nil {
+		t.Errorf("Unexpected error during GetServerCertificate: %v", err)
+	}
+
+	// Check that a certificate was indeed captured
+	if cert == nil || len(cert.Certificate) == 0 {
+		t.Error("Expected a server certificate, but none was captured")
+	}
+}
