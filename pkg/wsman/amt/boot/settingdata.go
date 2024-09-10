@@ -11,6 +11,7 @@ import (
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 )
 
 // Instantiates a new Boot Setting Data service.
@@ -147,5 +148,14 @@ func (settingData SettingData) Put(bootSettingData BootSettingDataRequest) (resp
 		return response, err
 	}
 
-	return response, nil
+	checkForErrorResponse := common.ErrorResponse{}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &checkForErrorResponse)
+	if err != nil {
+		return response, err
+	}
+
+	err = common.DecodeAMTError(checkForErrorResponse)
+
+	return response, err
 }

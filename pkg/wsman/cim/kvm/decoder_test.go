@@ -5,7 +5,9 @@
 
 package kvm
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestKVMProtocol_String(t *testing.T) {
 	tests := []struct {
