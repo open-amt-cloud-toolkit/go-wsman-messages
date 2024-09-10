@@ -12,6 +12,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/methods"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 )
 
 // NewKVMRedirectionSAP returns a new instance of the KVMRedirectionSAP struct.
@@ -101,6 +102,15 @@ func (redirectionSAP RedirectionSAP) Pull(enumerationContext string) (response R
 	if err != nil {
 		return
 	}
+
+	checkForErrorResponse := common.ErrorResponse{}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &checkForErrorResponse)
+	if err != nil {
+		return
+	}
+
+	err = common.DecodeAMTError(checkForErrorResponse)
 
 	return
 }

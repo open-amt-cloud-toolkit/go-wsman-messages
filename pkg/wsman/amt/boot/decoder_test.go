@@ -5,7 +5,9 @@
 
 package boot
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestFirmwareVerbosity_String(t *testing.T) {
 	tests := []struct {
