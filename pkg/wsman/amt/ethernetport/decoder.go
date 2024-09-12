@@ -25,10 +25,10 @@ const (
 
 // linkPolicyToString is a map of LinkPolicy values to their string representations.
 var linkPolicyToString = map[LinkPolicy]string{
-	LinkPolicyS0AC: "LinkPolicyS0AC",
-	LinkPolicySxAC: "LinkPolicySxAC",
-	LinkPolicyS0DC: "LinkPolicyS0DC",
-	LinkPolicySxDC: "LinkPolicySxDC",
+	LinkPolicyS0AC: "S0 AC",
+	LinkPolicySxAC: "Sx AC",
+	LinkPolicyS0DC: "S0 DC",
+	LinkPolicySxDC: "Sx DC",
 }
 
 // String returns the string representation of the LinkPolicy value.
@@ -47,8 +47,8 @@ const (
 
 // linkPreferenceToString is a map of LinkPreference values to their string representations.
 var linkPreferenceToString = map[LinkPreference]string{
-	LinkPreferenceME:   "LinkPreferenceME",
-	LinkPreferenceHOST: "LinkPreferenceHOST",
+	LinkPreferenceME:   "Management Engine",
+	LinkPreferenceHOST: "Host",
 }
 
 // String returns the string representation of the LinkPreference value.
@@ -67,8 +67,8 @@ const (
 
 // linkControlToString is a map of LinkControl values to their string representations.
 var linkControlToString = map[LinkControl]string{
-	LinkControlME:   "LinkControlME",
-	LinkControlHOST: "LinkControlHOST",
+	LinkControlME:   "Management Engine",
+	LinkControlHOST: "Host",
 }
 
 // String returns the string representation of the LinkControl value.
@@ -89,10 +89,10 @@ const (
 
 // wlanLinkProtectionLevelToString is a map of WLANLinkProtectionLevel values to their string representations.
 var wlanLinkProtectionLevelToString = map[WLANLinkProtectionLevel]string{
-	WLANLinkProtectionLevelOverride: "WLANLinkProtectionLevelOverride",
-	WLANLinkProtectionLevelNone:     "WLANLinkProtectionLevelNone",
-	WLANLinkProtectionLevelPassive:  "WLANLinkProtectionLevelPassive",
-	WLANLinkProtectionLevelHigh:     "WLANLinkProtectionLevelHigh",
+	WLANLinkProtectionLevelOverride: "Override",
+	WLANLinkProtectionLevelNone:     "None",
+	WLANLinkProtectionLevelPassive:  "Passive",
+	WLANLinkProtectionLevelHigh:     "High",
 }
 
 // String returns the string representation of the WLANLinkProtectionLevel value.
@@ -113,10 +113,10 @@ const (
 
 // PhysicalConnectionTypeToString is a map of PhysicalConnectionType values to their string representations.
 var PhysicalConnectionTypeToString = map[PhysicalConnectionType]string{
-	PhysicalConnectionIntegratedLANNIC:      "PhysicalConnectionIntegratedLANNIC",
-	PhysicalConnectionDiscreteLANNIC:        "PhysicalConnectionDiscreteLANNIC",
-	PhysicalConnectionLANviaThunderboltDock: "PhysicalConnectionLANviaThunderboltDock",
-	PhysicalConnectionWirelessLAN:           "PhysicalConnectionWirelessLAN",
+	PhysicalConnectionIntegratedLANNIC:      "Integrated LAN NIC",
+	PhysicalConnectionDiscreteLANNIC:        "Discrete LAN NIC",
+	PhysicalConnectionLANviaThunderboltDock: "LAN via Thunderbolt Dock",
+	PhysicalConnectionWirelessLAN:           "Wireless LAN",
 }
 
 // String returns the string representation of the PhysicalConnectionType value.
@@ -135,8 +135,8 @@ const (
 
 // PhysicalNicMediumToString is a map of PhysicalNicMedium values to their string representations.
 var PhysicalNicMediumToString = map[PhysicalNicMedium]string{
-	PhysicalNicMediumSMBUS: "PhysicalNicMediumSMBUS",
-	PhysicalNicMediumPCIe:  "PhysicalNicMediumPCIe",
+	PhysicalNicMediumSMBUS: "SMBUS",
+	PhysicalNicMediumPCIe:  "PCIe",
 }
 
 // String returns the string representation of the PhysicalNicMedium value.

@@ -12,10 +12,10 @@ func TestLinkPolicy_String(t *testing.T) {
 		state    LinkPolicy
 		expected string
 	}{
-		{LinkPolicyS0AC, "LinkPolicyS0AC"},
-		{LinkPolicySxAC, "LinkPolicySxAC"},
-		{LinkPolicyS0DC, "LinkPolicyS0DC"},
-		{LinkPolicySxDC, "LinkPolicySxDC"},
+		{LinkPolicyS0AC, "S0 AC"},
+		{LinkPolicySxAC, "Sx AC"},
+		{LinkPolicyS0DC, "S0 DC"},
+		{LinkPolicySxDC, "Sx DC"},
 		{LinkPolicy(999), "Value not found in map"},
 	}
 
@@ -32,8 +32,8 @@ func TestLinkPreference_String(t *testing.T) {
 		state    LinkPreference
 		expected string
 	}{
-		{LinkPreferenceME, "LinkPreferenceME"},
-		{LinkPreferenceHOST, "LinkPreferenceHOST"},
+		{LinkPreferenceME, "Management Engine"},
+		{LinkPreferenceHOST, "Host"},
 		{LinkPreference(999), "Value not found in map"},
 	}
 
@@ -50,8 +50,8 @@ func TestLinkControl_String(t *testing.T) {
 		state    LinkControl
 		expected string
 	}{
-		{LinkControlME, "LinkControlME"},
-		{LinkControlHOST, "LinkControlHOST"},
+		{LinkControlME, "Management Engine"},
+		{LinkControlHOST, "Host"},
 		{LinkControl(999), "Value not found in map"},
 	}
 
@@ -68,10 +68,10 @@ func TestWLANLinkProtectionLevel_String(t *testing.T) {
 		state    WLANLinkProtectionLevel
 		expected string
 	}{
-		{WLANLinkProtectionLevelOverride, "WLANLinkProtectionLevelOverride"},
-		{WLANLinkProtectionLevelNone, "WLANLinkProtectionLevelNone"},
-		{WLANLinkProtectionLevelPassive, "WLANLinkProtectionLevelPassive"},
-		{WLANLinkProtectionLevelHigh, "WLANLinkProtectionLevelHigh"},
+		{WLANLinkProtectionLevelOverride, "Override"},
+		{WLANLinkProtectionLevelNone, "None"},
+		{WLANLinkProtectionLevelPassive, "Passive"},
+		{WLANLinkProtectionLevelHigh, "High"},
 		{WLANLinkProtectionLevel(999), "Value not found in map"},
 	}
 
@@ -88,10 +88,10 @@ func TestPhysicalConnectionType_String(t *testing.T) {
 		state    PhysicalConnectionType
 		expected string
 	}{
-		{PhysicalConnectionIntegratedLANNIC, "PhysicalConnectionIntegratedLANNIC"},
-		{PhysicalConnectionDiscreteLANNIC, "PhysicalConnectionDiscreteLANNIC"},
-		{PhysicalConnectionLANviaThunderboltDock, "PhysicalConnectionLANviaThunderboltDock"},
-		{PhysicalConnectionWirelessLAN, "PhysicalConnectionWirelessLAN"},
+		{PhysicalConnectionIntegratedLANNIC, "Integrated LAN NIC"},
+		{PhysicalConnectionDiscreteLANNIC, "Discrete LAN NIC"},
+		{PhysicalConnectionLANviaThunderboltDock, "LAN via Thunderbolt Dock"},
+		{PhysicalConnectionWirelessLAN, "Wireless LAN"},
 		{PhysicalConnectionType(999), "Value not found in map"},
 	}
 
@@ -108,8 +108,8 @@ func TestPhysicalNicMediumToString(t *testing.T) {
 		state    PhysicalNicMedium
 		expected string
 	}{
-		{PhysicalNicMediumSMBUS, "PhysicalNicMediumSMBUS"},
-		{PhysicalNicMediumPCIe, "PhysicalNicMediumPCIe"},
+		{PhysicalNicMediumSMBUS, "SMBUS"},
+		{PhysicalNicMediumPCIe, "PCIe"},
 		{PhysicalNicMedium(999), "Value not found in map"},
 	}
 
