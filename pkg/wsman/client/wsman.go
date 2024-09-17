@@ -22,6 +22,8 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
+
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/amterror"
 )
 
 const (
@@ -256,21 +258,6 @@ func (t *Target) Post(msg string) (response []byte, err error) {
 
 	defer res.Body.Close()
 
-	if res.StatusCode >= 400 {
-		b, err := io.ReadAll(res.Body)
-		if err != nil {
-			return nil, err
-		}
-
-		if t.logAMTMessages {
-			logrus.Trace(string(b))
-		}
-
-		errPostResponse := errors.New("wsman.Client post received")
-
-		return nil, fmt.Errorf("%w: %v\n%v", errPostResponse, res.Status, string(b))
-	}
-
 	response, err = io.ReadAll(res.Body)
 
 	if t.logAMTMessages {
@@ -279,6 +266,18 @@ func (t *Target) Post(msg string) (response []byte, err error) {
 
 	if err != nil && err.Error() != io.EOF.Error() {
 		return nil, err
+	}
+
+	if res.StatusCode == 400 {
+		amterr := amterror.DecodeAMTErrorString(string(response))
+
+		return nil, amterr
+	}
+
+	if res.StatusCode >= 401 {
+		errPostResponse := errors.New("wsman.Client post received")
+
+		return nil, fmt.Errorf("%w: %v\n%v", errPostResponse, res.Status, string(response))
 	}
 
 	return response, nil

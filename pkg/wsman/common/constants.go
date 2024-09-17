@@ -5,10 +5,6 @@
 
 package common
 
-import (
-	"fmt"
-)
-
 // TODO: Review if this file is still necessary.
 
 const ValueNotFound string = "Value not found in map"
@@ -234,24 +230,4 @@ func ConvertPackageTypeToString(value int) string {
 	}
 
 	return ValueNotFound
-}
-
-func (e *AMTError) Error() string {
-	return fmt.Sprintf("Error [SubCode: %s] Message: %s, Detail: %s", e.SubCode, e.Message, e.Detail)
-}
-
-func NewAMTError(subCode, message, detail string) *AMTError {
-	return &AMTError{
-		SubCode: subCode,
-		Message: message,
-		Detail:  detail,
-	}
-}
-
-func DecodeAMTError(er ErrorResponse) error {
-	if er.Body.Fault.Code.SubCode.Value != "" {
-		return NewAMTError(er.Body.Fault.Code.SubCode.Value, er.Body.Fault.Reason.Text, er.Body.Fault.Detail)
-	}
-
-	return nil
 }
