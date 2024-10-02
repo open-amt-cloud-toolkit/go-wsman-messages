@@ -9,6 +9,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -23,7 +24,7 @@ func TestJson(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Items\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"StartTime\":\"\",\"Interval\":\"\",\"DeleteOnCompletion\":false}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Items\":null},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"StartTime\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Datetime\":\"0001-01-01T00:00:00Z\"},\"Interval\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"Interval\":\"\"},\"DeleteOnCompletion\":false}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -34,7 +35,7 @@ func TestYaml(t *testing.T) {
 			PullResponse: PullResponse{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    items: []\nenumerateresponse:\n    enumerationcontext: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    starttime: \"\"\n    interval: \"\"\n    deleteoncompletion: false\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    items: []\nenumerateresponse:\n    enumerationcontext: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    starttime:\n        xmlname:\n            space: \"\"\n            local: \"\"\n        datetime: 0001-01-01T00:00:00Z\n    interval:\n        xmlname:\n            space: \"\"\n            local: \"\"\n        interval: \"\"\n    deleteoncompletion: false\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
@@ -73,11 +74,17 @@ func TestPositiveIPS_AlarmClockOccurrence(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: AlarmClockOccurrence{
-						XMLName:            xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSAlarmClockOccurrence), Local: IPSAlarmClockOccurrence},
-						ElementName:        "testalarm",
-						InstanceID:         "testalarm",
-						StartTime:          "testdatetime",
-						Interval:           "0",
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSAlarmClockOccurrence), Local: IPSAlarmClockOccurrence},
+						ElementName: "testalarm",
+						InstanceID:  "testalarm",
+						StartTime: StartTime{
+							XMLName:  xml.Name{Space: "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence", Local: "StartTime"},
+							Datetime: time.Time{},
+						},
+						Interval: Interval{
+							XMLName:  xml.Name{Space: "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence", Local: "Interval"},
+							Interval: "",
+						},
 						DeleteOnCompletion: true,
 					},
 				},
@@ -119,11 +126,17 @@ func TestPositiveIPS_AlarmClockOccurrence(t *testing.T) {
 						XMLName: xml.Name{Space: message.XMLPullResponseSpace, Local: "PullResponse"},
 						Items: []AlarmClockOccurrence{
 							{
-								XMLName:            xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSAlarmClockOccurrence), Local: IPSAlarmClockOccurrence},
-								ElementName:        "testalarm",
-								InstanceID:         "testalarm",
-								StartTime:          "testdatetime",
-								Interval:           "0",
+								XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSAlarmClockOccurrence), Local: IPSAlarmClockOccurrence},
+								ElementName: "testalarm",
+								InstanceID:  "testalarm",
+								StartTime: StartTime{
+									XMLName:  xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "StartTime"},
+									Datetime: time.Time{},
+								},
+								Interval: Interval{
+									XMLName:  xml.Name{Space: "http://schemas.xmlsoap.org/ws/2004/09/enumeration", Local: "Interval"},
+									Interval: "",
+								},
 								DeleteOnCompletion: true,
 							},
 						},
@@ -193,11 +206,17 @@ func TestNegativeIPS_AlarmClockOccurrence(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					GetResponse: AlarmClockOccurrence{
-						XMLName:            xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSAlarmClockOccurrence), Local: IPSAlarmClockOccurrence},
-						ElementName:        "testalarm",
-						InstanceID:         "testalarm",
-						StartTime:          "testdatetime",
-						Interval:           "0",
+						XMLName:     xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSAlarmClockOccurrence), Local: IPSAlarmClockOccurrence},
+						ElementName: "testalarm",
+						InstanceID:  "testalarm",
+						StartTime: StartTime{
+							XMLName:  xml.Name{Space: "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence", Local: "StartTime"},
+							Datetime: time.Time{},
+						},
+						Interval: Interval{
+							XMLName:  xml.Name{Space: "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence", Local: "Interval"},
+							Interval: "",
+						},
 						DeleteOnCompletion: true,
 					},
 				},
@@ -242,8 +261,8 @@ func TestNegativeIPS_AlarmClockOccurrence(t *testing.T) {
 								XMLName:            xml.Name{Space: fmt.Sprintf("%s%s", message.IPSSchema, IPSAlarmClockOccurrence), Local: IPSAlarmClockOccurrence},
 								ElementName:        "testalarm",
 								InstanceID:         "testalarm",
-								StartTime:          "testdatetime",
-								Interval:           "0",
+								StartTime:          StartTime{Datetime: time.Time{}},
+								Interval:           Interval{Interval: "0"},
 								DeleteOnCompletion: true,
 							},
 						},

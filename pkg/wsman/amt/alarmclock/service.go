@@ -101,19 +101,19 @@ func (acs Service) AddAlarm(alarmClockOccurrence AlarmClockOccurrence) (response
 
 	var body strings.Builder
 
-	body.WriteString(`<Body><p:AddAlarm_INPUT xmlns:p="`)
+	body.WriteString(`<Body><r:AddAlarm_INPUT xmlns:r="`)
 	body.WriteString(acs.base.WSManMessageCreator.ResourceURIBase)
-	body.WriteString(`AMT_AlarmClockService"><p:AlarmTemplate><s:InstanceID xmlns:s="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence">`)
+	body.WriteString(`AMT_AlarmClockService"><d:AlarmTemplate xmlns:d="http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AlarmClockService" xmlns:s="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence"><s:InstanceID>`)
 	body.WriteString(alarmClockOccurrence.InstanceID)
 	body.WriteString(`</s:InstanceID>`)
 
 	if alarmClockOccurrence.ElementName != "" {
-		body.WriteString(`<s:ElementName xmlns:s="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence">`)
+		body.WriteString(`<s:ElementName>`)
 		body.WriteString(alarmClockOccurrence.ElementName)
 		body.WriteString(`</s:ElementName>`)
 	}
 
-	body.WriteString(`<s:StartTime xmlns:s="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence"><p:Datetime xmlns:p="http://schemas.dmtf.org/wbem/wscim/1/common">`)
+	body.WriteString(`<s:StartTime><p:Datetime xmlns:p="http://schemas.dmtf.org/wbem/wscim/1/common">`)
 	body.WriteString(startTime)
 	body.WriteString(`</p:Datetime></s:StartTime>`)
 
@@ -121,7 +121,7 @@ func (acs Service) AddAlarm(alarmClockOccurrence AlarmClockOccurrence) (response
 	hours := (alarmClockOccurrence.Interval / 60) % 24
 	days := alarmClockOccurrence.Interval / 1440
 
-	body.WriteString(`<s:Interval xmlns:s="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence"><p:Interval xmlns:p="http://schemas.dmtf.org/wbem/wscim/1/common">P`)
+	body.WriteString(`<s:Interval><p:Interval xmlns:p="http://schemas.dmtf.org/wbem/wscim/1/common">P`)
 	body.WriteString(strconv.Itoa(days))
 	body.WriteString("DT")
 	body.WriteString(strconv.Itoa(hours))
@@ -129,9 +129,9 @@ func (acs Service) AddAlarm(alarmClockOccurrence AlarmClockOccurrence) (response
 	body.WriteString(strconv.Itoa(minutes))
 	body.WriteString(`M</p:Interval></s:Interval>`)
 
-	body.WriteString(`<s:DeleteOnCompletion xmlns:s="http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence">`)
+	body.WriteString(`<s:DeleteOnCompletion>`)
 	body.WriteString(strconv.FormatBool(alarmClockOccurrence.DeleteOnCompletion))
-	body.WriteString(`</s:DeleteOnCompletion></p:AlarmTemplate></p:AddAlarm_INPUT></Body>`)
+	body.WriteString(`</s:DeleteOnCompletion></d:AlarmTemplate></r:AddAlarm_INPUT></Body>`)
 
 	response = Response{
 		Message: &client.Message{
