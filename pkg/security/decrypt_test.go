@@ -43,11 +43,24 @@ var (
 					Authentication: "",
 				},
 				Wireless: config.Wireless{
-					Profiles: []string{},
+					Profiles: []config.WirelessProfile{
+						{
+							SSID:                 "SSID",
+							Password:             "Password",
+							AuthenticationMethod: "WPA3 SAE",
+							EncryptionMethod:     "CCMP",
+							Priority:             1,
+							IEEE8021x: config.IEEE8021x{
+								AuthenticationProtocol: 0,
+								Username:               "",
+								Password:               "",
+								ClientCert:             "",
+								PrivateKey:             "",
+								CACert:                 "",
+							},
+						},
+					},
 				},
-			},
-			Authentication: config.Authentication{
-				Profiles: []string{},
 			},
 			TLS: config.TLS{
 				MutualAuthentication: false,

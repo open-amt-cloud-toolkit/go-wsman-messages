@@ -9,7 +9,6 @@ type Configuration struct {
 type RemoteManagement struct {
 	GeneralSettings     GeneralSettings     `yaml:"generalSettings"`
 	Network             Network             `yaml:"network"`
-	Authentication      Authentication      `yaml:"authentication"`
 	TLS                 TLS                 `yaml:"tls"`
 	Redirection         Redirection         `yaml:"redirection"`
 	UserAccounts        UserAccounts        `yaml:"userAccounts"`
@@ -32,23 +31,38 @@ type Network struct {
 }
 
 type Wired struct {
-	DHCPEnabled    bool   `yaml:"dhcpEnabled"`
-	IPSyncEnabled  bool   `yaml:"ipSyncEnabled"`
-	SharedStaticIP bool   `yaml:"sharedStaticIP"`
-	IPAddress      string `yaml:"ipAddress"`
-	SubnetMask     string `yaml:"subnetMask"`
-	DefaultGateway string `yaml:"defaultGateway"`
-	PrimaryDNS     string `yaml:"primaryDNS"`
-	SecondaryDNS   string `yaml:"secondaryDNS"`
-	Authentication string `yaml:"authentication"`
+	DHCPEnabled    bool      `yaml:"dhcpEnabled"`
+	IPSyncEnabled  bool      `yaml:"ipSyncEnabled"`
+	SharedStaticIP bool      `yaml:"sharedStaticIP"`
+	IPAddress      string    `yaml:"ipAddress"`
+	SubnetMask     string    `yaml:"subnetMask"`
+	DefaultGateway string    `yaml:"defaultGateway"`
+	PrimaryDNS     string    `yaml:"primaryDNS"`
+	SecondaryDNS   string    `yaml:"secondaryDNS"`
+	Authentication string    `yaml:"authentication"`
+	IEEE8021x      IEEE8021x `yaml:"ieee8021x"`
 }
 
 type Wireless struct {
-	Profiles []string `yaml:"profiles"`
+	Profiles []WirelessProfile `yaml:"profiles"`
 }
 
-type Authentication struct {
-	Profiles []string `yaml:"profiles"`
+type WirelessProfile struct {
+	SSID                 string    `yaml:"ssid"`
+	Password             string    `yaml:"password"`
+	AuthenticationMethod string    `yaml:"authenticationMethod"`
+	EncryptionMethod     string    `yaml:"encryptionMethod"`
+	Priority             int       `yaml:"priority"`
+	IEEE8021x            IEEE8021x `yaml:"ieee8021x"`
+}
+
+type IEEE8021x struct {
+	Username               string `yaml:"username"`
+	Password               string `yaml:"password"`
+	AuthenticationProtocol int    `yaml:"authenticationProtocol"`
+	ClientCert             string `yaml:"clientCert"`
+	CACert                 string `yaml:"caCert"`
+	PrivateKey             string `yaml:"privateKey"`
 }
 
 type TLS struct {

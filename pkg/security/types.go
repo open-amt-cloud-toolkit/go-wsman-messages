@@ -32,5 +32,4 @@ type Keyring interface {
 }
 
 // RealKeyring struct to implement the Keyring interface using the real keyring package.
-type RealKeyring struct {
-}
+type RealKeyring struct{}
