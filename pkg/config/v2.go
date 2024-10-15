@@ -69,6 +69,7 @@ type TLS struct {
 	MutualAuthentication bool     `yaml:"mutualAuthentication"`
 	Enabled              bool     `yaml:"enabled"`
 	TrustedCN            []string `yaml:"trustedCN"`
+	AllowNonTLS          bool     `yaml:"allowNonTLS"`
 }
 
 type Redirection struct {
