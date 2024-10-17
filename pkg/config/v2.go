@@ -63,6 +63,7 @@ type IEEE8021x struct {
 	ClientCert             string `yaml:"clientCert"`
 	CACert                 string `yaml:"caCert"`
 	PrivateKey             string `yaml:"privateKey"`
+	PXETimeout             int    `yaml:"pxeTimeout"`
 }
 
 type TLS struct {
