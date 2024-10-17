@@ -31,16 +31,16 @@ type Network struct {
 }
 
 type Wired struct {
-	DHCPEnabled    bool      `yaml:"dhcpEnabled"`
-	IPSyncEnabled  bool      `yaml:"ipSyncEnabled"`
-	SharedStaticIP bool      `yaml:"sharedStaticIP"`
-	IPAddress      string    `yaml:"ipAddress"`
-	SubnetMask     string    `yaml:"subnetMask"`
-	DefaultGateway string    `yaml:"defaultGateway"`
-	PrimaryDNS     string    `yaml:"primaryDNS"`
-	SecondaryDNS   string    `yaml:"secondaryDNS"`
-	Authentication string    `yaml:"authentication"`
-	IEEE8021x      IEEE8021x `yaml:"ieee8021x"`
+	DHCPEnabled    bool       `yaml:"dhcpEnabled"`
+	IPSyncEnabled  bool       `yaml:"ipSyncEnabled"`
+	SharedStaticIP bool       `yaml:"sharedStaticIP"`
+	IPAddress      string     `yaml:"ipAddress"`
+	SubnetMask     string     `yaml:"subnetMask"`
+	DefaultGateway string     `yaml:"defaultGateway"`
+	PrimaryDNS     string     `yaml:"primaryDNS"`
+	SecondaryDNS   string     `yaml:"secondaryDNS"`
+	Authentication string     `yaml:"authentication"`
+	IEEE8021x      *IEEE8021x `yaml:"ieee8021x"`
 }
 
 type Wireless struct {
@@ -48,12 +48,12 @@ type Wireless struct {
 }
 
 type WirelessProfile struct {
-	SSID                 string    `yaml:"ssid"`
-	Password             string    `yaml:"password"`
-	AuthenticationMethod string    `yaml:"authenticationMethod"`
-	EncryptionMethod     string    `yaml:"encryptionMethod"`
-	Priority             int       `yaml:"priority"`
-	IEEE8021x            IEEE8021x `yaml:"ieee8021x"`
+	SSID                 string     `yaml:"ssid"`
+	Password             string     `yaml:"password"`
+	AuthenticationMethod string     `yaml:"authenticationMethod"`
+	EncryptionMethod     string     `yaml:"encryptionMethod"`
+	Priority             int        `yaml:"priority"`
+	IEEE8021x            *IEEE8021x `yaml:"ieee8021x"`
 }
 
 type IEEE8021x struct {
