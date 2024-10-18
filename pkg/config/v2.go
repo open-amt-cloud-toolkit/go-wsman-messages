@@ -39,7 +39,6 @@ type Wired struct {
 	DefaultGateway string     `yaml:"defaultGateway"`
 	PrimaryDNS     string     `yaml:"primaryDNS"`
 	SecondaryDNS   string     `yaml:"secondaryDNS"`
-	Authentication string     `yaml:"authentication"`
 	IEEE8021x      *IEEE8021x `yaml:"ieee8021x"`
 }
 
@@ -74,7 +73,6 @@ type TLS struct {
 }
 
 type Redirection struct {
-	Enabled     bool     `yaml:"enabled"`
 	Services    Services `yaml:"services"`
 	UserConsent string   `yaml:"userConsent"`
 }
