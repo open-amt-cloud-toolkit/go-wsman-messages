@@ -48,6 +48,7 @@ type Wireless struct {
 }
 
 type WirelessProfile struct {
+	ProfileName          string     `yaml:"profileName"`
 	SSID                 string     `yaml:"ssid"`
 	Password             string     `yaml:"password"`
 	AuthenticationMethod string     `yaml:"authenticationMethod"`
