@@ -38,6 +38,7 @@ type (
 		XMLName                               xml.Name                           `xml:"Body"`
 		SettingDataGetAndPutResponse          SettingDataResponse                `xml:"AMT_TLSSettingData"`
 		CredentialContextGetResponse          CredentialContextResponse          `xml:"AMT_TLSCredentialContext"`
+		CredentialContextCreateResponse       CredentialContextCreateResponse    `xml:"ResourceCreated"`
 		ProtocolEndpointCollectionGetResponse ProtocolEndpointCollectionResponse `xml:"AMT_TLSProtocolEndpointCollection"`
 		EnumerateResponse                     common.EnumerateResponse
 		PullResponse                          PullResponse
@@ -53,9 +54,10 @@ type (
 		NonSecureConnectionsSupported *bool    `xml:"NonSecureConnectionsSupported"` // Indicates the removal of support for the non-TLS WS-MAN ports for the remote interface. Available starting Intel CSME 16.1 firmware on Raptor Lake platforms. If this read-only field exists and its value is True, changing the value of the AcceptNonSecureConnections field is allowed only for the local interface. Note that this class and field can be accessed locally as well as remotely. Invoking the AMT_TLSSettingData.Put() command on the remote instance with AcceptNonSecureConnections set to True will fail with error code AMT_STATUS_NOT_PERMITTED. Setting AMT_TLSSettingData.Enabled to False will also fail for the remote interface.
 	}
 	SelectorResponse struct {
-		XMLName xml.Name `xml:"Selector,omitempty"`
-		Name    string   `xml:"Name,attr"`
-		Text    string   `xml:",chardata"`
+		XMLName           xml.Name                  `xml:"Selector,omitempty"`
+		Name              string                    `xml:"Name,attr,omitempty"`
+		Text              string                    `xml:"Text,omitempty"`
+		EndpointReference EndpointReferenceResponse `xml:"EndpointReference,omitempty"`
 	}
 	SelectorSetResponse struct {
 		XMLName   xml.Name           `xml:"SelectorSet,omitempty"`
@@ -90,6 +92,16 @@ type (
 		SettingDataItems                []SettingDataResponse                `xml:"Items>AMT_TLSSettingData"`
 		ProtocolEndpointCollectionItems []ProtocolEndpointCollectionResponse `xml:"Items>AMT_TLSProtocolEndpointCollection"`
 		CredentialContextItems          []CredentialContextResponse          `xml:"Items>AMT_TLSCredentialContext"`
+	}
+	CredentialContextCreateResponse struct {
+		XMLName             xml.Name                    `xml:"ResourceCreated"`
+		Address             string                      `xml:"Address,omitempty"`
+		ReferenceParameters ReferenceParametersResponse `xml:"ReferenceParameters,omitempty"`
+	}
+	EndpointReferenceResponse struct {
+		XMLName             xml.Name                    `xml:"EndpointReference"`
+		Address             string                      `xml:"Address,omitempty"`
+		ReferenceParameters ReferenceParametersResponse `xml:"ReferenceParameters,omitempty"`
 	}
 )
 

@@ -10,6 +10,7 @@ import (
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/card"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/chassis"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/client"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 )
@@ -41,9 +42,13 @@ type (
 	PullResponse struct {
 		XMLName xml.Name `xml:"PullResponse"`
 		common.EnumerateResponse
-		MemoryItems     []PhysicalMemory       `xml:"Items>CIM_PhysicalMemory"`
-		PhysicalPackage []card.PackageResponse `xml:"Items>CIM_Card"` // This might need to be fixed if we get more than just CIM_Card back on a Pull call
+		MemoryItems     []PhysicalMemory          `xml:"Items>CIM_PhysicalMemory"`
+		Card            []card.PackageResponse    `xml:"Items>CIM_Card"`
+		PhysicalPackage []PhysicalPackage         `xml:"Items>CIM_PhysicalPackage"`
+		Chassis         []chassis.PackageResponse `xml:"Items>CIM_Chassis"`
+		EndOfSequence   xml.Name                  `xml:"EndOfSequence"`
 	}
+
 	PhysicalMemory struct {
 		XMLName                    xml.Name            `xml:"CIM_PhysicalMemory"`
 		PartNumber                 string              `xml:"PartNumber"`        // The part number assigned by the organization that is responsible for producing or manufacturing the PhysicalElement.
@@ -61,6 +66,23 @@ type (
 		ConfiguredMemoryClockSpeed int                 `xml:"ConfiguredMemoryClockSpeed,omitempty"` // The configured clock speed (in MHz) of PhysicalMemory.
 		IsSpeedInMhz               bool                `xml:"IsSpeedInMhz,omitempty"`               // The IsSpeedInMHz property is used to indicate if the Speed property or the MaxMemorySpeed contains the value of the memory speed. A value of TRUE shall indicate that the speed is represented by the MaxMemorySpeed property. A value of FALSE shall indicate that the speed is represented by the Speed property.
 		MaxMemorySpeed             int                 `xml:"MaxMemorySpeed,omitempty"`             // The maximum speed (in MHz) of PhysicalMemory.
+	}
+
+	PhysicalPackage struct {
+		XMLName              xml.Name `xml:"CIM_PhysicalPackage"`
+		CanBeFRUed           bool     `xml:"CanBeFRUed"`
+		VendorEquipmentType  string   `xml:"VendorEquipmentType"`
+		ManufactureDate      string   `xml:"ManufactureDate"`
+		OtherIdentifyingInfo string   `xml:"OtherIdentifyingInfo"`
+		SerialNumber         string   `xml:"SerialNumber"`
+		SKU                  string   `xml:"SKU"`
+		Model                string   `xml:"Model"`
+		Manufacturer         string   `xml:"Manufacturer"`
+		ElementName          string   `xml:"ElementName"`
+		CreationClassName    string   `xml:"CreationClassName"`
+		Tag                  string   `xml:"Tag"`
+		OperationalStatus    []int    `xml:"OperationalStatus"`
+		PackageType          int      `xml:"PackageType"`
 	}
 
 	// MemoryType is an enumeration that describes the type of memory.

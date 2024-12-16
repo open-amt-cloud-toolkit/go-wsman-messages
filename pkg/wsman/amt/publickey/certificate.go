@@ -75,23 +75,43 @@ func (certificate Certificate) Enumerate() (response Response, err error) {
 
 // Pull returns the instances of this class.  An enumeration context provided by the Enumerate call is used as input.
 func (certificate Certificate) Pull(enumerationContext string) (response Response, err error) {
+	var refinedOutput []RefinedPublicKeyCertificateResponse
+
 	response = Response{
 		Message: &client.Message{
 			XMLInput: certificate.base.Pull(enumerationContext),
 		},
 	}
+
 	// send the message to AMT
 	err = certificate.base.Execute(response.Message)
 	if err != nil {
-		return
+		return response, err
 	}
+
 	// put the xml response into the go struct
 	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
 	if err != nil {
-		return
+		return response, err
 	}
 
-	return
+	for _, item := range response.Body.PullResponse.PublicKeyCertificateItems {
+		output := RefinedPublicKeyCertificateResponse{
+			InstanceID:             item.InstanceID,
+			X509Certificate:        item.X509Certificate,
+			ElementName:            item.ElementName,
+			TrustedRootCertificate: item.TrustedRootCertificate,
+			Issuer:                 item.Issuer,
+			Subject:                item.Subject,
+			ReadOnlyCertificate:    item.ReadOnlyCertificate,
+		}
+
+		refinedOutput = append(refinedOutput, output)
+	}
+
+	response.Body.RefinedPullResponse.PublicKeyCertificateItems = refinedOutput
+
+	return response, err
 }
 
 // Put will change properties of the selected instance.

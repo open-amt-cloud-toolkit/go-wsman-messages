@@ -1,6 +1,7 @@
 package wsmantesting
 
 import (
+	"crypto/tls"
 	"io"
 	"os"
 	"strings"
@@ -13,6 +14,8 @@ type MockClient struct {
 	CurrentMessage   string
 	PackageUnderTest string
 }
+
+func (c *MockClient) IsAuthenticated() bool { return true }
 
 func (c *MockClient) Post(msg string) ([]byte, error) {
 	if strings.EqualFold(c.CurrentMessage, "error") {
@@ -39,7 +42,8 @@ func (c *MockClient) Post(msg string) ([]byte, error) {
 	// Simulate a successful response for testing.
 	return xmlData, nil
 }
-func (c *MockClient) Send(data []byte) error   { return nil }
-func (c *MockClient) Receive() ([]byte, error) { return nil, nil }
-func (c *MockClient) CloseConnection() error   { return nil }
-func (c *MockClient) Connect() error           { return nil }
+func (c *MockClient) Send(data []byte) error                          { return nil }
+func (c *MockClient) Receive() ([]byte, error)                        { return nil, nil }
+func (c *MockClient) CloseConnection() error                          { return nil }
+func (c *MockClient) Connect() error                                  { return nil }
+func (c *MockClient) GetServerCertificate() (*tls.Certificate, error) { return nil, nil }

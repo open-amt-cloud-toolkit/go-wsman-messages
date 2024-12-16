@@ -7,17 +7,23 @@ package client
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"crypto/tls"
+	"crypto/x509"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
 	"net"
 	"net/http"
 	"net/url"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/sirupsen/logrus"
+
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/amterror"
 )
 
 const (
@@ -44,19 +50,24 @@ type WSMan interface {
 	Send(data []byte) error
 	Receive() ([]byte, error)
 	CloseConnection() error
+	IsAuthenticated() bool
+	GetServerCertificate() (*tls.Certificate, error)
 }
 
 // Target is a thin wrapper around http.Target.
 type Target struct {
 	http.Client
-	endpoint       string
-	username       string
-	password       string
-	useDigest      bool
-	logAMTMessages bool
-	challenge      *AuthChallenge
-	conn           net.Conn
-	bufferPool     sync.Pool
+	endpoint           string
+	username           string
+	password           string
+	useDigest          bool
+	logAMTMessages     bool
+	challenge          *AuthChallenge
+	conn               net.Conn
+	bufferPool         sync.Pool
+	UseTLS             bool
+	InsecureSkipVerify bool
+	PinnedCert         string
 }
 
 const timeout = 10 * time.Second
@@ -75,16 +86,52 @@ func NewWsman(cp Parameters) *Target {
 	}
 
 	res := &Target{
-		endpoint:       protocol + "://" + cp.Target + ":" + port + path,
-		username:       cp.Username,
-		password:       cp.Password,
-		useDigest:      cp.UseDigest,
-		logAMTMessages: cp.LogAMTMessages,
+		endpoint:           protocol + "://" + cp.Target + ":" + port + path,
+		username:           cp.Username,
+		password:           cp.Password,
+		useDigest:          cp.UseDigest,
+		logAMTMessages:     cp.LogAMTMessages,
+		UseTLS:             cp.UseTLS,
+		InsecureSkipVerify: cp.SelfSignedAllowed,
 	}
 
 	res.Timeout = timeout
-	res.Transport = &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: cp.SelfSignedAllowed},
+
+	if cp.Transport == nil {
+		// check if pinnedCert is not null and not empty
+		var config *tls.Config
+		if len(cp.PinnedCert) > 0 {
+			config = &tls.Config{
+				InsecureSkipVerify: cp.SelfSignedAllowed,
+				VerifyPeerCertificate: func(rawCerts [][]byte, verifiedChains [][]*x509.Certificate) error {
+					for _, rawCert := range rawCerts {
+						cert, err := x509.ParseCertificate(rawCert)
+						if err != nil {
+							return err
+						}
+
+						// Compare the current certificate with the pinned certificate
+						sha256Fingerprint := sha256.Sum256(cert.Raw)
+						if hex.EncodeToString(sha256Fingerprint[:]) == cp.PinnedCert {
+							return nil // Success: The certificate matches the pinned certificate
+						}
+					}
+
+					return fmt.Errorf("certificate pinning failed")
+				},
+			}
+		} else {
+			config = &tls.Config{InsecureSkipVerify: cp.SelfSignedAllowed}
+		}
+
+		res.Transport = &http.Transport{
+			MaxIdleConns:      10,
+			IdleConnTimeout:   30 * time.Second,
+			DisableKeepAlives: true,
+			TLSClientConfig:   config,
+		}
+	} else {
+		res.Transport = cp.Transport
 	}
 
 	if res.useDigest {
@@ -92,6 +139,56 @@ func NewWsman(cp Parameters) *Target {
 	}
 
 	return res
+}
+
+func (t *Target) IsAuthenticated() bool {
+	return t.challenge != nil && t.challenge.Realm != ""
+}
+
+func (t *Target) GetServerCertificate() (*tls.Certificate, error) {
+	httpTransport, ok := t.Transport.(*http.Transport)
+	if !ok {
+		return nil, errors.New("transport does not support TLSClientConfig")
+	}
+
+	tlsConfig := httpTransport.TLSClientConfig
+	if tlsConfig == nil {
+		return nil, errors.New("TLSClientConfig is nil")
+	}
+
+	// Create a custom DialTLS to capture the server certificate
+	capturedCert := &tls.Certificate{}
+	tlsConfig.VerifyPeerCertificate = func(rawCerts [][]byte, verifiedChains [][]*x509.Certificate) error {
+		if len(rawCerts) > 0 {
+			cert, err := x509.ParseCertificate(rawCerts[0])
+			if err != nil {
+				return err
+			}
+
+			*capturedCert = tls.Certificate{
+				Certificate: [][]byte{cert.Raw},
+			}
+		}
+
+		return nil
+	}
+
+	// undo what we did in the constructor to get the endpoint (host and port)
+	nohttps := strings.Replace(t.endpoint, "https://", "", 1)
+	nohttps = strings.Replace(nohttps, "/wsman", "", 1)
+
+	conn, err := tls.Dial("tcp", nohttps, tlsConfig)
+	if err != nil {
+		return nil, err
+	}
+
+	defer conn.Close()
+
+	if len(capturedCert.Certificate) == 0 {
+		return nil, errors.New("no server certificate captured")
+	}
+
+	return capturedCert, nil
 }
 
 // Post overrides http.Client's Post method.
@@ -130,8 +227,6 @@ func (t *Target) Post(msg string) (response []byte, err error) {
 
 	res, err := t.Do(req)
 	if err != nil {
-		res.Body.Close()
-
 		return nil, err
 	}
 
@@ -157,28 +252,11 @@ func (t *Target) Post(msg string) (response []byte, err error) {
 
 		res, err = t.Do(req)
 		if err != nil && err.Error() != io.EOF.Error() {
-			res.Body.Close()
-
 			return nil, err
 		}
 	}
 
 	defer res.Body.Close()
-
-	if res.StatusCode >= 400 {
-		b, err := io.ReadAll(res.Body)
-		if err != nil {
-			return nil, err
-		}
-
-		if t.logAMTMessages {
-			logrus.Trace(string(b))
-		}
-
-		errPostResponse := errors.New("wsman.Client post received")
-
-		return nil, fmt.Errorf("%w: %v\n%v", errPostResponse, res.Status, string(b))
-	}
 
 	response, err = io.ReadAll(res.Body)
 
@@ -188,6 +266,18 @@ func (t *Target) Post(msg string) (response []byte, err error) {
 
 	if err != nil && err.Error() != io.EOF.Error() {
 		return nil, err
+	}
+
+	if res.StatusCode == 400 {
+		amterr := amterror.DecodeAMTErrorString(string(response))
+
+		return nil, amterr
+	}
+
+	if res.StatusCode >= 401 {
+		errPostResponse := errors.New("wsman.Client post received")
+
+		return nil, fmt.Errorf("%w: %v\n%v", errPostResponse, res.Status, string(response))
 	}
 
 	return response, nil

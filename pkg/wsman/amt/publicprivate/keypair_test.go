@@ -23,7 +23,7 @@ func TestJson(t *testing.T) {
 			GetResponse: PublicPrivateKeyPair{},
 		},
 	}
-	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"DERKey\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PublicPrivateKeyPairItems\":null}}"
+	expectedResult := "{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"GetResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"ElementName\":\"\",\"InstanceID\":\"\",\"DERKey\":\"\"},\"EnumerateResponse\":{\"EnumerationContext\":\"\"},\"PullResponse\":{\"XMLName\":{\"Space\":\"\",\"Local\":\"\"},\"PublicPrivateKeyPairItems\":null},\"RefinedPullResponse\":{\"PublicPrivateKeyPairItems\":null}}"
 	result := response.JSON()
 	assert.Equal(t, expectedResult, result)
 }
@@ -34,7 +34,7 @@ func TestYaml(t *testing.T) {
 			GetResponse: PublicPrivateKeyPair{},
 		},
 	}
-	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    derkey: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    publicprivatekeypairitems: []\n"
+	expectedResult := "xmlname:\n    space: \"\"\n    local: \"\"\ngetresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    elementname: \"\"\n    instanceid: \"\"\n    derkey: \"\"\nenumerateresponse:\n    enumerationcontext: \"\"\npullresponse:\n    xmlname:\n        space: \"\"\n        local: \"\"\n    publicprivatekeypairitems: []\nrefinedpullresponse:\n    publicprivatekeypairitems: []\n"
 	result := response.YAML()
 	assert.Equal(t, expectedResult, result)
 }
@@ -132,6 +132,22 @@ func TestPositiveAMT_PublicPrivateKeyPair(t *testing.T) {
 								ElementName: "Intel(r) AMT Key",
 								InstanceID:  "Intel(r) AMT Key: Handle: 1",
 								DERKey:      "MIIBCgKCAQEAvMgYL2FyGuHOVvwYgjABqRlJ8j8LhMo2OCU1HU2WvDN3NoLmjAh2XmBS6ic5IjIc4VtjL7S8ImKP8+PSye9nxf+lv33AqcGsvQFcUuJ5gLTnYzrmqVk6XTcHf1qtvHEmVoykTV6bN7BQx0eTejTjhw3Ro6HZBMyStaTGIKjC9HLQySV6SnFGbrjdNZZoCYsaT8dVetn23npeses9f6dZT5K3IgpA13NcdJioS71uppjIcg8dXpcxA4QKgHLmmELPN9JLbywMvcCuU+xMDceWQlFld9ohmr8NiwgebLyVCh/Q+O+jkQT43snNolyTGLRWQFR4M6DT5fdgXivoFhzMcwIDAQAB",
+							},
+						},
+					},
+					RefinedPullResponse: RefinedPullResponse{
+						PublicPrivateKeyPairItems: []RefinedPublicPrivateKeyPair{
+							{
+								ElementName:       "Intel(r) AMT Key",
+								InstanceID:        "Intel(r) AMT Key: Handle: 0",
+								DERKey:            "MIIBCgKCAQEA4y00wezZ1XwsSITMvqeYf61tgfVhlGbBVwq9Au0BaEgofPFCLuWMnKaTnMhUlJEGaeB2y6F8qjId0xMwLtNY6XWhmMoCP0R+ymgClT0treqtYp2zL1QPK1R04KTgF0KZh247oQpPGnB2nIe7PKCjPaY8BfOyBC6eNLeWUVIOA5TLL0gSTuk8y3iaadKo+LoWBaH/WDrIJ21Dzn6yU3zGueA8tphPH7yXaOJuNiijOUYZjVT7J0Ia8qMxUv1CrbfL2+N0lrcCG/E4f0QF1XgoCJnwIHdYaNhWzKVhfh2TTZIxJo8bXngckNOLzdYM35hUq98CxPiMSO8+G7J8RZaobQIDAQAB",
+								CertificateHandle: "",
+							},
+							{
+								ElementName:       "Intel(r) AMT Key",
+								InstanceID:        "Intel(r) AMT Key: Handle: 1",
+								DERKey:            "MIIBCgKCAQEAvMgYL2FyGuHOVvwYgjABqRlJ8j8LhMo2OCU1HU2WvDN3NoLmjAh2XmBS6ic5IjIc4VtjL7S8ImKP8+PSye9nxf+lv33AqcGsvQFcUuJ5gLTnYzrmqVk6XTcHf1qtvHEmVoykTV6bN7BQx0eTejTjhw3Ro6HZBMyStaTGIKjC9HLQySV6SnFGbrjdNZZoCYsaT8dVetn23npeses9f6dZT5K3IgpA13NcdJioS71uppjIcg8dXpcxA4QKgHLmmELPN9JLbywMvcCuU+xMDceWQlFld9ohmr8NiwgebLyVCh/Q+O+jkQT43snNolyTGLRWQFR4M6DT5fdgXivoFhzMcwIDAQAB",
+								CertificateHandle: "",
 							},
 						},
 					},

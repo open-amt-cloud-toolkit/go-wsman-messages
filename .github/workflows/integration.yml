@@ -1,0 +1,73 @@
+# This workflow will do a clean install of go dependencies, build the source code and run tests across different versions of go
+
+name: Go Integration CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  build:
+    permissions:
+      contents: read # for actions/checkout to fetch code
+      pull-requests: read # for golangci/golangci-lint-action to fetch pull requests
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        go-version: [1.22.x, 1.23.x]
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
+        with:
+          egress-policy: audit
+
+      - name: Install Go
+        uses: actions/setup-go@3041bf56c941b39c61721a86cd11f3bb1338122a # v5.2.0
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+       
+
+      - name: Checkout rpc-go repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: open-amt-cloud-toolkit/rpc-go
+          path: rpc-go
+          ref: main
+
+      - name: Checkout console repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: open-amt-cloud-toolkit/console
+          path: console
+          ref: main
+
+      - name: Set go-wsman-messages dependency to current branch
+        run: |
+          cd rpc-go
+          go mod edit -replace github.com/open-amt-cloud-toolkit/go-wsman-messages=../${{ github.repository }}
+          cd ../console
+          go mod edit -replace github.com/open-amt-cloud-toolkit/go-wsman-messages=../${{ github.repository }}
+
+      - name: Build rpc-go
+        run: |
+          cd rpc-go
+          go build -o rpc ./cmd/main.go
+
+      - name: Build console
+        run: |
+          cd console
+          CGO_ENABLED=0 go build -o console ./cmd/app/main.go
+
+      - name: Run tests
+        run: |
+          go test ./...

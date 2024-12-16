@@ -5,6 +5,7 @@
 package apf
 
 import (
+	"sync"
 	"testing"
 	"time"
 
@@ -137,16 +138,18 @@ func TestProcessChannelOpenConfirmation(t *testing.T) {
 
 	data := []byte{0x01}
 	statusChannel := make(chan bool)
+	wg := &sync.WaitGroup{}
 	session := &Session{
-		Status: statusChannel,
+		Status:    statusChannel,
+		WaitGroup: wg,
 	}
 
 	defer close(statusChannel)
 
 	go func() {
 		<-statusChannel
-		logrus.Print("Hello, status  is done")
 	}()
+	wg.Add(1)
 	ProcessChannelOpenConfirmation(data, session)
 }
 

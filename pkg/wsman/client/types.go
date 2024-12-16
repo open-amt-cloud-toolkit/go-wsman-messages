@@ -1,5 +1,7 @@
 package client
 
+import "net/http"
+
 // Parameters struct defines the connection settings for wsman client.
 type Parameters struct {
 	Target            string
@@ -9,5 +11,7 @@ type Parameters struct {
 	UseTLS            bool
 	SelfSignedAllowed bool
 	LogAMTMessages    bool
+	Transport         http.RoundTripper
 	IsRedirection     bool
+	PinnedCert        string
 }
