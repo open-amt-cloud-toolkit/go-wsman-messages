@@ -6,7 +6,6 @@
 [![OSSF-Scorecard Score](https://img.shields.io/ossf-scorecard/github.com/open-amt-cloud-toolkit/go-wsman-messages?style=for-the-badge&label=OSSF%20Score)](https://api.securityscorecards.dev/projects/github.com/open-amt-cloud-toolkit/go-wsman-messages)
 [![Discord](https://img.shields.io/discord/1063200098680582154?style=for-the-badge&label=Discord&logo=discord&logoColor=white&labelColor=%235865F2&link=https%3A%2F%2Fdiscord.gg%2FDKHeUNEWVH)](https://discord.gg/DKHeUNEWVH)
 
-
 > Disclaimer: Production viable releases are tagged and listed under 'Releases'.  All other check-ins should be considered 'in-development' and should not be used in production
 
 This repository contains a Go library that implements APIs for communicating with Intel® Active Management Technology (AMT) capable platforms. These APIs are based on the AMT SDK documentation, which can be found [here](https://www.intel.com/content/www/us/en/developer/tools/active-management-technology-sdk/overview.html).
@@ -15,8 +14,8 @@ This repository contains a Go library that implements APIs for communicating wit
 
 A few steps are required to use the library in your code.
 
-1. Import the library in your project, 
-1. Provide the connection parameters, 
+1. Import the library in your project,
+1. Provide the connection parameters,
 1. Create the desired messages to act on the AMT device.
 
 See the commented source code as follows:
@@ -97,7 +96,7 @@ func main() {
 
 As shown, you can call the various methods of the wsman.Messages struct.  go-wsman-messages authenticates with AMT using the client parameters provided, sends messages to the Intel® AMT device, and handles responses, returning a package-specific Response struct or error message.
 
-# Dev tips for passing CI Checks
+## Dev tips for passing CI Checks
 
 - Install gofumpt `go install mvdan.cc/gofumpt@latest` (replaces gofmt)
 - Install gci `go install github.com/daixiang0/gci@latest` (organizes imports)
