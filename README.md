@@ -94,7 +94,7 @@ func main() {
 }
 ```
 
-As shown, you can call the various methods of the wsman.Messages struct.  go-wsman-messages authenticates with AMT using the client parameters provided, sends messages to the Intel® AMT device, and handles responses, returning a package-specific Response struct or error message.
+As shown, you can call the various methods of the wsman.Messages struct. go-wsman-messages authenticates with AMT using the client parameters provided, sends messages to the Intel® AMT device, and handles responses, returning a package-specific Response struct or error message.
 
 ## Dev tips for passing CI Checks
 
