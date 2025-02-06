@@ -1,6 +1,9 @@
 package client
 
-import "net/http"
+import (
+	"crypto/tls"
+	"net/http"
+)
 
 // Parameters struct defines the connection settings for wsman client.
 type Parameters struct {
@@ -14,4 +17,5 @@ type Parameters struct {
 	Transport         http.RoundTripper
 	IsRedirection     bool
 	PinnedCert        string
+	TlsConfig         *tls.Config
 }
