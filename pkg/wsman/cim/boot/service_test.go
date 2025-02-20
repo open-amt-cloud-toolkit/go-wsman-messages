@@ -12,6 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/internal/message"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/cim/methods"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/common"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
@@ -122,6 +123,25 @@ func TestPositiveService(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					SetBootConfigRole_OUTPUT: SetBootConfigRole_OUTPUT{
+						ReturnValue: 0,
+					},
+				},
+			},
+			// Request State Change
+			{
+				"should create and parse a valid cim_BootService Request State Change call",
+				CIMBootService,
+				methods.RequestStateChange(CIMBootService),
+				"<h:RequestStateChange_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService\"><h:RequestedState>3</h:RequestedState></h:RequestStateChange_INPUT>",
+				func() (Response, error) {
+					client.CurrentMessage = "RequestStateChange"
+
+					return elementUnderTest.RequestStateChange(3)
+				},
+				Body{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					RequestStateChange_OUTPUT: common.ReturnValue{
+						XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService", Local: "RequestStateChange_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
@@ -247,6 +267,25 @@ func TestNegativeService(t *testing.T) {
 				Body{
 					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
 					SetBootConfigRole_OUTPUT: SetBootConfigRole_OUTPUT{
+						ReturnValue: 0,
+					},
+				},
+			},
+			// Request State Change
+			{
+				"should handle error when making cim_BootService requestStateChange wsman message",
+				CIMBootService,
+				methods.RequestStateChange(CIMBootService),
+				"<h:RequestStateChange_INPUT xmlns:h=\"http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService\"><h:RequestedState>3</h:RequestedState></h:RequestStateChange_INPUT>",
+				func() (Response, error) {
+					client.CurrentMessage = wsmantesting.CurrentMessageError
+
+					return elementUnderTest.RequestStateChange(3)
+				},
+				Body{
+					XMLName: xml.Name{Space: message.XMLBodySpace, Local: "Body"},
+					RequestStateChange_OUTPUT: common.ReturnValue{
+						XMLName:     xml.Name{Space: "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService", Local: "RequestStateChange_OUTPUT"},
 						ReturnValue: 0,
 					},
 				},
