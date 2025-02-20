@@ -20,6 +20,7 @@ const (
 	Create                  = "http://schemas.xmlsoap.org/ws/2004/09/transfer/Create"
 	EnumerateBody           = "<Enumerate xmlns=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration\" />"
 	SetBootConfigRole       = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService/SetBootConfigRole"
+	RequestStateChange      = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BootService/RequestStateChange"
 	ServerCertificateIssuer = `serverCertificateIssuer`
 	ClientCertificate       = `clientCertificate`
 	DigestRealm             = "Digest:Realm"
