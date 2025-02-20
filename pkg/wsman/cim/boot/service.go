@@ -122,7 +122,6 @@ func (service Service) SetBootConfigRole(instanceID string, role int) (response 
 
 // RequestStateChange requests that the state of the element be changed to the value specified in the RequestedState parameter . . .
 func (service Service) RequestStateChange(requestedState int) (response Response, err error) {
-
 	response = Response{
 		Message: &client.Message{
 			XMLInput: service.base.RequestStateChange(methods.GenerateAction(CIMBootService, "RequestStateChange"), requestedState),
