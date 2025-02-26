@@ -37,14 +37,15 @@ type (
 	}
 
 	Body struct {
-		XMLName                  xml.Name          `xml:"Body"`
-		ConfigSettingGetResponse BootConfigSetting `xml:"CIM_BootConfigSetting"`
-		SourceSettingGetResponse BootSourceSetting `xml:"CIM_BootSourceSetting"`
-		ServiceGetResponse       BootService       `xml:"CIM_BootService"`
-		EnumerateResponse        common.EnumerateResponse
-		PullResponse             PullResponse             `xml:"PullResponse"`
-		ChangeBootOrder_OUTPUT   ChangeBootOrder_OUTPUT   `xml:"ChangeBootOrder_OUTPUT"`
-		SetBootConfigRole_OUTPUT SetBootConfigRole_OUTPUT `xml:"SetBootConfigRole_OUTPUT"`
+		XMLName                   xml.Name          `xml:"Body"`
+		ConfigSettingGetResponse  BootConfigSetting `xml:"CIM_BootConfigSetting"`
+		SourceSettingGetResponse  BootSourceSetting `xml:"CIM_BootSourceSetting"`
+		ServiceGetResponse        BootService       `xml:"CIM_BootService"`
+		EnumerateResponse         common.EnumerateResponse
+		PullResponse              PullResponse             `xml:"PullResponse"`
+		ChangeBootOrder_OUTPUT    ChangeBootOrder_OUTPUT   `xml:"ChangeBootOrder_OUTPUT"`
+		SetBootConfigRole_OUTPUT  SetBootConfigRole_OUTPUT `xml:"SetBootConfigRole_OUTPUT"`
+		RequestStateChange_OUTPUT common.ReturnValue
 	}
 
 	BootConfigSetting struct {

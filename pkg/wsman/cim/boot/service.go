@@ -7,6 +7,7 @@ package boot
 
 import (
 	"encoding/xml"
+	"errors"
 	"strconv"
 	"strings"
 
@@ -117,4 +118,29 @@ func (service Service) SetBootConfigRole(instanceID string, role int) (response 
 	}
 
 	return response, nil
+}
+
+// RequestStateChange requests that the state of the element be changed to the value specified in the RequestedState parameter . . .
+func (service Service) RequestStateChange(requestedState int) (response Response, err error) {
+	response = Response{
+		Message: &client.Message{
+			XMLInput: service.base.RequestStateChange(methods.GenerateAction(CIMBootService, "RequestStateChange"), requestedState),
+		},
+	}
+
+	err = service.base.Execute(response.Message)
+	if err != nil {
+		return response, err
+	}
+
+	err = xml.Unmarshal([]byte(response.XMLOutput), &response)
+	if err != nil {
+		return response, err
+	}
+
+	if response.Body.RequestStateChange_OUTPUT.ReturnValue != 0 {
+		err = errors.New("RequestStateChange failed with return code " + strconv.Itoa(response.Body.RequestStateChange_OUTPUT.ReturnValue))
+	}
+
+	return response, err
 }

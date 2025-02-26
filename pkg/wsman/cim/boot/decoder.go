@@ -12,6 +12,7 @@ const (
 	ChangeBootOrder      string = "ChangeBootOrder"
 	ValueNotFound        string = "Value not found in map"
 	SetBootConfigRole    string = "SetBootConfigRole"
+	RequestStateChange   string = "RequestStateChange"
 )
 
 const (
