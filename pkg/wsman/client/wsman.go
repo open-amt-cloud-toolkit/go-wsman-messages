@@ -127,6 +127,13 @@ func NewWsman(cp Parameters) *Target {
 				config = res.tlsConfig
 			} else {
 				config = &tls.Config{InsecureSkipVerify: cp.SelfSignedAllowed}
+				if cp.AllowInsecureCipherSuites {
+					config.MinVersion = tls.VersionTLS10
+					insecureCipherSuites := tls.InsecureCipherSuites()
+					for _, suite := range insecureCipherSuites {
+						config.CipherSuites = append(config.CipherSuites, suite.ID)
+					}
+				}
 			}
 		}
 
