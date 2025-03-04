@@ -13,6 +13,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips/hostbasedsetup"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips/ieee8021x"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips/optin"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips/power"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
@@ -42,5 +43,9 @@ func TestNewMessages(t *testing.T) {
 
 	if reflect.DeepEqual(m.IEEE8021xSettings, ieee8021x.Settings{}) {
 		t.Error("BootSettingData is not initialized")
+	}
+
+	if reflect.DeepEqual(m.PowerManagementService, power.ManagementService{}) {
+		t.Error("PowerManagementService is not initialized")
 	}
 }
