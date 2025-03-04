@@ -12,6 +12,7 @@ import (
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips/hostbasedsetup"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips/ieee8021x"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips/optin"
+	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/ips/power"
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/wsman/wsmantesting"
 )
 
@@ -22,6 +23,7 @@ type Messages struct {
 	AlarmClockOccurrence       alarmclock.Occurrence
 	IEEE8021xCredentialContext ieee8021x.CredentialContext
 	IEEE8021xSettings          ieee8021x.Settings
+	PowerManagementService     power.ManagementService
 }
 
 func NewMessages(client client.WSMan) Messages {
@@ -35,6 +37,7 @@ func NewMessages(client client.WSMan) Messages {
 	m.AlarmClockOccurrence = alarmclock.NewAlarmClockOccurrenceWithClient(wsmanMessageCreator, client)
 	m.IEEE8021xCredentialContext = ieee8021x.NewIEEE8021xCredentialContextWithClient(wsmanMessageCreator, client)
 	m.IEEE8021xSettings = ieee8021x.NewIEEE8021xSettingsWithClient(wsmanMessageCreator, client)
+	m.PowerManagementService = power.NewPowerManagementServiceWithClient(wsmanMessageCreator, client)
 
 	return m
 }
