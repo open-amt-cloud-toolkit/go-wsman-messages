@@ -3,8 +3,8 @@ package security_test
 import (
 	"testing"
 
-	"github.com/99designs/keyring"
 	"github.com/stretchr/testify/mock"
+	"github.com/zalando/go-keyring"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/security"
 )

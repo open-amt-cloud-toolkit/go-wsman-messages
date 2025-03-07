@@ -1,7 +1,7 @@
 package security
 
 import (
-	"github.com/99designs/keyring"
+	"github.com/zalando/go-keyring"
 
 	"github.com/open-amt-cloud-toolkit/go-wsman-messages/v2/pkg/config"
 )

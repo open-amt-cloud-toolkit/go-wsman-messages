@@ -1,7 +1,7 @@
 package security
 
 import (
-	"github.com/99designs/keyring"
+	"github.com/zalando/go-keyring"
 )
 
 // Storage struct to hold the service name and keyring interface
